@@ -160,10 +160,10 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
         <header className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <div className="eyebrow mb-1">Visão Geral</div>
-            <h1 className="text-glow-amber" style={{ fontSize: 'clamp(2rem, 1.4rem + 2.6vw, 3.4rem)', lineHeight: 1, fontWeight: 800 }}>
+            <h1 className="text-glow-amber" style={{ fontSize: 'clamp(1.25rem, 0.95rem + 1.2vw, 1.875rem)', lineHeight: 1.05, fontWeight: 800 }}>
               Dashboard
             </h1>
-            <p className="text-[var(--brand-text-muted)] text-sm mt-2">
+            <p className="text-[var(--brand-text-muted)] text-xs mt-1.5">
               R$ <span className="kpi text-white">{monthRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
               <span className="ml-2 chip chip-lime">+{parsedDeliveredOrdersCount} entregues</span>
               <span className="ml-2 chip">{formatMonthLabel(selectedMonth)}</span>

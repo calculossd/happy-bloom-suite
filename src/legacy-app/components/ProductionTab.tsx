@@ -496,14 +496,6 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
 
   return (
     <div className="space-y-6" id="production-dashboard-container">
-      <header className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <div className="eyebrow mb-1">Operação</div>
-          <h1 className="text-glow-amber" style={{ fontSize: 'clamp(1.75rem, 1.2rem + 2vw, 2.75rem)', lineHeight: 1, fontWeight: 800 }}>Produção</h1>
-          <p className="text-sm text-[var(--brand-text-muted)] mt-1">Fila de impressão, máquinas ativas e status em tempo real.</p>
-        </div>
-      </header>
-      
       {/* ONLINE PRINTER CONNECTIONS */}
       <div className="bg-[#151917] border border-[#232B27] p-4 rounded-xl space-y-3 shadow" id="online-printers-tracker">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#232B27] pb-2">
