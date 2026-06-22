@@ -185,38 +185,8 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
           </div>
         </header>
 
-        {/* KPI tiles */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          <div className="tile tile-lime">
-            <span className="tile-tag">#Faturamento</span>
-            <div className="tile-title">Receita do mês</div>
-            <div className="tile-meta">{parsedDeliveredOrdersCount} pedidos entregues</div>
-            <div className="tile-value">R$ {monthRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 0 })}</div>
-          </div>
-          <div className="tile tile-orange">
-            <span className="tile-tag">#Operação</span>
-            <div className="tile-title">Pedidos abertos</div>
-            <div className="tile-meta">{parsedReadyToDeliverCount} prontos p/ entrega</div>
-            <div className="tile-value">{parsedOpenOrdersCount}</div>
-          </div>
-          <div className="tile tile-emerald">
-            <span className="tile-tag">#Margem</span>
-            <div className="tile-title">ROI do mês</div>
-            <div className="tile-meta">Margem {monthProfitMargin.toFixed(1)}%</div>
-            <div className="tile-value">{monthRoi.toFixed(0)}%</div>
-          </div>
-          <div className="tile tile-purple">
-            <span className="tile-tag">#Produção</span>
-            <div className="tile-title">Impressoras ativas</div>
-            <div className="tile-meta">{safePrinters.length} no total</div>
-            <div className="tile-value">{activePrinters.length}</div>
-          </div>
-        </div>
-
-        {/* Projects strip + Calendar */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          {/* In-progress orders as colorful project tiles */}
-          <div className="lg:col-span-2 glass-panel p-5">
+        {/* In-progress projects strip — calendar moved to legacy block below */}
+        <div className="glass-panel p-5">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <div className="eyebrow">Projetos</div>
@@ -227,7 +197,7 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
             {(() => {
               const inProgress = safeOrders
                 .filter(o => o.status === 'QUEUE' || o.status === 'PRINTING' || o.status === 'POST_PROCESS' || o.status === 'READY')
-                .slice(0, 6);
+                .slice(0, 8);
               if (inProgress.length === 0) {
                 return (
                   <div className="text-center py-10 text-sm text-[var(--brand-text-muted)]">
@@ -237,7 +207,7 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
               }
               const palette = ['tile-lime','tile-orange','tile-emerald','tile-red','tile-purple','tile-teal'];
               return (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                   {inProgress.map((o, i) => (
                     <button key={o.id} onClick={() => onSelectTab(1)} className={`tile ${palette[i % palette.length]} text-left`}>
                       <span className="tile-tag">#{o.status}</span>
@@ -249,39 +219,6 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
                 </div>
               );
             })()}
-          </div>
-
-          {/* Calendar */}
-          <div className="glass-panel p-5">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <div className="eyebrow">Calendário</div>
-                <h3 className="text-lg font-bold text-white tracking-tight">{formatMonthLabel(calendarActiveMonth)}</h3>
-              </div>
-            </div>
-            <div className="grid grid-cols-7 gap-1.5 text-center text-[10px] uppercase tracking-wider text-[var(--brand-text-subtle)] mb-2">
-              {['D','S','T','Q','Q','S','S'].map((d,i) => <div key={i}>{d}</div>)}
-            </div>
-            <div className="grid grid-cols-7 gap-1.5">
-              {Array.from({ length: firstDayIndex }).map((_, i) => <div key={`e${i}`} />)}
-              {Array.from({ length: totalDays }).map((_, i) => {
-                const day = i + 1;
-                const sales = getDaySales(day);
-                const isToday = day === currentDate.getDate() && calMonth === currentDate.getMonth() && calYear === currentDate.getFullYear();
-                const heat = sales > 500 ? 'tile-lime' : sales > 100 ? 'tile-emerald' : sales > 0 ? 'tile-teal' : '';
-                return (
-                  <div
-                    key={day}
-                    title={sales > 0 ? `R$ ${sales.toLocaleString('pt-BR')}` : ''}
-                    className={`aspect-square rounded-xl text-xs flex items-center justify-center font-semibold ${heat || 'bg-white/[0.03] border border-white/5 text-[var(--brand-text-subtle)]'} ${isToday ? 'ring-2 ring-[var(--cat-lime)]' : ''}`}
-                    style={heat ? { color: heat === 'tile-lime' || heat === 'tile-orange' ? '#11131A' : '#fff' } : undefined}
-                  >
-                    {day}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
         </div>
       </section>
 
