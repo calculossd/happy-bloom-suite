@@ -191,6 +191,13 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
 
   return (
     <div className="space-y-6" id="sold-orders-tab-container">
+      <header className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <div className="eyebrow mb-1">Histórico</div>
+          <h1 className="text-glow-amber" style={{ fontSize: 'clamp(1.75rem, 1.2rem + 2vw, 2.75rem)', lineHeight: 1, fontWeight: 800 }}>Vendidos</h1>
+          <p className="text-sm text-[var(--brand-text-muted)] mt-1">Pedidos finalizados, faturamento histórico e exportações.</p>
+        </div>
+      </header>
       
       {/* Header Bento Title */}
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-[var(--brand-card)] border border-[var(--brand-border)] p-5 rounded-2xl shadow-sm" id="sold-tab-header">
