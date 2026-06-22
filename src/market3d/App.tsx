@@ -120,13 +120,23 @@ export default function App() {
     JINA_API_KEY: string;
     SERPAPI_KEY: string;
   }>(() => {
-    const ls = typeof window !== 'undefined' ? window.localStorage : null;
+    const safeGet = (k: string): string => {
+      try {
+        if (typeof window === 'undefined') return '';
+        const v = window.localStorage.getItem(k);
+        if (v) return v;
+      } catch {}
+      try {
+        return (window as any).__market3d_keys?.[k] || '';
+      } catch {}
+      return '';
+    };
     return {
-      GEMINI_API_KEY: ls?.getItem('GEMINI_API_KEY') || '',
-      TAVILY_API_KEY: ls?.getItem('TAVILY_API_KEY') || '',
-      GROQ_API_KEY: ls?.getItem('GROQ_API_KEY') || '',
-      JINA_API_KEY: ls?.getItem('JINA_API_KEY') || '',
-      SERPAPI_KEY: ls?.getItem('SERPAPI_KEY') || '',
+      GEMINI_API_KEY: safeGet('GEMINI_API_KEY'),
+      TAVILY_API_KEY: safeGet('TAVILY_API_KEY'),
+      GROQ_API_KEY: safeGet('GROQ_API_KEY'),
+      JINA_API_KEY: safeGet('JINA_API_KEY'),
+      SERPAPI_KEY: safeGet('SERPAPI_KEY'),
     };
   });
 
@@ -1711,11 +1721,11 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => {
-                    localStorage.removeItem('GEMINI_API_KEY');
-                    localStorage.removeItem('TAVILY_API_KEY');
-                    localStorage.removeItem('GROQ_API_KEY');
-                    localStorage.removeItem('JINA_API_KEY');
-                    localStorage.removeItem('SERPAPI_KEY');
+                    const keys = ['GEMINI_API_KEY','TAVILY_API_KEY','GROQ_API_KEY','JINA_API_KEY','SERPAPI_KEY'];
+                    for (const k of keys) {
+                      try { localStorage.removeItem(k); } catch {}
+                      try { if ((window as any).__market3d_keys) delete (window as any).__market3d_keys[k]; } catch {}
+                    }
                     setCustomKeys({
                       GEMINI_API_KEY: '',
                       TAVILY_API_KEY: '',
@@ -1732,11 +1742,32 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => {
-                    localStorage.setItem('GEMINI_API_KEY', customKeys.GEMINI_API_KEY);
-                    localStorage.setItem('TAVILY_API_KEY', customKeys.TAVILY_API_KEY);
-                    localStorage.setItem('GROQ_API_KEY', customKeys.GROQ_API_KEY);
-                    localStorage.setItem('JINA_API_KEY', customKeys.JINA_API_KEY);
-                    localStorage.setItem('SERPAPI_KEY', customKeys.SERPAPI_KEY);
+                    const entries: [string,string][] = [
+                      ['GEMINI_API_KEY', customKeys.GEMINI_API_KEY.trim()],
+                      ['TAVILY_API_KEY', customKeys.TAVILY_API_KEY.trim()],
+                      ['GROQ_API_KEY', customKeys.GROQ_API_KEY.trim()],
+                      ['JINA_API_KEY', customKeys.JINA_API_KEY.trim()],
+                      ['SERPAPI_KEY', customKeys.SERPAPI_KEY.trim()],
+                    ];
+                    let lsOk = true;
+                    try {
+                      if (!(window as any).__market3d_keys) (window as any).__market3d_keys = {};
+                    } catch {}
+                    for (const [k, v] of entries) {
+                      try { localStorage.setItem(k, v); } catch { lsOk = false; }
+                      try { (window as any).__market3d_keys[k] = v; } catch {}
+                    }
+                    // Reflect trimmed values back into state so next open shows what was saved
+                    setCustomKeys({
+                      GEMINI_API_KEY: entries[0][1],
+                      TAVILY_API_KEY: entries[1][1],
+                      GROQ_API_KEY: entries[2][1],
+                      JINA_API_KEY: entries[3][1],
+                      SERPAPI_KEY: entries[4][1],
+                    });
+                    alert(lsOk
+                      ? '✓ Chaves salvas com sucesso!'
+                      : '✓ Chaves salvas para esta sessão. O navegador bloqueou o armazenamento permanente — recarregar a página pode limpá-las.');
                     setIsApiSettingsOpen(false);
                   }}
                   className="bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-bold px-5 py-2 text-xs rounded-xl transition-all shadow-md cursor-pointer h-[38px]"
