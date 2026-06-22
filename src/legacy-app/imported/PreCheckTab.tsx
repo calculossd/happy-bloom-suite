@@ -1,4 +1,3 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import {
@@ -12,11 +11,6 @@ import {
   getProfile, saveProfile, listRuns, pushRun, loadProgress, saveProgress,
   type CalibrationProfile,
 } from "@/lib/calibration-db";
-
-export const Route = createFileRoute("/calibracao")({
-  head: () => ({ meta: [{ title: "Calibração — ImpreMetrics 3D" }] }),
-  component: CalibrationPage,
-});
 
 type Step = {
   id: string;
@@ -262,7 +256,7 @@ function CalibrationPage() {
         {printers.length === 0 && (
           <div className="mb-6 rounded-xl border border-amber-400/30 bg-amber-500/5 p-4 text-sm text-amber-200">
             Nenhuma impressora cadastrada.{" "}
-            <Link to="/impressoras" className="underline">Cadastrar agora</Link> para enviar G-code direto pelo app.
+            <span className="underline opacity-60">Cadastrar agora</span> para enviar G-code direto pelo app.
           </div>
         )}
 
@@ -544,3 +538,5 @@ function HistoryPanel() {
     </div>
   );
 }
+
+export default CalibrationPage;

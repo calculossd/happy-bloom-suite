@@ -1,16 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { ExternalLink, Plus, Trash2, Search } from "lucide-react";
-
-export const Route = createFileRoute("/sites")({
-  head: () => ({
-    meta: [
-      { title: "Sites & Ferramentas — ImpreMetrics 3D" },
-      { name: "description", content: "Diretório curado de sites e ferramentas para impressão 3D: MakerWorld, Printables, Cults, Thangs e mais." },
-    ],
-  }),
-  component: SitesPage,
-});
 
 type Link = { id: string; name: string; url: string; category: string; desc?: string };
 
@@ -182,3 +171,5 @@ function SitesPage() {
     </div>
   );
 }
+
+export default SitesPage;

@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
   Plus,
@@ -11,16 +10,6 @@ import {
   XCircle,
   Loader2,
 } from "lucide-react";
-
-export const Route = createFileRoute("/agenda")({
-  head: () => ({
-    meta: [
-      { title: "Agenda — ImpreMetrics 3D" },
-      { name: "description", content: "Agenda mensal com integração ao Hermes via webhook." },
-    ],
-  }),
-  component: AgendaPage,
-});
 
 type SendState = "idle" | "sending" | "ok" | "err";
 type Event = {
@@ -430,3 +419,5 @@ function AgendaPage() {
     </div>
   );
 }
+
+export default AgendaPage;
