@@ -2,8 +2,10 @@
 import { useState } from 'react';
 import {
   Search, Box, Megaphone, Columns3, FileBox, ClipboardCheck,
-  Calendar, Globe, Wrench, Plus, ExternalLink, Check, Trash2
+  Calendar, Globe, Wrench, Plus, ExternalLink, Check, Trash2, ShoppingBag, Star, TrendingDown, Loader2
 } from 'lucide-react';
+import { getApiUrl } from '../utils/api';
+import { safeStorage } from '../utils/storage';
 
 const panel = "rounded-2xl border border-white/10 bg-black/30 backdrop-blur-md p-4";
 const sectionTitle = "text-[13px] font-bold text-[var(--cat-lime,#A5D84B)] uppercase tracking-wider mb-3";
@@ -14,39 +16,125 @@ const chip = "inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] 
 /* =================== PESQUISA DE PREÇOS =================== */
 export function PriceResearchTab() {
   const [query, setQuery] = useState('');
-  const [items, setItems] = useState([
-    { name: 'Filamento PLA 1kg', ml: 'R$ 89,90', shopee: 'R$ 82,50', amazon: 'R$ 95,00' },
-    { name: 'Filamento PETG 1kg', ml: 'R$ 110,00', shopee: 'R$ 105,00', amazon: 'R$ 119,00' },
-  ]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [searched, setSearched] = useState('');
+  const [offers, setOffers] = useState<any[]>([]);
+
+  const runSearch = async (term = query) => {
+    const q = String(term || '').trim();
+    if (!q) {
+      setError('Digite o nome de um produto para pesquisar.');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+    setSearched(q);
+
+    try {
+      const customSerpKey = safeStorage.getItem('bambuzau_custom_serp_key', '');
+      const params = new URLSearchParams({ q, type: 'Produtos' });
+      if (customSerpKey) params.set('api_key', customSerpKey.trim());
+
+      const res = await fetch(getApiUrl(`/api/quotations?${params.toString()}`), {
+        headers: { 'X-Custom-Serpapi-Key': customSerpKey.trim() },
+      });
+      const data = await res.json().catch(() => []);
+      const group = Array.isArray(data) ? data[0] : data;
+      const list = Array.isArray(group?.offers) ? group.offers : Array.isArray(data?.offers) ? data.offers : [];
+
+      setOffers([...list].sort((a, b) => Number(a.price || 0) - Number(b.price || 0)).slice(0, 12));
+      if (!list.length) setError('Nenhum preço encontrado para este produto.');
+    } catch (err: any) {
+      setError(err?.message || 'Falha ao pesquisar preços.');
+      setOffers([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const examples = ['garrafa térmica stanley', 'fone bluetooth', 'suporte celular carro', 'mochila executiva'];
+  const lowest = offers.length ? offers.reduce((best, item) => Number(item.price) < Number(best.price) ? item : best, offers[0]) : null;
+
   return (
     <div className="space-y-4">
       <div className={panel}>
-        <h3 className={sectionTitle}>Buscar produto</h3>
-        <div className="flex gap-2">
-          <input className={inputCls} placeholder="Ex.: Filamento PLA 1kg" value={query} onChange={e => setQuery(e.target.value)} />
-          <button className={btnPrimary}><Search className="h-3.5 w-3.5" />Buscar</button>
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+          <div className="space-y-2 flex-1">
+            <h3 className={sectionTitle + " mb-0"}>Pesquisa de produtos</h3>
+            <p className="text-[11px] text-zinc-400 max-w-2xl">Busque qualquer produto no Google Shopping e compare as melhores ofertas por menor preço.</p>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <input
+                className={inputCls + " py-3"}
+                placeholder="Ex.: garrafa térmica, fone bluetooth, suporte celular..."
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+                onKeyDown={e => { if (e.key === 'Enter') runSearch(); }}
+              />
+              <button onClick={() => runSearch()} disabled={loading} className={btnPrimary + " justify-center py-3 min-w-[132px] disabled:opacity-60"}>
+                {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Search className="h-3.5 w-3.5" />}
+                {loading ? 'Buscando' : 'Pesquisar'}
+              </button>
+            </div>
+          </div>
+          {lowest && (
+            <div className="rounded-xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 min-w-[190px]">
+              <div className="text-[9px] text-emerald-300 uppercase font-black flex items-center gap-1"><TrendingDown className="h-3 w-3" />Menor preço</div>
+              <div className="text-xl font-black text-white">R$ {Number(lowest.price || 0).toFixed(2)}</div>
+              <div className="text-[10px] text-zinc-400 truncate">{lowest.storeName}</div>
+            </div>
+          )}
         </div>
-      </div>
-      <div className={panel}>
-        <h3 className={sectionTitle}>Comparativo</h3>
-        <div className="overflow-x-auto">
-          <table className="w-full text-[12px]">
-            <thead><tr className="text-zinc-400 text-left">
-              <th className="py-2">Produto</th><th>Mercado Livre</th><th>Shopee</th><th>Amazon</th>
-            </tr></thead>
-            <tbody>
-              {items.map((it, i) => (
-                <tr key={i} className="border-t border-white/5">
-                  <td className="py-2 text-white">{it.name}</td>
-                  <td className="text-yellow-300">{it.ml}</td>
-                  <td className="text-orange-300">{it.shopee}</td>
-                  <td className="text-sky-300">{it.amazon}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="flex flex-wrap gap-2 mt-3">
+          {examples.map(ex => (
+            <button key={ex} onClick={() => { setQuery(ex); runSearch(ex); }} className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-[10px] text-zinc-300 hover:text-white hover:border-[var(--cat-lime,#A5D84B)]/40">{ex}</button>
+          ))}
         </div>
+        {error && <div className="mt-3 text-[11px] text-amber-300 bg-amber-500/10 border border-amber-500/20 rounded-lg p-2">{error}</div>}
       </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
+        {offers.map((offer, i) => (
+          <div key={`${offer.productName}-${i}`} className={panel + " flex gap-3 items-start"}>
+            <div className="h-14 w-14 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 overflow-hidden">
+              {offer.thumbnail ? <img src={offer.thumbnail} alt={offer.productName} className="h-full w-full object-cover" /> : <ShoppingBag className="h-6 w-6 text-[var(--cat-lime,#A5D84B)]" />}
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center justify-between gap-2 mb-1">
+                <span className={`${chip} bg-white/10 text-zinc-300`}>{offer.storeName || 'Loja'}</span>
+                {i === 0 && <span className={`${chip} bg-emerald-400/15 text-emerald-300`}>Melhor preço</span>}
+              </div>
+              <div className="text-[12px] font-bold text-white leading-snug line-clamp-2">{offer.productName}</div>
+              <div className="mt-2 flex items-center justify-between gap-3">
+                <div>
+                  <div className="text-lg font-black text-[var(--cat-lime,#A5D84B)]">R$ {Number(offer.price || 0).toFixed(2)}</div>
+                  <div className="text-[10px] text-zinc-500 flex items-center gap-1"><Star className="h-3 w-3 text-yellow-400" />{Number(offer.rating || 4.5).toFixed(1)}</div>
+                </div>
+                {offer.buyUrl && (
+                  <a href={offer.buyUrl} target="_blank" rel="noreferrer" className={btnPrimary + " bg-white/10 text-white hover:bg-white/15"}>
+                    Abrir <ExternalLink className="h-3 w-3" />
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {!offers.length && !loading && (
+          <div className={panel + " xl:col-span-2 text-center py-12"}>
+            <Search className="h-10 w-10 mx-auto text-zinc-600 mb-3" />
+            <div className="text-sm font-bold text-white">Pesquise um produto acima</div>
+            <div className="text-[11px] text-zinc-500 mt-1">Os resultados aparecem aqui em ordem de menor preço.</div>
+          </div>
+        )}
+      </div>
+
+      {searched && offers.length > 0 && (
+        <div className="text-[10px] text-zinc-500 text-right">
+          Resultado para: <strong className="text-zinc-300">{searched}</strong>
+        </div>
+      )}
     </div>
   );
 }
