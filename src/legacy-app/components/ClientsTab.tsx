@@ -889,9 +889,10 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
 
   return (
     <div className="space-y-6" id="clients_tab_container">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className={viewMode === 'full' ? 'grid grid-cols-1 lg:grid-cols-2 gap-6' : 'grid grid-cols-1 gap-6'}>
         
         {/* LEFT COLUMN: CLIENT CATALOG */}
+        {viewMode !== 'printers' && (
         <div className="bg-[#151917] border border-[#232B27] p-6 rounded-2xl space-y-4" id="clients-catalog">
           <div className="flex items-center justify-between pb-2 border-b border-[#232B27]">
             <div>
