@@ -1763,6 +1763,15 @@ export default function App() {
           { id: 2, label: 'Clientes',  icon: Users },
           { id: 3, label: 'Pedidos',   icon: GitPullRequest, badge: pendingOrdersCount },
           { id: 4, label: 'Gestão',    icon: Layers },
+          { id: 7,  label: 'Preços',     icon: Search },
+          { id: 8,  label: 'Catálogo 3D',icon: Box },
+          { id: 9,  label: 'Marketing',  icon: Megaphone },
+          { id: 10, label: 'Kanban',     icon: Columns3 },
+          { id: 11, label: 'Modelos',    icon: FileBox },
+          { id: 12, label: 'Pré-check',  icon: ClipboardCheck },
+          { id: 13, label: 'Agenda',     icon: Calendar },
+          { id: 14, label: 'Sites',      icon: Globe },
+          { id: 15, label: 'Ferramentas',icon: Wrench },
           { id: 5, label: 'Ajustes',   icon: Settings },
         ].map(item => {
           const active = currentTab === item.id;
