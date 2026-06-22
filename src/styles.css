@@ -410,7 +410,8 @@ textarea:focus {
 input::placeholder, textarea::placeholder { color: var(--brand-text-subtle); }
 
 /* Modal/dialog surfaces */
-[role="dialog"], .modal-panel {
+[role="dialog"], .modal-panel,
+.fixed.inset-0 > div:not(.fixed):not([class*="inset-0"]) {
   background: linear-gradient(180deg, #161922 0%, #11141C 100%) !important;
   border: 1px solid var(--brand-hairline) !important;
   border-radius: 24px !important;
