@@ -707,3 +707,166 @@ input, select, textarea {
   box-shadow: 0 6px 20px -8px rgba(216,255,61,0.45) !important;
 }
 .legacy-skin .p-5 { padding: 1rem !important; }
+
+/* ===== UNIFIED BRAND SKIN — kill rainbow accents across legacy app ===== */
+/* Single source of truth: dark navy + lime + teal. Everything else flattens. */
+
+/* 1. Neutralize colored gradient backgrounds on cards/sections → unified surface */
+.legacy-skin [class*="bg-gradient-to-"][class*="from-emerald"],
+.legacy-skin [class*="bg-gradient-to-"][class*="from-teal"],
+.legacy-skin [class*="bg-gradient-to-"][class*="from-cyan"],
+.legacy-skin [class*="bg-gradient-to-"][class*="from-sky"],
+.legacy-skin [class*="bg-gradient-to-"][class*="from-blue"],
+.legacy-skin [class*="bg-gradient-to-"][class*="from-indigo"],
+.legacy-skin [class*="bg-gradient-to-"][class*="from-purple"],
+.legacy-skin [class*="bg-gradient-to-"][class*="from-pink"],
+.legacy-skin [class*="bg-gradient-to-"][class*="from-rose"],
+.legacy-skin [class*="bg-gradient-to-"][class*="from-red"],
+.legacy-skin [class*="bg-gradient-to-"][class*="from-orange"],
+.legacy-skin [class*="bg-gradient-to-"][class*="from-amber"],
+.legacy-skin [class*="bg-gradient-to-"][class*="from-yellow"] {
+  background-image: linear-gradient(180deg, rgba(28,32,48,0.65), rgba(20,23,34,0.85)) !important;
+}
+
+/* 2. Solid colored panel backgrounds → unified dark surface */
+.legacy-skin [class*="bg-emerald-"]:not(button):not([class*="bg-emerald-400"]):not([class*="bg-emerald-500"]):not([class*="/"]),
+.legacy-skin [class*="bg-teal-"]:not(button):not([class*="/"]),
+.legacy-skin [class*="bg-cyan-"]:not(button):not([class*="/"]),
+.legacy-skin [class*="bg-sky-"]:not(button):not([class*="/"]),
+.legacy-skin [class*="bg-blue-"]:not(button):not([class*="/"]),
+.legacy-skin [class*="bg-indigo-"]:not(button):not([class*="/"]),
+.legacy-skin [class*="bg-purple-"]:not(button):not([class*="/"]),
+.legacy-skin [class*="bg-pink-"]:not(button):not([class*="/"]),
+.legacy-skin [class*="bg-rose-"]:not(button):not([class*="/"]),
+.legacy-skin [class*="bg-orange-"]:not(button):not([class*="/"]),
+.legacy-skin [class*="bg-amber-"]:not(button):not([class*="/"]),
+.legacy-skin [class*="bg-yellow-"]:not(button):not([class*="/"]) {
+  background-color: rgba(22,25,34,0.85) !important;
+}
+
+/* 3. Recolor accent text/borders/dots → lime (primary) or teal (secondary) */
+.legacy-skin .text-emerald-300, .legacy-skin .text-emerald-400, .legacy-skin .text-emerald-500,
+.legacy-skin .text-green-300, .legacy-skin .text-green-400, .legacy-skin .text-green-500,
+.legacy-skin .text-lime-300, .legacy-skin .text-lime-400 { color: #D8FF3D !important; }
+
+.legacy-skin .text-cyan-300, .legacy-skin .text-cyan-400,
+.legacy-skin .text-sky-300, .legacy-skin .text-sky-400,
+.legacy-skin .text-teal-300, .legacy-skin .text-teal-400 { color: #6BE3DD !important; }
+
+.legacy-skin .text-orange-300, .legacy-skin .text-orange-400, .legacy-skin .text-orange-500,
+.legacy-skin .text-amber-300, .legacy-skin .text-amber-400, .legacy-skin .text-amber-500,
+.legacy-skin .text-yellow-300, .legacy-skin .text-yellow-400 { color: #E8FF7A !important; }
+
+.legacy-skin .text-pink-300, .legacy-skin .text-pink-400,
+.legacy-skin .text-rose-300, .legacy-skin .text-rose-400,
+.legacy-skin .text-fuchsia-300, .legacy-skin .text-fuchsia-400,
+.legacy-skin .text-purple-300, .legacy-skin .text-purple-400 { color: #C8B5FF !important; }
+
+.legacy-skin .text-red-300, .legacy-skin .text-red-400, .legacy-skin .text-red-500 { color: #FF8A7A !important; }
+
+/* Borders flatten to hairline; active/colored borders → lime */
+.legacy-skin [class*="border-emerald"],
+.legacy-skin [class*="border-green"],
+.legacy-skin [class*="border-lime"] { border-color: rgba(216,255,61,0.28) !important; }
+
+.legacy-skin [class*="border-cyan"],
+.legacy-skin [class*="border-sky"],
+.legacy-skin [class*="border-teal"],
+.legacy-skin [class*="border-blue"],
+.legacy-skin [class*="border-indigo"],
+.legacy-skin [class*="border-purple"],
+.legacy-skin [class*="border-pink"],
+.legacy-skin [class*="border-rose"],
+.legacy-skin [class*="border-orange"],
+.legacy-skin [class*="border-amber"],
+.legacy-skin [class*="border-yellow"],
+.legacy-skin [class*="border-red"] { border-color: var(--brand-hairline) !important; }
+
+/* 4. Gradient text → unified lime-to-teal */
+.legacy-skin .bg-clip-text.text-transparent,
+.legacy-skin [class*="bg-gradient-to-"][class*="bg-clip-text"] {
+  background-image: linear-gradient(135deg, #ffffff 0%, #E8FF7A 55%, #D8FF3D 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* 5. Primary CTAs → unified lime button regardless of original color */
+.legacy-skin button[class*="bg-gradient-to-"]:not([class*="bg-clip-text"]),
+.legacy-skin button[class*="from-lime"],
+.legacy-skin button[class*="from-emerald"],
+.legacy-skin button[class*="from-green"],
+.legacy-skin button[class*="from-cyan"],
+.legacy-skin button[class*="from-teal"],
+.legacy-skin button[class*="from-blue"],
+.legacy-skin button[class*="from-indigo"],
+.legacy-skin button[class*="from-purple"],
+.legacy-skin button[class*="from-pink"],
+.legacy-skin button[class*="from-orange"],
+.legacy-skin button[class*="from-amber"],
+.legacy-skin button[class*="from-red"] {
+  background-image: linear-gradient(135deg, #D8FF3D 0%, #C8F25C 100%) !important;
+  color: #0E1014 !important;
+  font-weight: 700 !important;
+  border: 1px solid rgba(216,255,61,0.5) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 28px -10px rgba(216,255,61,0.5), inset 0 1px 0 rgba(255,255,255,0.25) !important;
+  transition: filter .25s ease, transform .2s ease, box-shadow .25s ease !important;
+}
+.legacy-skin button[class*="bg-gradient-to-"]:hover {
+  filter: brightness(1.08) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* 6. SVG/icon stroke recoloring — paint legacy lucide icons with brand */
+.legacy-skin [class*="text-emerald"] svg,
+.legacy-skin [class*="text-green-4"] svg,
+.legacy-skin [class*="text-lime"] svg { color: #D8FF3D !important; }
+.legacy-skin [class*="text-cyan"] svg,
+.legacy-skin [class*="text-sky"] svg,
+.legacy-skin [class*="text-teal"] svg { color: #6BE3DD !important; }
+
+/* 7. Unified card recipe — every panel/section gets the same surface */
+.legacy-skin section,
+.legacy-skin [class*="rounded-2xl"],
+.legacy-skin [class*="rounded-3xl"],
+.legacy-skin [class*="rounded-[2"] {
+  background-color: rgba(22,25,34,0.72) !important;
+  border-color: var(--brand-hairline) !important;
+}
+
+/* 8. Header + ticker tape integration — same surface family */
+.legacy-skin header {
+  background: linear-gradient(180deg, rgba(22,25,34,0.85), rgba(14,16,20,0.75)) !important;
+  border-color: rgba(216,255,61,0.10) !important;
+  box-shadow:
+    0 24px 60px -28px rgba(0,0,0,0.9),
+    0 0 0 1px rgba(216,255,61,0.06),
+    0 0 40px -8px rgba(216,255,61,0.10) !important;
+}
+
+/* Kill multi-color ambient blur orbs in headers/heroes — too noisy */
+.legacy-skin header > .absolute.rounded-full,
+.legacy-skin section > .absolute.rounded-full {
+  filter: hue-rotate(0deg) saturate(0.4) !important;
+  opacity: 0.5 !important;
+}
+
+/* 9. Status dot harmony */
+.legacy-skin .bg-emerald-400, .legacy-skin .bg-green-400, .legacy-skin .bg-lime-400 {
+  background-color: #D8FF3D !important;
+  box-shadow: 0 0 8px rgba(216,255,61,0.6) !important;
+}
+.legacy-skin .bg-cyan-400, .legacy-skin .bg-sky-400, .legacy-skin .bg-teal-400 {
+  background-color: #6BE3DD !important;
+  box-shadow: 0 0 8px rgba(107,227,221,0.5) !important;
+}
+
+/* 10. Tabular numbers everywhere for KPI/financial values */
+.legacy-skin .font-mono,
+.legacy-skin [class*="text-3xl"],
+.legacy-skin [class*="text-4xl"],
+.legacy-skin [class*="text-5xl"] {
+  font-variant-numeric: tabular-nums;
+}
