@@ -28,6 +28,7 @@ function normalize(s: string) {
 
 export function PriceConfidence({ term, platform, referencePrice }: Props) {
   void term;
+  void platform;
   // Deterministic pseudo-confidence baseline (no backend in this build).
   const n = 0;
   const mean = referencePrice;
@@ -38,53 +39,6 @@ export function PriceConfidence({ term, platform, referencePrice }: Props) {
     score >= 70 ? { label: 'Alta', color: 'emerald', Icon: ShieldCheck }
     : score >= 40 ? { label: 'Média', color: 'amber', Icon: Database }
     : { label: 'Baixa', color: 'rose', Icon: AlertTriangle };
-
-  const recordObservation = async () => {
-    if (!authed) return;
-    setSaving(true);
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) {
-      await supabase.from('price_observations').insert({
-        query_term: term,
-        normalized_term: normalized,
-        platform,
-        price: referencePrice,
-        source: 'user_search',
-        confidence: 0.6,
-        user_id: user.id,
-      });
-      await load();
-    }
-    setSaving(false);
-  };
-
-  const saveCorrection = async () => {
-    if (!authed) return;
-    const value = parseFloat(draft);
-    if (!isFinite(value) || value <= 0) return;
-    setSaving(true);
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) {
-      await supabase.from('price_corrections').upsert({
-        user_id: user.id,
-        normalized_term: normalized,
-        platform,
-        corrected_price: value,
-      }, { onConflict: 'user_id,normalized_term,platform' });
-      await supabase.from('price_observations').insert({
-        query_term: term,
-        normalized_term: normalized,
-        platform,
-        price: value,
-        source: 'manual_correction',
-        confidence: 0.95,
-        user_id: user.id,
-      });
-      setEditing(false);
-      await load();
-    }
-    setSaving(false);
-  };
 
   return (
     <div className="bg-[#05080F]/60 rounded-2xl p-5 border border-[#121826] space-y-4">
