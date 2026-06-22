@@ -128,23 +128,25 @@ html {
 
 
 
-/* ===== PREMIUM DESIGN SYSTEM — Noir & Gold ===== */
+/* ===== OBSIDIAN PRECISION COCKPIT ===== */
 :root {
-  --brand-bg: #0a0a0c;
-  --brand-surface-1: #121215;
-  --brand-surface-2: #1a1a1f;
-  --brand-hairline: rgba(255, 255, 255, 0.06);
+  --brand-bg: #070708;
+  --brand-surface-1: rgba(255, 255, 255, 0.02);
+  --brand-surface-2: rgba(255, 255, 255, 0.03);
+  --brand-hairline: rgba(255, 255, 255, 0.05);
   --brand-hairline-strong: rgba(255, 255, 255, 0.12);
-  --brand-text: #f4f4f5;
-  --brand-text-muted: rgba(244, 244, 245, 0.62);
-  --brand-text-subtle: rgba(244, 244, 245, 0.42);
-  --brand-primary: 201, 168, 76; /* gold rgb */
-  --brand-accent: #c9a84c;
-  --brand-accent-bright: #f0d78c;
-  --shadow-soft: 0 1px 2px rgba(0,0,0,0.4), 0 8px 24px -8px rgba(0,0,0,0.5);
-  --shadow-elevated: 0 2px 4px rgba(0,0,0,0.5), 0 24px 64px -16px rgba(0,0,0,0.7);
-  --shadow-gold: 0 0 0 1px rgba(201,168,76,0.18), 0 12px 40px -10px rgba(201,168,76,0.25);
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --brand-text: #f8fafc;
+  --brand-text-muted: rgb(148, 163, 184);   /* slate-400 */
+  --brand-text-subtle: rgb(100, 116, 139);  /* slate-500 */
+  --brand-primary: 249, 115, 22;            /* orange-500 rgb */
+  --brand-accent: #f97316;
+  --brand-accent-bright: #fdba74;
+  --brand-success: #10b981;
+  --shadow-soft: 0 1px 2px rgba(0,0,0,0.5), 0 8px 24px -10px rgba(0,0,0,0.6);
+  --shadow-elevated: 0 2px 4px rgba(0,0,0,0.6), 0 28px 64px -20px rgba(0,0,0,0.8);
+  --shadow-gold: 0 0 0 1px rgba(249,115,22,0.22), 0 12px 40px -12px rgba(249,115,22,0.30);
+  --glow-thermal: 0 0 10px rgba(249,115,22,0.5);
+  --ease-out-expo: cubic-bezier(0.22, 0.61, 0.36, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
@@ -153,7 +155,7 @@ html, body {
   color: var(--brand-text);
 }
 
-/* Ambient radial backdrop */
+/* Ambient radial backdrop — thermal */
 body::before {
   content: "";
   position: fixed;
@@ -161,9 +163,9 @@ body::before {
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(1200px 600px at 15% -10%, rgba(201,168,76,0.08), transparent 60%),
-    radial-gradient(900px 500px at 90% 10%, rgba(79,70,229,0.05), transparent 65%),
-    radial-gradient(800px 600px at 50% 110%, rgba(201,168,76,0.04), transparent 70%);
+    radial-gradient(900px 500px at 12% -10%, rgba(249,115,22,0.06), transparent 60%),
+    radial-gradient(800px 500px at 88% 8%, rgba(56,189,248,0.03), transparent 65%),
+    radial-gradient(700px 500px at 50% 110%, rgba(249,115,22,0.04), transparent 70%);
 }
 body > * { position: relative; z-index: 1; }
 
