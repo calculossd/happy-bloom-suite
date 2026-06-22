@@ -388,6 +388,44 @@ table, .numbers, input[type="number"] { font-variant-numeric: tabular-nums; }
   .tt-shell { padding-left: 240px; }
 }
 
+/* ===== TASKTRAIL FORM CONTROLS ===== */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+select,
+textarea {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--brand-hairline);
+  border-radius: 12px;
+  color: var(--brand-text);
+  padding: .65rem .85rem;
+  transition: border-color .2s var(--ease-out-expo), background .2s var(--ease-out-expo), box-shadow .2s var(--ease-out-expo);
+}
+input:not([type="checkbox"]):not([type="radio"]):focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: rgba(216,255,61,0.6);
+  background: rgba(255,255,255,0.05);
+  box-shadow: 0 0 0 3px rgba(216,255,61,0.15);
+}
+input::placeholder, textarea::placeholder { color: var(--brand-text-subtle); }
+
+/* Modal/dialog surfaces */
+[role="dialog"], .modal-panel {
+  background: linear-gradient(180deg, #161922 0%, #11141C 100%) !important;
+  border: 1px solid var(--brand-hairline) !important;
+  border-radius: 24px !important;
+  box-shadow: var(--shadow-elevated) !important;
+}
+
+/* Switches & checkbox accent */
+input[type="checkbox"], input[type="radio"] { accent-color: var(--cat-lime); }
+
+/* Page header rhythm — eyebrow tag color */
+.eyebrow { color: var(--cat-lime); opacity: .85; }
+
+/* Smooth transitions on tab content */
+main { transition: opacity .25s var(--ease-out-expo); }
+
 /* ===== COCKPIT UTILITIES ===== */
 /* Editorial micro-label: UPPERCASE tracking-wide slate */
 .eyebrow {
