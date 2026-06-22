@@ -20,6 +20,10 @@ import { SettingsTab } from './components/SettingsTab';
 import { SoldTab } from './components/SoldTab';
 import { OkLojaAssistant } from './components/OkLojaAssistant';
 import { ShowcaseView } from './components/ShowcaseView';
+import {
+  PriceResearchTab, Catalog3DTab, MarketingTab, KanbanTab, ModelsTab,
+  PreCheckTab, AgendaTab, SitesTab, ToolsTab
+} from './components/NewTabs';
 import { 
   Wrench, 
   RefreshCw, 
@@ -40,7 +44,15 @@ import {
   Wifi,
   WifiOff,
   Menu,
-  X
+  X,
+  Search,
+  Box,
+  Megaphone,
+  Columns3,
+  FileBox,
+  ClipboardCheck,
+  Calendar,
+  Globe
 } from 'lucide-react';
 
 // STUNNING 3D CUBE & PRINTER EXTENSION GEOMETRIC LOGO
@@ -1494,6 +1506,15 @@ export default function App() {
           title: "Vendas & Vitrine",
           subtitle: "Pedidos finalizados, lucros e vitrine de catálogos",
         };
+      case 7:  return { title: "Pesquisa de Preços", subtitle: "Compare preços entre marketplaces e fornecedores" };
+      case 8:  return { title: "Catálogo 3D",        subtitle: "Biblioteca de produtos com material, tempo e preço" };
+      case 9:  return { title: "Marketing",          subtitle: "Campanhas, geração de posts e calendário de publicações" };
+      case 10: return { title: "Kanban",             subtitle: "Fluxo visual dos pedidos da fila ao entregue" };
+      case 11: return { title: "Modelos",            subtitle: "Biblioteca de arquivos STL e 3MF" };
+      case 12: return { title: "Pré-check",          subtitle: "Checklist antes de iniciar a impressão" };
+      case 13: return { title: "Agenda",             subtitle: "Eventos, entregas e manutenções programadas" };
+      case 14: return { title: "Sites",              subtitle: "Lojas e sites conectados ao seu ateliê" };
+      case 15: return { title: "Ferramentas",        subtitle: "Calculadoras e utilitários para impressão 3D" };
       default:
         return {
           title: "Ateliê 3D",
@@ -1742,6 +1763,15 @@ export default function App() {
           { id: 2, label: 'Clientes',  icon: Users },
           { id: 3, label: 'Pedidos',   icon: GitPullRequest, badge: pendingOrdersCount },
           { id: 4, label: 'Gestão',    icon: Layers },
+          { id: 7,  label: 'Preços',     icon: Search },
+          { id: 8,  label: 'Catálogo 3D',icon: Box },
+          { id: 9,  label: 'Marketing',  icon: Megaphone },
+          { id: 10, label: 'Kanban',     icon: Columns3 },
+          { id: 11, label: 'Modelos',    icon: FileBox },
+          { id: 12, label: 'Pré-check',  icon: ClipboardCheck },
+          { id: 13, label: 'Agenda',     icon: Calendar },
+          { id: 14, label: 'Sites',      icon: Globe },
+          { id: 15, label: 'Ferramentas',icon: Wrench },
           { id: 5, label: 'Ajustes',   icon: Settings },
         ].map(item => {
           const active = currentTab === item.id;
@@ -2218,6 +2248,16 @@ export default function App() {
             clients={clients}
           />
         )}
+
+        {currentTab === 7  && <PriceResearchTab />}
+        {currentTab === 8  && <Catalog3DTab />}
+        {currentTab === 9  && <MarketingTab />}
+        {currentTab === 10 && <KanbanTab />}
+        {currentTab === 11 && <ModelsTab />}
+        {currentTab === 12 && <PreCheckTab />}
+        {currentTab === 13 && <AgendaTab />}
+        {currentTab === 14 && <SitesTab />}
+        {currentTab === 15 && <ToolsTab />}
       </main>
 
 
