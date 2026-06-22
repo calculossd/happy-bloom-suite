@@ -1792,6 +1792,8 @@ export default function App() {
         <Menu className="h-5 w-5" />
       </button>
 
+      {currentTab !== 0 && (
+      <>
       {/* GLOBAL HEADER (Floating Glassmorphism Island Header - Lovable Styled) */}
       <header className="relative md:mx-auto md:my-4 md:max-w-7xl md:rounded-[2rem] border border-white/10 bg-black/40 sticky top-0 md:top-2 z-50 backdrop-blur-2xl px-6 py-4 md:py-4.5 flex flex-col md:flex-row items-center justify-between gap-4 transition-all duration-300 shadow-[0_24px_50px_rgba(0,0,0,0.8)] overflow-hidden">
         
@@ -1966,6 +1968,9 @@ export default function App() {
         </div>
       </div>
 
+
+      </>
+      )}
 
       {/* TWO-PANEL CONTENT OR CENTRAL CONTAINER */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 pb-28 space-y-4">
