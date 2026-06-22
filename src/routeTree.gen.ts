@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiQuotationsRouteImport } from './routes/api/quotations'
+import { Route as ApiKeysStatusRouteImport } from './routes/api/keys-status'
+import { Route as Api3dTrendsRouteImport } from './routes/api/3d-trends'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,30 +24,53 @@ const ApiQuotationsRoute = ApiQuotationsRouteImport.update({
   path: '/api/quotations',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiKeysStatusRoute = ApiKeysStatusRouteImport.update({
+  id: '/api/keys-status',
+  path: '/api/keys-status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Api3dTrendsRoute = Api3dTrendsRouteImport.update({
+  id: '/api/3d-trends',
+  path: '/api/3d-trends',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/3d-trends': typeof Api3dTrendsRoute
+  '/api/keys-status': typeof ApiKeysStatusRoute
   '/api/quotations': typeof ApiQuotationsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/3d-trends': typeof Api3dTrendsRoute
+  '/api/keys-status': typeof ApiKeysStatusRoute
   '/api/quotations': typeof ApiQuotationsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/3d-trends': typeof Api3dTrendsRoute
+  '/api/keys-status': typeof ApiKeysStatusRoute
   '/api/quotations': typeof ApiQuotationsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/quotations'
+  fullPaths: '/' | '/api/3d-trends' | '/api/keys-status' | '/api/quotations'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/quotations'
-  id: '__root__' | '/' | '/api/quotations'
+  to: '/' | '/api/3d-trends' | '/api/keys-status' | '/api/quotations'
+  id:
+    | '__root__'
+    | '/'
+    | '/api/3d-trends'
+    | '/api/keys-status'
+    | '/api/quotations'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  Api3dTrendsRoute: typeof Api3dTrendsRoute
+  ApiKeysStatusRoute: typeof ApiKeysStatusRoute
   ApiQuotationsRoute: typeof ApiQuotationsRoute
 }
 
@@ -65,11 +90,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiQuotationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/keys-status': {
+      id: '/api/keys-status'
+      path: '/api/keys-status'
+      fullPath: '/api/keys-status'
+      preLoaderRoute: typeof ApiKeysStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/3d-trends': {
+      id: '/api/3d-trends'
+      path: '/api/3d-trends'
+      fullPath: '/api/3d-trends'
+      preLoaderRoute: typeof Api3dTrendsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  Api3dTrendsRoute: Api3dTrendsRoute,
+  ApiKeysStatusRoute: ApiKeysStatusRoute,
   ApiQuotationsRoute: ApiQuotationsRoute,
 }
 export const routeTree = rootRouteImport
