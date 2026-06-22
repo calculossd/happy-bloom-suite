@@ -5,6 +5,7 @@ import {
   ChevronLeft, ChevronRight, Activity, GitPullRequest, Users as UsersIcon,
   Layers, ShoppingBag, Cpu, Package, CreditCard, Wallet, Banknote, Camera,
   TrendingUp, AlertTriangle, DollarSign, Percent, Clock as ClockIcon,
+  MapPin, Truck, CheckCircle2,
 } from 'lucide-react';
 
 /**
@@ -27,15 +28,13 @@ export const ReferenceDashboardHero: React.FC<any> = (props) => {
     calendar, monthLabel, onSelectTab,
   } = props;
 
-  // ===== 8 quick KPI pills (uniform lime-accent style — no palette) =====
+  // ===== 6 quick KPI pills (no filamentos, no máquinas) =====
   const kpis = [
     { icon: Briefcase,   big: fmtBRLk(monthRevenue),                badge: '+14%', sub: 'Faturamento',  tab: 4 },
     { icon: CalendarDays,big: `+${deliveredCount}`,                 badge: `+${openCount}`, sub: 'Pedidos', tab: 3 },
     { icon: DollarSign,  big: fmtBRLk(monthRevenue - monthExpense), badge: `${monthProfitMargin.toFixed(0)}%`, sub: 'Lucro', tab: 4 },
     { icon: Percent,     big: `${monthProfitMargin.toFixed(1)}%`,   badge: 'mês', sub: 'Margem',         tab: 4 },
     { icon: GitPullRequest, big: String(openCount),                 badge: `${readyToDeliver}✓`, sub: 'Em aberto', tab: 3 },
-    { icon: Cpu,         big: `${activePrinters}/${printers.length}`, badge: 'on', sub: 'Máquinas',      tab: 1 },
-    { icon: Package,     big: String(filaments.length),             badge: `${alertFilaments}!`, sub: 'Filamentos', tab: 4 },
     { icon: UsersIcon,   big: String(clients.length),               badge: 'base', sub: 'Clientes',     tab: 2 },
   ];
 
@@ -66,6 +65,23 @@ export const ReferenceDashboardHero: React.FC<any> = (props) => {
     .filter((o: any) => o.status === 'PRINTING' || o.status === 'QUEUE' || o.status === 'POST_PROCESS')
     .slice(0, 5);
 
+  // ===== Recent orders (top 6) =====
+  const recentOrders = [...(orders || [])]
+    .sort((a: any, b: any) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
+    .slice(0, 6);
+  const recentTotal = recentOrders.reduce((s: number, o: any) => s + (o.priceCharged || 0), 0);
+
+  // ===== Upcoming deliveries =====
+  const upcoming = [...(orders || [])]
+    .filter((o: any) => o.deliveryDate || o.dueDate)
+    .sort((a: any, b: any) => new Date(a.deliveryDate || a.dueDate).getTime() - new Date(b.deliveryDate || b.dueDate).getTime())
+    .slice(0, 5);
+
+  // ===== Critical stock =====
+  const criticalStock = (filaments || [])
+    .filter((f: any) => (f.currentWeight ?? 0) <= (f.alertThreshold ?? 200))
+    .slice(0, 5);
+
   // ===== Year-profit bars =====
   const months = Array.from({ length: 8 }).map((_, i) => {
     const d = new Date();
@@ -80,6 +96,21 @@ export const ReferenceDashboardHero: React.FC<any> = (props) => {
   if (months.every(m => m.value === 0)) [4000, 7000, 5500, 9800, 12500, 8200, 6800, 14200].forEach((v, i) => { months[i].value = v; });
   const maxBar = Math.max(...months.map(m => m.value), 1);
   const peakIdx = months.reduce((mx, m, i, a) => (m.value > a[mx].value ? i : mx), 0);
+
+  const statusMap: Record<string, { label: string; color: string }> = {
+    PRINTING: { label: 'Imprimindo', color: '#A5D84B' },
+    QUEUE: { label: 'Fila', color: '#5A8FE0' },
+    POST_PROCESS: { label: 'Acabamento', color: '#E0C04B' },
+    READY: { label: 'Pronto', color: '#A5D84B' },
+    DELIVERED: { label: 'Entregue', color: '#7DE08F' },
+    CANCELED: { label: 'Cancelado', color: '#E05A5A' },
+  };
+  const fmtDateTime = (d: any) => {
+    if (!d) return '—';
+    const dt = new Date(d);
+    return dt.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) +
+      ' · ' + dt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  };
 
   // ===== Calendar =====
   const { totalDays, firstDayIndex, getDaySales } = calendar;
@@ -100,7 +131,7 @@ export const ReferenceDashboardHero: React.FC<any> = (props) => {
           <span className="ml-2 text-xs font-medium text-white/40">{`{${monthLabel}}`}</span>
         </h1>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-8 gap-2 mb-5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-2 mb-5">
         {kpis.map((k, i) => (
           <button key={i} onClick={() => onSelectTab(k.tab)} className="text-left">
             <CompactKpi icon={<k.icon className="h-4 w-4" />} big={k.big} badge={k.badge} sub={k.sub} />
@@ -108,102 +139,7 @@ export const ReferenceDashboardHero: React.FC<any> = (props) => {
         ))}
       </div>
 
-      {/* ===== Printers monitor (with photo) + Calendar ===== */}
-      <div className="grid grid-cols-1 xl:grid-cols-[2fr_1fr] gap-5 mb-5">
-        <Panel>
-          <PanelHead title="Monitor das Máquinas" tag={`{${activePrinters}/${printers.length}}`} onOpen={() => onSelectTab(1)} />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {(printers || []).slice(0, 4).map((p: any) => {
-              const job = (orders || []).find((o: any) => o.assignedPrinterId === p.id && o.status === 'PRINTING');
-              const prog = job ? Math.round((job.printingProgress || 0) * 100) : (p.printProgress || 0);
-              const isPrinting = p.status === 'PRINTING';
-              return (
-                <button
-                  key={p.id}
-                  onClick={() => onSelectTab(1)}
-                  className="flex gap-3 p-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:border-[#A5D84B]/30 hover:bg-white/[0.04] transition text-left"
-                >
-                  {/* Photo slot */}
-                  <div className="h-20 w-20 shrink-0 rounded-xl overflow-hidden bg-black/40 border border-white/5 grid place-items-center relative">
-                    {p.imageUrl ? (
-                      <img src={p.imageUrl} alt={p.name} className="h-full w-full object-cover" />
-                    ) : (
-                      <Camera className="h-6 w-6 text-white/25" />
-                    )}
-                    <span className={`absolute top-1 right-1 h-2 w-2 rounded-full ${isPrinting ? 'bg-[#A5D84B] animate-pulse shadow-[0_0_8px_#A5D84B]' : 'bg-white/30'}`} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-baseline justify-between gap-2">
-                      <div className="text-sm font-bold text-white truncate">{p.name}</div>
-                      <span className="text-[9px] uppercase tracking-wider text-white/40 shrink-0">{p.model}</span>
-                    </div>
-                    <div className="text-[10px] text-white/45 truncate mb-2">
-                      {isPrinting ? (job?.itemName || 'Imprimindo…') : p.status === 'MAINTENANCE' ? 'Manutenção' : 'Disponível'}
-                    </div>
-                    {/* Progress bar */}
-                    <div className="h-2 rounded-full bg-white/5 overflow-hidden border border-white/5">
-                      <div
-                        className="h-full rounded-full transition-all"
-                        style={{
-                          width: `${prog}%`,
-                          background: 'linear-gradient(90deg, #A5D84B 0%, #C7F26B 100%)',
-                          boxShadow: '0 0 12px rgba(165,216,75,0.45)',
-                        }}
-                      />
-                    </div>
-                    <div className="mt-1 flex items-center justify-between text-[10px]">
-                      <span className="text-[#A5D84B] font-bold tabular">{prog}%</span>
-                      {p.nozzleTemp ? <span className="text-white/45">N {p.nozzleTemp}° · M {p.bedTemp || 0}°</span> : <span className="text-white/30">—</span>}
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
-            {printers.length === 0 && (
-              <div className="col-span-full text-center text-white/40 text-xs py-6">Nenhuma máquina cadastrada</div>
-            )}
-          </div>
-        </Panel>
-
-        {/* Calendar */}
-        <Panel>
-          <PanelHead title="Calendário" tag={`{${monthLabel}}`} />
-          <div className="grid grid-cols-7 gap-1.5">
-            {['D','S','T','Q','Q','S','S'].map((d, i) => (
-              <div key={i} className="text-center text-[9px] font-bold text-white/30 uppercase pb-1">{d}</div>
-            ))}
-            {cells.map((c, i) => {
-              const hot = c.sales > 0;
-              return (
-                <div
-                  key={i}
-                  className={`relative aspect-square rounded-lg p-1 flex flex-col justify-between text-[10px] ${
-                    c.day === null ? 'opacity-20' : ''
-                  }`}
-                  style={{
-                    background: hot ? 'rgba(165,216,75,0.10)' : 'rgba(255,255,255,0.015)',
-                    border: hot ? '1px solid rgba(165,216,75,0.32)' : '1px solid rgba(255,255,255,0.04)',
-                    boxShadow: hot ? 'inset 0 0 12px rgba(165,216,75,0.10)' : 'none',
-                  }}
-                >
-                  <span className={hot ? 'text-white font-bold' : 'text-white/55'}>{c.day ?? ''}</span>
-                  {hot && (
-                    <span className="text-[9px] font-bold leading-none text-[#C7F26B] tabular truncate">
-                      {c.sales >= 1000 ? `${(c.sales / 1000).toFixed(1)}k` : `${Math.round(c.sales)}`}
-                    </span>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-          <div className="mt-3 flex items-center justify-between text-[10px] text-white/45">
-            <span>Venda do dia · neon = ativo</span>
-            <span className="text-[#A5D84B] font-bold">{fmtBRLk(monthRevenue)} no mês</span>
-          </div>
-        </Panel>
-      </div>
-
-      {/* ===== Production Queue (with %) + Payment methods ===== */}
+      {/* ===== ROW 1: Production Queue (left) + Yearly profit chart (right) ===== */}
       <div className="grid grid-cols-1 xl:grid-cols-[2fr_1fr] gap-5 mb-5">
         <Panel>
           <PanelHead title="Projetos em Andamento" tag={`{${queueOrders.length}}`} onOpen={() => onSelectTab(1)} />
@@ -245,38 +181,6 @@ export const ReferenceDashboardHero: React.FC<any> = (props) => {
         </Panel>
 
         <Panel>
-          <PanelHead title="Meios de Pagamento" tag={`{${orders.length}}`} onOpen={() => onSelectTab(3)} />
-          <div className="grid grid-cols-2 gap-2.5">
-            {paymentBuckets.map((p) => (
-              <div
-                key={p.key}
-                className="p-3 rounded-xl border border-white/[0.07] bg-white/[0.02] hover:border-[#A5D84B]/25 transition"
-              >
-                <div className="flex items-center justify-between mb-1.5">
-                  <p.icon className="h-4 w-4 text-[#A5D84B]" />
-                  <span className="text-[9px] uppercase tracking-wider text-white/40">{p.label}</span>
-                </div>
-                <div className="text-[15px] font-black text-white tabular leading-none">{fmtBRLk(p.sum)}</div>
-                <div className="text-[10px] text-white/45 mt-0.5">{p.count} pedidos</div>
-              </div>
-            ))}
-          </div>
-        </Panel>
-      </div>
-
-      {/* ===== Stats (left) + Yearly profit (right) ===== */}
-      <div className="grid grid-cols-1 xl:grid-cols-[1fr_2fr] gap-5">
-        <Panel>
-          <div className="flex items-start justify-between">
-            <h2 className="text-lg font-bold text-white">Projetos este ano</h2>
-            <IconBtn><ArrowUpRight className="h-4 w-4" /></IconBtn>
-          </div>
-          <StatRow label="Ticket médio" value={fmtBRL(monthRevenue / Math.max(1, deliveredCount || 1))} delta="por pedido entregue" />
-          <StatRow label="Pedidos no período" value={String(deliveredCount + openCount)} delta="abertos + concluídos" />
-          <StatRow label="Novos pedidos" value={String(openCount)} delta="aguardando produção" />
-        </Panel>
-
-        <Panel>
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-baseline gap-2">
               <h2 className="text-lg font-bold text-white">Lucro do ano</h2>
@@ -287,29 +191,16 @@ export const ReferenceDashboardHero: React.FC<any> = (props) => {
               <IconBtn><ArrowUpRight className="h-4 w-4" /></IconBtn>
             </div>
           </div>
-          <div className="flex items-center gap-2 mb-5 overflow-x-auto pb-1">
-            {months.map((m, i) => (
-              <div
-                key={m.key + i}
-                className={`px-3 py-1 rounded-full text-[10px] font-semibold whitespace-nowrap border ${
-                  i === peakIdx ? 'border-white/15 text-white bg-white/[0.04]' : 'border-white/[0.06] text-white/55'
-                }`}
-              >
-                {m.key}
-              </div>
-            ))}
-          </div>
           <div className="relative">
-            <div className="absolute -top-1 z-10 flex items-center gap-2" style={{ left: `${(peakIdx + 0.5) * (100 / months.length)}%`, transform: 'translateX(-50%)' }}>
-              <div className="px-2 py-0.5 rounded-md bg-white/[0.05] border border-white/10 text-[9px] text-white/65 font-mono">Tarefas {Math.round(months[peakIdx].value / 35)}</div>
-              <div className="px-2 py-0.5 rounded-md bg-[#A5D84B] text-black text-[10px] font-bold">{fmtBRLk(months[peakIdx].value)}</div>
+            <div className="absolute -top-1 z-10 px-2 py-0.5 rounded-md bg-[#A5D84B] text-black text-[10px] font-bold" style={{ left: `${(peakIdx + 0.5) * (100 / months.length)}%`, transform: 'translateX(-50%)' }}>
+              {fmtBRLk(months[peakIdx].value)}
             </div>
-            <div className="grid grid-cols-8 gap-3 h-[160px] items-end mt-4">
+            <div className="grid grid-cols-8 gap-2 h-[180px] items-end mt-4">
               {months.map((m, i) => {
                 const isPeak = i === peakIdx;
                 const h = Math.max(14, (m.value / maxBar) * 100);
                 return (
-                  <div key={i} className="relative h-full flex items-end">
+                  <div key={i} className="relative h-full flex flex-col items-stretch justify-end">
                     <div
                       className="w-full rounded-[12px] transition-all"
                       style={{
@@ -323,14 +214,199 @@ export const ReferenceDashboardHero: React.FC<any> = (props) => {
                           : 'inset 0 1px 0 rgba(255,255,255,0.03)',
                       }}
                     />
+                    <div className="mt-1 text-center text-[9px] font-semibold text-white/45 uppercase">{m.key}</div>
                   </div>
                 );
               })}
             </div>
-            <div className="flex items-center justify-end gap-2 mt-2 text-white/40">
-              <IconBtn><ChevronLeft className="h-4 w-4" /></IconBtn>
-              <IconBtn><ChevronRight className="h-4 w-4" /></IconBtn>
+          </div>
+        </Panel>
+      </div>
+
+      {/* ===== ROW 2: Recent orders (with summary) + Upcoming deliveries ===== */}
+      <div className="grid grid-cols-1 xl:grid-cols-[2fr_1fr] gap-5 mb-5">
+        <Panel>
+          <PanelHead title="Pedidos Recentes" tag={`{${recentOrders.length}}`} onOpen={() => onSelectTab(3)} />
+          {/* Summary header */}
+          <div className="grid grid-cols-4 gap-2 mb-4">
+            <SummaryStat label="Total" value={fmtBRLk(recentTotal)} accent />
+            <SummaryStat label="Pedidos" value={String(recentOrders.length)} />
+            <SummaryStat label="Em aberto" value={String(openCount)} />
+            <SummaryStat label="Entregues" value={String(deliveredCount)} />
+          </div>
+          {recentOrders.length === 0 ? (
+            <div className="text-center text-white/40 text-xs py-6">Sem pedidos recentes</div>
+          ) : (
+            <div className="divide-y divide-white/[0.04]">
+              {recentOrders.map((o: any) => {
+                const s = statusMap[o.status] || { label: o.status, color: '#888' };
+                return (
+                  <div key={o.id} className="flex items-center gap-3 py-2.5">
+                    <div className="h-8 w-8 rounded-lg grid place-items-center bg-white/[0.03] border border-white/[0.06] shrink-0">
+                      <ShoppingBag className="h-4 w-4 text-[#A5D84B]" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[13px] font-bold text-white truncate">{o.itemName}</div>
+                      <div className="text-[10px] text-white/45 truncate">{o.clientName} · {fmtDateTime(o.createdAt)}</div>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <div className="text-[13px] font-bold tabular text-white">{fmtBRLk(o.priceCharged || 0)}</div>
+                      <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-px rounded-full border" style={{ color: s.color, borderColor: `${s.color}55`, background: `${s.color}15` }}>
+                        {s.label}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
+          )}
+        </Panel>
+
+        <Panel>
+          <PanelHead title="Próximas Entregas" tag={`{${upcoming.length}}`} onOpen={() => onSelectTab(3)} />
+          {upcoming.length === 0 ? (
+            <div className="text-center text-white/40 text-xs py-8">Nenhuma entrega agendada</div>
+          ) : (
+            <div className="space-y-2.5">
+              {upcoming.map((o: any) => (
+                <div key={o.id} className="flex gap-3 p-2.5 rounded-xl border border-white/[0.06] bg-white/[0.02]">
+                  <div className="h-9 w-9 rounded-lg grid place-items-center bg-[#A5D84B]/10 border border-[#A5D84B]/25 shrink-0">
+                    <Truck className="h-4 w-4 text-[#A5D84B]" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-[12px] font-bold text-white truncate">{o.clientName || o.itemName}</div>
+                    <div className="flex items-center gap-1 text-[10px] text-white/55 mt-0.5">
+                      <ClockIcon className="h-3 w-3" />
+                      <span className="tabular">{fmtDateTime(o.deliveryDate || o.dueDate)}</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-[10px] text-white/45 mt-0.5 truncate">
+                      <MapPin className="h-3 w-3 shrink-0" />
+                      <span className="truncate">{o.deliveryAddress || o.clientAddress || 'Retirada no local'}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </Panel>
+      </div>
+
+      {/* ===== ROW 3: Printer monitor + Critical stock + Calendar + Payments ===== */}
+      <div className="grid grid-cols-1 xl:grid-cols-[2fr_1fr] gap-5 mb-5">
+        <Panel>
+          <PanelHead title="Monitor das Máquinas" tag={`{${activePrinters}/${printers.length}}`} onOpen={() => onSelectTab(1)} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {(printers || []).slice(0, 4).map((p: any) => {
+              const job = (orders || []).find((o: any) => o.assignedPrinterId === p.id && o.status === 'PRINTING');
+              const prog = job ? Math.round((job.printingProgress || 0) * 100) : (p.printProgress || 0);
+              const isPrinting = p.status === 'PRINTING';
+              return (
+                <button
+                  key={p.id}
+                  onClick={() => onSelectTab(1)}
+                  className="flex gap-3 p-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:border-[#A5D84B]/30 hover:bg-white/[0.04] transition text-left"
+                >
+                  <div className="h-20 w-20 shrink-0 rounded-xl overflow-hidden bg-black/40 border border-white/5 grid place-items-center relative">
+                    {p.imageUrl ? (
+                      <img src={p.imageUrl} alt={p.name} className="h-full w-full object-cover" />
+                    ) : (
+                      <Camera className="h-6 w-6 text-white/25" />
+                    )}
+                    <span className={`absolute top-1 right-1 h-2 w-2 rounded-full ${isPrinting ? 'bg-[#A5D84B] animate-pulse shadow-[0_0_8px_#A5D84B]' : 'bg-white/30'}`} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-baseline justify-between gap-2">
+                      <div className="text-sm font-bold text-white truncate">{p.name}</div>
+                      <span className="text-[9px] uppercase tracking-wider text-white/40 shrink-0">{p.model}</span>
+                    </div>
+                    <div className="text-[10px] text-white/45 truncate mb-2">
+                      {isPrinting ? (job?.itemName || 'Imprimindo…') : p.status === 'MAINTENANCE' ? 'Manutenção' : 'Disponível'}
+                    </div>
+                    <div className="h-2 rounded-full bg-white/5 overflow-hidden border border-white/5">
+                      <div className="h-full rounded-full transition-all" style={{ width: `${prog}%`, background: 'linear-gradient(90deg, #A5D84B 0%, #C7F26B 100%)', boxShadow: '0 0 12px rgba(165,216,75,0.45)' }} />
+                    </div>
+                    <div className="mt-1 flex items-center justify-between text-[10px]">
+                      <span className="text-[#A5D84B] font-bold tabular">{prog}%</span>
+                      {p.nozzleTemp ? <span className="text-white/45">N {p.nozzleTemp}° · M {p.bedTemp || 0}°</span> : <span className="text-white/30">—</span>}
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+            {printers.length === 0 && (
+              <div className="col-span-full text-center text-white/40 text-xs py-6">Nenhuma máquina cadastrada</div>
+            )}
+          </div>
+        </Panel>
+
+        <Panel>
+          <PanelHead title="Estoque Crítico" tag={`{${criticalStock.length}}`} onOpen={() => onSelectTab(4)} />
+          {criticalStock.length === 0 ? (
+            <div className="flex flex-col items-center text-white/40 text-xs py-6 gap-2">
+              <CheckCircle2 className="h-6 w-6 text-[#A5D84B]/60" />
+              Estoque saudável
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {criticalStock.map((f: any) => {
+                const pct = Math.min(100, Math.max(2, ((f.currentWeight ?? 0) / Math.max(1, f.totalWeight ?? 1000)) * 100));
+                return (
+                  <div key={f.id} className="p-2.5 rounded-xl border border-white/[0.06] bg-white/[0.02]">
+                    <div className="flex items-center justify-between gap-2 mb-1.5">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="h-2.5 w-2.5 rounded-full shrink-0" style={{ background: f.colorHex || '#A5D84B' }} />
+                        <span className="text-[12px] font-bold text-white truncate">{f.material} {f.color}</span>
+                      </div>
+                      <AlertTriangle className="h-3.5 w-3.5 text-[#E0C04B] shrink-0" />
+                    </div>
+                    <div className="h-1.5 rounded-full bg-white/5 overflow-hidden">
+                      <div className="h-full rounded-full" style={{ width: `${pct}%`, background: pct < 20 ? '#E05A5A' : '#E0C04B' }} />
+                    </div>
+                    <div className="mt-1 flex items-center justify-between text-[10px] tabular">
+                      <span className="text-white/55">{f.currentWeight ?? 0}g restantes</span>
+                      <span className="text-white/40">{pct.toFixed(0)}%</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </Panel>
+      </div>
+
+      {/* ===== ROW 4: Payments + Calendar ===== */}
+      <div className="grid grid-cols-1 xl:grid-cols-[2fr_1fr] gap-5">
+        <Panel>
+          <PanelHead title="Meios de Pagamento" tag={`{${orders.length}}`} onOpen={() => onSelectTab(3)} />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
+            {paymentBuckets.map((p) => (
+              <div key={p.key} className="p-3 rounded-xl border border-white/[0.07] bg-white/[0.02] hover:border-[#A5D84B]/25 transition">
+                <div className="flex items-center justify-between mb-1.5">
+                  <p.icon className="h-4 w-4 text-[#A5D84B]" />
+                  <span className="text-[9px] uppercase tracking-wider text-white/40">{p.label}</span>
+                </div>
+                <div className="text-[15px] font-black text-white tabular leading-none">{fmtBRLk(p.sum)}</div>
+                <div className="text-[10px] text-white/45 mt-0.5">{p.count} pedidos</div>
+              </div>
+            ))}
+          </div>
+        </Panel>
+
+        <Panel>
+          <PanelHead title="Calendário" tag={`{${monthLabel}}`} />
+          <div className="grid grid-cols-7 gap-1.5">
+            {['D','S','T','Q','Q','S','S'].map((d, i) => (
+              <div key={i} className="text-center text-[9px] font-bold text-white/30 uppercase pb-1">{d}</div>
+            ))}
+            {cells.map((c, i) => {
+              const hot = c.sales > 0;
+              return (
+                <div key={i} className={`relative aspect-square rounded-lg p-1 flex flex-col justify-between text-[10px] ${c.day === null ? 'opacity-20' : ''}`} style={{ background: hot ? 'rgba(165,216,75,0.10)' : 'rgba(255,255,255,0.015)', border: hot ? '1px solid rgba(165,216,75,0.32)' : '1px solid rgba(255,255,255,0.04)' }}>
+                  <span className={hot ? 'text-white font-bold' : 'text-white/55'}>{c.day ?? ''}</span>
+                  {hot && <span className="text-[9px] font-bold leading-none text-[#C7F26B] tabular truncate">{c.sales >= 1000 ? `${(c.sales / 1000).toFixed(1)}k` : `${Math.round(c.sales)}`}</span>}
+                </div>
+              );
+            })}
           </div>
         </Panel>
       </div>
@@ -398,6 +474,15 @@ function StatRow({ label, value, delta }: any) {
         <div className="text-[22px] font-bold tabular text-[#A5D84B]">{value}</div>
         <div className="text-[10px] text-white/40">{delta}</div>
       </div>
+    </div>
+  );
+}
+
+function SummaryStat({ label, value, accent }: any) {
+  return (
+    <div className="p-2.5 rounded-xl border border-white/[0.06] bg-white/[0.02]">
+      <div className="text-[9px] uppercase tracking-wider text-white/40">{label}</div>
+      <div className={`text-[15px] font-black tabular leading-tight ${accent ? 'text-[#A5D84B]' : 'text-white'}`}>{value}</div>
     </div>
   );
 }
