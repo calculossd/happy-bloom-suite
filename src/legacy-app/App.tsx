@@ -24,6 +24,7 @@ import { PrintFlowTab } from './components/PrintFlowTab';
 import {
   PriceResearchTab, PreCheckTab, AgendaTab, ToolsTab, ModelsTab
 } from './components/NewTabs';
+import Market3DApp from '@/market3d/App';
 import { 
   Wrench, 
   RefreshCw, 
