@@ -1793,8 +1793,8 @@ export default function App() {
       </button>
 
       <>
-      {/* GLOBAL HEADER (Floating Glassmorphism Island Header - Lovable Styled) */}
-      <header className="relative md:mx-auto md:my-4 md:max-w-7xl md:rounded-[2rem] border border-white/10 bg-black/40 sticky top-0 md:top-2 z-50 backdrop-blur-2xl px-6 py-4 md:py-4.5 flex flex-col md:flex-row items-center justify-between gap-4 transition-all duration-300 shadow-[0_24px_50px_rgba(0,0,0,0.8)] overflow-hidden">
+      {/* GLOBAL HEADER (Full-Width Glassmorphism Header) */}
+      <header className="relative md:mx-4 md:my-3 md:rounded-[1.5rem] border border-white/10 bg-black/40 sticky top-0 md:top-2 z-50 backdrop-blur-2xl px-6 py-4 md:py-4.5 flex flex-col md:flex-row items-center justify-between gap-4 transition-all duration-300 shadow-[0_24px_50px_rgba(0,0,0,0.8)] overflow-hidden">
         
         {/* Subtle geometric digital background pattern */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.04] select-none bg-[radial-gradient(var(--brand-primary)_1.2px,transparent_1.2px)] [background-size:16px_16px]" />
@@ -1896,25 +1896,6 @@ export default function App() {
                 <span className="text-emerald-300 font-bold">{printers.filter(p => p.status === 'PRINTING').length}/{printers.length} Ativas</span>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Global actions & running indicator */}
-        <div className="flex items-center gap-2.5 flex-wrap justify-end w-full md:w-auto mt-1 md:mt-0 select-none relative z-10">
-          {/* Live Clock with heartbeat action */}
-          <div className="hidden lg:flex items-center gap-2 text-xs text-[#8BA58D] bg-[#0C0E0D]/85 border border-[#232B27] px-3.5 py-2 rounded-xl font-mono shadow-inner">
-            <Clock className="h-3.5 w-3.5 text-emerald-400" />
-            <span className="font-semibold tracking-wider text-white">{currentTime.toLocaleTimeString('pt-BR')}</span>
-          </div>
-
-          {/* Live Desktop Web Badge */}
-          <div className="flex items-center gap-2 bg-[#0C0E0D]/85 border border-[#232B27] px-3.5 py-2 rounded-xl font-sans text-xs text-zinc-300 shadow-sm" title="Seus dados são processados e armazenados localmente de forma segura e ultra-rápida no seu computador">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
-            </span>
-            <span className="font-bold text-[9px] uppercase tracking-wider text-zinc-400">Ambiente:</span>
-            <strong className="text-emerald-400 text-[10.5px] font-bold">Local Web Offline</strong>
           </div>
         </div>
 
