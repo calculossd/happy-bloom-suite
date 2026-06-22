@@ -316,6 +316,7 @@ interface ClientsTabProps {
   onAddPrinter: (printer: Omit<Printer, 'id'>) => void;
   onDeletePrinter: (id: number) => void;
   onAddOrder: (order: Partial<PrintOrder>) => void;
+  viewMode?: 'full' | 'clients' | 'printers';
 }
 
 export const ClientsTab: React.FC<ClientsTabProps> = ({
@@ -328,7 +329,8 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
   onUpdatePrinter,
   onAddPrinter,
   onDeletePrinter,
-  onAddOrder
+  onAddOrder,
+  viewMode = 'full'
 }) => {
   const [showClientForm, setShowClientForm] = useState(false);
   const [editingClientId, setEditingClientId] = useState<number | null>(null);
