@@ -286,33 +286,30 @@ export const PrinterCameraModal: React.FC<PrinterCameraModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4" id="printer-camera-modal-backdrop">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4" id="printer-camera-modal-backdrop" role="dialog" aria-modal="true">
       <div 
-        className="bg-[#111613] border border-[#232B27] rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl relative flex flex-col animate-in scale-in duration-200"
-        style={{ borderColor: showSpaghettiFail ? '#ef4444' : 'var(--brand-border)' }}
+        className="modal-panel w-full max-w-2xl overflow-hidden relative flex flex-col animate-in fade-in zoom-in-95 duration-200"
+        style={showSpaghettiFail ? { borderColor: 'var(--cat-red)' } : undefined}
       >
-        {/* Header bar */}
-        <div className="p-4 bg-[#151917] border-b border-[#232B27]/80 flex justify-between items-center">
-          <div className="flex items-center gap-2.5">
-            <div className="p-1.5 bg-amber-500/10 rounded-lg text-amber-500">
-              <Camera className="h-5 w-5 animate-pulse" />
+        {/* Header */}
+        <div className="p-5 border-b border-white/5 flex justify-between items-center">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="h-10 w-10 rounded-xl grid place-items-center bg-[var(--cat-lime)] text-black shrink-0">
+              <Camera className="h-5 w-5" />
             </div>
-            <div>
-              <h3 className="text-sm font-black text-[#F1F4EE] flex items-center gap-2">
-                Monitoramento por Vídeo {printer.name}
-                <span className={`text-[8px] uppercase tracking-wider px-2 py-0.5 rounded font-black ${printer.status === 'PRINTING' ? 'bg-emerald-500 text-black' : 'bg-zinc-800 text-zinc-400'}`}>
-                  {printer.status === 'PRINTING' ? 'LIVE HD' : printer.status === 'MAINTENANCE' ? 'MANUTENÇÃO' : 'OCIOSA'}
+            <div className="min-w-0">
+              <div className="eyebrow mb-0.5">Monitoramento</div>
+              <h3 className="text-base font-bold text-white tracking-tight flex items-center gap-2 truncate">
+                {printer.name}
+                <span className={`chip ${printer.status === 'PRINTING' ? 'chip-lime' : ''}`}>
+                  {printer.status === 'PRINTING' ? 'LIVE' : printer.status === 'MAINTENANCE' ? 'Manut.' : 'Ociosa'}
                 </span>
               </h3>
-              <p className="text-[10px] text-[#8BA58D] font-mono">Endereço IP: {printer.ipAddress}</p>
+              <p className="text-[11px] text-[var(--brand-text-subtle)] font-mono mt-0.5">IP: {printer.ipAddress}</p>
             </div>
           </div>
-          <button 
-            type="button" 
-            onClick={onClose}
-            className="text-zinc-400 hover:text-white hover:bg-zinc-800/60 p-1.5 rounded-full transition"
-          >
-            <X className="h-5 w-5" />
+          <button type="button" onClick={onClose} className="btn-icon shrink-0" aria-label="Fechar">
+            <X className="h-4 w-4" />
           </button>
         </div>
 
