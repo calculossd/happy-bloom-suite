@@ -183,34 +183,34 @@ h1 { letter-spacing: -0.03em; }
 }
 .tabular { font-variant-numeric: tabular-nums; }
 
-/* Premium glass — refined over legacy */
+/* Cockpit glass — hairline panels */
 .glass-panel {
-  background: linear-gradient(180deg, rgba(20,20,24,0.65) 0%, rgba(14,14,18,0.55) 100%) !important;
-  backdrop-filter: blur(32px) saturate(180%) !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+  backdrop-filter: blur(20px) saturate(160%) !important;
   border: 1px solid var(--brand-hairline) !important;
-  box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255,255,255,0.04) !important;
-  border-radius: 20px !important;
+  box-shadow: var(--shadow-soft) !important;
+  border-radius: 12px !important;
 }
 .glass-panel-hover {
-  transition: transform .5s var(--ease-out-expo),
-              background .5s var(--ease-out-expo),
-              border-color .5s var(--ease-out-expo),
-              box-shadow .5s var(--ease-out-expo) !important;
+  transition: transform .4s var(--ease-out-expo),
+              background .4s var(--ease-out-expo),
+              border-color .4s var(--ease-out-expo),
+              box-shadow .4s var(--ease-out-expo) !important;
 }
 .glass-panel-hover:hover {
-  transform: translateY(-3px) !important;
-  background: linear-gradient(180deg, rgba(26,26,32,0.78) 0%, rgba(18,18,22,0.7) 100%) !important;
-  border-color: var(--brand-hairline-strong) !important;
-  box-shadow: var(--shadow-elevated), inset 0 1px 0 rgba(255,255,255,0.06) !important;
+  transform: translateY(-4px) !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border-color: rgba(249,115,22,0.30) !important;
+  box-shadow: var(--shadow-elevated), var(--shadow-gold) !important;
 }
 
-/* Gold accent text gradient (replaces amber glow) */
+/* Thermal text gradient */
 .text-glow-amber {
-  background: linear-gradient(135deg, #ffffff 0%, var(--brand-accent-bright) 55%, var(--brand-accent) 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #fdba74 55%, #f97316 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0 2px 12px rgba(201,168,76,0.18));
+  filter: drop-shadow(0 2px 12px rgba(249,115,22,0.22));
 }
 
 /* Premium button */
@@ -225,11 +225,11 @@ h1 { letter-spacing: -0.03em; }
 }
 .btn-premium:active { transform: scale(0.985); }
 
-/* Refined hairline focus ring */
+/* Thermal focus ring */
 button:focus-visible, a:focus-visible, [role="button"]:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(201,168,76,0.55), 0 0 0 4px rgba(201,168,76,0.12);
-  border-radius: 12px;
+  box-shadow: 0 0 0 2px rgba(249,115,22,0.55), 0 0 0 4px rgba(249,115,22,0.12);
+  border-radius: 10px;
 }
 
 /* Stagger entrance */
@@ -261,14 +261,56 @@ table, .numbers, input[type="number"] { font-variant-numeric: tabular-nums; }
 
 /* Smoother scrollbars on dark */
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgba(201,168,76,0.18), rgba(255,255,255,0.06));
+  background: linear-gradient(180deg, rgba(249,115,22,0.20), rgba(255,255,255,0.06));
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, rgba(201,168,76,0.35), rgba(255,255,255,0.14));
+  background: linear-gradient(180deg, rgba(249,115,22,0.40), rgba(255,255,255,0.14));
 }
 
 /* Selection */
-::selection { background: rgba(201,168,76,0.35); color: #fff; }
+::selection { background: rgba(249,115,22,0.30); color: #fff; }
+
+/* ===== COCKPIT UTILITIES ===== */
+/* Editorial micro-label: UPPERCASE tracking-wide slate */
+.eyebrow {
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--brand-text-subtle);
+  font-weight: 500;
+}
+/* KPI number — JetBrains Mono, tabular */
+.kpi {
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  color: var(--brand-text);
+}
+/* Hairline divider */
+hr, .divider {
+  border: 0;
+  border-top: 1px solid var(--brand-hairline);
+}
+/* Thermal progress bar */
+.progress-thermal {
+  background: var(--brand-accent);
+  box-shadow: var(--glow-thermal);
+}
+/* Status pulse dot */
+.dot-live {
+  position: relative;
+  display: inline-block;
+  width: .5rem; height: .5rem;
+  border-radius: 9999px;
+  background: var(--brand-accent);
+  box-shadow: 0 0 10px rgba(249,115,22,0.7);
+  animation: dotPulse 1.8s var(--ease-out-quart) infinite;
+}
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: .55; transform: scale(.92); }
+}
 
 /* Subtle grain overlay */
 .bg-grain {
