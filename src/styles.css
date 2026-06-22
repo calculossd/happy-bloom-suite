@@ -600,3 +600,45 @@ input, select, textarea {
     scroll-behavior: auto !important;
   }
 }
+
+/* ===== Legacy reskin — normalize legacy painel blocks to TaskTrail design ===== */
+.legacy-skin .absolute.rounded-full {
+  display: none !important;
+}
+.legacy-skin [class*="bg-white/5"] {
+  background: rgba(28, 32, 48, 0.55) !important;
+  backdrop-filter: blur(22px) saturate(150%);
+  border-color: var(--brand-hairline) !important;
+  border-radius: 22px !important;
+  box-shadow: var(--shadow-soft);
+}
+.legacy-skin h3,
+.legacy-skin h4,
+.legacy-skin h5 {
+  font-family: "Space Grotesk", var(--font-sans) !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  letter-spacing: -0.01em !important;
+  color: var(--brand-text) !important;
+}
+.legacy-skin h3 { font-size: 0.95rem !important; }
+.legacy-skin h4 { font-size: 0.82rem !important; }
+.legacy-skin h5 { font-size: 0.78rem !important; }
+.legacy-skin .font-black,
+.legacy-skin .font-extrabold {
+  font-weight: 700 !important;
+}
+.legacy-skin .uppercase {
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+.legacy-skin button[class*="from-emerald-500"],
+.legacy-skin button[class*="from-pink-500"],
+.legacy-skin button[class*="from-green-"] {
+  background: var(--cat-lime) !important;
+  color: #11131A !important;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 6px 20px -8px rgba(216,255,61,0.45) !important;
+}
+.legacy-skin .p-5 { padding: 1rem !important; }
