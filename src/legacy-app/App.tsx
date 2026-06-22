@@ -2242,25 +2242,21 @@ export default function App() {
 
       {/* ONBOARDING DIALOG / WELCOME WIZARD */}
       {showSetupModal && (
-        <div className="fixed inset-0 bg-black/85 backdrop-blur-md z-[9999] flex items-center justify-center p-4 overflow-y-auto" id="onboarding_modal_overlay">
-          <div className="bg-[#131815] border border-[var(--brand-primary)]/40 p-6 sm:p-8 rounded-3xl max-w-2xl w-full text-[var(--brand-text)] flex flex-col gap-6 shadow-2xl relative" style={{ backgroundColor: 'var(--brand-card)', borderColor: 'var(--brand-border)' }}>
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-[9999] flex items-center justify-center p-4 overflow-y-auto" id="onboarding_modal_overlay" role="dialog" aria-modal="true">
+          <div className="modal-panel p-6 sm:p-8 max-w-2xl w-full text-[var(--brand-text)] flex flex-col gap-6 relative">
             
-            {/* Live pulsing glowing decorative circles */}
-            <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 px-3 py-1 rounded-full text-xs text-[var(--brand-primary)] font-mono">
-              <span className="w-2 h-2 rounded-full bg-[var(--brand-primary)] animate-pulse" />
-              <span>Personalização Ativa</span>
+            <div className="absolute top-4 right-4">
+              <span className="chip chip-lime"><span className="dot-live" />Personalização</span>
             </div>
 
             <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Sparkles className="w-6 h-6 text-[var(--brand-accent)] animate-spin" style={{ animationDuration: '6s' }} />
-                <h2 className="text-xl sm:text-2xl font-black tracking-tight text-[var(--brand-text)]">
-                  Configure o Seu Ateliê 3D 🛠️
-                </h2>
-              </div>
-              <p className="text-xs text-[var(--brand-muted)] leading-relaxed">
+              <div className="eyebrow">Bem-vindo</div>
+              <h2 className="text-glow-amber" style={{ fontSize: 'clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem)', lineHeight: 1.05, fontWeight: 800 }}>
+                Configure o seu ateliê 3D
+              </h2>
+              <p className="text-xs text-[var(--brand-text-muted)] leading-relaxed">
                 Este aplicativo completo gerencia a sua produção de peças, fila de impressão, estoque de filamentos e cálculo de despesas. 
-                Configure o nome da sua marca e sua paleta de cores inicial abaixo. <strong className="text-[var(--brand-text-accent)]">Você poderá mudar livremente qualquer opção depois nos Ajustes!</strong>
+                Configure o nome da sua marca e a paleta inicial abaixo. <strong className="text-[var(--cat-lime)]">Você poderá mudar tudo depois em Ajustes.</strong>
               </p>
             </div>
 
