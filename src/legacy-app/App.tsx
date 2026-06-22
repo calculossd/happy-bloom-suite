@@ -1507,7 +1507,7 @@ export default function App() {
       case 5:
         return {
           title: "Ajustes do Sistema",
-          subtitle: "Configurações de marca, integrações IoT Tuya e importação/exportação",
+          subtitle: "",
         };
       case 6:
         return {
