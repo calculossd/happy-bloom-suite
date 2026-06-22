@@ -155,6 +155,144 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
   return (
     <div className="space-y-6" id="dashboard_tab_container">
 
+      {/* ===== TASKTRAIL HERO ===== */}
+      <section className="space-y-5">
+        <header className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <div className="eyebrow mb-1">Visão Geral</div>
+            <h1 className="text-glow-amber" style={{ fontSize: 'clamp(2rem, 1.4rem + 2.6vw, 3.4rem)', lineHeight: 1, fontWeight: 800 }}>
+              Dashboard
+            </h1>
+            <p className="text-[var(--brand-text-muted)] text-sm mt-2">
+              R$ <span className="kpi text-white">{monthRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+              <span className="ml-2 chip chip-lime">+{parsedDeliveredOrdersCount} entregues</span>
+              <span className="ml-2 chip">{formatMonthLabel(selectedMonth)}</span>
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <select
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(e.target.value)}
+              className="btn-ghost text-sm"
+              style={{ paddingRight: '2rem' }}
+            >
+              <option value="ALL">Geral (Total)</option>
+              {availableMonths.map(m => <option key={m} value={m}>{formatMonthLabel(m)}</option>)}
+            </select>
+            <button onClick={() => onSelectTab(3)} className="btn-lime text-sm flex items-center gap-2">
+              <Plus className="h-4 w-4" /> Novo Pedido
+            </button>
+          </div>
+        </header>
+
+        {/* KPI tiles */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="tile tile-lime">
+            <span className="tile-tag">#Faturamento</span>
+            <div className="tile-title">Receita do mês</div>
+            <div className="tile-meta">{parsedDeliveredOrdersCount} pedidos entregues</div>
+            <div className="tile-value">R$ {monthRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 0 })}</div>
+          </div>
+          <div className="tile tile-orange">
+            <span className="tile-tag">#Operação</span>
+            <div className="tile-title">Pedidos abertos</div>
+            <div className="tile-meta">{parsedReadyToDeliverCount} prontos p/ entrega</div>
+            <div className="tile-value">{parsedOpenOrdersCount}</div>
+          </div>
+          <div className="tile tile-emerald">
+            <span className="tile-tag">#Margem</span>
+            <div className="tile-title">ROI do mês</div>
+            <div className="tile-meta">Margem {monthProfitMargin.toFixed(1)}%</div>
+            <div className="tile-value">{monthRoi.toFixed(0)}%</div>
+          </div>
+          <div className="tile tile-purple">
+            <span className="tile-tag">#Produção</span>
+            <div className="tile-title">Impressoras ativas</div>
+            <div className="tile-meta">{safePrinters.length} no total</div>
+            <div className="tile-value">{activePrinters.length}</div>
+          </div>
+        </div>
+
+        {/* Projects strip + Calendar */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {/* In-progress orders as colorful project tiles */}
+          <div className="lg:col-span-2 glass-panel p-5">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <div className="eyebrow">Projetos</div>
+                <h3 className="text-lg font-bold text-white tracking-tight">Em andamento</h3>
+              </div>
+              <button onClick={() => onSelectTab(1)} className="btn-ghost text-xs">Ver tudo →</button>
+            </div>
+            {(() => {
+              const inProgress = safeOrders
+                .filter(o => o.status === 'QUEUE' || o.status === 'PRINTING' || o.status === 'POST_PROCESS' || o.status === 'READY')
+                .slice(0, 6);
+              if (inProgress.length === 0) {
+                return (
+                  <div className="text-center py-10 text-sm text-[var(--brand-text-muted)]">
+                    Nenhum pedido em andamento. <button onClick={() => onSelectTab(3)} className="text-[var(--cat-lime)] underline">Criar pedido</button>
+                  </div>
+                );
+              }
+              const palette = ['tile-lime','tile-orange','tile-emerald','tile-red','tile-purple','tile-teal'];
+              return (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {inProgress.map((o, i) => (
+                    <button key={o.id} onClick={() => onSelectTab(1)} className={`tile ${palette[i % palette.length]} text-left`}>
+                      <span className="tile-tag">#{o.status}</span>
+                      <div className="tile-title">{o.productName || 'Pedido'}</div>
+                      <div className="tile-meta">{o.clientName || 'Cliente'}</div>
+                      <div className="tile-value">R$ {Number(o.priceCharged || 0).toLocaleString('pt-BR')}</div>
+                    </button>
+                  ))}
+                </div>
+              );
+            })()}
+          </div>
+
+          {/* Calendar */}
+          <div className="glass-panel p-5">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <div className="eyebrow">Calendário</div>
+                <h3 className="text-lg font-bold text-white tracking-tight">{formatMonthLabel(calendarActiveMonth)}</h3>
+              </div>
+            </div>
+            <div className="grid grid-cols-7 gap-1.5 text-center text-[10px] uppercase tracking-wider text-[var(--brand-text-subtle)] mb-2">
+              {['D','S','T','Q','Q','S','S'].map((d,i) => <div key={i}>{d}</div>)}
+            </div>
+            <div className="grid grid-cols-7 gap-1.5">
+              {Array.from({ length: firstDayIndex }).map((_, i) => <div key={`e${i}`} />)}
+              {Array.from({ length: totalDays }).map((_, i) => {
+                const day = i + 1;
+                const sales = getDaySales(day);
+                const isToday = day === currentDate.getDate() && calMonth === currentDate.getMonth() && calYear === currentDate.getFullYear();
+                const heat = sales > 500 ? 'tile-lime' : sales > 100 ? 'tile-emerald' : sales > 0 ? 'tile-teal' : '';
+                return (
+                  <div
+                    key={day}
+                    title={sales > 0 ? `R$ ${sales.toLocaleString('pt-BR')}` : ''}
+                    className={`aspect-square rounded-xl text-xs flex items-center justify-center font-semibold ${heat || 'bg-white/[0.03] border border-white/5 text-[var(--brand-text-subtle)]'} ${isToday ? 'ring-2 ring-[var(--cat-lime)]' : ''}`}
+                    style={heat ? { color: heat === 'tile-lime' || heat === 'tile-orange' ? '#11131A' : '#fff' } : undefined}
+                  >
+                    {day}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== DETALHES (LEGADO) ===== */}
+      <details className="group">
+        <summary className="cursor-pointer btn-ghost inline-flex items-center gap-2 text-sm">
+          <span>Ver detalhes operacionais</span>
+          <span className="text-[var(--brand-text-subtle)] group-open:rotate-180 transition">▾</span>
+        </summary>
+        <div className="mt-4 space-y-6">
+
       {/* SEÇÃO 1 & 4 (STATUS RÁPIDO & ÚLTIMAS ATUALIZAÇÕES RESUMIDAS) */}
       <div className="bg-white/5 border border-white/10 p-5 rounded-2xl relative overflow-hidden shadow-xl backdrop-blur-md" id="top_action_updates_panel">
         {/* Subtle decorative mesh background glow */}
