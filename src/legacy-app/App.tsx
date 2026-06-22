@@ -301,6 +301,7 @@ export function safeGetLocalStorageItem(key: string, defaultValue: string = ''):
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState(0);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [dismissedPriceAlert, setDismissedPriceAlert] = useState(false);
   const [dismissedStockAlert, setDismissedStockAlert] = useState(false);
 
