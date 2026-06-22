@@ -9,12 +9,26 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as StoriesRouteImport } from './routes/stories'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiSearchImageRouteImport } from './routes/api/search-image'
 import { Route as ApiQuotationsRouteImport } from './routes/api/quotations'
+import { Route as ApiKeysStatusRouteImport } from './routes/api/keys-status'
+import { Route as Api3dTrendsRouteImport } from './routes/api/3d-trends'
 
+const StoriesRoute = StoriesRouteImport.update({
+  id: '/stories',
+  path: '/stories',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSearchImageRoute = ApiSearchImageRouteImport.update({
+  id: '/api/search-image',
+  path: '/api/search-image',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiQuotationsRoute = ApiQuotationsRouteImport.update({
@@ -22,40 +36,99 @@ const ApiQuotationsRoute = ApiQuotationsRouteImport.update({
   path: '/api/quotations',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiKeysStatusRoute = ApiKeysStatusRouteImport.update({
+  id: '/api/keys-status',
+  path: '/api/keys-status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Api3dTrendsRoute = Api3dTrendsRouteImport.update({
+  id: '/api/3d-trends',
+  path: '/api/3d-trends',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/stories': typeof StoriesRoute
+  '/api/3d-trends': typeof Api3dTrendsRoute
+  '/api/keys-status': typeof ApiKeysStatusRoute
   '/api/quotations': typeof ApiQuotationsRoute
+  '/api/search-image': typeof ApiSearchImageRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/stories': typeof StoriesRoute
+  '/api/3d-trends': typeof Api3dTrendsRoute
+  '/api/keys-status': typeof ApiKeysStatusRoute
   '/api/quotations': typeof ApiQuotationsRoute
+  '/api/search-image': typeof ApiSearchImageRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/stories': typeof StoriesRoute
+  '/api/3d-trends': typeof Api3dTrendsRoute
+  '/api/keys-status': typeof ApiKeysStatusRoute
   '/api/quotations': typeof ApiQuotationsRoute
+  '/api/search-image': typeof ApiSearchImageRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/quotations'
+  fullPaths:
+    | '/'
+    | '/stories'
+    | '/api/3d-trends'
+    | '/api/keys-status'
+    | '/api/quotations'
+    | '/api/search-image'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/quotations'
-  id: '__root__' | '/' | '/api/quotations'
+  to:
+    | '/'
+    | '/stories'
+    | '/api/3d-trends'
+    | '/api/keys-status'
+    | '/api/quotations'
+    | '/api/search-image'
+  id:
+    | '__root__'
+    | '/'
+    | '/stories'
+    | '/api/3d-trends'
+    | '/api/keys-status'
+    | '/api/quotations'
+    | '/api/search-image'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  StoriesRoute: typeof StoriesRoute
+  Api3dTrendsRoute: typeof Api3dTrendsRoute
+  ApiKeysStatusRoute: typeof ApiKeysStatusRoute
   ApiQuotationsRoute: typeof ApiQuotationsRoute
+  ApiSearchImageRoute: typeof ApiSearchImageRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/stories': {
+      id: '/stories'
+      path: '/stories'
+      fullPath: '/stories'
+      preLoaderRoute: typeof StoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/search-image': {
+      id: '/api/search-image'
+      path: '/api/search-image'
+      fullPath: '/api/search-image'
+      preLoaderRoute: typeof ApiSearchImageRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/quotations': {
@@ -65,12 +138,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiQuotationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/keys-status': {
+      id: '/api/keys-status'
+      path: '/api/keys-status'
+      fullPath: '/api/keys-status'
+      preLoaderRoute: typeof ApiKeysStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/3d-trends': {
+      id: '/api/3d-trends'
+      path: '/api/3d-trends'
+      fullPath: '/api/3d-trends'
+      preLoaderRoute: typeof Api3dTrendsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  StoriesRoute: StoriesRoute,
+  Api3dTrendsRoute: Api3dTrendsRoute,
+  ApiKeysStatusRoute: ApiKeysStatusRoute,
   ApiQuotationsRoute: ApiQuotationsRoute,
+  ApiSearchImageRoute: ApiSearchImageRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

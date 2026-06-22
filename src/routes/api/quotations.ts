@@ -12,6 +12,8 @@ function getKey(request: Request, url: URL): string {
   const h = request.headers.get("x-custom-serpapi-key");
   if (isValidKey(q)) return q!.trim();
   if (isValidKey(h)) return h!.trim();
+  const env = process.env.SERPAPI_KEY;
+  if (isValidKey(env)) return env!.trim();
   return "";
 }
 

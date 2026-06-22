@@ -16,6 +16,7 @@ import {
   Download,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
+import { Link } from "@tanstack/react-router";
 
 const DEFAULT_IMAGE =
   "https://images.unsplash.com/photo-1631467488256-b1f88c520007?w=1200&q=80&auto=format&fit=crop";
@@ -74,13 +75,13 @@ function MarketingPage() {
             </p>
 
             <div className="mt-3">
-              <a
-                href="#"
+              <Link
+                to="/stories"
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-white bg-gradient-to-r from-violet-600/30 to-pink-600/30 border border-violet-400/40 hover:from-violet-600/40 hover:to-pink-600/40 transition-colors shadow-[0_8px_24px_-8px_rgba(168,85,247,0.6)]"
               >
                 <Sparkles className="h-4 w-4 text-violet-200" />
                 Gerador de Stories IA
-              </a>
+              </Link>
             </div>
           </div>
 
