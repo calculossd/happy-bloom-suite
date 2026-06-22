@@ -58,7 +58,7 @@ html {
 
 /* Neon Text Gradient */
 .text-glow-amber {
-  background: linear-gradient(135deg, #FFFFFF 0%, #C7F26B 50%, #A5D84B 100%);
+  background: linear-gradient(135deg, #FFFFFF 0%, #A7F3E4 50%, #5EEAD4 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(0 2px 8px rgba(244, 110, 31, 0.15));
@@ -128,35 +128,36 @@ html {
 
 
 
-/* ===== PREMIUM SAAS — OBSIDIAN + NEON LIME ===== */
+/* ===== PREMIUM SAAS — MIDNIGHT OBSIDIAN + AQUA PLATINUM + WARM GOLD ===== */
 :root {
-  --brand-bg: #071018;
-  --brand-surface-1: #08141D;
-  --brand-surface-2: #0B1723;
-  --brand-hairline: rgba(165, 216, 75, 0.08);
-  --brand-hairline-strong: rgba(165, 216, 75, 0.22);
-  --brand-text: #F2F6FA;
-  --brand-text-muted: rgb(160, 176, 192);
-  --brand-text-subtle: rgb(110, 126, 142);
-  --brand-primary: 165, 216, 75;              /* neon lime rgb */
-  --brand-accent: #A5D84B;
-  --brand-accent-bright: #C7F26B;
-  --brand-success: #10B981;
-  /* Categorical accents */
-  --cat-lime:    #A5D84B;
-  --cat-blue:    #4A7DFF;
-  --cat-orange:  #F97316;
-  --cat-magenta: #C026D3;
-  --cat-emerald: #10B981;
-  --cat-cyan:    #06B6D4;
-  /* Back-compat aliases (used elsewhere in the css) */
-  --cat-red:     #F97316;
-  --cat-purple:  #C026D3;
-  --cat-teal:    #06B6D4;
+  --brand-bg: #06080F;
+  --brand-surface-1: #0B0F1A;
+  --brand-surface-2: #111726;
+  --brand-hairline: rgba(148, 163, 184, 0.10);
+  --brand-hairline-strong: rgba(94, 234, 212, 0.28);
+  --brand-text: #EEF2F7;
+  --brand-text-muted: rgb(158, 170, 188);
+  --brand-text-subtle: rgb(108, 120, 138);
+  --brand-primary: 94, 234, 212;              /* aqua platinum rgb */
+  --brand-accent: #5EEAD4;
+  --brand-accent-bright: #A7F3E4;
+  --brand-gold: #E8C07A;
+  --brand-success: #34D399;
+  /* Categorical accents — refined editorial palette */
+  --cat-lime:    #5EEAD4;   /* aqua (primary, replaces lime everywhere) */
+  --cat-blue:    #7C9DFF;
+  --cat-orange:  #E8C07A;   /* warm gold instead of orange */
+  --cat-magenta: #B58CFF;
+  --cat-emerald: #34D399;
+  --cat-cyan:    #67E8F9;
+  /* Back-compat aliases */
+  --cat-red:     #F472B6;
+  --cat-purple:  #B58CFF;
+  --cat-teal:    #67E8F9;
   --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.55), 0 14px 40px -16px rgba(0, 0, 0, 0.85);
   --shadow-elevated: 0 4px 8px rgba(0, 0, 0, 0.65), 0 36px 80px -24px rgba(0, 0, 0, 0.95);
-  --shadow-gold: 0 0 0 1px rgba(165, 216, 75, 0.35), 0 18px 50px -16px rgba(165, 216, 75, 0.45);
-  --glow-thermal: 0 0 14px rgba(165, 216, 75, 0.55);
+  --shadow-gold: 0 0 0 1px rgba(94, 234, 212, 0.30), 0 18px 50px -16px rgba(94, 234, 212, 0.35);
+  --glow-thermal: 0 0 14px rgba(94, 234, 212, 0.45);
   --ease-out-expo: cubic-bezier(0.22, 0.61, 0.36, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
 }
@@ -174,14 +175,10 @@ body::before {
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(900px 500px at 10% -10%, rgba(165, 216, 75, 0.18), transparent 60%),
-    radial-gradient(800px 500px at 90% 6%, rgba(0, 212, 255, 0.12), transparent 65%),
-    radial-gradient(700px 500px at 50% 110%, rgba(125, 92, 255, 0.10), transparent 70%);
-  background:
-    radial-gradient(1100px 600px at 8% -8%, rgba(165, 216, 75, 0.14), transparent 60%),
-    radial-gradient(900px 520px at 92% 4%, rgba(74, 125, 255, 0.10), transparent 65%),
-    radial-gradient(800px 520px at 50% 115%, rgba(192, 38, 211, 0.08), transparent 70%),
-    radial-gradient(700px 420px at 80% 80%, rgba(6, 182, 212, 0.06), transparent 70%);
+    radial-gradient(1100px 620px at 8% -8%, rgba(94, 234, 212, 0.12), transparent 60%),
+    radial-gradient(900px 540px at 92% 4%, rgba(124, 157, 255, 0.10), transparent 65%),
+    radial-gradient(800px 540px at 50% 115%, rgba(232, 192, 122, 0.07), transparent 70%),
+    radial-gradient(700px 440px at 80% 80%, rgba(181, 140, 255, 0.06), transparent 70%);
 }
 body > * { position: relative; z-index: 1; }
 
@@ -216,24 +213,24 @@ h1 { letter-spacing: -0.03em; }
   box-shadow:
     0 1px 0 0 rgba(255, 255, 255, 0.05) inset,
     0 24px 60px -28px rgba(3, 18, 38, 0.9),
-    0 0 0 1px rgba(165, 216, 75, 0.10),
+    0 0 0 1px rgba(94, 234, 212, 0.10),
     0 0 40px -10px rgba(0, 212, 255, 0.18);
   transition: box-shadow 0.4s ease, border-color 0.35s ease, transform 0.3s ease;
 }
 .glass-panel:hover,
 [class*="rounded-2xl"][class*="border"]:hover,
 [class*="rounded-[2"][class*="border"]:hover {
-  border-color: rgba(165, 216, 75, 0.45) !important;
+  border-color: rgba(94, 234, 212, 0.45) !important;
   box-shadow:
     0 1px 0 0 rgba(255, 255, 255, 0.08) inset,
     0 30px 80px -28px rgba(3, 18, 38, 0.95),
-    0 0 0 1px rgba(165, 216, 75, 0.14),
-    0 0 60px -8px rgba(165, 216, 75, 0.28);
+    0 0 0 1px rgba(94, 234, 212, 0.14),
+    0 0 60px -8px rgba(94, 234, 212, 0.28);
 }
 
 /* Lime selection + focus everywhere */
 ::selection {
-  background: rgba(165, 216, 75, 0.35);
+  background: rgba(94, 234, 212, 0.35);
   color: #0a0f0c;
 }
 button:focus-visible,
@@ -242,9 +239,9 @@ input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
 [role="button"]:focus-visible {
-  outline: 2px solid rgba(165, 216, 75, 0.65);
+  outline: 2px solid rgba(94, 234, 212, 0.65);
   outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(165, 216, 75, 0.18);
+  box-shadow: 0 0 0 4px rgba(94, 234, 212, 0.18);
 }
 
 /* Primary CTAs hover glow */
@@ -255,22 +252,22 @@ button:not(:disabled):hover {
 button[class*="from-lime"]:hover,
 button[class*="from-emerald"]:hover,
 button[class*="bg-emerald"]:hover {
-  box-shadow: 0 10px 30px -8px rgba(165, 216, 75, 0.55), 0 0 0 1px rgba(165, 216, 75, 0.35);
+  box-shadow: 0 10px 30px -8px rgba(94, 234, 212, 0.55), 0 0 0 1px rgba(94, 234, 212, 0.35);
 }
 
 /* Active sidebar / nav items get lime glow */
 [data-active="true"],
 .tt-nav-item.active,
 a[aria-current="page"] {
-  box-shadow: 0 0 0 1px rgba(165, 216, 75, 0.35), 0 0 24px -6px rgba(165, 216, 75, 0.4) !important;
+  box-shadow: 0 0 0 1px rgba(94, 234, 212, 0.35), 0 0 24px -6px rgba(94, 234, 212, 0.4) !important;
 }
 
 /* Lime caret / accent ring on inputs */
 input, textarea, select {
-  caret-color: rgb(165, 216, 75);
+  caret-color: rgb(94, 234, 212);
 }
 input:focus, textarea:focus, select:focus {
-  border-color: rgba(165, 216, 75, 0.5) !important;
+  border-color: rgba(94, 234, 212, 0.5) !important;
 }
 .glass-panel-hover {
   transition: transform .4s var(--ease-out-expo),
@@ -281,17 +278,17 @@ input:focus, textarea:focus, select:focus {
 .glass-panel-hover:hover {
   transform: translateY(-4px) !important;
   background: rgba(36, 41, 60, 0.7) !important;
-  border-color: rgba(165, 216, 75,0.35) !important;
+  border-color: rgba(94, 234, 212,0.35) !important;
   box-shadow: var(--shadow-elevated), var(--shadow-gold) !important;
 }
 
 /* Lime text accent */
 .text-glow-amber {
-  background: linear-gradient(135deg, #ffffff 0%, #C7F26B 55%, #06B6D4 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #A7F3E4 55%, #06B6D4 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0 2px 12px rgba(165, 216, 75,0.28));
+  filter: drop-shadow(0 2px 12px rgba(94, 234, 212,0.28));
 }
 
 /* Premium button */
@@ -309,7 +306,7 @@ input:focus, textarea:focus, select:focus {
 /* Lime focus ring */
 button:focus-visible, a:focus-visible, [role="button"]:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(165, 216, 75,0.65), 0 0 0 4px rgba(165, 216, 75,0.18);
+  box-shadow: 0 0 0 2px rgba(94, 234, 212,0.65), 0 0 0 4px rgba(94, 234, 212,0.18);
   border-radius: 12px;
 }
 
@@ -342,14 +339,14 @@ table, .numbers, input[type="number"] { font-variant-numeric: tabular-nums; }
 
 /* Scrollbars */
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgba(165, 216, 75,0.25), rgba(255,255,255,0.06));
+  background: linear-gradient(180deg, rgba(94, 234, 212,0.25), rgba(255,255,255,0.06));
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, rgba(165, 216, 75,0.45), rgba(255,255,255,0.14));
+  background: linear-gradient(180deg, rgba(94, 234, 212,0.45), rgba(255,255,255,0.14));
 }
 
 /* Selection */
-::selection { background: rgba(165, 216, 75,0.35); color: #0E1014; }
+::selection { background: rgba(94, 234, 212,0.35); color: #0E1014; }
 
 /* ===== TASKTRAIL CATEGORICAL TILES ===== */
 .tile { border-radius: 22px; padding: 1.1rem 1.15rem; color: #11131A; position: relative; overflow: hidden; box-shadow: 0 14px 36px -18px rgba(0,0,0,0.55); }
@@ -407,7 +404,7 @@ table, .numbers, input[type="number"] { font-variant-numeric: tabular-nums; }
   color: var(--brand-text-muted);
   letter-spacing: .02em;
 }
-.chip-lime { background: rgba(165, 216, 75,0.12); border-color: rgba(165, 216, 75,0.35); color: var(--cat-lime); }
+.chip-lime { background: rgba(94, 234, 212,0.12); border-color: rgba(94, 234, 212,0.35); color: var(--cat-lime); }
 
 /* ===== TASKTRAIL SIDEBAR ===== */
 .tt-sidebar {
@@ -474,9 +471,9 @@ input:not([type="checkbox"]):not([type="radio"]):focus,
 select:focus,
 textarea:focus {
   outline: none;
-  border-color: rgba(165, 216, 75,0.6);
+  border-color: rgba(94, 234, 212,0.6);
   background: rgba(255,255,255,0.05);
-  box-shadow: 0 0 0 3px rgba(165, 216, 75,0.15);
+  box-shadow: 0 0 0 3px rgba(94, 234, 212,0.15);
 }
 input::placeholder, textarea::placeholder { color: var(--brand-text-subtle); }
 
@@ -710,7 +707,7 @@ input, select, textarea {
   color: #11131A !important;
   font-weight: 700 !important;
   border-radius: 12px !important;
-  box-shadow: 0 6px 20px -8px rgba(165, 216, 75,0.45) !important;
+  box-shadow: 0 6px 20px -8px rgba(94, 234, 212,0.45) !important;
 }
 .legacy-skin .p-5 { padding: 1rem !important; }
 
@@ -753,7 +750,7 @@ input, select, textarea {
 /* 3. Recolor accent text/borders/dots → lime (primary) or teal (secondary) */
 .legacy-skin .text-emerald-300, .legacy-skin .text-emerald-400, .legacy-skin .text-emerald-500,
 .legacy-skin .text-green-300, .legacy-skin .text-green-400, .legacy-skin .text-green-500,
-.legacy-skin .text-lime-300, .legacy-skin .text-lime-400 { color: #A5D84B !important; }
+.legacy-skin .text-lime-300, .legacy-skin .text-lime-400 { color: #5EEAD4 !important; }
 
 .legacy-skin .text-cyan-300, .legacy-skin .text-cyan-400,
 .legacy-skin .text-sky-300, .legacy-skin .text-sky-400,
@@ -761,7 +758,7 @@ input, select, textarea {
 
 .legacy-skin .text-orange-300, .legacy-skin .text-orange-400, .legacy-skin .text-orange-500,
 .legacy-skin .text-amber-300, .legacy-skin .text-amber-400, .legacy-skin .text-amber-500,
-.legacy-skin .text-yellow-300, .legacy-skin .text-yellow-400 { color: #C7F26B !important; }
+.legacy-skin .text-yellow-300, .legacy-skin .text-yellow-400 { color: #A7F3E4 !important; }
 
 .legacy-skin .text-pink-300, .legacy-skin .text-pink-400,
 .legacy-skin .text-rose-300, .legacy-skin .text-rose-400,
@@ -773,7 +770,7 @@ input, select, textarea {
 /* Borders flatten to hairline; active/colored borders → lime */
 .legacy-skin [class*="border-emerald"],
 .legacy-skin [class*="border-green"],
-.legacy-skin [class*="border-lime"] { border-color: rgba(165, 216, 75,0.28) !important; }
+.legacy-skin [class*="border-lime"] { border-color: rgba(94, 234, 212,0.28) !important; }
 
 .legacy-skin [class*="border-cyan"],
 .legacy-skin [class*="border-sky"],
@@ -791,7 +788,7 @@ input, select, textarea {
 /* 4. Gradient text → unified lime-to-teal */
 .legacy-skin .bg-clip-text.text-transparent,
 .legacy-skin [class*="bg-gradient-to-"][class*="bg-clip-text"] {
-  background-image: linear-gradient(135deg, #ffffff 0%, #C7F26B 55%, #A5D84B 100%) !important;
+  background-image: linear-gradient(135deg, #ffffff 0%, #A7F3E4 55%, #5EEAD4 100%) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   color: transparent !important;
@@ -812,12 +809,12 @@ input, select, textarea {
 .legacy-skin button[class*="from-orange"],
 .legacy-skin button[class*="from-amber"],
 .legacy-skin button[class*="from-red"] {
-  background-image: linear-gradient(135deg, #A5D84B 0%, #06B6D4 100%) !important;
+  background-image: linear-gradient(135deg, #5EEAD4 0%, #06B6D4 100%) !important;
   color: #0E1014 !important;
   font-weight: 700 !important;
-  border: 1px solid rgba(165, 216, 75,0.5) !important;
+  border: 1px solid rgba(94, 234, 212,0.5) !important;
   border-radius: 12px !important;
-  box-shadow: 0 10px 28px -10px rgba(165, 216, 75,0.5), inset 0 1px 0 rgba(255,255,255,0.25) !important;
+  box-shadow: 0 10px 28px -10px rgba(94, 234, 212,0.5), inset 0 1px 0 rgba(255,255,255,0.25) !important;
   transition: filter .25s ease, transform .2s ease, box-shadow .25s ease !important;
 }
 .legacy-skin button[class*="bg-gradient-to-"]:hover {
@@ -828,7 +825,7 @@ input, select, textarea {
 /* 6. SVG/icon stroke recoloring — paint legacy lucide icons with brand */
 .legacy-skin [class*="text-emerald"] svg,
 .legacy-skin [class*="text-green-4"] svg,
-.legacy-skin [class*="text-lime"] svg { color: #A5D84B !important; }
+.legacy-skin [class*="text-lime"] svg { color: #5EEAD4 !important; }
 .legacy-skin [class*="text-cyan"] svg,
 .legacy-skin [class*="text-sky"] svg,
 .legacy-skin [class*="text-teal"] svg { color: #06B6D4 !important; }
@@ -845,11 +842,11 @@ input, select, textarea {
 /* 8. Header + ticker tape integration — same surface family */
 .legacy-skin header {
   background: linear-gradient(180deg, rgba(22,25,34,0.85), rgba(14,16,20,0.75)) !important;
-  border-color: rgba(165, 216, 75,0.10) !important;
+  border-color: rgba(94, 234, 212,0.10) !important;
   box-shadow:
     0 24px 60px -28px rgba(0,0,0,0.9),
-    0 0 0 1px rgba(165, 216, 75,0.06),
-    0 0 40px -8px rgba(165, 216, 75,0.10) !important;
+    0 0 0 1px rgba(94, 234, 212,0.06),
+    0 0 40px -8px rgba(94, 234, 212,0.10) !important;
 }
 
 /* Kill multi-color ambient blur orbs in headers/heroes — too noisy */
@@ -861,8 +858,8 @@ input, select, textarea {
 
 /* 9. Status dot harmony */
 .legacy-skin .bg-emerald-400, .legacy-skin .bg-green-400, .legacy-skin .bg-lime-400 {
-  background-color: #A5D84B !important;
-  box-shadow: 0 0 8px rgba(165, 216, 75,0.6) !important;
+  background-color: #5EEAD4 !important;
+  box-shadow: 0 0 8px rgba(94, 234, 212,0.6) !important;
 }
 .legacy-skin .bg-cyan-400, .legacy-skin .bg-sky-400, .legacy-skin .bg-teal-400 {
   background-color: #06B6D4 !important;
