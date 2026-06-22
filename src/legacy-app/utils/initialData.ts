@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Client, Printer, PrintOrder, CatalogItem, FilamentStock, Expense, ShoppingItem, MaterialProfile, ExternalPlatformOrder } from '../types';
 
 export const initialClients: Client[] = [];

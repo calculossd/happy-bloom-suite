@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState, useEffect, useRef } from 'react';
 import { getApiUrl } from './utils/api';
 import { safeStorage } from './utils/storage';

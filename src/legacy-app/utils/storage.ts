@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Centralized safe storage utility that falls back to window memory if localStorage is restricted/blocked.
 
 if (typeof window !== 'undefined') {

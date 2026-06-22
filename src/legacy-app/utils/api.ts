@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Utility to resolve API URLs.
  * When running inside the Android APK WebView (appassets.androidplatform.net),

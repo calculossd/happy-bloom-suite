@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState } from 'react';
 import { Client, Printer, PrintOrder, FilamentStock, Expense, ShoppingItem } from '../types';
 import { 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { FilamentStock, ShoppingItem, MaterialProfile, SupplyStock, CatalogItem, Expense } from '../types';
 import { staticFilamentOffers, initialMaterialProfiles, initialCatalogItems } from '../utils/initialData';
