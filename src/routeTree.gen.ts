@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiSearchImageRouteImport } from './routes/api/search-image'
 import { Route as ApiQuotationsRouteImport } from './routes/api/quotations'
 import { Route as ApiKeysStatusRouteImport } from './routes/api/keys-status'
 import { Route as Api3dTrendsRouteImport } from './routes/api/3d-trends'
@@ -17,6 +18,11 @@ import { Route as Api3dTrendsRouteImport } from './routes/api/3d-trends'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSearchImageRoute = ApiSearchImageRouteImport.update({
+  id: '/api/search-image',
+  path: '/api/search-image',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiQuotationsRoute = ApiQuotationsRouteImport.update({
@@ -40,12 +46,14 @@ export interface FileRoutesByFullPath {
   '/api/3d-trends': typeof Api3dTrendsRoute
   '/api/keys-status': typeof ApiKeysStatusRoute
   '/api/quotations': typeof ApiQuotationsRoute
+  '/api/search-image': typeof ApiSearchImageRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/3d-trends': typeof Api3dTrendsRoute
   '/api/keys-status': typeof ApiKeysStatusRoute
   '/api/quotations': typeof ApiQuotationsRoute
+  '/api/search-image': typeof ApiSearchImageRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,18 +61,30 @@ export interface FileRoutesById {
   '/api/3d-trends': typeof Api3dTrendsRoute
   '/api/keys-status': typeof ApiKeysStatusRoute
   '/api/quotations': typeof ApiQuotationsRoute
+  '/api/search-image': typeof ApiSearchImageRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/3d-trends' | '/api/keys-status' | '/api/quotations'
+  fullPaths:
+    | '/'
+    | '/api/3d-trends'
+    | '/api/keys-status'
+    | '/api/quotations'
+    | '/api/search-image'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/3d-trends' | '/api/keys-status' | '/api/quotations'
+  to:
+    | '/'
+    | '/api/3d-trends'
+    | '/api/keys-status'
+    | '/api/quotations'
+    | '/api/search-image'
   id:
     | '__root__'
     | '/'
     | '/api/3d-trends'
     | '/api/keys-status'
     | '/api/quotations'
+    | '/api/search-image'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -72,6 +92,7 @@ export interface RootRouteChildren {
   Api3dTrendsRoute: typeof Api3dTrendsRoute
   ApiKeysStatusRoute: typeof ApiKeysStatusRoute
   ApiQuotationsRoute: typeof ApiQuotationsRoute
+  ApiSearchImageRoute: typeof ApiSearchImageRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -81,6 +102,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/search-image': {
+      id: '/api/search-image'
+      path: '/api/search-image'
+      fullPath: '/api/search-image'
+      preLoaderRoute: typeof ApiSearchImageRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/quotations': {
@@ -112,6 +140,7 @@ const rootRouteChildren: RootRouteChildren = {
   Api3dTrendsRoute: Api3dTrendsRoute,
   ApiKeysStatusRoute: ApiKeysStatusRoute,
   ApiQuotationsRoute: ApiQuotationsRoute,
+  ApiSearchImageRoute: ApiSearchImageRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
