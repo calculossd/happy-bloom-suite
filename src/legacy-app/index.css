@@ -95,7 +95,7 @@ textarea:focus-visible {
 
 /* Neon Text Gradient */
 .text-glow-amber {
-  background: linear-gradient(135deg, #FFFFFF 0%, #FE9D5D 50%, #F46E1F 100%);
+  background: linear-gradient(135deg, #FFFFFF 0%, #7A73FF 50%, #635BFF 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(0 2px 8px rgba(244, 110, 31, 0.15));
