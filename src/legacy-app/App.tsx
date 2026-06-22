@@ -2248,6 +2248,16 @@ export default function App() {
             clients={clients}
           />
         )}
+
+        {currentTab === 7  && <PriceResearchTab />}
+        {currentTab === 8  && <Catalog3DTab />}
+        {currentTab === 9  && <MarketingTab />}
+        {currentTab === 10 && <KanbanTab />}
+        {currentTab === 11 && <ModelsTab />}
+        {currentTab === 12 && <PreCheckTab />}
+        {currentTab === 13 && <AgendaTab />}
+        {currentTab === 14 && <SitesTab />}
+        {currentTab === 15 && <ToolsTab />}
       </main>
 
 
