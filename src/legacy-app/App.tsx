@@ -29,6 +29,9 @@ import CatalogoTab from './imported/CatalogoTab';
 import MarketingTab from './imported/MarketingTab';
 import KanbanTab from './imported/KanbanTab';
 import MarketTab from './imported/MarketTab';
+import AgendaTabNew from './imported/AgendaTab';
+import SitesTab from './imported/SitesTab';
+import PreCheckTabNew from './imported/PreCheckTab';
 import { 
   Wrench, 
   RefreshCw, 
@@ -2259,15 +2262,10 @@ export default function App() {
         {currentTab === 9  && <MarketingTab />}
         {currentTab === 10 && <KanbanTab />}
         {currentTab === 11 && <MarketTab />}
-        {currentTab === 12 && <PreCheckTab />}
-        {currentTab === 13 && <AgendaTab />}
-        {currentTab === 14 && (
-          <IntegrationTab
-            onImportOrder={handleImportExternalOrder}
-            importedExternalIds={importedExternalIds}
-          />
-        )}
-        {currentTab === 15 && <ToolsTab />}
+        {currentTab === 12 && <PreCheckTabNew />}
+        {currentTab === 13 && <AgendaTabNew />}
+        {currentTab === 14 && <SitesTab />}
+        {currentTab === 15 && <SitesTab />}
       </main>
 
 
