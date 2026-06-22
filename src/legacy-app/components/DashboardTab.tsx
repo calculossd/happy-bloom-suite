@@ -20,6 +20,7 @@ import {
   Share2
 } from 'lucide-react';
 import { PrinterCameraModal } from './PrinterCameraModal';
+import { ReferenceDashboardHero } from './ReferenceDashboardHero';
 
 interface DashboardTabProps {
   orders: PrintOrder[];
