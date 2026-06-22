@@ -2119,7 +2119,7 @@ export default function App() {
               onSimulateTick={handleSimulateTick}
               onUpdateFilament={handleUpdateFilamentStock}
               onUpdatePrinter={handleUpdatePrinter}
-              viewMode="monitor"
+              viewMode="full"
             />
             <ClientsTab
               clients={clients}
