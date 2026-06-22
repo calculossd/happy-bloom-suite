@@ -293,6 +293,26 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
               </div>
             </div>
           </div>
+
+          {/* Secondary mini-stats strip — absorbs "Últimas Atualizações" + extra "Período" cards */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5 pt-1">
+            {[
+              { label: 'Despesas', value: `R$ ${monthExpense.toFixed(2)}`, color: 'text-rose-300', dot: 'bg-rose-400', glow: 'hover:shadow-[0_0_24px_-6px_rgba(244,63,94,0.45)] hover:border-rose-400/30' },
+              { label: 'A Entregar', value: `${parsedReadyToDeliverCount} un`, color: 'text-pink-300', dot: 'bg-pink-400', glow: 'hover:shadow-[0_0_24px_-6px_rgba(236,72,153,0.45)] hover:border-pink-400/30' },
+              { label: 'Entregues', value: `${parsedDeliveredOrdersCount} un`, color: 'text-emerald-300', dot: 'bg-emerald-400', glow: 'hover:shadow-[0_0_24px_-6px_rgba(16,185,129,0.45)] hover:border-emerald-400/30' },
+              { label: 'A Comprar', value: `R$ ${valorAComprar.toFixed(2)}`, color: 'text-amber-300', dot: 'bg-amber-400', glow: 'hover:shadow-[0_0_24px_-6px_rgba(251,191,36,0.45)] hover:border-amber-400/30' },
+              { label: 'Alertas Bobina', value: `${alertFilaments.length} cores`, color: 'text-amber-300', dot: 'bg-amber-400', glow: 'hover:shadow-[0_0_24px_-6px_rgba(251,191,36,0.45)] hover:border-amber-400/30' },
+              { label: 'Fila Produção', value: `${safeOrders.filter(o => o.status === 'QUEUE' || o.status === 'PRINTING').length} ord`, color: 'text-cyan-300', dot: 'bg-cyan-400', glow: 'hover:shadow-[0_0_24px_-6px_rgba(34,211,238,0.45)] hover:border-cyan-400/30' },
+            ].map((s, i) => (
+              <div key={i} className={`flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl border border-white/10 bg-white/[0.02] transition-all ${s.glow}`}>
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className={`h-1.5 w-1.5 rounded-full ${s.dot} animate-pulse shrink-0`} />
+                  <span className="text-[9.5px] font-black uppercase tracking-[0.14em] text-[var(--brand-text-subtle)] truncate">{s.label}</span>
+                </div>
+                <span className={`text-xs font-black font-mono ${s.color} shrink-0`}>{s.value}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
