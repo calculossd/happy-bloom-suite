@@ -3,7 +3,8 @@ import React from 'react';
 import {
   Briefcase, CalendarDays, ArrowUpRight, MoreHorizontal, SlidersHorizontal,
   ChevronLeft, ChevronRight, Activity, GitPullRequest, Users as UsersIcon,
-  Layers, ShoppingBag, Settings as SettingsIcon, Cpu, Package,
+  Layers, ShoppingBag, Cpu, Package, CreditCard, Wallet, Banknote, Camera,
+  TrendingUp, AlertTriangle, DollarSign, Percent, Clock as ClockIcon,
 } from 'lucide-react';
 
 /**
@@ -26,51 +27,44 @@ export const ReferenceDashboardHero: React.FC<any> = (props) => {
     calendar, monthLabel, onSelectTab,
   } = props;
 
-  // ===== Module cards (replace the demo Projects grid) =====
-  const modules = [
-    {
-      tab: 1, tag: '#Produção', name: 'Fila de Impressão',
-      stat: `${activePrinters}/${printers.length} ativas`,
-      value: `${alertFilaments} filamentos críticos`,
-      bg: 'linear-gradient(155deg, #3956D8 0%, #2B3FB0 100%)', tag_c: '#A9BDFF',
-      icon: Cpu,
-    },
-    {
-      tab: 3, tag: '#Pedidos', name: 'Pedidos Abertos',
-      stat: `${openCount} em aberto`,
-      value: `${readyToDeliver} prontos para entrega`,
-      bg: 'linear-gradient(155deg, #E0762B 0%, #B4571A 100%)', tag_c: '#FFD9B0',
-      icon: GitPullRequest,
-    },
-    {
-      tab: 2, tag: '#Clientes', name: 'Base de Clientes',
-      stat: `${clients.length} cadastrados`,
-      value: `${new Set(orders.map((o: any) => o.clientId)).size} ativos no mês`,
-      bg: 'linear-gradient(155deg, #9A3DB4 0%, #6E2A82 100%)', tag_c: '#F1BFFA',
-      icon: UsersIcon,
-    },
-    {
-      tab: 4, tag: '#Gestão', name: 'Financeiro',
-      stat: `${monthProfitMargin.toFixed(1)}% margem`,
-      value: fmtBRL(monthRevenue - monthExpense) + ' lucro',
-      bg: 'linear-gradient(155deg, #1F7E55 0%, #135A3C 100%)', tag_c: '#B6F0CF',
-      icon: Layers,
-    },
-    {
-      tab: 6, tag: '#Histórico', name: 'Pedidos Entregues',
-      stat: `${deliveredCount} concluídos`,
-      value: fmtBRL(pendingRevenue) + ' a receber',
-      bg: 'linear-gradient(155deg, #D8484A 0%, #A3302F 100%)', tag_c: '#FFC9C7',
-      icon: ShoppingBag,
-    },
-    {
-      tab: 4, tag: '#Estoque', name: 'Filamentos',
-      stat: `${filaments.length} bobinas`,
-      value: `${alertFilaments} abaixo do mínimo`,
-      bg: 'linear-gradient(155deg, #1F8C8E 0%, #126668 100%)', tag_c: '#B4F0EE',
-      icon: Package,
-    },
+  // ===== 8 quick KPI pills (uniform lime-accent style — no palette) =====
+  const kpis = [
+    { icon: Briefcase,   big: fmtBRLk(monthRevenue),                badge: '+14%', sub: 'Faturamento',  tab: 4 },
+    { icon: CalendarDays,big: `+${deliveredCount}`,                 badge: `+${openCount}`, sub: 'Pedidos', tab: 3 },
+    { icon: DollarSign,  big: fmtBRLk(monthRevenue - monthExpense), badge: `${monthProfitMargin.toFixed(0)}%`, sub: 'Lucro', tab: 4 },
+    { icon: Percent,     big: `${monthProfitMargin.toFixed(1)}%`,   badge: 'mês', sub: 'Margem',         tab: 4 },
+    { icon: GitPullRequest, big: String(openCount),                 badge: `${readyToDeliver}✓`, sub: 'Em aberto', tab: 3 },
+    { icon: Cpu,         big: `${activePrinters}/${printers.length}`, badge: 'on', sub: 'Máquinas',      tab: 1 },
+    { icon: Package,     big: String(filaments.length),             badge: `${alertFilaments}!`, sub: 'Filamentos', tab: 4 },
+    { icon: UsersIcon,   big: String(clients.length),               badge: 'base', sub: 'Clientes',     tab: 2 },
   ];
+
+  // ===== Payment methods breakdown =====
+  const paymentBuckets = (() => {
+    const map: Record<string, { count: number; sum: number }> = {
+      'PIX': { count: 0, sum: 0 },
+      'CARTÃO': { count: 0, sum: 0 },
+      'DINHEIRO': { count: 0, sum: 0 },
+      'CONSIGNADO': { count: 0, sum: 0 },
+    };
+    (orders || []).forEach((o: any) => {
+      const key = o.paymentMethod === 'OUTROS' ? 'PIX' : (o.paymentMethod || 'PIX');
+      if (!map[key]) map[key] = { count: 0, sum: 0 };
+      map[key].count += 1;
+      map[key].sum += o.priceCharged || 0;
+    });
+    return [
+      { key: 'PIX',        icon: Wallet,    label: 'PIX',        ...map['PIX'] },
+      { key: 'CARTÃO',     icon: CreditCard,label: 'Cartão',     ...map['CARTÃO'] },
+      { key: 'DINHEIRO',   icon: Banknote,  label: 'Dinheiro',   ...map['DINHEIRO'] },
+      { key: 'CONSIGNADO', icon: ClockIcon, label: 'Consignado', ...map['CONSIGNADO'] },
+    ];
+  })();
+
+  // ===== In-progress production queue =====
+  const queueOrders = (orders || [])
+    .filter((o: any) => o.status === 'PRINTING' || o.status === 'QUEUE' || o.status === 'POST_PROCESS')
+    .slice(0, 5);
 
   // ===== Year-profit bars =====
   const months = Array.from({ length: 8 }).map((_, i) => {
@@ -96,45 +90,78 @@ export const ReferenceDashboardHero: React.FC<any> = (props) => {
 
   return (
     <section className="relative">
-      {/* ===== Title row with COMPACT inline KPI badges ===== */}
-      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 mb-5 sm:flex sm:flex-wrap sm:justify-between">
+      {/* ===== TOP: title + 8 compact KPI pills (lime accent, moved UP) ===== */}
+      <div className="flex items-center justify-between gap-4 mb-3 flex-wrap">
         <h1
-          className="font-black tracking-tight text-white truncate"
-          style={{ fontSize: 'clamp(2rem, 1.4rem + 2.4vw, 3.4rem)', lineHeight: 0.95, letterSpacing: '-0.03em' }}
+          className="font-black tracking-tight text-white"
+          style={{ fontSize: 'clamp(1.6rem, 1.2rem + 1.6vw, 2.4rem)', lineHeight: 0.95, letterSpacing: '-0.03em' }}
         >
           Dashboard
+          <span className="ml-2 text-xs font-medium text-white/40">{`{${monthLabel}}`}</span>
         </h1>
-        <div className="flex items-center gap-2 flex-wrap">
-          <CompactKpi icon={<Briefcase className="h-4 w-4" />} big={fmtBRLk(monthRevenue)} badge="+14%" sub="Faturamento" />
-          <CompactKpi icon={<CalendarDays className="h-4 w-4" />} big={`+${deliveredCount}`} badge={`+${openCount}`} sub="Pedidos" />
-        </div>
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-8 gap-2 mb-5">
+        {kpis.map((k, i) => (
+          <button key={i} onClick={() => onSelectTab(k.tab)} className="text-left">
+            <CompactKpi icon={<k.icon className="h-4 w-4" />} big={k.big} badge={k.badge} sub={k.sub} />
+          </button>
+        ))}
       </div>
 
-      {/* ===== Modules grid (left, ~2/3) + Calendar (right, ~1/3) ===== */}
+      {/* ===== Printers monitor (with photo) + Calendar ===== */}
       <div className="grid grid-cols-1 xl:grid-cols-[2fr_1fr] gap-5 mb-5">
-        {/* Modules */}
         <Panel>
-          <PanelHead title="Módulos" tag={`{${modules.length}}`} onOpen={() => onSelectTab(1)} />
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {modules.map((m, i) => (
-              <button
-                key={i}
-                onClick={() => onSelectTab(m.tab)}
-                className="relative text-left aspect-[1.45] rounded-2xl p-4 overflow-hidden hover:-translate-y-0.5 transition group"
-                style={{ background: m.bg, boxShadow: '0 18px 40px -22px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.08)' }}
-              >
-                <div className="flex items-start justify-between">
-                  <span className="text-[11px] font-semibold" style={{ color: m.tag_c }}>{m.tag}</span>
-                  <ArrowUpRight className="h-4 w-4 text-white/70 group-hover:text-white transition" />
-                </div>
-                <div className="mt-1 text-[15px] font-bold text-white leading-tight">{m.name}</div>
-                <div className="mt-0.5 text-[11px] text-white/65">{m.stat}</div>
-                <div className="absolute bottom-3 left-4 right-4 flex items-end justify-between gap-2">
-                  <div className="text-white font-bold tabular leading-none text-[13px] truncate">{m.value}</div>
-                  <m.icon className="h-5 w-5 text-white/80 shrink-0" strokeWidth={2} />
-                </div>
-              </button>
-            ))}
+          <PanelHead title="Monitor das Máquinas" tag={`{${activePrinters}/${printers.length}}`} onOpen={() => onSelectTab(1)} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {(printers || []).slice(0, 4).map((p: any) => {
+              const job = (orders || []).find((o: any) => o.assignedPrinterId === p.id && o.status === 'PRINTING');
+              const prog = job ? Math.round((job.printingProgress || 0) * 100) : (p.printProgress || 0);
+              const isPrinting = p.status === 'PRINTING';
+              return (
+                <button
+                  key={p.id}
+                  onClick={() => onSelectTab(1)}
+                  className="flex gap-3 p-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:border-[#A5D84B]/30 hover:bg-white/[0.04] transition text-left"
+                >
+                  {/* Photo slot */}
+                  <div className="h-20 w-20 shrink-0 rounded-xl overflow-hidden bg-black/40 border border-white/5 grid place-items-center relative">
+                    {p.imageUrl ? (
+                      <img src={p.imageUrl} alt={p.name} className="h-full w-full object-cover" />
+                    ) : (
+                      <Camera className="h-6 w-6 text-white/25" />
+                    )}
+                    <span className={`absolute top-1 right-1 h-2 w-2 rounded-full ${isPrinting ? 'bg-[#A5D84B] animate-pulse shadow-[0_0_8px_#A5D84B]' : 'bg-white/30'}`} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-baseline justify-between gap-2">
+                      <div className="text-sm font-bold text-white truncate">{p.name}</div>
+                      <span className="text-[9px] uppercase tracking-wider text-white/40 shrink-0">{p.model}</span>
+                    </div>
+                    <div className="text-[10px] text-white/45 truncate mb-2">
+                      {isPrinting ? (job?.itemName || 'Imprimindo…') : p.status === 'MAINTENANCE' ? 'Manutenção' : 'Disponível'}
+                    </div>
+                    {/* Progress bar */}
+                    <div className="h-2 rounded-full bg-white/5 overflow-hidden border border-white/5">
+                      <div
+                        className="h-full rounded-full transition-all"
+                        style={{
+                          width: `${prog}%`,
+                          background: 'linear-gradient(90deg, #A5D84B 0%, #C7F26B 100%)',
+                          boxShadow: '0 0 12px rgba(165,216,75,0.45)',
+                        }}
+                      />
+                    </div>
+                    <div className="mt-1 flex items-center justify-between text-[10px]">
+                      <span className="text-[#A5D84B] font-bold tabular">{prog}%</span>
+                      {p.nozzleTemp ? <span className="text-white/45">N {p.nozzleTemp}° · M {p.bedTemp || 0}°</span> : <span className="text-white/30">—</span>}
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+            {printers.length === 0 && (
+              <div className="col-span-full text-center text-white/40 text-xs py-6">Nenhuma máquina cadastrada</div>
+            )}
           </div>
         </Panel>
 
@@ -172,6 +199,67 @@ export const ReferenceDashboardHero: React.FC<any> = (props) => {
           <div className="mt-3 flex items-center justify-between text-[10px] text-white/45">
             <span>Venda do dia · neon = ativo</span>
             <span className="text-[#A5D84B] font-bold">{fmtBRLk(monthRevenue)} no mês</span>
+          </div>
+        </Panel>
+      </div>
+
+      {/* ===== Production Queue (with %) + Payment methods ===== */}
+      <div className="grid grid-cols-1 xl:grid-cols-[2fr_1fr] gap-5 mb-5">
+        <Panel>
+          <PanelHead title="Projetos em Andamento" tag={`{${queueOrders.length}}`} onOpen={() => onSelectTab(1)} />
+          {queueOrders.length === 0 ? (
+            <div className="text-center text-white/40 text-xs py-8">Sem produção no momento</div>
+          ) : (
+            <div className="space-y-3">
+              {queueOrders.map((o: any, i: number) => {
+                const prog = Math.round((o.printingProgress || 0) * 100);
+                const statusColor = o.status === 'PRINTING' ? '#A5D84B' : o.status === 'POST_PROCESS' ? '#E0C04B' : '#5A8FE0';
+                return (
+                  <div key={o.id} className="flex items-center gap-3">
+                    <div className="h-7 w-7 rounded-full grid place-items-center bg-white/5 border border-white/10 text-[10px] font-bold text-white/70 shrink-0">{i + 1}</div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-baseline justify-between gap-2 mb-1">
+                        <div className="text-[13px] font-bold text-white truncate">{o.itemName}</div>
+                        <div className="text-[10px] text-white/45 shrink-0 tabular">{o.clientName}</div>
+                      </div>
+                      <div className="relative h-2.5 rounded-full bg-white/[0.04] border border-white/5 overflow-hidden">
+                        <div
+                          className="h-full rounded-full transition-all"
+                          style={{
+                            width: `${Math.max(prog, 2)}%`,
+                            background: `linear-gradient(90deg, ${statusColor} 0%, #C7F26B 100%)`,
+                            boxShadow: `0 0 14px ${statusColor}55`,
+                          }}
+                        />
+                      </div>
+                      <div className="mt-1 flex items-center justify-between text-[10px]">
+                        <span className="uppercase tracking-wider text-white/40">{o.status}</span>
+                        <span className="font-black tabular text-[#A5D84B]">{prog}%</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </Panel>
+
+        <Panel>
+          <PanelHead title="Meios de Pagamento" tag={`{${orders.length}}`} onOpen={() => onSelectTab(3)} />
+          <div className="grid grid-cols-2 gap-2.5">
+            {paymentBuckets.map((p) => (
+              <div
+                key={p.key}
+                className="p-3 rounded-xl border border-white/[0.07] bg-white/[0.02] hover:border-[#A5D84B]/25 transition"
+              >
+                <div className="flex items-center justify-between mb-1.5">
+                  <p.icon className="h-4 w-4 text-[#A5D84B]" />
+                  <span className="text-[9px] uppercase tracking-wider text-white/40">{p.label}</span>
+                </div>
+                <div className="text-[15px] font-black text-white tabular leading-none">{fmtBRLk(p.sum)}</div>
+                <div className="text-[10px] text-white/45 mt-0.5">{p.count} pedidos</div>
+              </div>
+            ))}
           </div>
         </Panel>
       </div>
