@@ -1662,18 +1662,32 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       </header>
       
       {/* GLOBAL ALERTS PORTAL */}
-      {alertMessage.text && (
-        <div key={alertMessage.text} className={`p-4 rounded-xl border flex items-center gap-2.5 font-medium text-xs shadow-lg animate-fade-in ${
-          alertMessage.type === 'success' 
-            ? 'bg-[#95BBA2]/15 border-[#95BBA2]/30 text-[#95BBA2]' 
-            : alertMessage.type === 'info'
-            ? 'bg-blue-500/10 border-blue-500/20 text-[#8BA58D]'
-            : 'bg-red-500/15 border-red-500/25 text-[#D35C5C]'
-        }`} id="app-toast-alert">
-          <CheckCircle className="h-4.5 w-4.5 animate-pulse" />
-          <span>{alertMessage.text}</span>
-        </div>
-      )}
+      {alertMessage.text && (() => {
+        const tone = alertMessage.type === 'error'
+          ? { c: 'var(--cat-red)', bg: 'rgba(239,68,68,0.08)', bd: 'rgba(239,68,68,0.35)' }
+          : alertMessage.type === 'info'
+          ? { c: 'var(--cat-amber)', bg: 'rgba(229,178,66,0.08)', bd: 'rgba(229,178,66,0.3)' }
+          : { c: 'var(--cat-lime)', bg: 'rgba(216,255,61,0.08)', bd: 'rgba(216,255,61,0.3)' };
+        return (
+          <div
+            key={alertMessage.text}
+            id="app-toast-alert"
+            className="flex items-center gap-3 px-4 py-3 rounded-2xl text-xs font-medium animate-fade-in"
+            style={{
+              background: tone.bg,
+              border: `1px solid ${tone.bd}`,
+              color: tone.c,
+              boxShadow: `0 8px 28px -16px ${tone.c}, inset 0 0 0 1px rgba(255,255,255,0.02)`,
+            }}
+          >
+            <span
+              className="inline-block h-2 w-2 rounded-full animate-pulse"
+              style={{ background: tone.c, boxShadow: `0 0 10px ${tone.c}` }}
+            />
+            <span className="text-white/90">{alertMessage.text}</span>
+          </div>
+        );
+      })()}
 
       {/* THREE D DAYS STOCK AUDIT BANNER */}
       <div className={`p-4.5 rounded-2xl border transition relative overflow-hidden ${
