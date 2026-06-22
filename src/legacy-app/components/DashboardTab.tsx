@@ -285,13 +285,8 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
         </div>
       </section>
 
-      {/* ===== DETALHES (LEGADO) ===== */}
-      <details className="group">
-        <summary className="cursor-pointer btn-ghost inline-flex items-center gap-2 text-sm">
-          <span>Ver detalhes operacionais</span>
-          <span className="text-[var(--brand-text-subtle)] group-open:rotate-180 transition">▾</span>
-        </summary>
-        <div className="mt-4 space-y-6">
+      {/* ===== DETALHES OPERACIONAIS ===== */}
+      <div className="space-y-6">
 
       {/* SEÇÃO 1 & 4 (STATUS RÁPIDO & ÚLTIMAS ATUALIZAÇÕES RESUMIDAS) */}
       <div className="bg-white/5 border border-white/10 p-5 rounded-2xl relative overflow-hidden shadow-xl backdrop-blur-md" id="top_action_updates_panel">
@@ -1078,8 +1073,7 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
         </div>
 
       </div>
-        </div>
-      </details>
+      </div>
     </div>
   );
 };
