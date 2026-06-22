@@ -1653,6 +1653,13 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
 
   return (
     <div className="space-y-6" id="costs_tab_container">
+      <header className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <div className="eyebrow mb-1">Financeiro</div>
+          <h1 className="text-glow-amber" style={{ fontSize: 'clamp(1.75rem, 1.2rem + 2vw, 2.75rem)', lineHeight: 1, fontWeight: 800 }}>Gestão de Custos</h1>
+          <p className="text-sm text-[var(--brand-text-muted)] mt-1">Filamentos, despesas operacionais e cotações de commodities.</p>
+        </div>
+      </header>
       
       {/* GLOBAL ALERTS PORTAL */}
       {alertMessage.text && (
