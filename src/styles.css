@@ -128,35 +128,36 @@ html {
 
 
 
-/* ===== PREMIUM SAAS — OBSIDIAN + NEON LIME ===== */
+/* ===== PREMIUM SAAS — MIDNIGHT OBSIDIAN + AQUA PLATINUM + WARM GOLD ===== */
 :root {
-  --brand-bg: #071018;
-  --brand-surface-1: #08141D;
-  --brand-surface-2: #0B1723;
-  --brand-hairline: rgba(165, 216, 75, 0.08);
-  --brand-hairline-strong: rgba(165, 216, 75, 0.22);
-  --brand-text: #F2F6FA;
-  --brand-text-muted: rgb(160, 176, 192);
-  --brand-text-subtle: rgb(110, 126, 142);
-  --brand-primary: 165, 216, 75;              /* neon lime rgb */
-  --brand-accent: #A5D84B;
-  --brand-accent-bright: #C7F26B;
-  --brand-success: #10B981;
-  /* Categorical accents */
-  --cat-lime:    #A5D84B;
-  --cat-blue:    #4A7DFF;
-  --cat-orange:  #F97316;
-  --cat-magenta: #C026D3;
-  --cat-emerald: #10B981;
-  --cat-cyan:    #06B6D4;
-  /* Back-compat aliases (used elsewhere in the css) */
-  --cat-red:     #F97316;
-  --cat-purple:  #C026D3;
-  --cat-teal:    #06B6D4;
+  --brand-bg: #06080F;
+  --brand-surface-1: #0B0F1A;
+  --brand-surface-2: #111726;
+  --brand-hairline: rgba(148, 163, 184, 0.10);
+  --brand-hairline-strong: rgba(94, 234, 212, 0.28);
+  --brand-text: #EEF2F7;
+  --brand-text-muted: rgb(158, 170, 188);
+  --brand-text-subtle: rgb(108, 120, 138);
+  --brand-primary: 94, 234, 212;              /* aqua platinum rgb */
+  --brand-accent: #5EEAD4;
+  --brand-accent-bright: #A7F3E4;
+  --brand-gold: #E8C07A;
+  --brand-success: #34D399;
+  /* Categorical accents — refined editorial palette */
+  --cat-lime:    #5EEAD4;   /* aqua (primary, replaces lime everywhere) */
+  --cat-blue:    #7C9DFF;
+  --cat-orange:  #E8C07A;   /* warm gold instead of orange */
+  --cat-magenta: #B58CFF;
+  --cat-emerald: #34D399;
+  --cat-cyan:    #67E8F9;
+  /* Back-compat aliases */
+  --cat-red:     #F472B6;
+  --cat-purple:  #B58CFF;
+  --cat-teal:    #67E8F9;
   --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.55), 0 14px 40px -16px rgba(0, 0, 0, 0.85);
   --shadow-elevated: 0 4px 8px rgba(0, 0, 0, 0.65), 0 36px 80px -24px rgba(0, 0, 0, 0.95);
-  --shadow-gold: 0 0 0 1px rgba(165, 216, 75, 0.35), 0 18px 50px -16px rgba(165, 216, 75, 0.45);
-  --glow-thermal: 0 0 14px rgba(165, 216, 75, 0.55);
+  --shadow-gold: 0 0 0 1px rgba(94, 234, 212, 0.30), 0 18px 50px -16px rgba(94, 234, 212, 0.35);
+  --glow-thermal: 0 0 14px rgba(94, 234, 212, 0.45);
   --ease-out-expo: cubic-bezier(0.22, 0.61, 0.36, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
 }
@@ -174,14 +175,10 @@ body::before {
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(900px 500px at 10% -10%, rgba(165, 216, 75, 0.18), transparent 60%),
-    radial-gradient(800px 500px at 90% 6%, rgba(0, 212, 255, 0.12), transparent 65%),
-    radial-gradient(700px 500px at 50% 110%, rgba(125, 92, 255, 0.10), transparent 70%);
-  background:
-    radial-gradient(1100px 600px at 8% -8%, rgba(165, 216, 75, 0.14), transparent 60%),
-    radial-gradient(900px 520px at 92% 4%, rgba(74, 125, 255, 0.10), transparent 65%),
-    radial-gradient(800px 520px at 50% 115%, rgba(192, 38, 211, 0.08), transparent 70%),
-    radial-gradient(700px 420px at 80% 80%, rgba(6, 182, 212, 0.06), transparent 70%);
+    radial-gradient(1100px 620px at 8% -8%, rgba(94, 234, 212, 0.12), transparent 60%),
+    radial-gradient(900px 540px at 92% 4%, rgba(124, 157, 255, 0.10), transparent 65%),
+    radial-gradient(800px 540px at 50% 115%, rgba(232, 192, 122, 0.07), transparent 70%),
+    radial-gradient(700px 440px at 80% 80%, rgba(181, 140, 255, 0.06), transparent 70%);
 }
 body > * { position: relative; z-index: 1; }
 
