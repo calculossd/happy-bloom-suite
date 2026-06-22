@@ -128,31 +128,35 @@ html {
 
 
 
-/* ===== STRIPE DASHBOARD — DEEP NAVY + VIOLET/CYAN ===== */
+/* ===== PREMIUM SAAS — OBSIDIAN + NEON LIME ===== */
 :root {
-  --brand-bg: #0A2540;                       /* Stripe slate navy */
-  --brand-surface-1: #0E2F52;
-  --brand-surface-2: #133A63;
-  --brand-hairline: rgba(255, 255, 255, 0.07);
-  --brand-hairline-strong: rgba(255, 255, 255, 0.16);
-  --brand-text: #F6F9FC;
-  --brand-text-muted: rgb(173, 189, 204);
-  --brand-text-subtle: rgb(125, 142, 161);
-  --brand-primary: 99, 91, 255;              /* Stripe violet rgb */
-  --brand-accent: #635BFF;
-  --brand-accent-bright: #00D4FF;            /* Stripe cyan */
-  --brand-success: #00D924;
-  /* Categorical tile palette (TaskTrail) */
-  --cat-lime:   #00D4FF;
-  --cat-orange: #F58A3B;
-  --cat-emerald:#39B68A;
-  --cat-red:    #E45D55;
-  --cat-purple: #B07BE0;
-  --cat-teal:   #4FC6C4;
-  --shadow-soft: 0 1px 2px rgba(3, 18, 38, 0.5), 0 14px 40px -16px rgba(3, 18, 38, 0.75);
-  --shadow-elevated: 0 4px 8px rgba(3, 18, 38, 0.6), 0 36px 80px -24px rgba(3, 18, 38, 0.85);
-  --shadow-gold: 0 0 0 1px rgba(99, 91, 255, 0.35), 0 18px 50px -16px rgba(99, 91, 255, 0.45);
-  --glow-thermal: 0 0 14px rgba(0, 212, 255, 0.55);
+  --brand-bg: #071018;
+  --brand-surface-1: #08141D;
+  --brand-surface-2: #0B1723;
+  --brand-hairline: rgba(165, 216, 75, 0.08);
+  --brand-hairline-strong: rgba(165, 216, 75, 0.22);
+  --brand-text: #F2F6FA;
+  --brand-text-muted: rgb(160, 176, 192);
+  --brand-text-subtle: rgb(110, 126, 142);
+  --brand-primary: 165, 216, 75;              /* neon lime rgb */
+  --brand-accent: #A5D84B;
+  --brand-accent-bright: #C7F26B;
+  --brand-success: #10B981;
+  /* Categorical accents */
+  --cat-lime:    #A5D84B;
+  --cat-blue:    #4A7DFF;
+  --cat-orange:  #F97316;
+  --cat-magenta: #C026D3;
+  --cat-emerald: #10B981;
+  --cat-cyan:    #06B6D4;
+  /* Back-compat aliases (used elsewhere in the css) */
+  --cat-red:     #F97316;
+  --cat-purple:  #C026D3;
+  --cat-teal:    #06B6D4;
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.55), 0 14px 40px -16px rgba(0, 0, 0, 0.85);
+  --shadow-elevated: 0 4px 8px rgba(0, 0, 0, 0.65), 0 36px 80px -24px rgba(0, 0, 0, 0.95);
+  --shadow-gold: 0 0 0 1px rgba(165, 216, 75, 0.35), 0 18px 50px -16px rgba(165, 216, 75, 0.45);
+  --glow-thermal: 0 0 14px rgba(165, 216, 75, 0.55);
   --ease-out-expo: cubic-bezier(0.22, 0.61, 0.36, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
 }
