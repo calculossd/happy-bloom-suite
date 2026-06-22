@@ -1548,6 +1548,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
           </div>
         )}
       </AnimatePresence>
+      </>)}
     </div>
   );
 };
