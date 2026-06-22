@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import {
@@ -26,11 +26,6 @@ import { loadAsStl } from "@/lib/threemf";
 import { renderStlThumbnail } from "@/lib/stl-thumbnail";
 import { SendToPrinterDialog } from "@/components/SendToPrinterDialog";
 import JSZip from "jszip";
-
-export const Route = createFileRoute("/catalogo/")({
-  head: () => ({ meta: [{ title: "Catálogo 3D — ImpreMetrics" }] }),
-  component: CatalogPage,
-});
 
 type UploadProgress = { name: string; pct: number; status: "uploading" | "done" | "dup" | "error"; message?: string };
 
@@ -403,3 +398,5 @@ function CatalogPage() {
     </AppShell>
   );
 }
+
+export default CatalogPage;

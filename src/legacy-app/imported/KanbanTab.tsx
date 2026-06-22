@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Plus,
@@ -18,20 +17,6 @@ import {
   Upload,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-
-export const Route = createFileRoute("/kanban")({
-  head: () => ({
-    meta: [
-      { title: "Kanban — ImpreMetrics 3D" },
-      {
-        name: "description",
-        content:
-          "Organize ideias, modelagens, impressões e entregas no quadro Kanban da sua oficina 3D.",
-      },
-    ],
-  }),
-  component: KanbanPage,
-});
 
 type Priority = "low" | "med" | "high";
 
@@ -775,3 +760,5 @@ function CardEditor({
     </div>
   );
 }
+
+export default KanbanPage;

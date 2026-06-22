@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import {
   Megaphone,
@@ -17,20 +17,6 @@ import {
   Download,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-
-export const Route = createFileRoute("/marketing")({
-  head: () => ({
-    meta: [
-      { title: "Divulgar — ImpreMetrics" },
-      {
-        name: "description",
-        content:
-          "Compartilhe seus produtos 3D em WhatsApp, Instagram, Facebook, TikTok e outras redes com mensagem e imagem prontas.",
-      },
-    ],
-  }),
-  component: MarketingPage,
-});
 
 const DEFAULT_IMAGE =
   "https://images.unsplash.com/photo-1631467488256-b1f88c520007?w=1200&q=80&auto=format&fit=crop";
@@ -462,3 +448,5 @@ function ShareBtn({
     </button>
   );
 }
+
+export default MarketingPage;

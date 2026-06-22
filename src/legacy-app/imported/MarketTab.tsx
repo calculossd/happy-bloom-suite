@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { Store, RefreshCw, ExternalLink, Download, Heart, ImageOff, Lightbulb, Check, Search, X } from "lucide-react";
 import { toast } from "sonner";
@@ -33,20 +32,6 @@ type ApiPayload = {
 const SOURCE_COLORS: Record<string, string> = {
   MakerWorld: "bg-amber-500/20 text-amber-200 border-amber-400/30",
 };
-
-export const Route = createFileRoute("/market")({
-  head: () => ({
-    meta: [
-      { title: "3D Market — MakerWorld | ImpreMetrics" },
-      {
-        name: "description",
-        content:
-          "Modelos 3D populares do MakerWorld em tempo real.",
-      },
-    ],
-  }),
-  component: MarketPage,
-});
 
 function formatAgo(ts: number) {
   const min = Math.floor((Date.now() - ts) / 60000);
@@ -426,3 +411,5 @@ function MarketPage() {
     </AppShell>
   );
 }
+
+export default MarketPage;
