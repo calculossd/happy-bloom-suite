@@ -24,6 +24,7 @@ import { PrintFlowTab } from './components/PrintFlowTab';
 import {
   PriceResearchTab, PreCheckTab, AgendaTab, ToolsTab, ModelsTab
 } from './components/NewTabs';
+import Market3DApp from '@/market3d/App';
 import { 
   Wrench, 
   RefreshCw, 
@@ -2249,7 +2250,7 @@ export default function App() {
           />
         )}
 
-        {currentTab === 7  && <PriceResearchTab />}
+        {currentTab === 7  && <Market3DApp />}
         {currentTab === 8  && (
           <ShowcaseView
             workspaceCode={showcaseWorkspace}
