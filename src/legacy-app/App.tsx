@@ -1506,6 +1506,15 @@ export default function App() {
           title: "Vendas & Vitrine",
           subtitle: "Pedidos finalizados, lucros e vitrine de catálogos",
         };
+      case 7:  return { title: "Pesquisa de Preços", subtitle: "Compare preços entre marketplaces e fornecedores" };
+      case 8:  return { title: "Catálogo 3D",        subtitle: "Biblioteca de produtos com material, tempo e preço" };
+      case 9:  return { title: "Marketing",          subtitle: "Campanhas, geração de posts e calendário de publicações" };
+      case 10: return { title: "Kanban",             subtitle: "Fluxo visual dos pedidos da fila ao entregue" };
+      case 11: return { title: "Modelos",            subtitle: "Biblioteca de arquivos STL e 3MF" };
+      case 12: return { title: "Pré-check",          subtitle: "Checklist antes de iniciar a impressão" };
+      case 13: return { title: "Agenda",             subtitle: "Eventos, entregas e manutenções programadas" };
+      case 14: return { title: "Sites",              subtitle: "Lojas e sites conectados ao seu ateliê" };
+      case 15: return { title: "Ferramentas",        subtitle: "Calculadoras e utilitários para impressão 3D" };
       default:
         return {
           title: "Ateliê 3D",
