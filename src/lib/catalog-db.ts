@@ -24,7 +24,7 @@ const DB_VERSION = 1;
 
 async function db(): Promise<IDBPDatabase> {
   return openDB(DB_NAME, DB_VERSION, {
-    upgrade(d) {
+    upgrade(d: IDBPDatabase) {
       if (!d.objectStoreNames.contains("models")) {
         d.createObjectStore("models", { keyPath: "id" });
       }
