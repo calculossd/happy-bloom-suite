@@ -1981,23 +1981,23 @@ export default function App() {
           const formattedTime = currentTime.toLocaleTimeString('pt-BR');
 
           return (
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white/5 border border-white/10 backdrop-blur-xl p-5 rounded-2xl shadow-sm transition-all duration-300" id="view-page-header">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 bg-white/5 border border-white/10 backdrop-blur-xl px-4 py-3 rounded-xl shadow-sm transition-all duration-300" id="view-page-header">
               <div>
-                <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
-                  <span className={`w-2.5 h-2.5 rounded-full ${
+                <h2 className="text-sm sm:text-base font-bold text-white tracking-tight flex items-center gap-2">
+                  <span className={`w-1.5 h-1.5 rounded-full ${
                     currentTab === 1 || currentTab === 2 ? 'bg-cyan-400 animate-pulse' :
                     currentTab === 3 || currentTab === 6 ? 'bg-pink-400 animate-pulse' :
                     currentTab === 4 ? 'bg-emerald-400 animate-pulse' : 'bg-white/40'
                   }`} />
                   {headerInfo.title}
                 </h2>
-                <p className="text-[11px] sm:text-xs text-[var(--brand-muted)] max-w-xl mt-0.5">
+                <p className="text-[10px] sm:text-[11px] text-[var(--brand-muted)] max-w-xl mt-0.5">
                   {headerInfo.subtitle}
                 </p>
               </div>
               {isClientMounted && (
-                <div className="flex items-center gap-2 self-start sm:self-center font-mono text-xs text-[var(--brand-text-accent)] shrink-0 bg-white/5 border border-white/10 px-3.5 py-2 rounded-xl shadow-inner">
-                  <Clock className={`h-3.5 w-3.5 ${
+                <div className="flex items-center gap-1.5 self-start sm:self-center font-mono text-[10px] text-[var(--brand-text-accent)] shrink-0 bg-white/5 border border-white/10 px-2.5 py-1.5 rounded-lg shadow-inner">
+                  <Clock className={`h-3 w-3 ${
                     currentTab === 1 || currentTab === 2 ? 'text-cyan-400' :
                     currentTab === 3 || currentTab === 6 ? 'text-pink-400' :
                     currentTab === 4 ? 'text-emerald-400' : 'text-amber-400'

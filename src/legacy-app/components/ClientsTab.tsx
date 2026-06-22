@@ -887,13 +887,6 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
 
   return (
     <div className="space-y-6" id="clients_tab_container">
-      <header className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <div className="eyebrow mb-1">CRM</div>
-          <h1 className="text-glow-amber" style={{ fontSize: 'clamp(1.75rem, 1.2rem + 2vw, 2.75rem)', lineHeight: 1, fontWeight: 800 }}>Clientes</h1>
-          <p className="text-sm text-[var(--brand-text-muted)] mt-1">Base de clientes, histórico de compras e contatos.</p>
-        </div>
-      </header>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
         {/* LEFT COLUMN: CLIENT CATALOG */}
