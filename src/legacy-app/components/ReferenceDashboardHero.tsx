@@ -429,7 +429,7 @@ function PanelHead({ title, tag, onOpen }: any) {
   return (
     <div className="flex items-center justify-between mb-4">
       <div className="flex items-baseline gap-2 min-w-0">
-        <h2 className="text-xl font-bold text-white truncate">{title}</h2>
+        <h2 className="text-sm sm:text-base font-bold text-white truncate tracking-tight">{title}</h2>
         <span className="text-xs text-white/40">{tag}</span>
       </div>
       <div className="flex items-center gap-1 text-white/50 shrink-0">
