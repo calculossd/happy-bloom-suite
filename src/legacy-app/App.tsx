@@ -38,7 +38,9 @@ import {
   ShoppingBag,
   AlertTriangle,
   Wifi,
-  WifiOff
+  WifiOff,
+  Menu,
+  X
 } from 'lucide-react';
 
 // STUNNING 3D CUBE & PRINTER EXTENSION GEOMETRIC LOGO
@@ -299,6 +301,7 @@ export function safeGetLocalStorageItem(key: string, defaultValue: string = ''):
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState(0);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [dismissedPriceAlert, setDismissedPriceAlert] = useState(false);
   const [dismissedStockAlert, setDismissedStockAlert] = useState(false);
 
@@ -1513,7 +1516,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col font-sans transition-colors duration-300">
+    <div className="min-h-screen flex flex-col font-sans transition-colors duration-300 tt-shell">
       
       {/* GLOBAL SAFE TOAST NOTIFICATION CARD */}
       {globalToast && (
@@ -1728,6 +1731,66 @@ export default function App() {
           animation: spin-slow 12s linear infinite;
         }
       `}</style>
+
+      {/* TASKTRAIL SIDEBAR */}
+      {sidebarOpen && (
+        <div className="tt-sidebar-backdrop md:hidden" onClick={() => setSidebarOpen(false)} />
+      )}
+      <aside className="tt-sidebar" data-open={sidebarOpen}>
+        <div className="flex items-center gap-2.5 px-2 mb-6">
+          <div className="h-9 w-9 rounded-xl bg-[var(--cat-lime)] grid place-items-center text-black font-black">
+            {brandConfig.name?.[0]?.toUpperCase() || 'A'}
+          </div>
+          <div className="min-w-0">
+            <div className="text-sm font-bold truncate text-white">{brandConfig.name || 'Ateliê 3D'}</div>
+            <div className="text-[10px] uppercase tracking-wider text-[var(--brand-text-subtle)]">Gestão 3D</div>
+          </div>
+          <button className="ml-auto md:hidden btn-icon" onClick={() => setSidebarOpen(false)} aria-label="Fechar menu">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+        <div className="text-[10px] uppercase tracking-[0.18em] text-[var(--brand-text-subtle)] px-3 mb-2">Menu</div>
+        <nav className="flex flex-col gap-1">
+          {[
+            { id: 0, label: 'Painel',    icon: Home },
+            { id: 1, label: 'Produção',  icon: Activity },
+            { id: 6, label: 'Histórico', icon: ShoppingBag },
+            { id: 2, label: 'Clientes',  icon: Users },
+            { id: 3, label: 'Pedidos',   icon: GitPullRequest, badge: pendingOrdersCount },
+            { id: 4, label: 'Gestão',    icon: Layers },
+            { id: 5, label: 'Ajustes',   icon: Settings },
+          ].map(item => (
+            <button
+              key={item.id}
+              className="tt-nav-item"
+              data-active={currentTab === item.id}
+              onClick={() => { setCurrentTab(item.id); setSidebarOpen(false); }}
+            >
+              <item.icon className="h-4 w-4 shrink-0" />
+              <span className="truncate">{item.label}</span>
+              {item.badge ? <span className="tt-nav-badge">{item.badge}</span> : null}
+            </button>
+          ))}
+        </nav>
+        <div className="mt-auto pt-4 border-t border-white/5">
+          <div className="flex items-center gap-2 px-2">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+            </span>
+            <span className="text-[10px] uppercase tracking-wider text-[var(--brand-text-subtle)]">Local · Online</span>
+          </div>
+        </div>
+      </aside>
+
+      {/* Mobile sidebar trigger */}
+      <button
+        className="md:hidden fixed top-3 left-3 z-50 btn-icon"
+        onClick={() => setSidebarOpen(true)}
+        aria-label="Abrir menu"
+      >
+        <Menu className="h-5 w-5" />
+      </button>
 
       {/* GLOBAL HEADER (Floating Glassmorphism Island Header - Lovable Styled) */}
       <header className="relative md:mx-auto md:my-4 md:max-w-7xl md:rounded-[2rem] border border-white/10 bg-black/40 sticky top-0 md:top-2 z-50 backdrop-blur-2xl px-6 py-4 md:py-4.5 flex flex-col md:flex-row items-center justify-between gap-4 transition-all duration-300 shadow-[0_24px_50px_rgba(0,0,0,0.8)] overflow-hidden">
@@ -2167,135 +2230,6 @@ export default function App() {
         )}
       </main>
 
-      {/* REVOLUTIONARY LOWER NAVIGATION BAR (High-Fidelity Lovable Floating Dock) */}
-      <nav className="fixed bottom-0 left-0 right-0 md:bottom-6 md:left-1/2 md:-translate-x-1/2 md:max-w-4xl md:w-[90%] border-t md:border border-white/10 bg-[#0E0E12]/85 backdrop-blur-3xl py-2.5 px-3 z-40 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] flex justify-around items-center transition-all duration-300 md:rounded-full md:border-white/15">
-        <button
-          onClick={() => setCurrentTab(0)}
-          className="flex flex-col items-center gap-1.5 text-center group cursor-pointer focus:outline-none transition-all"
-          id="btn_tab_dashboard"
-        >
-          <div className={`px-4 md:px-6 py-1.5 rounded-full flex items-center justify-center transition-all duration-300 ${
-            currentTab === 0 
-              ? 'bg-[var(--brand-primary)] text-black font-extrabold shadow-[0_4px_20px_rgba(244,110,31,0.4)] scale-105' 
-              : 'text-[var(--brand-muted)] hover:text-white hover:bg-white/5'
-          }`}>
-            <Home className="h-4.5 w-4.5 transition-transform group-hover:scale-110" />
-          </div>
-          <span className={`text-[10px] tracking-wider uppercase font-sans font-bold transition-all ${
-            currentTab === 0 ? 'text-[var(--brand-primary)] drop-shadow-[0_0_8px_rgba(244,110,31,0.2)]' : 'text-[var(--brand-muted)]'
-          }`}>Painel</span>
-        </button>
-
-        <button
-          onClick={() => setCurrentTab(1)}
-          className="flex flex-col items-center gap-1.5 text-center group cursor-pointer focus:outline-none transition-all"
-          id="btn_tab_production"
-        >
-          <div className={`px-4 md:px-6 py-1.5 rounded-full flex items-center justify-center transition-all duration-300 ${
-            currentTab === 1 
-              ? 'bg-[var(--brand-primary)] text-black font-extrabold shadow-[0_4px_20px_rgba(244,110,31,0.4)] scale-105' 
-              : 'text-[var(--brand-muted)] hover:text-white hover:bg-white/5'
-          }`}>
-            <Activity className="h-4.5 w-4.5 transition-transform group-hover:scale-110" />
-          </div>
-          <span className={`text-[10px] tracking-wider uppercase font-sans font-bold transition-all ${
-            currentTab === 1 ? 'text-[var(--brand-primary)] drop-shadow-[0_0_8px_rgba(244,110,31,0.2)]' : 'text-[var(--brand-muted)]'
-          }`}>Produção</span>
-        </button>
-
-        <button
-          onClick={() => setCurrentTab(6)}
-          className="flex flex-col items-center gap-1.5 text-center group cursor-pointer focus:outline-none transition-all"
-          id="btn_tab_sold"
-        >
-          <div className={`px-4 md:px-6 py-1.5 rounded-full flex items-center justify-center transition-all duration-300 ${
-            currentTab === 6 
-              ? 'bg-[var(--brand-primary)] text-black font-extrabold shadow-[0_4px_20px_rgba(244,110,31,0.4)] scale-105' 
-              : 'text-[var(--brand-muted)] hover:text-white hover:bg-white/5'
-          }`}>
-            <ShoppingBag className="h-4.5 w-4.5 transition-transform group-hover:scale-110" />
-          </div>
-          <span className={`text-[10px] tracking-wider uppercase font-sans font-bold transition-all ${
-            currentTab === 6 ? 'text-[var(--brand-primary)] drop-shadow-[0_0_8px_rgba(244,110,31,0.2)]' : 'text-[var(--brand-muted)]'
-          }`}>Histórico</span>
-        </button>
-
-        <button
-          onClick={() => setCurrentTab(2)}
-          className="flex flex-col items-center gap-1.5 text-center group cursor-pointer focus:outline-none transition-all"
-          id="btn_tab_clients"
-        >
-          <div className={`px-4 md:px-6 py-1.5 rounded-full flex items-center justify-center transition-all duration-300 ${
-            currentTab === 2 
-              ? 'bg-[var(--brand-primary)] text-black font-extrabold shadow-[0_4px_20px_rgba(244,110,31,0.4)] scale-105' 
-              : 'text-[var(--brand-muted)] hover:text-white hover:bg-white/5'
-          }`}>
-            <Users className="h-4.5 w-4.5 transition-transform group-hover:scale-110" />
-          </div>
-          <span className={`text-[10px] tracking-wider uppercase font-sans font-bold transition-all ${
-            currentTab === 2 ? 'text-[var(--brand-primary)] drop-shadow-[0_0_8px_rgba(244,110,31,0.2)]' : 'text-[var(--brand-muted)]'
-          }`}>Clientes</span>
-        </button>
-
-        <button
-          onClick={() => setCurrentTab(3)}
-          className="flex flex-col items-center gap-1.5 text-center group cursor-pointer focus:outline-none transition-all"
-          id="btn_tab_integration"
-        >
-          <div className={`px-4 md:px-6 py-1.5 rounded-full flex items-center justify-center transition-all duration-300 ${
-            currentTab === 3 
-              ? 'bg-[var(--brand-primary)] text-black font-extrabold shadow-[0_4px_20px_rgba(244,110,31,0.4)] scale-105' 
-              : pendingOrdersCount > 0 
-              ? 'bg-[var(--brand-accent)] text-black font-bold animate-tab-blink' 
-              : 'text-[var(--brand-muted)] hover:text-white hover:bg-white/5'
-          }`}>
-            <GitPullRequest className="h-4.5 w-4.5 transition-transform group-hover:scale-110" />
-          </div>
-          <span className={`text-[10px] tracking-wider uppercase font-sans font-bold transition-all ${
-            currentTab === 3 
-              ? 'text-[var(--brand-primary)] drop-shadow-[0_0_8px_rgba(244,110,31,0.2)]' 
-              : pendingOrdersCount > 0 
-              ? 'text-[var(--brand-accent)] font-extrabold animate-pulse' 
-              : 'text-[var(--brand-muted)]'
-          }`}>
-            Pedidos{pendingOrdersCount > 0 && ` (${pendingOrdersCount})`}
-          </span>
-        </button>
-
-        <button
-          onClick={() => setCurrentTab(4)}
-          className="flex flex-col items-center gap-1.5 text-center group cursor-pointer focus:outline-none transition-all"
-          id="btn_tab_costs"
-        >
-          <div className={`px-4 md:px-6 py-1.5 rounded-full flex items-center justify-center transition-all duration-300 ${
-            currentTab === 4 
-              ? 'bg-[var(--brand-primary)] text-black font-extrabold shadow-[0_4px_20px_rgba(244,110,31,0.4)] scale-105' 
-              : 'text-[var(--brand-muted)] hover:text-white hover:bg-white/5'
-          }`}>
-            <Layers className="h-4.5 w-4.5 transition-transform group-hover:scale-110" />
-          </div>
-          <span className={`text-[10px] tracking-wider uppercase font-sans font-bold transition-all ${
-            currentTab === 4 ? 'text-[var(--brand-primary)] drop-shadow-[0_0_8px_rgba(244,110,31,0.2)]' : 'text-[var(--brand-muted)]'
-          }`}>Gestão</span>
-        </button>
-
-        <button
-          onClick={() => setCurrentTab(5)}
-          className="flex flex-col items-center gap-1.5 text-center group cursor-pointer focus:outline-none transition-all"
-          id="btn_tab_settings"
-        >
-          <div className={`px-4 md:px-6 py-1.5 rounded-full flex items-center justify-center transition-all duration-300 ${
-            currentTab === 5 
-              ? 'bg-[var(--brand-primary)] text-black font-extrabold shadow-[0_4px_20px_rgba(244,110,31,0.4)] scale-105' 
-              : 'text-[var(--brand-muted)] hover:text-white hover:bg-white/5'
-          }`}>
-            <Settings className="h-4.5 w-4.5 transition-transform group-hover:scale-110" />
-          </div>
-          <span className={`text-[10px] tracking-wider uppercase font-sans font-bold transition-all ${
-            currentTab === 5 ? 'text-[var(--brand-primary)] drop-shadow-[0_0_8px_rgba(244,110,31,0.2)]' : 'text-[var(--brand-muted)]'
-          }`}>Ajustes</span>
-        </button>
-      </nav>
 
       {/* OK LOJA VOICE & SMART AI ASSISTANT (v3.2.3.6 Update) */}
       <OkLojaAssistant 
