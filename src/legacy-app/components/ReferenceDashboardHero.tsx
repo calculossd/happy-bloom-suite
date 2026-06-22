@@ -417,8 +417,8 @@ export const ReferenceDashboardHero: React.FC<any> = (props) => {
 function Panel({ children }: any) {
   return (
     <div
-      className="relative rounded-[24px] p-5 border border-white/[0.06]"
-      style={{ background: 'linear-gradient(180deg, rgba(17,28,40,0.85), rgba(10,18,28,0.75))' }}
+      className="relative rounded-[24px] p-5 border border-white/[0.08] shadow-[0_8px_30px_rgba(0,0,0,0.5)]"
+      style={{ background: 'radial-gradient(120% 100% at 0% 0%, rgba(40,40,40,0.55) 0%, rgba(10,10,10,0.95) 55%, #000 100%)' }}
     >
       {children}
     </div>
