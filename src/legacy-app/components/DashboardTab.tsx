@@ -293,6 +293,26 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
               </div>
             </div>
           </div>
+
+          {/* Secondary mini-stats strip — absorbs "Últimas Atualizações" + extra "Período" cards */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5 pt-1">
+            {[
+              { label: 'Despesas', value: `R$ ${monthExpense.toFixed(2)}`, color: 'text-rose-300', dot: 'bg-rose-400', glow: 'hover:shadow-[0_0_24px_-6px_rgba(244,63,94,0.45)] hover:border-rose-400/30' },
+              { label: 'A Entregar', value: `${parsedReadyToDeliverCount} un`, color: 'text-pink-300', dot: 'bg-pink-400', glow: 'hover:shadow-[0_0_24px_-6px_rgba(236,72,153,0.45)] hover:border-pink-400/30' },
+              { label: 'Entregues', value: `${parsedDeliveredOrdersCount} un`, color: 'text-emerald-300', dot: 'bg-emerald-400', glow: 'hover:shadow-[0_0_24px_-6px_rgba(16,185,129,0.45)] hover:border-emerald-400/30' },
+              { label: 'A Comprar', value: `R$ ${valorAComprar.toFixed(2)}`, color: 'text-amber-300', dot: 'bg-amber-400', glow: 'hover:shadow-[0_0_24px_-6px_rgba(251,191,36,0.45)] hover:border-amber-400/30' },
+              { label: 'Alertas Bobina', value: `${alertFilaments.length} cores`, color: 'text-amber-300', dot: 'bg-amber-400', glow: 'hover:shadow-[0_0_24px_-6px_rgba(251,191,36,0.45)] hover:border-amber-400/30' },
+              { label: 'Fila Produção', value: `${safeOrders.filter(o => o.status === 'QUEUE' || o.status === 'PRINTING').length} ord`, color: 'text-cyan-300', dot: 'bg-cyan-400', glow: 'hover:shadow-[0_0_24px_-6px_rgba(34,211,238,0.45)] hover:border-cyan-400/30' },
+            ].map((s, i) => (
+              <div key={i} className={`flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl border border-white/10 bg-white/[0.02] transition-all ${s.glow}`}>
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className={`h-1.5 w-1.5 rounded-full ${s.dot} animate-pulse shrink-0`} />
+                  <span className="text-[9.5px] font-black uppercase tracking-[0.14em] text-[var(--brand-text-subtle)] truncate">{s.label}</span>
+                </div>
+                <span className={`text-xs font-black font-mono ${s.color} shrink-0`}>{s.value}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -336,75 +356,6 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
 
       {/* ===== DETALHES OPERACIONAIS ===== */}
       <div className="space-y-6 legacy-skin">
-
-      {/* SEÇÃO 1 & 4 (STATUS RÁPIDO & ÚLTIMAS ATUALIZAÇÕES RESUMIDAS) */}
-      <div className="bg-white/5 border border-white/10 p-5 rounded-2xl relative overflow-hidden shadow-xl backdrop-blur-md" id="top_action_updates_panel">
-        {/* Subtle decorative mesh background glow */}
-        <div className="absolute top-0 left-0 w-24 h-24 bg-cyan-500/10 rounded-full blur-[30px] pointer-events-none" />
-        <div className="absolute bottom-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-[40px] pointer-events-none" />
-
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center p-2.5 bg-cyan-500/10 border border-cyan-500/15 rounded-xl text-cyan-400">
-              <FileText className="h-5 w-5" />
-            </div>
-            <div>
-              <h3 className="text-base font-black text-white uppercase tracking-tight">
-                Últimas Atualizações Resumidas
-              </h3>
-              <p className="text-[11px] text-[#A5BBA7]">Indicadores operacionais consolidados e sincronizados em tempo real no ateliê</p>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <span className="hidden sm:inline-block text-[9px] uppercase tracking-wider font-extrabold text-cyan-400 bg-cyan-500/10 px-3 py-1.5 rounded-xl border border-cyan-500/20 font-mono">
-              Ateliê Live Active
-            </span>
-            <button
-               onClick={handleRecalculate}
-               className="px-4 py-2 bg-gradient-to-r from-emerald-500 to-green-400 hover:from-emerald-400 hover:to-green-300 text-black font-extrabold rounded-xl text-[11px] uppercase tracking-wider transition-all duration-300 flex items-center gap-2 cursor-pointer shadow-lg active:scale-95"
-               id="btn_refresh_status_resumo"
-             >
-               <RefreshCw className="h-3.5 w-3.5 animate-spin-slow text-black" />
-               Sincronizar Painel
-             </button>
-          </div>
-        </div>
-
-        {recentFeedback && (
-          <p className="text-[10px] text-center font-bold text-emerald-400 animate-pulse mt-3 bg-emerald-500/10 py-1.5 rounded-lg border border-emerald-500/20">{recentFeedback}</p>
-        )}
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5 mt-4" id="dashboard-top-resumo-slots">
-          
-          {/* Fila Produção - Ciano */}
-          <div className="bg-white/[0.02] hover:bg-white/[0.04] p-3.5 px-4 border border-white/10 hover:border-cyan-500/30 rounded-xl flex items-center justify-between gap-1.5 transition-all duration-300 group">
-            <span className="text-[11px] text-[#8BA58D] font-bold uppercase tracking-wider group-hover:text-cyan-400 transition-colors">📦 Produção Fila</span>
-            <strong className="text-white font-mono text-sm font-black">{orders.filter(o => o.status === 'QUEUE' || o.status === 'PRINTING').length} ordens</strong>
-          </div>
-
-          {/* Extrusoras - Ciano */}
-          <div className="bg-white/[0.02] hover:bg-white/[0.04] p-3.5 px-4 border border-white/10 hover:border-cyan-500/30 rounded-xl flex items-center justify-between gap-1.5 transition-all duration-300 group">
-            <span className="text-[11px] text-[#8BA58D] font-bold uppercase tracking-wider group-hover:text-cyan-400 transition-colors">⚡ Extrusoras</span>
-            <strong className="text-cyan-400 font-mono text-sm font-black">{printers.filter(p => p.status === 'PRINTING').length} ativas</strong>
-          </div>
-
-          {/* Alertas Bobina - Âmbar */}
-          <div className="bg-white/[0.02] hover:bg-white/[0.04] p-3.5 px-4 border border-white/10 hover:border-amber-500/30 rounded-xl flex items-center justify-between gap-1.5 transition-all duration-300 group">
-            <span className="text-[11px] text-[#8BA58D] font-bold uppercase tracking-wider group-hover:text-amber-400 transition-colors">🧵 Alertas Bobina</span>
-            <strong className="text-amber-400 font-mono text-sm font-black">{safeFilaments.filter(f => f.stockGrams < f.minStockGrams).length} cores</strong>
-          </div>
-
-          {/* Faturado Hoje - Esmeralda */}
-          <div className="bg-white/[0.02] hover:bg-white/[0.04] p-3.5 px-4 border border-white/10 hover:border-emerald-500/30 rounded-xl flex items-center justify-between gap-1.5 transition-all duration-300 group">
-            <span className="text-[11px] text-[#8BA58D] font-bold uppercase tracking-wider group-hover:text-emerald-400 transition-colors">💰 Faturado Hoje</span>
-            <strong className="text-emerald-400 font-mono text-sm font-black">
-              R$ {safeOrders.filter(o => o.status === 'READY' || o.status === 'DELIVERED').reduce((sum, o) => sum + o.priceCharged, 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </strong>
-          </div>
-
-        </div>
-      </div>
 
       {/* SEÇÃO 2 (PREÇOS PETG - 4 LOJAS LÍDERES NA WEB) */}
       <div className="bg-white/5 border border-white/10 p-5 rounded-2xl relative overflow-hidden shadow-xl backdrop-blur-md transition-all duration-300 hover:border-pink-500/20" id="petg-store-prices-index">
@@ -455,208 +406,6 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
               <span className="text-[10px] font-black text-pink-400 flex items-center shrink-0">▼ -0,5%</span>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* SEÇÃO 5 (PERÍODO DE ANÁLISE FINANCEIRA & DESEMPENHO UNIFICADO DE ALTA DENSIDADE) */}
-      <div className="bg-white/5 border border-white/10 p-5 rounded-2xl shadow-xl space-y-4 backdrop-blur-md" id="compact-finance-dashboard">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-[40px] pointer-events-none" />
-
-        {/* Header Seletor */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-white/10 pb-4">
-          <div>
-            <h3 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-1.5 font-sans">
-              <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-              Período de Análise Financeira
-            </h3>
-            <p className="text-[11px] text-[#A5BBA7]">Selecione o mês desejado para auditar faturamentos, despesas e ROI</p>
-          </div>
-          
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 max-w-full scrollbar-thin">
-            <button
-              onClick={() => setSelectedMonth('ALL')}
-              className={`px-3 py-1.5 text-[10px] font-black uppercase tracking-wider rounded-xl border transition-all duration-300 shrink-0 cursor-pointer ${
-                selectedMonth === 'ALL'
-                  ? 'bg-emerald-400 text-black border-emerald-400 font-extrabold shadow-[0_2px_15px_rgba(16,185,129,0.25)]'
-                  : 'bg-white/5 text-[#8BA58D] border-white/5 hover:border-emerald-500/30 font-mono'
-              }`}
-            >
-              Geral (Totalizado)
-            </button>
-            {availableMonths.map((mKey) => (
-              <button
-                key={mKey}
-                onClick={() => setSelectedMonth(mKey)}
-                className={`px-3 py-1.5 text-[10px] font-black uppercase tracking-wider rounded-xl border transition-all duration-300 shrink-0 cursor-pointer ${
-                  selectedMonth === mKey
-                    ? 'bg-emerald-400 text-black border-emerald-400 font-extrabold shadow-[0_2px_15px_rgba(16,185,129,0.25)]'
-                    : mKey === currentMonthKey
-                    ? 'bg-emerald-400/10 text-emerald-300 border-emerald-500/30'
-                    : 'bg-white/5 text-[#8BA58D] border-white/5 hover:border-emerald-500/20'
-                }`}
-              >
-                {formatMonthLabel(mKey)} {mKey === currentMonthKey ? ' (Vigente)' : ''}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="flex flex-col xl:flex-row items-stretch justify-between gap-6" id="dashboard-financial-row">
-          
-          {/* Métricas Financeiras Fundamentais: Grid Bento com 8 Cards de Métricas */}
-          <div className="flex-1 space-y-3">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-              
-              {/* Card 1: Faturamento - Esmeralda */}
-              <div className="p-4 bg-white/[0.01] hover:bg-white/[0.03] border border-white/10 hover:border-emerald-500/30 rounded-2xl flex items-center justify-between gap-1.5 transition-all duration-300 shadow-sm">
-                <div className="space-y-0.5">
-                  <span className="text-[10px] text-[#8BA58D] font-extrabold uppercase block leading-tight">Faturamento</span>
-                  <span className="text-base font-black text-emerald-400 font-mono">
-                    R$ {monthRevenue.toFixed(2)}
-                  </span>
-                </div>
-                <div className="p-2 bg-emerald-500/10 border border-emerald-500/15 rounded-xl text-emerald-400">
-                  <DollarSign className="h-4 w-4" />
-                </div>
-              </div>
-
-              {/* Card 2: Despesas - Esmeralda */}
-              <div className="p-4 bg-white/[0.01] hover:bg-white/[0.03] border border-white/10 hover:border-red-500/30 rounded-2xl flex items-center justify-between gap-1.5 transition-all duration-300 shadow-sm">
-                <div className="space-y-0.5">
-                  <span className="text-[10px] text-[#8BA58D] font-extrabold uppercase block leading-tight">Despesas</span>
-                  <span className="text-base font-black text-rose-400 font-mono">
-                    R$ {monthExpense.toFixed(2)}
-                  </span>
-                </div>
-                <div className="p-2 bg-red-500/10 border border-red-500/15 rounded-xl text-rose-400">
-                  <ShoppingBag className="h-4 w-4" />
-                </div>
-              </div>
-
-              {/* Card 3: Margem Líquida - Esmeralda */}
-              <div className="p-4 bg-white/[0.01] hover:bg-white/[0.03] border border-white/10 hover:border-emerald-500/30 rounded-2xl flex items-center justify-between gap-1.5 transition-all duration-300 shadow-sm">
-                <div className="space-y-0.5">
-                  <span className="text-[10px] text-[#8BA58D] font-extrabold uppercase block leading-tight">Margem Líq.</span>
-                  <span className="text-base font-black text-emerald-450 font-mono">
-                    {monthProfitMargin > 0 ? `${monthProfitMargin.toFixed(1)}%` : '0%'}
-                  </span>
-                </div>
-                <div className="p-2 bg-emerald-500/10 border border-emerald-500/15 rounded-xl text-emerald-400">
-                  <TrendingUp className="h-4 w-4" />
-                </div>
-              </div>
-
-              {/* Card 4: ROI - Esmeralda */}
-              <div className="p-4 bg-white/[0.01] hover:bg-white/[0.03] border border-white/10 hover:border-emerald-500/30 rounded-2xl flex items-center justify-between gap-1.5 transition-all duration-300 shadow-sm">
-                <div className="space-y-0.5">
-                  <span className="text-[10px] text-[#8BA58D] font-extrabold uppercase block leading-tight">ROI</span>
-                  <span className={`text-base font-black font-mono ${monthRoi >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-                    {monthRoi >= 0 ? '+' : ''}{monthRoi.toFixed(1)}%
-                  </span>
-                </div>
-                <div className={`p-2 border rounded-xl ${monthRoi >= 0 ? 'bg-emerald-500/10 border-emerald-500/15 text-emerald-400' : 'bg-red-500/10 border-red-500/15 text-red-400'}`}>
-                  <TrendingUp className="h-4 w-4" />
-                </div>
-              </div>
-
-              {/* Card 5: Pedidos Abertos - Âmbar */}
-              <div className="p-4 bg-white/[0.01] hover:bg-white/[0.03] border border-white/10 hover:border-amber-500/30 rounded-2xl flex items-center justify-between gap-1.5 transition-all duration-300 shadow-sm">
-                <div className="space-y-0.5">
-                  <span className="text-[10px] text-[#8BA58D] font-extrabold uppercase block leading-tight">Pedidos Abertos</span>
-                  <span className="text-base font-black text-amber-400 font-mono">
-                    {parsedOpenOrdersCount} un
-                  </span>
-                </div>
-                <div className="p-2 bg-amber-500/10 border border-amber-500/15 rounded-xl text-amber-500">
-                  <Sparkles className="h-4 w-4" />
-                </div>
-              </div>
-
-              {/* Card 6: Pedidos a Entregar (Prontos) - Fúcsia */}
-              <div className="p-4 bg-white/[0.01] hover:bg-white/[0.03] border border-white/10 hover:border-pink-500/30 rounded-2xl flex items-center justify-between gap-1.5 transition-all duration-300 shadow-sm">
-                <div className="space-y-0.5">
-                  <span className="text-[10px] text-[#8BA58D] font-extrabold uppercase block leading-tight">A Entregar (Prontos)</span>
-                  <span className="text-base font-black text-pink-400 font-mono">
-                    {parsedReadyToDeliverCount} un
-                  </span>
-                </div>
-                <div className="p-2 bg-pink-500/10 border border-pink-500/15 rounded-xl text-pink-400">
-                  <Sparkles className="h-4 w-4" />
-                </div>
-              </div>
-
-              {/* Card 7: Delivered - Esmeralda */}
-              <div className="p-4 bg-white/[0.01] hover:bg-white/[0.03] border border-white/10 hover:border-emerald-500/30 rounded-2xl flex items-center justify-between gap-1.5 transition-all duration-300 shadow-sm">
-                <div className="space-y-0.5">
-                  <span className="text-[10px] text-[#8BA58D] font-extrabold uppercase block leading-tight">Delivered ({formatMonthLabel(selectedMonth)})</span>
-                  <span className="text-base font-black text-emerald-450 font-mono">
-                    {parsedDeliveredOrdersCount} un
-                  </span>
-                </div>
-                <div className="p-2 bg-emerald-500/10 border border-emerald-500/15 rounded-xl text-emerald-400">
-                  <CheckCircle2 className="h-4 w-4" />
-                </div>
-              </div>
-
-              {/* Card 8: Valor a Comprar - Âmbar */}
-              <div className="p-4 bg-white/[0.01] hover:bg-white/[0.03] border border-white/10 hover:border-amber-500/30 rounded-2xl flex items-center justify-between gap-1.5 transition-all duration-300 shadow-sm" title="Valor dos insumos unchecked da Lista de Compras">
-                <div className="space-y-0.5">
-                  <span className="text-[10px] text-[#8BA58D] font-extrabold uppercase block leading-tight">A Comprar (Lista)</span>
-                  <span className="text-base font-black text-amber-400 font-mono">
-                    R$ {valorAComprar.toFixed(2)}
-                  </span>
-                </div>
-                <div className="p-2 bg-amber-500/10 border border-amber-500/15 rounded-xl text-amber-500">
-                  <ShoppingBag className="h-4 w-4" />
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          {/* SEÇÃO 6: HISTÓRICO RECENTE MINI-CHART (MAX 100) */}
-          <div className="w-full xl:w-[320px] shrink-0 flex flex-col justify-between border-t xl:border-t-0 xl:border-l border-white/10 pt-4 xl:pt-0 xl:pl-5">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-[11px] font-black text-white uppercase tracking-wider font-sans">📈 Histórico Recente</span>
-              <span className="text-[9px] font-mono font-bold text-[#8BA58D] bg-white/5 border border-white/5 px-2 py-0.5 rounded-lg">MAX {maxOrderVal.toFixed(0)}</span>
-            </div>
-
-            <div className="relative h-20 w-full flex items-end justify-between px-1" id="charts-svg-container-mini">
-              {filteredOrders.length === 0 ? (
-                <div className="absolute inset-0 flex items-center justify-center text-[10px] text-[#8BA58D] italic">
-                  Sem faturamentos no mês selecionado
-                </div>
-              ) : (
-                <div className="flex justify-around items-end w-full h-full gap-1">
-                  {filteredOrders.slice(-12).map((o, idx) => {
-                    const heightPercent = maxOrderVal > 0 ? (o.priceCharged / maxOrderVal) * 90 : 10;
-                    return (
-                      <div key={idx} className="flex flex-col items-center group relative flex-1 mx-0.5 bg-transparent h-full justify-end">
-                        <div className="absolute bottom-full mb-1.5 bg-zinc-950 border border-white/15 px-2 py-1 rounded text-[9px] text-white opacity-0 group-hover:opacity-100 transition-opacity duration-150 whitespace-nowrap z-50 pointer-events-none shadow-2xl">
-                          R$ {o.priceCharged.toFixed(0)} - <span className="opacity-75">{o.itemName}</span>
-                        </div>
-                        <div 
-                          className="w-full bg-gradient-to-t from-emerald-500 to-teal-400 group-hover:from-emerald-400 group-hover:to-teal-300 rounded-t-sm transition-all duration-300"
-                          style={{ height: `${heightPercent}%` }}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-
-            <div className="flex items-center justify-between text-[10px] text-[#8BA58D] mt-4 leading-none select-none border-t border-white/5 pt-3">
-              <span>Média por item: R$ {filteredOrders.length > 0 ? (monthRevenue / filteredOrders.length).toFixed(0) : '0'}</span>
-              <button 
-                onClick={() => onSelectTab(1)}
-                className="text-emerald-400 hover:text-emerald-300 hover:underline font-extrabold cursor-pointer flex items-center gap-1"
-              >
-                Fila de Vendas →
-              </button>
-            </div>
-          </div>
-
         </div>
       </div>
 
