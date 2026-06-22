@@ -316,6 +316,7 @@ interface ClientsTabProps {
   onAddPrinter: (printer: Omit<Printer, 'id'>) => void;
   onDeletePrinter: (id: number) => void;
   onAddOrder: (order: Partial<PrintOrder>) => void;
+  viewMode?: 'full' | 'clients' | 'printers';
 }
 
 export const ClientsTab: React.FC<ClientsTabProps> = ({
@@ -328,7 +329,8 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
   onUpdatePrinter,
   onAddPrinter,
   onDeletePrinter,
-  onAddOrder
+  onAddOrder,
+  viewMode = 'full'
 }) => {
   const [showClientForm, setShowClientForm] = useState(false);
   const [editingClientId, setEditingClientId] = useState<number | null>(null);
@@ -887,9 +889,10 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
 
   return (
     <div className="space-y-6" id="clients_tab_container">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className={viewMode === 'full' ? 'grid grid-cols-1 lg:grid-cols-2 gap-6' : 'grid grid-cols-1 gap-6'}>
         
         {/* LEFT COLUMN: CLIENT CATALOG */}
+        {viewMode !== 'printers' && (
         <div className="bg-[#151917] border border-[#232B27] p-6 rounded-2xl space-y-4" id="clients-catalog">
           <div className="flex items-center justify-between pb-2 border-b border-[#232B27]">
             <div>
@@ -1141,8 +1144,10 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
             ))}
           </div>
         </div>
+        )}
 
         {/* RIGHT COLUMN: 3D PRINTERS & HARDWARE CHECKLISTS */}
+        {viewMode !== 'clients' && (
         <div className="bg-[#151917] border border-[#232B27] p-6 rounded-2xl space-y-5 animate-in fade-in duration-300" id="printers-catalog" style={{ borderColor: 'var(--brand-border)' }}>
           <div className="flex items-center justify-between flex-wrap gap-2">
             <div>
@@ -1685,12 +1690,14 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
             />
           )}
         </div>
+        )}
 
       </div>
 
       {/* ========================================================================= */}
       {/* 📡 CRM RADAR GOOGLE MAPS - PROSPECÇÃO B2B & NOVO FILTRO DE CLIENTES LEADS */}
       {/* ========================================================================= */}
+      {viewMode !== 'printers' && (
       <div className="bg-[#151917] border border-[#232B27] p-6 rounded-2xl space-y-6 mt-6 relative" id="crm-b2b-leads-section" style={{ borderColor: 'var(--brand-border)' }}>
         
         {/* Glow Header */}
@@ -2415,11 +2422,12 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
         </div>
 
       </div>
+      )}
 
       {/* ========================================================================= */}
       {/* 🔮 MODAL DETALHADO DO LEAD B2B ("PÁGINA DO LEAD" COM STATUS & CHECKLISTS) */}
       {/* ========================================================================= */}
-      {selectedLeadForModal && (() => {
+      {viewMode !== 'printers' && selectedLeadForModal && (() => {
         // Find newest update in local state list
         const lead = prospectLeads.find(l => l.id === selectedLeadForModal.id) || selectedLeadForModal;
         
@@ -2810,7 +2818,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
       })()}
 
       {/* 📂 CUSTOMER DETAILS & PRODUCT STOCK ENGINE MODEL (Página do Cliente) */}
-      {selectedClientForPage && (() => {
+      {viewMode !== 'printers' && selectedClientForPage && (() => {
         // Resolve latest client model to stay in sync with props changes
         const client = clients.find(c => c.id === selectedClientForPage.id) || selectedClientForPage;
         const stockItems = (client as any).productsStock || [

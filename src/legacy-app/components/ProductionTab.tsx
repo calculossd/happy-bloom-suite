@@ -107,6 +107,7 @@ interface ProductionTabProps {
   onSimulateTick: () => void;
   onUpdateFilament?: (id: number, updated: Partial<FilamentStock>) => void;
   onUpdatePrinter: (id: number, updated: Partial<Printer>) => void;
+  viewMode?: 'full' | 'monitor' | 'orders';
 }
 
 export const ProductionTab: React.FC<ProductionTabProps> = ({
@@ -119,7 +120,8 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
   onDeleteOrder,
   onSimulateTick,
   onUpdateFilament,
-  onUpdatePrinter
+  onUpdatePrinter,
+  viewMode = 'full'
 }) => {
   const [selectedFilter, setSelectedFilter] = useState<string>('TODOS');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -497,6 +499,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
   return (
     <div className="space-y-6" id="production-dashboard-container">
       {/* ONLINE PRINTER CONNECTIONS */}
+      {viewMode !== 'orders' && (
       <div className="bg-[#151917] border border-[#232B27] p-4 rounded-xl space-y-3 shadow" id="online-printers-tracker">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#232B27] pb-2">
           <div>
@@ -586,7 +589,9 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
           />
         )}
       </div>
+      )}
 
+      {viewMode !== 'monitor' && (<>
       {/* Compact status row grouping Total Pedidos & Faturamento for space saving */}
       <div className="grid grid-cols-2 gap-4 bg-[#151917] p-3.5 rounded-xl border border-[#232B27] select-none">
         <div className="flex items-center gap-3">
@@ -1543,6 +1548,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
           </div>
         )}
       </AnimatePresence>
+      </>)}
     </div>
   );
 };
