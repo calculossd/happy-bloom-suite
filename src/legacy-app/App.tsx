@@ -1732,6 +1732,66 @@ export default function App() {
         }
       `}</style>
 
+      {/* TASKTRAIL SIDEBAR */}
+      {sidebarOpen && (
+        <div className="tt-sidebar-backdrop md:hidden" onClick={() => setSidebarOpen(false)} />
+      )}
+      <aside className="tt-sidebar" data-open={sidebarOpen}>
+        <div className="flex items-center gap-2.5 px-2 mb-6">
+          <div className="h-9 w-9 rounded-xl bg-[var(--cat-lime)] grid place-items-center text-black font-black">
+            {brandConfig.name?.[0]?.toUpperCase() || 'A'}
+          </div>
+          <div className="min-w-0">
+            <div className="text-sm font-bold truncate text-white">{brandConfig.name || 'Ateliê 3D'}</div>
+            <div className="text-[10px] uppercase tracking-wider text-[var(--brand-text-subtle)]">Gestão 3D</div>
+          </div>
+          <button className="ml-auto md:hidden btn-icon" onClick={() => setSidebarOpen(false)} aria-label="Fechar menu">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+        <div className="text-[10px] uppercase tracking-[0.18em] text-[var(--brand-text-subtle)] px-3 mb-2">Menu</div>
+        <nav className="flex flex-col gap-1">
+          {[
+            { id: 0, label: 'Painel',    icon: Home },
+            { id: 1, label: 'Produção',  icon: Activity },
+            { id: 6, label: 'Histórico', icon: ShoppingBag },
+            { id: 2, label: 'Clientes',  icon: Users },
+            { id: 3, label: 'Pedidos',   icon: GitPullRequest, badge: pendingOrdersCount },
+            { id: 4, label: 'Gestão',    icon: Layers },
+            { id: 5, label: 'Ajustes',   icon: Settings },
+          ].map(item => (
+            <button
+              key={item.id}
+              className="tt-nav-item"
+              data-active={currentTab === item.id}
+              onClick={() => { setCurrentTab(item.id); setSidebarOpen(false); }}
+            >
+              <item.icon className="h-4 w-4 shrink-0" />
+              <span className="truncate">{item.label}</span>
+              {item.badge ? <span className="tt-nav-badge">{item.badge}</span> : null}
+            </button>
+          ))}
+        </nav>
+        <div className="mt-auto pt-4 border-t border-white/5">
+          <div className="flex items-center gap-2 px-2">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+            </span>
+            <span className="text-[10px] uppercase tracking-wider text-[var(--brand-text-subtle)]">Local · Online</span>
+          </div>
+        </div>
+      </aside>
+
+      {/* Mobile sidebar trigger */}
+      <button
+        className="md:hidden fixed top-3 left-3 z-50 btn-icon"
+        onClick={() => setSidebarOpen(true)}
+        aria-label="Abrir menu"
+      >
+        <Menu className="h-5 w-5" />
+      </button>
+
       {/* GLOBAL HEADER (Floating Glassmorphism Island Header - Lovable Styled) */}
       <header className="relative md:mx-auto md:my-4 md:max-w-7xl md:rounded-[2rem] border border-white/10 bg-black/40 sticky top-0 md:top-2 z-50 backdrop-blur-2xl px-6 py-4 md:py-4.5 flex flex-col md:flex-row items-center justify-between gap-4 transition-all duration-300 shadow-[0_24px_50px_rgba(0,0,0,0.8)] overflow-hidden">
         
