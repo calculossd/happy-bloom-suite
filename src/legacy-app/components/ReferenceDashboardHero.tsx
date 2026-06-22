@@ -418,7 +418,7 @@ function Panel({ children }: any) {
   return (
     <div
       className="relative rounded-[24px] p-5 border border-white/[0.08] shadow-[0_8px_30px_rgba(0,0,0,0.5)] backdrop-blur-xl"
-      style={{ background: 'radial-gradient(120% 100% at 0% 0%, rgba(40,40,40,0.45) 0%, rgba(10,10,10,0.75) 55%, rgba(0,0,0,0.7) 100%)' }}
+      style={{ background: 'radial-gradient(120% 100% at 0% 0%, rgba(40,40,40,0.25) 0%, rgba(10,10,10,0.4) 55%, rgba(0,0,0,0.35) 100%)' }}
     >
       {children}
     </div>
