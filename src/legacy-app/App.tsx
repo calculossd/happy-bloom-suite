@@ -2249,7 +2249,7 @@ export default function App() {
           />
         )}
 
-        {currentTab === 7  && <PriceResearchTab />}
+        {currentTab === 7  && <Market3DApp />}
         {currentTab === 8  && (
           <ShowcaseView
             workspaceCode={showcaseWorkspace}
