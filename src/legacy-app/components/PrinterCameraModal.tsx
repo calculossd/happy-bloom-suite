@@ -286,7 +286,7 @@ export const PrinterCameraModal: React.FC<PrinterCameraModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4" id="printer-camera-modal-backdrop" role="dialog" aria-modal="true">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4" id="printer-camera-modal-backdrop">
       <div 
         className="modal-panel w-full max-w-2xl overflow-hidden relative flex flex-col animate-in fade-in zoom-in-95 duration-200"
         style={showSpaghettiFail ? { borderColor: 'var(--cat-red)' } : undefined}

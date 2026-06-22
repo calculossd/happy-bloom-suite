@@ -2242,7 +2242,7 @@ export default function App() {
 
       {/* ONBOARDING DIALOG / WELCOME WIZARD */}
       {showSetupModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-[9999] flex items-center justify-center p-4 overflow-y-auto" id="onboarding_modal_overlay" role="dialog" aria-modal="true">
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-[9999] flex items-center justify-center p-4 overflow-y-auto" id="onboarding_modal_overlay">
           <div className="modal-panel p-6 sm:p-8 max-w-2xl w-full text-[var(--brand-text)] flex flex-col gap-6 relative">
             
             <div className="absolute top-4 right-4">
