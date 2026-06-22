@@ -1821,7 +1821,7 @@ export default function App() {
 
               {/* Greenhouse Sensors Monitor (Túnel das Estufas) */}
               <div className="flex items-center gap-1.5">
-                <span className="text-[9px] font-black uppercase text-sky-400 tracking-wider select-none">Estufas:</span>
+                <span className="text-[9px] font-black uppercase text-zinc-300 tracking-wider select-none">Estufas:</span>
                 {tuyaDevices.length === 0 ? (
                   <button 
                     onClick={restoreDefaultEstufas}
@@ -1943,7 +1943,7 @@ export default function App() {
               <div>
                 <h2 className="text-sm sm:text-base font-bold text-white tracking-tight flex items-center gap-2">
                   <span className={`w-1.5 h-1.5 rounded-full ${
-                    currentTab === 1 || currentTab === 2 ? 'bg-cyan-400 animate-pulse' :
+                    currentTab === 1 || currentTab === 2 ? 'bg-zinc-300 animate-pulse' :
                     currentTab === 3 || currentTab === 6 ? 'bg-pink-400 animate-pulse' :
                     currentTab === 4 ? 'bg-emerald-400 animate-pulse' : 'bg-white/40'
                   }`} />
@@ -1956,7 +1956,7 @@ export default function App() {
               {isClientMounted && (
                 <div className="flex items-center gap-1.5 self-start sm:self-center font-mono text-[10px] text-[var(--brand-text-accent)] shrink-0 bg-white/5 border border-white/10 px-2.5 py-1.5 rounded-lg shadow-inner">
                   <Clock className={`h-3 w-3 ${
-                    currentTab === 1 || currentTab === 2 ? 'text-cyan-400' :
+                    currentTab === 1 || currentTab === 2 ? 'text-zinc-300' :
                     currentTab === 3 || currentTab === 6 ? 'text-pink-400' :
                     currentTab === 4 ? 'text-emerald-400' : 'text-amber-400'
                   } animate-spin-slow`} />
