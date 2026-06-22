@@ -346,28 +346,6 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
         </div>
       </div>
 
-      {/* SEÇÃO 3 (OPORTUNIDADE HISTÓRICA / HIGHLIGHT BANNER DENTRO DO CONTEXTO DE PAINEL) */}
-      <div className="bg-white/5 border border-white/15 p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3.5 shadow-lg relative overflow-hidden" id="dashboard-opportunistic-highlight-pill">
-        <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-pink-500/20 via-emerald-500/30 to-cyan-500/20" />
-        <div className="flex items-center gap-3 w-full sm:w-auto">
-          <div className="p-2.5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-300 animate-pulse">
-            <Sparkles className="h-4.5 w-4.5" />
-          </div>
-          <div>
-            <span className="text-xs font-black text-white block uppercase tracking-wider">Painel de Controle de Custos</span>
-            <p className="text-[10.5px] text-[#A5BBA7] leading-relaxed">
-              Visão geral das ordens, impressoras e faturamento consolidado. <strong className="text-emerald-400 font-extrabold">Oportunidade ativa:</strong> PETG por R$ 72.90 (abaixo de R$ 80.00).
-            </p>
-          </div>
-        </div>
-        <button 
-          onClick={() => onSelectTab(4)}
-          className="px-4 py-2 bg-pink-500/10 hover:bg-pink-500/25 border border-pink-500/25 text-pink-400 font-extrabold text-[10.5px] rounded-xl transition uppercase tracking-wider cursor-pointer shadow-sm select-none w-full sm:w-auto shrink-0 text-center"
-        >
-          Ver Cotações na Aba Custos 📈
-        </button>
-      </div>
-
       {/* SEÇÃO 5 (PERÍODO DE ANÁLISE FINANCEIRA & DESEMPENHO UNIFICADO DE ALTA DENSIDADE) */}
       <div className="bg-white/5 border border-white/10 p-5 rounded-2xl shadow-xl space-y-4 backdrop-blur-md" id="compact-finance-dashboard">
         <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-[40px] pointer-events-none" />
