@@ -20,6 +20,10 @@ import { SettingsTab } from './components/SettingsTab';
 import { SoldTab } from './components/SoldTab';
 import { OkLojaAssistant } from './components/OkLojaAssistant';
 import { ShowcaseView } from './components/ShowcaseView';
+import {
+  PriceResearchTab, Catalog3DTab, MarketingTab, KanbanTab, ModelsTab,
+  PreCheckTab, AgendaTab, SitesTab, ToolsTab
+} from './components/NewTabs';
 import { 
   Wrench, 
   RefreshCw, 
@@ -40,7 +44,15 @@ import {
   Wifi,
   WifiOff,
   Menu,
-  X
+  X,
+  Search,
+  Box,
+  Megaphone,
+  Columns3,
+  FileBox,
+  ClipboardCheck,
+  Calendar,
+  Globe
 } from 'lucide-react';
 
 // STUNNING 3D CUBE & PRINTER EXTENSION GEOMETRIC LOGO
