@@ -2818,7 +2818,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
       })()}
 
       {/* 📂 CUSTOMER DETAILS & PRODUCT STOCK ENGINE MODEL (Página do Cliente) */}
-      {selectedClientForPage && (() => {
+      {viewMode !== 'printers' && selectedClientForPage && (() => {
         // Resolve latest client model to stay in sync with props changes
         const client = clients.find(c => c.id === selectedClientForPage.id) || selectedClientForPage;
         const stockItems = (client as any).productsStock || [
