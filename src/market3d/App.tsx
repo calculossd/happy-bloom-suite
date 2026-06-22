@@ -120,13 +120,23 @@ export default function App() {
     JINA_API_KEY: string;
     SERPAPI_KEY: string;
   }>(() => {
-    const ls = typeof window !== 'undefined' ? window.localStorage : null;
+    const safeGet = (k: string): string => {
+      try {
+        if (typeof window === 'undefined') return '';
+        const v = window.localStorage.getItem(k);
+        if (v) return v;
+      } catch {}
+      try {
+        return (window as any).__market3d_keys?.[k] || '';
+      } catch {}
+      return '';
+    };
     return {
-      GEMINI_API_KEY: ls?.getItem('GEMINI_API_KEY') || '',
-      TAVILY_API_KEY: ls?.getItem('TAVILY_API_KEY') || '',
-      GROQ_API_KEY: ls?.getItem('GROQ_API_KEY') || '',
-      JINA_API_KEY: ls?.getItem('JINA_API_KEY') || '',
-      SERPAPI_KEY: ls?.getItem('SERPAPI_KEY') || '',
+      GEMINI_API_KEY: safeGet('GEMINI_API_KEY'),
+      TAVILY_API_KEY: safeGet('TAVILY_API_KEY'),
+      GROQ_API_KEY: safeGet('GROQ_API_KEY'),
+      JINA_API_KEY: safeGet('JINA_API_KEY'),
+      SERPAPI_KEY: safeGet('SERPAPI_KEY'),
     };
   });
 
