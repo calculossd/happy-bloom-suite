@@ -2373,8 +2373,7 @@ export default function App() {
                   localStorage.setItem('bambuzau_brand_config', JSON.stringify(brandConfig));
                   setShowSetupModal(false);
                 }}
-                className="w-full sm:w-auto px-8 py-3 bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-light)] text-white font-extrabold rounded-2xl shadow-lg transition-transform hover:scale-[1.03] active:scale-[0.98] cursor-pointer text-xs uppercase tracking-wider flex items-center justify-center gap-1.5"
-                style={{ backgroundColor: 'var(--brand-primary)' }}
+                className="btn-lime w-full sm:w-auto text-sm flex items-center justify-center gap-1.5"
                 id="btn_complete_atelier_setup"
               >
                 Concluir & Entrar no Painel 🚀
