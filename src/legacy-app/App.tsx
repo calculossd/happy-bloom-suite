@@ -1734,7 +1734,7 @@ export default function App() {
 
       <>
       {/* TOP HORIZONTAL TAB BAR (acima do header) */}
-      <div className="md:mx-4 md:mt-3 rounded-2xl border border-white/10 bg-black/50 backdrop-blur-2xl px-3 py-2 flex items-center gap-1.5 overflow-x-auto shadow-[0_12px_30px_rgba(0,0,0,0.6)] relative z-[60]">
+      <div className="w-full border-b border-white/10 bg-black/60 backdrop-blur-2xl px-2 sm:px-4 py-2 grid grid-flow-col auto-cols-fr gap-1 sm:gap-1.5 overflow-x-auto shadow-[0_12px_30px_rgba(0,0,0,0.6)] relative z-[60]">
         {[
           { id: 0, label: 'Painel',    icon: Home },
           { id: 1, label: 'Produção',  icon: Activity },
@@ -1749,14 +1749,14 @@ export default function App() {
             <button
               key={item.id}
               onClick={() => setCurrentTab(item.id)}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[12px] font-bold whitespace-nowrap transition-all border ${
+              className={`inline-flex items-center justify-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-[12px] font-bold whitespace-nowrap transition-all border min-w-0 ${
                 active
                   ? 'bg-[var(--cat-lime,#A5D84B)] text-black border-[var(--cat-lime,#A5D84B)] shadow-[0_0_18px_rgba(165,216,75,0.45)]'
                   : 'bg-white/[0.03] text-zinc-300 border-white/10 hover:bg-white/[0.07] hover:text-white'
               }`}
             >
-              <item.icon className="h-3.5 w-3.5" />
-              <span>{item.label}</span>
+              <item.icon className="h-3.5 w-3.5 shrink-0" />
+              <span className="truncate">{item.label}</span>
               {item.badge ? (
                 <span className="ml-1 px-1.5 py-0.5 rounded-full text-[9px] font-black bg-black/30 text-[var(--cat-lime,#A5D84B)]">
                   {item.badge}
