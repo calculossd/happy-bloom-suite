@@ -1733,8 +1733,8 @@ export default function App() {
       `}</style>
 
       <>
-      {/* TOP HORIZONTAL TAB BAR (acima do header) */}
-      <div className="w-full border-b border-white/10 bg-black/60 backdrop-blur-2xl px-2 sm:px-4 py-2 grid grid-flow-col auto-cols-fr gap-1 sm:gap-1.5 overflow-x-auto shadow-[0_12px_30px_rgba(0,0,0,0.6)] relative z-[60]">
+      {/* FOLDER-STYLE TABS (sit on top of the header like file folders) */}
+      <div className="w-full pt-2 px-2 sm:px-4 flex items-end gap-1 overflow-x-auto bg-transparent">
         {[
           { id: 0, label: 'Painel',    icon: Home },
           { id: 1, label: 'Produção',  icon: Activity },
@@ -1749,16 +1749,16 @@ export default function App() {
             <button
               key={item.id}
               onClick={() => setCurrentTab(item.id)}
-              className={`inline-flex items-center justify-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-[12px] font-bold whitespace-nowrap transition-all border min-w-0 ${
+              className={`relative inline-flex items-center justify-center gap-1.5 px-3 sm:px-4 rounded-t-xl text-[11px] sm:text-[12px] font-bold whitespace-nowrap transition-all border border-b-0 -mb-px ${
                 active
-                  ? 'bg-[var(--cat-lime,#A5D84B)] text-black border-[var(--cat-lime,#A5D84B)] shadow-[0_0_18px_rgba(165,216,75,0.45)]'
-                  : 'bg-white/[0.03] text-zinc-300 border-white/10 hover:bg-white/[0.07] hover:text-white'
+                  ? 'bg-black/40 text-[var(--cat-lime,#A5D84B)] border-white/15 py-2.5 z-10 shadow-[0_-4px_14px_rgba(0,0,0,0.5)]'
+                  : 'bg-black/20 text-zinc-400 border-white/5 py-2 hover:bg-black/30 hover:text-white'
               }`}
             >
               <item.icon className="h-3.5 w-3.5 shrink-0" />
               <span className="truncate">{item.label}</span>
               {item.badge ? (
-                <span className="ml-1 px-1.5 py-0.5 rounded-full text-[9px] font-black bg-black/30 text-[var(--cat-lime,#A5D84B)]">
+                <span className="ml-1 px-1.5 py-0.5 rounded-full text-[9px] font-black bg-[var(--cat-lime,#A5D84B)]/20 text-[var(--cat-lime,#A5D84B)]">
                   {item.badge}
                 </span>
               ) : null}
@@ -1768,7 +1768,7 @@ export default function App() {
       </div>
 
       {/* GLOBAL HEADER (Full-Width Glassmorphism Header) */}
-      <header className="relative w-full border-b border-white/10 bg-black/40 sticky top-0 z-50 backdrop-blur-2xl px-3 sm:px-6 py-3 sm:py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 transition-all duration-300 shadow-[0_24px_50px_rgba(0,0,0,0.8)] overflow-hidden">
+      <header className="relative w-full border-y border-white/15 bg-black/40 backdrop-blur-2xl px-3 sm:px-6 py-3 sm:py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 transition-all duration-300 shadow-[0_24px_50px_rgba(0,0,0,0.8)] overflow-hidden">
         
         {/* Subtle geometric digital background pattern */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.04] select-none bg-[radial-gradient(var(--brand-primary)_1.2px,transparent_1.2px)] [background-size:16px_16px]" />
