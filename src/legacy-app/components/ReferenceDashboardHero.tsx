@@ -183,7 +183,7 @@ export const ReferenceDashboardHero: React.FC<any> = (props) => {
         <Panel>
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-baseline gap-2">
-              <h2 className="text-lg font-bold text-white">Lucro do ano</h2>
+              <h2 className="text-sm sm:text-base font-bold text-white tracking-tight">Lucro do ano</h2>
               <span className="text-xs text-white/40">{`{${monthProfitMargin.toFixed(0)}%}`}</span>
             </div>
             <div className="flex items-center gap-1">
