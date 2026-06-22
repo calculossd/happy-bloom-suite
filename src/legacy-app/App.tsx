@@ -1768,7 +1768,7 @@ export default function App() {
       </div>
 
       {/* GLOBAL HEADER (Full-Width Glassmorphism Header) */}
-      <header className="relative md:mx-4 md:my-3 md:rounded-[1.5rem] border border-white/10 bg-black/40 sticky top-0 md:top-2 z-50 backdrop-blur-2xl px-6 py-4 md:py-4.5 flex flex-col md:flex-row items-center justify-between gap-4 transition-all duration-300 shadow-[0_24px_50px_rgba(0,0,0,0.8)] overflow-hidden">
+      <header className="relative w-full border-b border-white/10 bg-black/40 sticky top-0 z-50 backdrop-blur-2xl px-3 sm:px-6 py-3 sm:py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 transition-all duration-300 shadow-[0_24px_50px_rgba(0,0,0,0.8)] overflow-hidden">
         
         {/* Subtle geometric digital background pattern */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.04] select-none bg-[radial-gradient(var(--brand-primary)_1.2px,transparent_1.2px)] [background-size:16px_16px]" />
