@@ -3084,7 +3084,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
               </form>
             )}
 
-            <div className="space-y-3" id="filament-rolls-listing">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3" id="filament-rolls-listing">
               {[...filamentStocks].sort((a, b) => {
                 const lowA = a.stockGrams < a.minStockGrams;
                 const lowB = b.stockGrams < b.minStockGrams;
@@ -3093,56 +3093,94 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                 return 0;
               }).map(fil => {
                 const low = fil.stockGrams < fil.minStockGrams;
+                const cStyle = getHexColorByName(fil.color);
+                const pct = Math.max(0, Math.min(100, (fil.stockGrams / Math.max(1, fil.minStockGrams * 2)) * 100));
+                const swatchBg = cStyle.bg === 'transparent' ? 'rgba(255,255,255,0.08)' : cStyle.bg;
                 return (
-                  <div key={fil.id} className={`p-3 bg-[#0C0E0D] border rounded-xl flex items-center justify-between gap-4 transition-all duration-300 ${
-                    low ? 'border-red-500/80 shadow-[0_0_10px_rgba(239,68,68,0.15)] ring-1 ring-red-500/20' : 'border-[#232B27]'
-                  }`}>
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-1.5">
-                        {(() => {
-                          const cStyle = getHexColorByName(fil.color);
-                          return (
-                            <span 
-                              className="w-2.5 h-2.5 rounded-full inline-block" 
-                              style={{ 
-                                backgroundColor: cStyle.bg, 
-                                border: cStyle.bg === 'transparent' ? `1.5px solid ${cStyle.border}` : `1px solid ${cStyle.border}`
-                              }} 
-                            />
-                          );
-                        })()}
-                        <span className="text-xs font-bold text-white">{fil.type} {fil.color}</span>
-                        {low && <span className="text-[7.5px] font-mono uppercase bg-red-400/15 text-red-400 border border-red-500/30 px-1.5 py-0.5 rounded animate-pulse font-black">Estoque Baixo 🚨</span>}
-                      </div>
+                  <div
+                    key={fil.id}
+                    className="relative overflow-hidden rounded-2xl p-4 flex flex-col gap-3 transition-all duration-300 group"
+                    style={{
+                      background: `linear-gradient(160deg, ${swatchBg}22 0%, rgba(22,25,34,0.95) 55%, rgba(17,20,28,0.95) 100%)`,
+                      border: low ? '1px solid var(--cat-red)' : `1px solid ${cStyle.border}55`,
+                      boxShadow: low
+                        ? '0 0 0 1px rgba(239,68,68,0.25), 0 8px 24px -12px rgba(239,68,68,0.45)'
+                        : `0 8px 24px -16px ${swatchBg}`,
+                    }}
+                  >
+                    {/* Color bar accent */}
+                    <div
+                      className="absolute left-0 top-0 bottom-0 w-1"
+                      style={{ background: swatchBg, boxShadow: `0 0 12px ${swatchBg}` }}
+                    />
 
-                      <div className="text-[10px] text-[#8BA58D] font-mono">
-                        Gramas Restantes: <strong className={low ? 'text-red-400 font-bold' : 'text-white'}>{fil.stockGrams}g</strong> (Mín. {fil.minStockGrams}g)
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <span
+                          className="h-10 w-10 rounded-xl shrink-0 grid place-items-center font-mono text-[10px] font-black tracking-tight"
+                          style={{
+                            background: swatchBg,
+                            color: cStyle.bg === 'transparent' || ['Branco', 'Amarelo', 'White'].includes(fil.color) ? '#0C0E0D' : '#fff',
+                            border: `1px solid ${cStyle.border}`,
+                            boxShadow: `inset 0 0 0 2px rgba(255,255,255,0.06)`,
+                          }}
+                        >
+                          {fil.type.slice(0, 4)}
+                        </span>
+                        <div className="min-w-0">
+                          <div className="eyebrow mb-0.5">{fil.type}</div>
+                          <div className="text-sm font-bold text-white truncate">{fil.color}</div>
+                        </div>
+                      </div>
+                      {low && (
+                        <span className="chip" style={{ background: 'rgba(239,68,68,0.12)', color: 'var(--cat-red)', borderColor: 'rgba(239,68,68,0.35)' }}>
+                          Baixo
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Stock meter */}
+                    <div className="space-y-1.5">
+                      <div className="flex items-end justify-between font-mono">
+                        <span className="text-lg font-black text-white tabular-nums">{fil.stockGrams}<span className="text-xs text-[var(--brand-text-subtle)] ml-0.5">g</span></span>
+                        <span className="text-[10px] text-[var(--brand-text-subtle)]">mín {fil.minStockGrams}g</span>
+                      </div>
+                      <div className="h-1.5 rounded-full bg-white/5 overflow-hidden">
+                        <div
+                          className="h-full rounded-full transition-all duration-500"
+                          style={{
+                            width: `${pct}%`,
+                            background: low ? 'var(--cat-red)' : swatchBg,
+                            boxShadow: low ? '0 0 8px rgba(239,68,68,0.6)' : `0 0 8px ${swatchBg}`,
+                          }}
+                        />
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-1.5 pt-1">
                       <button
                         onClick={() => handleReplenishStock(fil.id, fil.stockGrams)}
-                        className="px-2.5 py-1.5 bg-[#2a352f] hover:bg-[#3b4c42] text-[#F1F4EE] hover:text-white text-[10px] font-black rounded-lg border border-[#3e4f45] transition cursor-pointer"
+                        className="flex-1 px-2.5 py-1.5 bg-white/5 hover:bg-white/10 text-white text-[10px] font-black rounded-lg border border-white/10 transition cursor-pointer uppercase tracking-wider"
                       >
-                        Recarregar 🔄
+                        Recarregar
                       </button>
                       <button
                         onClick={() => {
                           onAddShoppingItem({ name: `Rolo Filamento 1kg: ${fil.type} ${fil.color}`, price: fil.priceRoll, isChecked: false });
                           triggerFeedback('Adicionado rolo de filamento ao carrinho!');
                         }}
-                        className="p-1.5 text-[#95BBA2] hover:bg-[#95BBA2]/10 rounded-lg"
+                        className="btn-icon"
                         title="Adicionar ao Carrinho"
                       >
-                        <ShoppingCart className="h-4.5 w-4.5" />
+                        <ShoppingCart className="h-4 w-4" />
                       </button>
                       <button
                         onClick={() => onDeleteFilament(fil.id)}
-                        className="p-1.5 text-red-400 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition shrink-0"
+                        className="btn-icon"
+                        style={{ color: 'var(--cat-red)' }}
                         title="Excluir do Estoque"
                       >
-                        <Trash2 className="h-4.5 w-4.5" />
+                        <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
                   </div>
