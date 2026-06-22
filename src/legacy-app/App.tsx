@@ -2107,18 +2107,34 @@ export default function App() {
         )}
 
         {currentTab === 1 && (
-          <ProductionTab
-            orders={orders}
-            printers={printers}
-            filamentStocks={filamentStocks}
-            clients={clients}
-            onAddOrder={handleAddOrder}
-            onUpdateOrder={handleUpdateOrder}
-            onDeleteOrder={handleDeleteOrder}
-            onSimulateTick={handleSimulateTick}
-            onUpdateFilament={handleUpdateFilamentStock}
-            onUpdatePrinter={handleUpdatePrinter}
-          />
+          <>
+            <ProductionTab
+              orders={orders}
+              printers={printers}
+              filamentStocks={filamentStocks}
+              clients={clients}
+              onAddOrder={handleAddOrder}
+              onUpdateOrder={handleUpdateOrder}
+              onDeleteOrder={handleDeleteOrder}
+              onSimulateTick={handleSimulateTick}
+              onUpdateFilament={handleUpdateFilamentStock}
+              onUpdatePrinter={handleUpdatePrinter}
+              viewMode="monitor"
+            />
+            <ClientsTab
+              clients={clients}
+              printers={printers}
+              orders={orders}
+              onAddClient={handleAddClient}
+              onUpdateClient={handleUpdateClient}
+              onDeleteClient={handleDeleteClient}
+              onAddPrinter={handleAddPrinter}
+              onUpdatePrinter={handleUpdatePrinter}
+              onDeletePrinter={handleDeletePrinter}
+              onAddOrder={handleAddOrder}
+              viewMode="printers"
+            />
+          </>
         )}
 
         {currentTab === 2 && (
@@ -2133,14 +2149,30 @@ export default function App() {
             onUpdatePrinter={handleUpdatePrinter}
             onDeletePrinter={handleDeletePrinter}
             onAddOrder={handleAddOrder}
+            viewMode="clients"
           />
         )}
 
         {currentTab === 3 && (
-          <IntegrationTab
-            onImportOrder={handleImportExternalOrder}
-            importedExternalIds={importedExternalIds}
-          />
+          <>
+            <ProductionTab
+              orders={orders}
+              printers={printers}
+              filamentStocks={filamentStocks}
+              clients={clients}
+              onAddOrder={handleAddOrder}
+              onUpdateOrder={handleUpdateOrder}
+              onDeleteOrder={handleDeleteOrder}
+              onSimulateTick={handleSimulateTick}
+              onUpdateFilament={handleUpdateFilamentStock}
+              onUpdatePrinter={handleUpdatePrinter}
+              viewMode="orders"
+            />
+            <IntegrationTab
+              onImportOrder={handleImportExternalOrder}
+              importedExternalIds={importedExternalIds}
+            />
+          </>
         )}
 
         {currentTab === 4 && (
