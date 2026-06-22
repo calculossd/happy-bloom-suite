@@ -155,37 +155,149 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
   return (
     <div className="space-y-6" id="dashboard_tab_container">
 
-      {/* ===== TASKTRAIL HERO ===== */}
-      <section className="space-y-5">
-        <header className="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <div className="eyebrow mb-1">Visão Geral</div>
-            <h1 className="text-glow-amber" style={{ fontSize: 'clamp(1.25rem, 0.95rem + 1.2vw, 1.875rem)', lineHeight: 1.05, fontWeight: 800 }}>
-              Dashboard
-            </h1>
-            <p className="text-[var(--brand-text-muted)] text-xs mt-1.5">
-              R$ <span className="kpi text-white">{monthRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-              <span className="ml-2 chip chip-lime">+{parsedDeliveredOrdersCount} entregues</span>
-              <span className="ml-2 chip">{formatMonthLabel(selectedMonth)}</span>
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <select
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(e.target.value)}
-              className="btn-ghost text-sm"
-              style={{ paddingRight: '2rem' }}
-            >
-              <option value="ALL">Geral (Total)</option>
-              {availableMonths.map(m => <option key={m} value={m}>{formatMonthLabel(m)}</option>)}
-            </select>
-            <button onClick={() => onSelectTab(3)} className="btn-lime text-sm flex items-center gap-2">
-              <Plus className="h-4 w-4" /> Novo Pedido
-            </button>
-          </div>
-        </header>
+      {/* ===== HERO COMMAND DECK ===== */}
+      <section className="relative overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-br from-[#0a1410] via-[#0d1a14] to-[#070b09] shadow-[0_30px_80px_-30px_rgba(0,0,0,0.9)]">
+        {/* Ambient glows */}
+        <div className="pointer-events-none absolute -top-32 -left-20 h-72 w-72 rounded-full bg-emerald-500/15 blur-[90px]" />
+        <div className="pointer-events-none absolute -top-24 right-1/4 h-72 w-72 rounded-full bg-lime-400/10 blur-[90px]" />
+        <div className="pointer-events-none absolute bottom-0 right-0 h-64 w-64 rounded-full bg-cyan-500/10 blur-[100px]" />
+        <div className="pointer-events-none absolute inset-0 opacity-[0.05] bg-[radial-gradient(rgba(216,255,61,0.6)_1px,transparent_1px)] [background-size:18px_18px]" />
+        <div className="pointer-events-none absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-lime-300/60 to-transparent" />
 
-        {/* In-progress projects strip — calendar moved to legacy block below */}
+        <div className="relative p-6 md:p-7 space-y-6">
+          {/* Header row */}
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-lime-400/10 border border-lime-400/25 text-[10px] font-black uppercase tracking-[0.18em] text-lime-300">
+                <span className="h-1.5 w-1.5 rounded-full bg-lime-300 animate-pulse" /> Visão Geral
+              </div>
+              <h1 className="mt-2 font-black tracking-tight text-white" style={{ fontSize: 'clamp(1.6rem, 1rem + 2vw, 2.5rem)', lineHeight: 1 }}>
+                Painel <span className="bg-gradient-to-r from-lime-300 via-emerald-300 to-teal-300 bg-clip-text text-transparent">Ateliê 3D</span>
+              </h1>
+              <p className="mt-1.5 text-xs text-[var(--brand-text-muted)]">
+                Controle financeiro e produtivo · <span className="text-white/80 font-semibold">{formatMonthLabel(selectedMonth)}</span>
+              </p>
+            </div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <div className="relative">
+                <select
+                  value={selectedMonth}
+                  onChange={(e) => setSelectedMonth(e.target.value)}
+                  className="appearance-none bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-lime-400/40 text-white text-xs font-bold uppercase tracking-wider rounded-xl pl-4 pr-9 py-2.5 cursor-pointer transition-all"
+                >
+                  <option value="ALL">Geral (Total)</option>
+                  {availableMonths.map(m => <option key={m} value={m}>{formatMonthLabel(m)}</option>)}
+                </select>
+                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-lime-300 text-[10px]">▼</span>
+              </div>
+              <button
+                onClick={handleRecalculate}
+                className="group flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-cyan-400/40 text-xs font-bold uppercase tracking-wider text-cyan-300 transition-all"
+              >
+                <RefreshCw className="h-3.5 w-3.5 group-hover:rotate-180 transition-transform duration-500" /> Sincronizar
+              </button>
+              <button
+                onClick={() => onSelectTab(3)}
+                className="relative flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-lime-300 to-emerald-400 hover:from-lime-200 hover:to-emerald-300 text-black text-xs font-black uppercase tracking-wider shadow-[0_10px_30px_-10px_rgba(163,230,53,0.7)] active:scale-95 transition-all"
+              >
+                <Plus className="h-4 w-4" /> Novo Pedido
+              </button>
+            </div>
+          </div>
+
+          {/* KPI + Chart row */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-5">
+            {/* Big KPIs */}
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { label: 'Faturamento', value: `R$ ${monthRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, icon: DollarSign, accent: 'from-emerald-400 to-teal-300', ring: 'ring-emerald-400/30', glow: 'shadow-[0_8px_30px_-8px_rgba(16,185,129,0.5)]' },
+                { label: 'Margem Líquida', value: `${monthProfitMargin.toFixed(1)}%`, icon: TrendingUp, accent: 'from-lime-300 to-emerald-300', ring: 'ring-lime-300/30', glow: 'shadow-[0_8px_30px_-8px_rgba(190,242,100,0.45)]' },
+                { label: 'Pedidos Abertos', value: `${parsedOpenOrdersCount}`, icon: Sparkles, accent: 'from-amber-300 to-orange-400', ring: 'ring-amber-400/30', glow: 'shadow-[0_8px_30px_-8px_rgba(251,191,36,0.45)]' },
+                { label: 'Impressoras Ativas', value: `${activePrinters.length}/${safePrinters.length}`, icon: Cpu, accent: 'from-cyan-300 to-sky-400', ring: 'ring-cyan-400/30', glow: 'shadow-[0_8px_30px_-8px_rgba(34,211,238,0.45)]' },
+              ].map((k, i) => (
+                <div key={i} className={`group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] p-4 transition-all hover:-translate-y-0.5 ${k.glow}`}>
+                  <div className={`absolute -top-10 -right-10 h-24 w-24 rounded-full bg-gradient-to-br ${k.accent} opacity-10 blur-2xl group-hover:opacity-20 transition`} />
+                  <div className="flex items-start justify-between gap-2 relative">
+                    <span className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--brand-text-subtle)]">{k.label}</span>
+                    <div className={`p-1.5 rounded-lg bg-gradient-to-br ${k.accent} ring-1 ${k.ring} text-black`}>
+                      <k.icon className="h-3.5 w-3.5" strokeWidth={2.5} />
+                    </div>
+                  </div>
+                  <div className={`mt-2 font-black font-mono tracking-tight bg-gradient-to-r ${k.accent} bg-clip-text text-transparent`} style={{ fontSize: 'clamp(1.25rem, 0.9rem + 1.2vw, 1.75rem)' }}>
+                    {k.value}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Revenue area chart */}
+            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/30 p-4">
+              <div className="flex items-center justify-between mb-2">
+                <div>
+                  <div className="text-[10px] font-black uppercase tracking-[0.18em] text-[var(--brand-text-subtle)]">Faturamento · {formatMonthLabel(selectedMonth)}</div>
+                  <div className="text-lg font-black text-white tracking-tight">Curva diária</div>
+                </div>
+                <div className="text-[10px] font-mono font-bold text-lime-300 bg-lime-400/10 border border-lime-400/20 px-2 py-1 rounded-lg">
+                  +{parsedDeliveredOrdersCount} entregas
+                </div>
+              </div>
+              {(() => {
+                const days = Array.from({ length: totalDays }, (_, i) => getDaySales(i + 1));
+                const max = Math.max(...days, 1);
+                const W = 320, H = 110, P = 4;
+                const step = days.length > 1 ? (W - P * 2) / (days.length - 1) : 0;
+                const pts = days.map((v, i) => [P + i * step, H - P - (v / max) * (H - P * 2)] as const);
+                const linePath = pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(' ');
+                const areaPath = `${linePath} L ${(P + (days.length - 1) * step).toFixed(1)} ${H - P} L ${P} ${H - P} Z`;
+                const hasData = days.some(d => d > 0);
+                return (
+                  <div className="relative">
+                    <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-[120px]" preserveAspectRatio="none">
+                      <defs>
+                        <linearGradient id="dashAreaGrad" x1="0" x2="0" y1="0" y2="1">
+                          <stop offset="0%" stopColor="rgb(190,242,100)" stopOpacity="0.55" />
+                          <stop offset="100%" stopColor="rgb(16,185,129)" stopOpacity="0" />
+                        </linearGradient>
+                        <linearGradient id="dashLineGrad" x1="0" x2="1" y1="0" y2="0">
+                          <stop offset="0%" stopColor="rgb(190,242,100)" />
+                          <stop offset="100%" stopColor="rgb(45,212,191)" />
+                        </linearGradient>
+                      </defs>
+                      {[0.25, 0.5, 0.75].map(f => (
+                        <line key={f} x1="0" x2={W} y1={H * f} y2={H * f} stroke="rgba(255,255,255,0.04)" strokeDasharray="2 4" />
+                      ))}
+                      {hasData && (
+                        <>
+                          <path d={areaPath} fill="url(#dashAreaGrad)" />
+                          <path d={linePath} fill="none" stroke="url(#dashLineGrad)" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
+                          {pts.map((p, i) => days[i] > 0 && (
+                            <circle key={i} cx={p[0]} cy={p[1]} r="2" fill="rgb(190,242,100)">
+                              <title>{`Dia ${i + 1}: R$ ${days[i].toFixed(2)}`}</title>
+                            </circle>
+                          ))}
+                        </>
+                      )}
+                    </svg>
+                    {!hasData && (
+                      <div className="absolute inset-0 flex items-center justify-center text-[11px] text-[var(--brand-text-subtle)] italic">
+                        Sem faturamento neste período
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
+              <div className="flex items-center justify-between text-[10px] mt-2 text-[var(--brand-text-subtle)] font-mono">
+                <span>Dia 1</span>
+                <span>Pico R$ {Math.max(...Array.from({ length: totalDays }, (_, i) => getDaySales(i + 1)), 0).toFixed(0)}</span>
+                <span>Dia {totalDays}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== EM ANDAMENTO ===== */}
+      <section>
         <div className="glass-panel p-5">
             <div className="flex items-center justify-between mb-4">
               <div>
