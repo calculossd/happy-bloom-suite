@@ -155,6 +155,17 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
   return (
     <div className="space-y-6" id="dashboard_tab_container">
 
+      {/* ===== REFERENCE LAYOUT — DASHBOARD HERO (matches uploaded design) ===== */}
+      <ReferenceDashboardHero
+        monthRevenue={monthRevenue}
+        deliveredCount={parsedDeliveredOrdersCount}
+        openCount={parsedOpenOrdersCount}
+        orders={filteredOrders}
+        calendar={{ year: calYear, month: calMonth, totalDays, firstDayIndex, getDaySales }}
+        monthLabel={formatMonthLabel(selectedMonth)}
+        onSelectTab={onSelectTab}
+      />
+
       {/* ===== HERO COMMAND DECK ===== */}
       <section className="relative overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-br from-[#0a1410] via-[#0d1a14] to-[#070b09] shadow-[0_30px_80px_-30px_rgba(0,0,0,0.9)]">
         {/* Ambient glows */}
