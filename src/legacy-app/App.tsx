@@ -22,7 +22,7 @@ import { OkLojaAssistant } from './components/OkLojaAssistant';
 import { ShowcaseView } from './components/ShowcaseView';
 import { PrintFlowTab } from './components/PrintFlowTab';
 import {
-  PreCheckTab, AgendaTab, ToolsTab, ModelsTab
+  PriceResearchTab, PreCheckTab, AgendaTab, ToolsTab, ModelsTab
 } from './components/NewTabs';
 import { 
   Wrench, 
@@ -2249,30 +2249,7 @@ export default function App() {
           />
         )}
 
-        {currentTab === 7  && (() => {
-          try { localStorage.setItem('bambuzau_costs_subtab_override', 'QUOTE'); } catch {}
-          return (
-            <CostsTab
-              key="costs-quote"
-              filamentStocks={filamentStocks}
-              shoppingItems={shoppingItems}
-              expenses={expenses}
-              onAddFilament={handleAddFilamentStock}
-              onUpdateFilament={handleUpdateFilamentStock}
-              onAddShoppingItem={handleAddShoppingItem}
-              onToggleShoppingItem={handleToggleShoppingItem}
-              onDeleteShoppingItem={handleDeleteShoppingItem}
-              onDeleteFilament={handleDeleteFilamentStock}
-              onAddExpense={handleAddExpense}
-              onDeleteExpense={handleDeleteExpense}
-              onUpdateExpense={handleUpdateExpense}
-              suppliesStocks={suppliesStocks}
-              setSuppliesStocks={setSuppliesStocks}
-              lastAuditDate={lastAuditDate}
-              setLastAuditDate={setLastAuditDate}
-            />
-          );
-        })()}
+        {currentTab === 7  && <PriceResearchTab />}
         {currentTab === 8  && (
           <ShowcaseView
             workspaceCode={showcaseWorkspace}
