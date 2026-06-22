@@ -20,9 +20,9 @@ import { SettingsTab } from './components/SettingsTab';
 import { SoldTab } from './components/SoldTab';
 import { OkLojaAssistant } from './components/OkLojaAssistant';
 import { ShowcaseView } from './components/ShowcaseView';
+import { PrintFlowTab } from './components/PrintFlowTab';
 import {
-  PriceResearchTab, Catalog3DTab, MarketingTab, KanbanTab, ModelsTab,
-  PreCheckTab, AgendaTab, SitesTab, ToolsTab
+  PriceResearchTab, PreCheckTab, AgendaTab, ToolsTab, ModelsTab
 } from './components/NewTabs';
 import { 
   Wrench, 
@@ -2250,13 +2250,49 @@ export default function App() {
         )}
 
         {currentTab === 7  && <PriceResearchTab />}
-        {currentTab === 8  && <Catalog3DTab />}
-        {currentTab === 9  && <MarketingTab />}
-        {currentTab === 10 && <KanbanTab />}
+        {currentTab === 8  && (
+          <ShowcaseView
+            workspaceCode={showcaseWorkspace}
+            firebaseUrl={showcaseFirebase}
+          />
+        )}
+        {currentTab === 9  && (
+          <ClientsTab
+            clients={clients}
+            printers={printers}
+            orders={orders}
+            onAddClient={handleAddClient}
+            onUpdateClient={handleUpdateClient}
+            onDeleteClient={handleDeleteClient}
+            onAddPrinter={handleAddPrinter}
+            onUpdatePrinter={handleUpdatePrinter}
+            onDeletePrinter={handleDeletePrinter}
+            onAddOrder={handleAddOrder}
+            viewMode="clients"
+          />
+        )}
+        {currentTab === 10 && (
+          <PrintFlowTab
+            orders={orders}
+            printers={printers}
+            filamentStocks={filamentStocks}
+            clients={clients}
+            onAddOrder={handleAddOrder}
+            onUpdateOrder={handleUpdateOrder}
+            onDeleteOrder={handleDeleteOrder}
+            onSimulateTick={handleSimulateTick}
+            onUpdateFilament={handleUpdateFilamentStock}
+          />
+        )}
         {currentTab === 11 && <ModelsTab />}
         {currentTab === 12 && <PreCheckTab />}
         {currentTab === 13 && <AgendaTab />}
-        {currentTab === 14 && <SitesTab />}
+        {currentTab === 14 && (
+          <IntegrationTab
+            onImportOrder={handleImportExternalOrder}
+            importedExternalIds={importedExternalIds}
+          />
+        )}
         {currentTab === 15 && <ToolsTab />}
       </main>
 
