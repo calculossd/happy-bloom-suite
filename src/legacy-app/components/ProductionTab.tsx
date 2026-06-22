@@ -499,6 +499,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
   return (
     <div className="space-y-6" id="production-dashboard-container">
       {/* ONLINE PRINTER CONNECTIONS */}
+      {viewMode !== 'orders' && (
       <div className="bg-[#151917] border border-[#232B27] p-4 rounded-xl space-y-3 shadow" id="online-printers-tracker">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#232B27] pb-2">
           <div>
