@@ -25,6 +25,10 @@ import {
   PriceResearchTab, PreCheckTab, AgendaTab, ToolsTab, ModelsTab
 } from './components/NewTabs';
 import Market3DApp from '@/market3d/App';
+import CatalogoTab from './imported/CatalogoTab';
+import MarketingTab from './imported/MarketingTab';
+import KanbanTab from './imported/KanbanTab';
+import MarketTab from './imported/MarketTab';
 import { 
   Wrench, 
   RefreshCw, 
@@ -2251,41 +2255,10 @@ export default function App() {
         )}
 
         {currentTab === 7  && <Market3DApp />}
-        {currentTab === 8  && (
-          <ShowcaseView
-            workspaceCode={showcaseWorkspace}
-            firebaseUrl={showcaseFirebase}
-          />
-        )}
-        {currentTab === 9  && (
-          <ClientsTab
-            clients={clients}
-            printers={printers}
-            orders={orders}
-            onAddClient={handleAddClient}
-            onUpdateClient={handleUpdateClient}
-            onDeleteClient={handleDeleteClient}
-            onAddPrinter={handleAddPrinter}
-            onUpdatePrinter={handleUpdatePrinter}
-            onDeletePrinter={handleDeletePrinter}
-            onAddOrder={handleAddOrder}
-            viewMode="clients"
-          />
-        )}
-        {currentTab === 10 && (
-          <PrintFlowTab
-            orders={orders}
-            printers={printers}
-            filamentStocks={filamentStocks}
-            clients={clients}
-            onAddOrder={handleAddOrder}
-            onUpdateOrder={handleUpdateOrder}
-            onDeleteOrder={handleDeleteOrder}
-            onSimulateTick={handleSimulateTick}
-            onUpdateFilament={handleUpdateFilamentStock}
-          />
-        )}
-        {currentTab === 11 && <ModelsTab />}
+        {currentTab === 8  && <CatalogoTab />}
+        {currentTab === 9  && <MarketingTab />}
+        {currentTab === 10 && <KanbanTab />}
+        {currentTab === 11 && <MarketTab />}
         {currentTab === 12 && <PreCheckTab />}
         {currentTab === 13 && <AgendaTab />}
         {currentTab === 14 && (
