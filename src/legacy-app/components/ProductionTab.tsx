@@ -589,7 +589,9 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
           />
         )}
       </div>
+      )}
 
+      {viewMode !== 'monitor' && (<>
       {/* Compact status row grouping Total Pedidos & Faturamento for space saving */}
       <div className="grid grid-cols-2 gap-4 bg-[#151917] p-3.5 rounded-xl border border-[#232B27] select-none">
         <div className="flex items-center gap-3">
