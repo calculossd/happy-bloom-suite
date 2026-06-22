@@ -2422,11 +2422,12 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
         </div>
 
       </div>
+      )}
 
       {/* ========================================================================= */}
       {/* 🔮 MODAL DETALHADO DO LEAD B2B ("PÁGINA DO LEAD" COM STATUS & CHECKLISTS) */}
       {/* ========================================================================= */}
-      {selectedLeadForModal && (() => {
+      {viewMode !== 'printers' && selectedLeadForModal && (() => {
         // Find newest update in local state list
         const lead = prospectLeads.find(l => l.id === selectedLeadForModal.id) || selectedLeadForModal;
         
