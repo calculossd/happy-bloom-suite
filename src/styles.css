@@ -198,6 +198,71 @@ h1 { letter-spacing: -0.03em; }
   box-shadow: var(--shadow-soft) !important;
   border-radius: 22px !important;
 }
+
+/* ===== GLOBAL LIME GLOW SIGNATURE (applies across whole site) ===== */
+.glass-panel,
+[class*="rounded-2xl"][class*="border"],
+[class*="rounded-xl"][class*="border-white"],
+[class*="rounded-[2"][class*="border"] {
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.04) inset,
+    0 24px 60px -28px rgba(0, 0, 0, 0.9),
+    0 0 0 1px rgba(216, 255, 61, 0.04),
+    0 0 40px -10px rgba(216, 255, 61, 0.08);
+  transition: box-shadow 0.4s ease, border-color 0.35s ease, transform 0.3s ease;
+}
+.glass-panel:hover,
+[class*="rounded-2xl"][class*="border"]:hover,
+[class*="rounded-[2"][class*="border"]:hover {
+  border-color: rgba(216, 255, 61, 0.28) !important;
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.06) inset,
+    0 30px 80px -28px rgba(0, 0, 0, 0.95),
+    0 0 0 1px rgba(216, 255, 61, 0.14),
+    0 0 60px -8px rgba(216, 255, 61, 0.28);
+}
+
+/* Lime selection + focus everywhere */
+::selection {
+  background: rgba(216, 255, 61, 0.35);
+  color: #0a0f0c;
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid rgba(216, 255, 61, 0.65);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(216, 255, 61, 0.18);
+}
+
+/* Primary CTAs hover glow */
+button:not(:disabled):hover {
+  transition: filter 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+}
+.btn-lime:hover,
+button[class*="from-lime"]:hover,
+button[class*="from-emerald"]:hover,
+button[class*="bg-emerald"]:hover {
+  box-shadow: 0 10px 30px -8px rgba(216, 255, 61, 0.55), 0 0 0 1px rgba(216, 255, 61, 0.35);
+}
+
+/* Active sidebar / nav items get lime glow */
+[data-active="true"],
+.tt-nav-item.active,
+a[aria-current="page"] {
+  box-shadow: 0 0 0 1px rgba(216, 255, 61, 0.35), 0 0 24px -6px rgba(216, 255, 61, 0.4) !important;
+}
+
+/* Lime caret / accent ring on inputs */
+input, textarea, select {
+  caret-color: rgb(216, 255, 61);
+}
+input:focus, textarea:focus, select:focus {
+  border-color: rgba(216, 255, 61, 0.5) !important;
+}
 .glass-panel-hover {
   transition: transform .4s var(--ease-out-expo),
               background .4s var(--ease-out-expo),
