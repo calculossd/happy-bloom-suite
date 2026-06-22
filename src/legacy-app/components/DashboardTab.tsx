@@ -286,7 +286,7 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
       </section>
 
       {/* ===== DETALHES OPERACIONAIS ===== */}
-      <div className="space-y-6">
+      <div className="space-y-6 legacy-skin">
 
       {/* SEÇÃO 1 & 4 (STATUS RÁPIDO & ÚLTIMAS ATUALIZAÇÕES RESUMIDAS) */}
       <div className="bg-white/5 border border-white/10 p-5 rounded-2xl relative overflow-hidden shadow-xl backdrop-blur-md" id="top_action_updates_panel">
