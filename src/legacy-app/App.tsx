@@ -1926,7 +1926,7 @@ export default function App() {
       </>
 
       {/* TWO-PANEL CONTENT OR CENTRAL CONTAINER */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 pb-28 space-y-4">
+      <main className="flex-1 w-full px-3 sm:px-4 md:px-6 py-4 md:py-6 pb-28 space-y-4">
         {/* EXQUISITE NEW HEADER DE CADA PÁGINA (Título grande + Subtítulo curto + Relógio/Data ao vivo mounted) */}
         {(() => {
           if (currentTab === 0) return null;
