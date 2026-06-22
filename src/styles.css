@@ -457,10 +457,7 @@ table, .numbers, input[type="number"] { font-variant-numeric: tabular-nums; }
   backdrop-filter: blur(4px); z-index: 49;
 }
 
-/* Shell offset for sidebar on desktop */
-@media (min-width: 768px) {
-  .tt-shell { padding-left: 240px; }
-}
+/* Sidebar removed — no shell offset */
 
 /* ===== TASKTRAIL FORM CONTROLS ===== */
 input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
