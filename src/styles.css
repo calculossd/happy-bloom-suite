@@ -64,6 +64,9 @@
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
+  --brand-primary: #F46E1F;
+  --brand-bg: #0A0A0B;
+  --brand-card: #121215;
   --foreground: oklch(0.129 0.042 264.695);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 264.695);
@@ -142,3 +145,15 @@
     color: var(--color-foreground);
   }
 }
+
+/* Gestão 3D global theme override */
+html, body {
+  background: var(--brand-bg);
+  color: #fff;
+}
+
+@keyframes tab-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.animate-tab-blink { animation: tab-blink 1.2s ease-in-out infinite; }
