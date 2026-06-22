@@ -9,12 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as StoriesRouteImport } from './routes/stories'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiSearchImageRouteImport } from './routes/api/search-image'
 import { Route as ApiQuotationsRouteImport } from './routes/api/quotations'
 import { Route as ApiKeysStatusRouteImport } from './routes/api/keys-status'
 import { Route as Api3dTrendsRouteImport } from './routes/api/3d-trends'
 
+const StoriesRoute = StoriesRouteImport.update({
+  id: '/stories',
+  path: '/stories',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -43,6 +49,7 @@ const Api3dTrendsRoute = Api3dTrendsRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/stories': typeof StoriesRoute
   '/api/3d-trends': typeof Api3dTrendsRoute
   '/api/keys-status': typeof ApiKeysStatusRoute
   '/api/quotations': typeof ApiQuotationsRoute
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/stories': typeof StoriesRoute
   '/api/3d-trends': typeof Api3dTrendsRoute
   '/api/keys-status': typeof ApiKeysStatusRoute
   '/api/quotations': typeof ApiQuotationsRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/stories': typeof StoriesRoute
   '/api/3d-trends': typeof Api3dTrendsRoute
   '/api/keys-status': typeof ApiKeysStatusRoute
   '/api/quotations': typeof ApiQuotationsRoute
@@ -67,6 +76,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/stories'
     | '/api/3d-trends'
     | '/api/keys-status'
     | '/api/quotations'
@@ -74,6 +84,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/stories'
     | '/api/3d-trends'
     | '/api/keys-status'
     | '/api/quotations'
@@ -81,6 +92,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/stories'
     | '/api/3d-trends'
     | '/api/keys-status'
     | '/api/quotations'
@@ -89,6 +101,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  StoriesRoute: typeof StoriesRoute
   Api3dTrendsRoute: typeof Api3dTrendsRoute
   ApiKeysStatusRoute: typeof ApiKeysStatusRoute
   ApiQuotationsRoute: typeof ApiQuotationsRoute
@@ -97,6 +110,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/stories': {
+      id: '/stories'
+      path: '/stories'
+      fullPath: '/stories'
+      preLoaderRoute: typeof StoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -137,6 +157,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  StoriesRoute: StoriesRoute,
   Api3dTrendsRoute: Api3dTrendsRoute,
   ApiKeysStatusRoute: ApiKeysStatusRoute,
   ApiQuotationsRoute: ApiQuotationsRoute,
