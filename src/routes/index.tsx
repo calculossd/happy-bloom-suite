@@ -40,7 +40,7 @@ function Gestao3DApp() {
   return (
     <div className="min-h-screen pb-32" style={{ background: "var(--brand-bg)" }}>
       <Header blink={blink} />
-      <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
+      <main key={tab} className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10 animate-fade-up">
         {tab === 0 && <PainelTab />}
         {tab === 1 && <ProducaoTab />}
         {tab === 2 && <ClientesTab />}
