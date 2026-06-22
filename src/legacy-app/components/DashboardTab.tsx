@@ -1078,6 +1078,8 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
         </div>
 
       </div>
+        </div>
+      </details>
     </div>
   );
 };
