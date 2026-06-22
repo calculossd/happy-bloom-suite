@@ -38,7 +38,9 @@ import {
   ShoppingBag,
   AlertTriangle,
   Wifi,
-  WifiOff
+  WifiOff,
+  Menu,
+  X
 } from 'lucide-react';
 
 // STUNNING 3D CUBE & PRINTER EXTENSION GEOMETRIC LOGO
