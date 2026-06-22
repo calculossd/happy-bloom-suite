@@ -131,7 +131,7 @@ export const ReferenceDashboardHero: React.FC<any> = (props) => {
           <span className="ml-2 text-xs font-medium text-white/40">{`{${monthLabel}}`}</span>
         </h1>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-8 gap-2 mb-5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-2 mb-5">
         {kpis.map((k, i) => (
           <button key={i} onClick={() => onSelectTab(k.tab)} className="text-left">
             <CompactKpi icon={<k.icon className="h-4 w-4" />} big={k.big} badge={k.badge} sub={k.sub} />
