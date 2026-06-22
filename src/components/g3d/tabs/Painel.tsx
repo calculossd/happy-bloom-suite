@@ -42,18 +42,34 @@ export function PainelTab() {
   const auditAlert = Date.now() - brand.lastAuditDate > 3 * 86_400_000;
 
   return (
-    <div className="space-y-5">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold text-white">Painel de Controle</h2>
-        <div className="flex gap-1 rounded-full border border-white/10 bg-black/30 p-1">
+    <div className="space-y-8">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4 sm:flex sm:items-end sm:justify-between">
+        <div className="min-w-0">
+          <div className="mb-2 text-[11px] font-medium uppercase tracking-[0.18em] text-white/40">Overview</div>
+          <h2 className="font-display text-3xl font-black tracking-tight text-white sm:text-4xl">
+            Painel de Controle
+          </h2>
+          <p className="mt-1 text-sm text-white/50">
+            Visão geral em tempo real do seu ateliê de impressão 3D.
+          </p>
+        </div>
+        <div className="flex shrink-0 gap-0.5 rounded-full border border-white/10 bg-black/40 p-1 backdrop-blur">
           {([1, 7, 30] as Range[]).map((r) => (
             <button
               key={r}
               onClick={() => setRange(r)}
-              className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+              className={`rounded-full px-3.5 py-1.5 text-xs font-semibold tracking-tight transition-all duration-300 ${
                 range === r ? "text-black" : "text-white/60"
               }`}
-              style={range === r ? { background: "var(--brand-primary)" } : undefined}
+              style={
+                range === r
+                  ? {
+                      background:
+                        "linear-gradient(180deg, color-mix(in oklab, var(--brand-primary) 92%, white), var(--brand-primary))",
+                      boxShadow: "0 4px 14px -4px var(--brand-primary-glow)",
+                    }
+                  : undefined
+              }
             >
               {r === 1 ? "Hoje" : `${r} dias`}
             </button>
@@ -62,7 +78,7 @@ export function PainelTab() {
       </div>
 
       {auditAlert && (
-        <div className="flex items-center gap-3 rounded-2xl border border-red-500/40 bg-red-500/10 p-4 text-red-200">
+        <div className="animate-fade-up flex items-center gap-3 rounded-2xl border border-red-500/30 bg-red-500/[0.08] p-4 text-red-200 backdrop-blur">
           <AlertTriangle className="h-5 w-5 shrink-0" />
           <div className="flex-1 text-sm">
             <b>Alerta de Auditoria:</b> mais de 3 dias sem recontagem física do silo. Realize a auditoria do estoque agora.
@@ -73,68 +89,55 @@ export function PainelTab() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <div className="flex items-center justify-between text-white/50">
-            <span className="text-xs uppercase tracking-wider">Faturamento Bruto</span>
-            <DollarSign className="h-4 w-4" />
-          </div>
-          <div className="mt-3 text-3xl font-black text-white">{BRL(faturamento)}</div>
-          <div className="mt-1 text-xs text-white/40">Pedidos prontos/entregues no período</div>
-        </Card>
-        <Card>
-          <div className="flex items-center justify-between text-white/50">
-            <span className="text-xs uppercase tracking-wider">Margem Líquida Est.</span>
-            <TrendingUp className="h-4 w-4" />
-          </div>
-          <div className="mt-3 text-3xl font-black" style={{ color: margem > 0.4 ? "#10B981" : "var(--brand-primary)" }}>
-            {(margem * 100).toFixed(1)}%
-          </div>
-          <div className="mt-1 text-xs text-white/40">Descontando filamento + energia</div>
-        </Card>
-        <Card>
-          <div className="flex items-center justify-between text-white/50">
-            <span className="text-xs uppercase tracking-wider">Pedidos no Período</span>
-            <Package className="h-4 w-4" />
-          </div>
-          <div className="mt-3 text-3xl font-black text-white">{filtered.length}</div>
-          <div className="mt-1 text-xs text-white/40">Criados nos últimos {range === 1 ? "24h" : `${range} dias`}</div>
-        </Card>
-        <Card>
-          <div className="flex items-center justify-between text-white/50">
-            <span className="text-xs uppercase tracking-wider">Pedidos em Produção</span>
-            <Package className="h-4 w-4" />
-          </div>
-          <div className="mt-3 text-3xl font-black text-white">
-            {orders.filter((o) => o.status === "PRINTING" || o.status === "QUEUE").length}
-          </div>
-          <div className="mt-1 text-xs text-white/40">Aguardando ou imprimindo</div>
-        </Card>
+      <div className="stagger grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <StatCard icon={DollarSign} label="Faturamento Bruto" hint="Prontos/entregues no período" value={BRL(faturamento)} accent />
+        <StatCard
+          icon={TrendingUp}
+          label="Margem Líquida Est."
+          hint="Descontando filamento + energia"
+          value={`${(margem * 100).toFixed(1)}%`}
+          color={margem > 0.4 ? "#10B981" : undefined}
+        />
+        <StatCard
+          icon={Package}
+          label="Pedidos no Período"
+          hint={`Últimos ${range === 1 ? "24h" : `${range} dias`}`}
+          value={String(filtered.length)}
+        />
+        <StatCard
+          icon={Package}
+          label="Em Produção"
+          hint="Aguardando ou imprimindo"
+          value={String(orders.filter((o) => o.status === "PRINTING" || o.status === "QUEUE").length)}
+        />
       </div>
 
       <Card>
-        <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-white/80">Pedidos recentes</h3>
+        <div className="mb-4 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 sm:flex sm:justify-between">
+          <h3 className="font-display text-base font-bold tracking-tight text-white">Pedidos recentes</h3>
           <Btn onClick={() => setOpenQuick(true)}>
             <Plus className="h-4 w-4" /> Registrar Venda Rápida
           </Btn>
         </div>
-        <div className="divide-y divide-white/5">
+        <div className="divide-y divide-white/[0.04]">
           {filtered.slice(0, 6).map((o) => (
-            <div key={o.id} className="flex items-center justify-between py-3 text-sm">
-              <div>
-                <div className="font-medium text-white">{o.itemName}</div>
-                <div className="text-xs text-white/50">
+            <div
+              key={o.id}
+              className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 py-3 text-sm transition-colors hover:bg-white/[0.02] -mx-2 px-2 rounded-lg"
+            >
+              <div className="min-w-0">
+                <div className="truncate font-medium text-white">{o.itemName}</div>
+                <div className="truncate text-xs text-white/45">
                   {o.clientName} · {o.platformSource}
                 </div>
               </div>
-              <div className="text-right">
-                <div className="font-semibold text-white">{BRL(o.priceCharged)}</div>
-                <div className="text-xs text-white/40">{o.status}</div>
+              <div className="shrink-0 text-right">
+                <div className="tabular-nums font-semibold text-white">{BRL(o.priceCharged)}</div>
+                <div className="text-[10px] uppercase tracking-wider text-white/40">{o.status}</div>
               </div>
             </div>
           ))}
-          {!filtered.length && <div className="py-6 text-center text-sm text-white/40">Nenhum pedido no período.</div>}
+          {!filtered.length && <div className="py-10 text-center text-sm text-white/40">Nenhum pedido no período.</div>}
         </div>
       </Card>
 
@@ -166,6 +169,46 @@ export function PainelTab() {
         catalog={catalog}
       />
     </div>
+  );
+}
+
+function StatCard({
+  icon: Icon,
+  label,
+  value,
+  hint,
+  accent,
+  color,
+}: {
+  icon: typeof DollarSign;
+  label: string;
+  value: string;
+  hint: string;
+  accent?: boolean;
+  color?: string;
+}) {
+  return (
+    <Card className="!p-6">
+      <div className="flex items-center justify-between">
+        <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/45">{label}</span>
+        <span
+          className="grid h-8 w-8 place-items-center rounded-xl"
+          style={{
+            background: accent ? "var(--brand-primary-soft)" : "rgba(255,255,255,0.04)",
+            border: "1px solid var(--hairline)",
+          }}
+        >
+          <Icon className="h-3.5 w-3.5" style={{ color: accent ? "var(--brand-primary)" : "rgba(255,255,255,0.6)" }} />
+        </span>
+      </div>
+      <div
+        className="font-display mt-4 text-[34px] font-black leading-none tracking-tight tabular-nums"
+        style={{ color: color ?? (accent ? "var(--brand-primary)" : "#fff") }}
+      >
+        {value}
+      </div>
+      <div className="mt-2 text-xs text-white/40">{hint}</div>
+    </Card>
   );
 }
 
