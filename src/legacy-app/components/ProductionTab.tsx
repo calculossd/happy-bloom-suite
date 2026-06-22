@@ -107,6 +107,7 @@ interface ProductionTabProps {
   onSimulateTick: () => void;
   onUpdateFilament?: (id: number, updated: Partial<FilamentStock>) => void;
   onUpdatePrinter: (id: number, updated: Partial<Printer>) => void;
+  viewMode?: 'full' | 'monitor' | 'orders';
 }
 
 export const ProductionTab: React.FC<ProductionTabProps> = ({
@@ -119,7 +120,8 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
   onDeleteOrder,
   onSimulateTick,
   onUpdateFilament,
-  onUpdatePrinter
+  onUpdatePrinter,
+  viewMode = 'full'
 }) => {
   const [selectedFilter, setSelectedFilter] = useState<string>('TODOS');
   const [searchQuery, setSearchQuery] = useState<string>('');
