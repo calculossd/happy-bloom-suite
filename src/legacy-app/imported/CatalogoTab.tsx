@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import {
@@ -329,10 +328,7 @@ function CatalogPage() {
                     className="h-4 w-4 cursor-pointer"
                   />
                 </label>
-                <Link
-                  to="/catalogo/$modelId"
-                  params={{ modelId: m.id }}
-                  className="block"
+                <div className="block"
                 >
                   <div className="aspect-square overflow-hidden rounded-xl bg-gradient-to-br from-white/[0.04] to-white/[0.01]">
                     {m.thumbnail ? (
@@ -359,15 +355,12 @@ function CatalogPage() {
                       </div>
                     )}
                   </div>
-                </Link>
+                </div>
                 <div className="mt-3 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-                  <Link
-                    to="/catalogo/$modelId"
-                    params={{ modelId: m.id }}
-                    className="flex-1 rounded-lg border border-white/10 bg-white/5 py-1.5 text-center text-xs text-white/80 hover:bg-white/10"
+                  <div className="flex-1 rounded-lg border border-white/10 bg-white/5 py-1.5 text-center text-xs text-white/80 hover:bg-white/10"
                   >
                     <Eye className="mx-auto h-3.5 w-3.5" />
-                  </Link>
+                  </div>
                   <button
                     onClick={() => setSendModel(m)}
                     className="flex-1 rounded-lg border border-white/10 bg-white/5 py-1.5 text-xs text-white/80 hover:bg-white/10"
