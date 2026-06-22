@@ -1835,15 +1835,15 @@ export default function App() {
                     <div 
                       key={dev.id} 
                       onClick={() => setCurrentTab(5)} 
-                      className="inline-flex items-center gap-1 bg-sky-500/5 border border-sky-500/15 hover:border-sky-450/40 px-1.5 py-0.5 rounded-lg cursor-pointer transition text-[9px] font-mono text-sky-200 select-none active:scale-95 hover:bg-sky-500/10"
+                      className="inline-flex items-center gap-1 bg-black/60 border border-white/10 hover:border-white/25 px-1.5 py-0.5 rounded-lg cursor-pointer transition text-[9px] font-mono text-zinc-200 select-none active:scale-95 hover:bg-black/80"
                       title={`${dev.name} • Umidade Atual: ${dev.currentHumidity}% • Clique para configurar`}
                     >
                       <span className="relative flex h-1 w-1">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-1 w-1 bg-sky-400"></span>
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-300 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-1 w-1 bg-zinc-200"></span>
                       </span>
                       <span className="font-sans font-bold text-zinc-400 uppercase text-[7px]">{dev.name.replace('Estufa ', '')}:</span>
-                      <span className="font-black text-sky-300">{dev.currentHumidity}%</span>
+                      <span className="font-black text-zinc-100">{dev.currentHumidity}%</span>
                     </div>
                   ))
                 )}
