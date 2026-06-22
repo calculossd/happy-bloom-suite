@@ -1476,8 +1476,8 @@ export default function App() {
         };
       case 3:
         return {
-          title: "Integrações ERP",
-          subtitle: "Sincronização de pedidos vindos do Mercado Livre, Shopee e Shopify",
+          title: "Pedidos",
+          subtitle: "Gestão de pedidos e sincronização com Mercado Livre, Shopee e Shopify",
         };
       case 4:
         return {
