@@ -1939,7 +1939,7 @@ export default function App() {
           const formattedTime = currentTime.toLocaleTimeString('pt-BR');
 
           return (
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 bg-white/5 border border-white/10 backdrop-blur-xl px-4 py-3 rounded-xl shadow-sm transition-all duration-300" id="view-page-header">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 px-1 py-1 transition-all duration-300" id="view-page-header">
               <div>
                 <h2 className="text-sm sm:text-base font-bold text-white tracking-tight flex items-center gap-2">
                   <span className={`w-1.5 h-1.5 rounded-full ${
