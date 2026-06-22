@@ -15,6 +15,7 @@ import { Route as ApiSearchImageRouteImport } from './routes/api/search-image'
 import { Route as ApiQuotationsRouteImport } from './routes/api/quotations'
 import { Route as ApiKeysStatusRouteImport } from './routes/api/keys-status'
 import { Route as Api3dTrendsRouteImport } from './routes/api/3d-trends'
+import { Route as ApiSerpapiStatusRouteImport } from './routes/api/serpapi.status'
 
 const StoriesRoute = StoriesRouteImport.update({
   id: '/stories',
@@ -46,6 +47,11 @@ const Api3dTrendsRoute = Api3dTrendsRouteImport.update({
   path: '/api/3d-trends',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiSerpapiStatusRoute = ApiSerpapiStatusRouteImport.update({
+  id: '/api/serpapi/status',
+  path: '/api/serpapi/status',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/api/keys-status': typeof ApiKeysStatusRoute
   '/api/quotations': typeof ApiQuotationsRoute
   '/api/search-image': typeof ApiSearchImageRoute
+  '/api/serpapi/status': typeof ApiSerpapiStatusRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/api/keys-status': typeof ApiKeysStatusRoute
   '/api/quotations': typeof ApiQuotationsRoute
   '/api/search-image': typeof ApiSearchImageRoute
+  '/api/serpapi/status': typeof ApiSerpapiStatusRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,6 +79,7 @@ export interface FileRoutesById {
   '/api/keys-status': typeof ApiKeysStatusRoute
   '/api/quotations': typeof ApiQuotationsRoute
   '/api/search-image': typeof ApiSearchImageRoute
+  '/api/serpapi/status': typeof ApiSerpapiStatusRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,6 +90,7 @@ export interface FileRouteTypes {
     | '/api/keys-status'
     | '/api/quotations'
     | '/api/search-image'
+    | '/api/serpapi/status'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -89,6 +99,7 @@ export interface FileRouteTypes {
     | '/api/keys-status'
     | '/api/quotations'
     | '/api/search-image'
+    | '/api/serpapi/status'
   id:
     | '__root__'
     | '/'
@@ -97,6 +108,7 @@ export interface FileRouteTypes {
     | '/api/keys-status'
     | '/api/quotations'
     | '/api/search-image'
+    | '/api/serpapi/status'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -106,6 +118,7 @@ export interface RootRouteChildren {
   ApiKeysStatusRoute: typeof ApiKeysStatusRoute
   ApiQuotationsRoute: typeof ApiQuotationsRoute
   ApiSearchImageRoute: typeof ApiSearchImageRoute
+  ApiSerpapiStatusRoute: typeof ApiSerpapiStatusRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -152,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Api3dTrendsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/serpapi/status': {
+      id: '/api/serpapi/status'
+      path: '/api/serpapi/status'
+      fullPath: '/api/serpapi/status'
+      preLoaderRoute: typeof ApiSerpapiStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -162,6 +182,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiKeysStatusRoute: ApiKeysStatusRoute,
   ApiQuotationsRoute: ApiQuotationsRoute,
   ApiSearchImageRoute: ApiSearchImageRoute,
+  ApiSerpapiStatusRoute: ApiSerpapiStatusRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
