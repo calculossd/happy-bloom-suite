@@ -3,9 +3,18 @@ import type { ReactNode, ButtonHTMLAttributes, InputHTMLAttributes, TextareaHTML
 export function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
     <div
-      className={`rounded-3xl border border-white/5 p-5 backdrop-blur-xl ${className}`}
-      style={{ background: "var(--brand-card)" }}
+      className={`group/card relative overflow-hidden rounded-3xl p-6 transition-all duration-500 ${className}`}
+      style={{
+        background: "linear-gradient(180deg, var(--surface-2), var(--surface-1))",
+        border: "1px solid var(--hairline)",
+        boxShadow: "var(--shadow-soft)",
+      }}
     >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-px"
+        style={{ background: "linear-gradient(90deg, transparent, var(--hairline-strong), transparent)" }}
+      />
       {children}
     </div>
   );
@@ -18,20 +27,29 @@ export function Btn({
   ...rest
 }: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primary" | "ghost" | "danger" | "outline" }) {
   const base =
-    "inline-flex items-center justify-center gap-2 rounded-xl py-2.5 px-4 text-sm font-medium transition-all active:scale-[0.98] disabled:opacity-50";
+    "inline-flex items-center justify-center gap-2 rounded-xl py-2.5 px-4 text-sm font-medium tracking-tight transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
   const styles =
     variant === "primary"
-      ? "text-black shadow-[0_4px_20px_rgba(244,110,31,0.4)]"
+      ? "text-black hover:-translate-y-0.5 hover:shadow-[var(--shadow-pop)]"
       : variant === "danger"
-        ? "bg-red-500/15 text-red-300 hover:bg-red-500/25 border border-red-500/30"
+        ? "bg-red-500/10 text-red-300 hover:bg-red-500/20 border border-red-500/25 hover:border-red-500/40"
         : variant === "outline"
-          ? "border border-white/10 text-white/90 hover:bg-white/5"
-          : "text-white/80 hover:bg-white/5";
+          ? "border border-white/10 text-white/90 hover:bg-white/5 hover:border-white/20"
+          : "text-white/70 hover:bg-white/[0.04] hover:text-white";
   return (
     <button
       {...rest}
       className={`${base} ${styles} ${className}`}
-      style={variant === "primary" ? { background: "var(--brand-primary)", ...rest.style } : rest.style}
+      style={
+        variant === "primary"
+          ? {
+              background:
+                "linear-gradient(180deg, color-mix(in oklab, var(--brand-primary) 92%, white), var(--brand-primary))",
+              boxShadow: "0 1px 0 rgba(255,255,255,0.25) inset, 0 8px 24px -8px var(--brand-primary-glow)",
+              ...rest.style,
+            }
+          : rest.style
+      }
     >
       {children}
     </button>
@@ -57,7 +75,7 @@ export function Input(props: InputHTMLAttributes<HTMLInputElement>) {
   return (
     <input
       {...props}
-      className={`w-full rounded-xl border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white placeholder:text-white/30 focus:border-[var(--brand-primary)] focus:outline-none ${props.className ?? ""}`}
+      className={`w-full rounded-xl border border-white/10 bg-black/30 px-3.5 py-2.5 text-sm text-white placeholder:text-white/30 transition-colors duration-200 focus:border-[var(--brand-primary)]/60 focus:bg-black/40 focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]/20 ${props.className ?? ""}`}
     />
   );
 }
@@ -66,7 +84,7 @@ export function Textarea(props: TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return (
     <textarea
       {...props}
-      className={`w-full rounded-xl border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white placeholder:text-white/30 focus:border-[var(--brand-primary)] focus:outline-none ${props.className ?? ""}`}
+      className={`w-full rounded-xl border border-white/10 bg-black/30 px-3.5 py-2.5 text-sm text-white placeholder:text-white/30 transition-colors duration-200 focus:border-[var(--brand-primary)]/60 focus:bg-black/40 focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]/20 ${props.className ?? ""}`}
     />
   );
 }
@@ -75,7 +93,7 @@ export function Select(props: SelectHTMLAttributes<HTMLSelectElement>) {
   return (
     <select
       {...props}
-      className={`w-full rounded-xl border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white focus:border-[var(--brand-primary)] focus:outline-none ${props.className ?? ""}`}
+      className={`w-full rounded-xl border border-white/10 bg-black/30 px-3.5 py-2.5 text-sm text-white transition-colors duration-200 focus:border-[var(--brand-primary)]/60 focus:bg-black/40 focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]/20 ${props.className ?? ""}`}
     />
   );
 }
@@ -93,15 +111,25 @@ export function Modal({
 }) {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 p-0 backdrop-blur-sm sm:items-center sm:p-4" onClick={onClose}>
+    <div
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-0 backdrop-blur-md sm:items-center sm:p-4 animate-fade-up"
+      onClick={onClose}
+    >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-lg rounded-t-3xl sm:rounded-3xl border border-white/10 p-6 max-h-[90vh] overflow-y-auto"
-        style={{ background: "var(--brand-card)" }}
+        className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-6 sm:p-7"
+        style={{
+          background: "linear-gradient(180deg, var(--surface-2), var(--surface-1))",
+          border: "1px solid var(--hairline-strong)",
+          boxShadow: "0 30px 80px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04) inset",
+        }}
       >
-        <div className="mb-5 flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-white">{title}</h3>
-          <button onClick={onClose} className="rounded-full p-2 text-white/60 hover:bg-white/10 hover:text-white">
+        <div className="mb-6 flex items-center justify-between">
+          <h3 className="font-display text-xl font-bold text-white">{title}</h3>
+          <button
+            onClick={onClose}
+            className="rounded-full p-2 text-white/50 transition-all hover:bg-white/10 hover:text-white hover:rotate-90 duration-300"
+          >
             ✕
           </button>
         </div>
