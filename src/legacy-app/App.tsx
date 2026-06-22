@@ -1756,7 +1756,7 @@ export default function App() {
 
       <>
       {/* FOLDER-STYLE TABS (sit on top of the header like file folders) */}
-      <div className="w-full pt-2 px-2 sm:px-4 flex items-end gap-1 overflow-x-auto bg-transparent">
+      <div className="w-full pt-2 px-1 sm:px-2 flex items-end gap-0 flex-wrap bg-transparent">
         {[
           { id: 0, label: 'Painel',    icon: Home },
           { id: 1, label: 'Produção',  icon: Activity },
@@ -1780,13 +1780,13 @@ export default function App() {
             <button
               key={item.id}
               onClick={() => setCurrentTab(item.id)}
-              className={`relative inline-flex items-center justify-center gap-1.5 px-3 sm:px-4 rounded-t-xl text-[11px] sm:text-[12px] font-bold whitespace-nowrap transition-all border border-b-0 -mb-px ${
+              className={`relative inline-flex items-center justify-center gap-1 px-2 rounded-t-lg text-[10.5px] sm:text-[11px] font-bold whitespace-nowrap transition-all border border-b-0 -mb-px -mr-px ${
                 active
-                  ? 'bg-black/40 text-[var(--cat-lime,#A5D84B)] border-white/15 py-2.5 z-10 shadow-[0_-4px_14px_rgba(0,0,0,0.5)]'
-                  : 'bg-black/20 text-zinc-400 border-white/5 py-2 hover:bg-black/30 hover:text-white'
+                  ? 'bg-black/40 text-[var(--cat-lime,#A5D84B)] border-white/15 py-2 z-10 shadow-[0_-4px_14px_rgba(0,0,0,0.5)]'
+                  : 'bg-black/20 text-zinc-400 border-white/5 py-1.5 hover:bg-black/30 hover:text-white'
               }`}
             >
-              <item.icon className="h-3.5 w-3.5 shrink-0" />
+              <item.icon className="h-3 w-3 shrink-0" />
               <span className="truncate">{item.label}</span>
               {item.badge ? (
                 <span className="ml-1 px-1.5 py-0.5 rounded-full text-[9px] font-black bg-[var(--cat-lime,#A5D84B)]/20 text-[var(--cat-lime,#A5D84B)]">
