@@ -3970,7 +3970,9 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                           {offer.thumbnail ? (
                             <img src={offer.thumbnail} alt={offer.productName} className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
                           ) : (
-                            <div className="absolute inset-0 grid place-items-center text-[10px] text-zinc-600">sem foto</div>
+                            <div className="absolute inset-0 grid place-items-center bg-gradient-to-br from-[#15181a] to-[#0c0e0d]">
+                              <FilamentSpool color={materialColor(materialGroup.type)} size={56} label={`${materialGroup.type} filamento`} />
+                            </div>
                           )}
                           {isHotOpportunity && (
                             <span className="absolute top-1 right-1 text-[10px] bg-amber-500 text-black rounded-full px-1 leading-none py-0.5 font-black">🔥</span>
