@@ -1261,8 +1261,8 @@ export default function App() {
         };
       case 4:
         return {
-          title: "Custos & Estoques",
-          subtitle: "Auditorias de filamentos, controle de insumos e despesas fixas",
+          title: "Custos",
+          subtitle: "Controle de insumos e despesas fixas",
         };
       case 5:
         return {
