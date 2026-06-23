@@ -646,8 +646,8 @@ export function OkLojaAssistant({
 
   return (
     <>
-      {/* FLOATING ACTION TRIGGER ORB — moved to top-right to avoid overlapping the left sidebar nav and bottom-right CADASTRO buttons */}
-      <div className="fixed top-4 right-4 z-50 select-none">
+      {/* FLOATING ACTION TRIGGER ORB — placed in the sidebar next to the "Navegação" label */}
+      <div className="fixed top-3 left-[108px] z-50 select-none">
         <button
           onClick={() => {
             setIsOpen(true);
@@ -655,7 +655,7 @@ export function OkLojaAssistant({
               window.speechSynthesis.cancel();
             }
           }}
-          className={`relative flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-tr from-amber-500/90 to-amber-400 text-black shadow-lg shadow-amber-950/40 hover:scale-108 active:scale-95 transition-all duration-200 border-2 border-white/20 cursor-pointer outline-none group focus:ring-2 focus:ring-amber-400 ${
+          className={`relative flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500/90 to-amber-400 text-black shadow-md shadow-amber-950/40 hover:scale-110 active:scale-95 transition-all duration-200 border border-white/20 cursor-pointer outline-none group focus:ring-2 focus:ring-amber-400 ${
             isBackgroundListening ? 'ring-[3px] ring-emerald-400/80 shadow-[0_0_18px_rgba(52,211,153,0.4)]' : ''
           }`}
           id="ok-loja-floating-orb"
@@ -668,17 +668,9 @@ export function OkLojaAssistant({
             <span className="absolute animate-ping inline-flex h-full w-full rounded-full bg-amber-400/30 opacity-75"></span>
           )}
           
-          <Mic className={`w-6 h-6 ${isBackgroundListening ? 'text-zinc-950 animate-pulse' : 'text-zinc-900'}`} />
+          <Mic className={`w-3.5 h-3.5 ${isBackgroundListening ? 'text-zinc-950 animate-pulse' : 'text-zinc-900'}`} />
           
-          <span className={`absolute -top-1 -right-1 flex h-4.5 w-4.5 items-center justify-center border rounded-full text-[8px] font-mono scale-90 ${
-            isBackgroundListening 
-              ? 'bg-zinc-950 border-emerald-400 text-emerald-400 font-extrabold' 
-              : 'bg-zinc-900 border-amber-300 text-amber-300 font-black'
-          }`}>
-            {isBackgroundListening ? "ON" : "AI"}
-          </span>
-          
-          <div className="absolute right-16 top-3 bg-black/85 border border-zinc-700 text-[10px] font-extrabold text-[#F1F4EE] px-2.5 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap hidden sm:block pointer-events-none">
+          <div className="absolute left-10 top-1 bg-black/85 border border-zinc-700 text-[10px] font-extrabold text-[#F1F4EE] px-2.5 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap hidden sm:block pointer-events-none">
             {isBackgroundListening ? "🎙️ Detecção por Voz 'Ok Loja' Ativa" : "Perguntar por Voz 'Ok Loja' 🎙️"}
           </div>
         </button>
