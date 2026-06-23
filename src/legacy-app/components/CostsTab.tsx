@@ -3144,6 +3144,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                       <div className="flex items-center gap-2.5 min-w-0">
                         <FilamentSpool
                           color={swatchBg}
+                          type={fil.type}
                           size={44}
                           label={`${fil.type} ${fil.color}`}
                           className="shrink-0 drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]"
