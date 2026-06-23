@@ -1847,7 +1847,7 @@ export default function App() {
               <div className="flex items-center gap-3 min-w-0">
                 <span className="inline-block h-2 w-2 rounded-full bg-[#b7ff00] shadow-[0_0_8px_rgba(183,255,0,0.8)]" />
                 <div className="min-w-0">
-                  <h2 className="text-sm sm:text-base font-bold text-gradient-lime tracking-[0.18em] uppercase">
+                  <h2 className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans leading-none">
                     {headerInfo.title}
                   </h2>
                   {headerInfo.subtitle && (
