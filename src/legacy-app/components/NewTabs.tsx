@@ -27,7 +27,7 @@ const getSafeOfferUrl = (offer: any, fallbackQuery: string) => {
   if (!isBlockedGoogleUrl(offer?.buyUrl)) return offer.buyUrl;
   const productName = String(offer?.productName || fallbackQuery || 'produto');
   const query = encodeURIComponent(productName);
-  return `https://www.google.com/search?tbm=shop&q=${query}`;
+  return `https://www.buscape.com.br/search?q=${query}`;
 };
 
 /* =================== PESQUISA DE PREÇOS =================== */
