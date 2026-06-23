@@ -1261,8 +1261,8 @@ export default function App() {
         };
       case 4:
         return {
-          title: "Custos",
-          subtitle: "Controle de insumos e despesas fixas",
+          title: "",
+          subtitle: "",
         };
       case 5:
         return {
