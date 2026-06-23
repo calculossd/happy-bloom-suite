@@ -1831,6 +1831,7 @@ export default function App() {
         {(() => {
           if (currentTab === 0 || currentTab === 1 || currentTab === 2 || currentTab === 3) return null;
           const headerInfo = getTabHeader(currentTab);
+          if (!headerInfo.title) return null;
           const formattedDate = currentTime.toLocaleDateString('pt-BR', { 
             weekday: 'short', 
             day: 'numeric', 
@@ -2102,11 +2103,6 @@ export default function App() {
 
         {currentTab === 4 && (
           <>
-            <div className="flex items-center gap-2 px-1 py-1 mb-2" id="view-page-header-costs">
-              <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">
-                Estoque
-              </div>
-            </div>
             <CostsTab
             filamentStocks={filamentStocks}
             shoppingItems={shoppingItems}

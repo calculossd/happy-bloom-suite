@@ -1702,6 +1702,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       })()}
 
       {/* THREE D DAYS STOCK AUDIT BANNER */}
+      {activeSubTab === 'STOCK' && (
       <div
         id="audit_period_safety_banner"
         className={`group relative overflow-hidden rounded-2xl border backdrop-blur-xl transition-all duration-500 ${
@@ -1782,6 +1783,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
           </button>
         </div>
       </div>
+      )}
 
       {/* CAPSULE TAB CHANGER MENU — hidden: navigation moved to global sidebar */}
       <div className="hidden grid-cols-3 sm:grid-cols-6 items-center gap-2 p-2 bg-[#0a0d0c] border border-[#26332c] rounded-2xl shadow-xl" id="subtab-capsules">
@@ -3410,25 +3412,12 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       {/* SUBTAB 4: SHOPPING ITEMS LIST */}
       {activeSubTab === 'SHOP' && (
         <div className="space-y-6 animate-fade-in" id="shopping-tab-panel">
-          
-          {/* Header of Separation */}
-          <div className="p-4 bg-gradient-to-r from-teal-950/20 to-black/40 border border-[#232B27] rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-[9px] font-mono tracking-widest text-emerald-400 font-extrabold uppercase px-2 py-0.5 bg-emerald-400/10 border border-emerald-400/20 rounded-md">
-                  Atualização v3.2.2.8
-                </span>
-                <span className="text-[9px] font-mono tracking-widest text-[#E5B242] font-semibold uppercase px-2 py-0.5 bg-yellow-500/10 border border-yellow-500/20 rounded-md">
-                  Sincronização Ativa 🔄
-                </span>
-              </div>
-              <h3 className="text-sm font-black text-[#F1F4EE] mt-1">Separação de Custos Efetivados vs. Carrinho de Compras</h3>
-              <p className="text-xs text-[#8BA58D]">Adicione gastos de materiais usados no trabalho e orçamente a sua lista & carrinho a comprar. Ambos retroalimentam o Dashboard automaticamente.</p>
-            </div>
-            
-            <div className="p-3 bg-black/40 border border-[#232B27] rounded-xl font-mono text-center shrink-0">
-              <span className="text-[8.5px] uppercase text-[#8BA58D] block">Despesas Dashboard Total</span>
-              <strong className="text-sm text-red-400">
+
+          {/* Compact total summary */}
+          <div className="flex items-center justify-end">
+            <div className="inline-flex items-center gap-3 px-4 py-2 bg-black/40 border border-white/[0.06] rounded-xl font-mono">
+              <span className="text-[9px] uppercase tracking-[0.18em] text-zinc-500">Despesas Total</span>
+              <strong className="text-sm text-rose-300">
                 R$ {(expenses.reduce((sum, e) => sum + (e.amount * e.qty), 0) + shoppingItems.reduce((sum, s) => sum + s.price, 0)).toFixed(2)}
               </strong>
             </div>
