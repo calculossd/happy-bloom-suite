@@ -971,7 +971,7 @@ export default function App() {
 
           {/* Scrollable list or spreadsheet table of feeds */}
           {viewMode === 'list' ? (
-            <div className="space-y-3 max-h-[64vh] overflow-y-auto scrollbar-thin scrollbar-thumb-[#151D2F] pr-1">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 max-h-[64vh] overflow-y-auto scrollbar-thin scrollbar-thumb-[#151D2F] pr-1">
               {filteredProducts.map((p, idx) => {
                 const isSelected = report?.id === p.id;
                 
@@ -1001,167 +1001,69 @@ export default function App() {
                       setReport(p);
                       setIsDetailOpen(true);
                     }}
-                    className={`p-4 rounded-xl border cursor-pointer transition-all duration-200 relative group overflow-hidden ${
-                      isSelected 
-                        ? p.estimatedMargin < 10 
-                          ? 'bg-red-950/15 border-red-500/40 shadow-lg shadow-red-955/10'
-                          : 'bg-[#121A2E] border-orange-500/40 shadow-lg' 
+                    title={p.title}
+                    className={`relative aspect-square rounded-lg border cursor-pointer overflow-hidden group transition-all duration-200 ${
+                      isSelected
+                        ? p.estimatedMargin < 10
+                          ? 'border-red-500/60 shadow-lg shadow-red-955/10'
+                          : 'border-orange-500/60 shadow-lg'
                         : p.estimatedMargin < 10
-                          ? 'bg-red-950/5 border-red-500/20 hover:bg-red-950/10'
-                          : 'bg-[#090D16]/95 border-[#121826]/70 hover:bg-[#0E1524]'
+                          ? 'border-red-500/30 hover:border-red-500/60'
+                          : 'border-[#121826]/70 hover:border-orange-500/40'
                     }`}
                   >
-                    
-                    {/* Selected Indicator Amber or Red line */}
-                    {isSelected && (
-                      <div className={`absolute top-0 bottom-0 left-0 w-1 ${p.estimatedMargin < 10 ? 'bg-red-500' : 'bg-orange-500'}`} />
+                    {/* Image (90% area) */}
+                    {showProductImage ? (
+                      <img
+                        src={productImageUrl}
+                        alt={p.title}
+                        className="absolute inset-0 w-full h-full object-cover"
+                        loading="lazy"
+                        referrerPolicy="no-referrer"
+                        onError={() => productImageUrl && setBrokenImageUrls(prev => ({ ...prev, [productImageUrl]: true }))}
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center bg-[#05080E] text-slate-700">
+                        <ImageIcon className="w-8 h-8" />
+                      </div>
                     )}
 
-                    {/* Kanban Idea Checkbox */}
+                    {/* Rank number */}
+                    <span className={`absolute top-1 left-1 z-10 w-5 h-5 rounded-full flex items-center justify-center font-black text-[10px] ${
+                      idx < 3 ? 'bg-[#FF6600]/95 text-white' : 'bg-black/70 text-slate-200'
+                    }`}>{idx + 1}</span>
+
+                    {/* Kanban toggle */}
                     <button
                       onClick={(e) => { e.stopPropagation(); toggleKanban(p, productImageUrl); }}
-                      title={isInKanban(p.id) ? 'Remover do Kanban de Ideias' : 'Adicionar ao Kanban como Ideia'}
-                      className={`absolute top-2 right-2 z-10 w-6 h-6 rounded-md border flex items-center justify-center transition-all ${
+                      title={isInKanban(p.id) ? 'Remover do Kanban' : 'Adicionar ao Kanban'}
+                      className={`absolute top-1 right-1 z-10 w-5 h-5 rounded-md border flex items-center justify-center transition-all ${
                         isInKanban(p.id)
-                          ? 'bg-emerald-500/90 border-emerald-400 text-white shadow-md shadow-emerald-500/30'
-                          : 'bg-[#05080E]/80 border-[#1F2B48] text-slate-500 hover:text-emerald-400 hover:border-emerald-500/40'
+                          ? 'bg-emerald-500/90 border-emerald-400 text-white'
+                          : 'bg-black/60 border-white/20 text-slate-200 hover:text-emerald-300'
                       }`}
                     >
-                      {isInKanban(p.id) ? <Check className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+                      {isInKanban(p.id) ? <Check className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
                     </button>
 
+                    {/* Characteristic badge (top center) */}
+                    <span className={`absolute top-1 left-1/2 -translate-x-1/2 z-10 px-1.5 py-0.5 rounded text-[8px] font-extrabold uppercase tracking-wide whitespace-nowrap ${badgeClasses}`}>
+                      {badgeText}
+                    </span>
 
-                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                      {/* Left stack: Number circle + Title + Badges */}
-                      <div className="flex items-center gap-3.5 flex-grow min-w-0">
-                        {/* Circle badge exactly like the screenshot uploads */}
-                        <div className="shrink-0">
-                          <span className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-xs transition-transform duration-200 group-hover:scale-105 ${
-                            idx === 0 || idx === 1 || idx === 2
-                              ? 'bg-[#FF6600]/95 text-white shadow-md shadow-orange-500/20'
-                              : 'bg-[#151D30] text-slate-400 border border-[#1F2B48]'
-                          }`}>
-                            {idx + 1}
-                          </span>
-                        </div>
-
-                        <div className="w-20 h-20 md:w-24 md:h-24 rounded-lg overflow-hidden bg-[#05080E] border border-[#1F2B48] shrink-0">
-                          {showProductImage ? (
-                            <img
-                              src={productImageUrl}
-                              alt={p.title}
-                              className="w-full h-full object-cover"
-                              loading="lazy"
-                              referrerPolicy="no-referrer"
-                              onError={() => productImageUrl && setBrokenImageUrls(prev => ({ ...prev, [productImageUrl]: true }))}
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center text-slate-600">
-                              <ImageIcon className="w-7 h-7" />
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Title & Under-Title meta */}
-                        <div className="min-w-0 space-y-1.5 flex-1">
-                          <h3 className={`font-semibold text-xs md:text-sm whitespace-normal break-words transition-colors ${
-                            p.estimatedMargin < 10 
-                              ? 'text-red-200 group-hover:text-red-405' 
-                              : 'text-slate-100 group-hover:text-orange-400'
-                          }`}>
-                            {p.title}
-                          </h3>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className={`px-2 py-0.5 rounded-md text-[9px] font-extrabold uppercase tracking-wide ${badgeClasses}`}>
-                              {badgeText}
-                            </span>
-                            <span className="flex items-center gap-0.5 text-[10px] text-slate-400 font-bold ml-1">
-                              <span className="text-amber-400">★</span> {rating}
-                            </span>
-                            {/* MakerWorld ID (only number) */}
-                            <div
-                              onClick={(e) => e.stopPropagation()}
-                              className="flex items-center gap-1 ml-1 rounded-md border border-[#1F2B48] bg-[#05080E]/80 px-1.5 py-0.5"
-                              title="ID numérico do modelo no MakerWorld"
-                            >
-                              <span className="text-[8.5px] font-extrabold uppercase tracking-wider text-amber-400/80">MW</span>
-                              <input
-                                type="text"
-                                inputMode="numeric"
-                                pattern="[0-9]*"
-                                value={makerworldIds[p.id] || ''}
-                                onChange={(e) => updateMakerworldId(p.id, e.target.value)}
-                                onClick={(e) => e.stopPropagation()}
-                                placeholder="ID"
-                                className="w-16 bg-transparent text-[10px] font-mono text-slate-200 placeholder:text-slate-600 outline-none"
-                              />
-                              {makerworldIds[p.id] && (
-                                <a
-                                  href={makerworldUrl(makerworldIds[p.id])}
-                                  target="_blank"
-                                  rel="noreferrer"
-                                  onClick={(e) => e.stopPropagation()}
-                                  className="text-amber-400 hover:text-amber-300"
-                                  title="Abrir no MakerWorld"
-                                >
-                                  <ArrowUpRight className="w-3 h-3" />
-                                </a>
-                              )}
-                            </div>
-                          </div>
-                        </div>
+                    {/* Bottom overlay: vendas/mês + faixa de preço */}
+                    <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/95 via-black/75 to-transparent px-1.5 py-1 flex items-end justify-between gap-1">
+                      <div className="leading-tight min-w-0">
+                        <span className="block text-[8px] text-slate-400 uppercase">Vendas/mês</span>
+                        <span className="block text-[11px] font-black text-white font-mono">{p.monthlySales.toLocaleString('pt-BR')}</span>
                       </div>
-
-                      {/* Right Part: Dynamic statistics columns matching the layout exactly */}
-                      <div className="grid grid-cols-2 sm:grid-cols-4 lg:flex lg:items-center justify-between lg:justify-end gap-x-4 sm:gap-x-8 md:gap-x-12 shrink-0">
-                        
-                        {/* Vendas/mês */}
-                        <div className="text-left sm:text-right w-20 md:w-24">
-                          <span className="text-[9.5px] text-slate-500 block">Vendas/mês</span>
-                          <span className="font-sans font-black text-xs md:text-[13px] text-slate-100 mt-0.5 block">
-                            {p.monthlySales.toLocaleString('pt-BR')}
-                          </span>
-                        </div>
-
-                        {/* Faixa de Preço */}
-                        <div className="text-center sm:text-right w-24 md:w-28">
-                          <span className="text-[9.5px] text-slate-500 block">Faixa de Preço</span>
-                          <span className="font-sans font-extrabold text-[#10B981] text-xs md:text-[12px] mt-0.5 block whitespace-nowrap">
-                            {p.priceRange || `R$ ${(p.pricePromo * 0.8).toFixed(0)} - ${(p.pricePromo * 1.3).toFixed(0)}`}
-                          </span>
-                        </div>
-
-                        {/* Margem */}
-                        <div className="text-right w-16 md:w-20">
-                          <span className="text-[9.5px] text-slate-500 block">Margem</span>
-                          <span className={`font-sans font-black text-xs md:text-[13px] inline-flex items-center gap-0.5 mt-0.5 ${
-                            p.estimatedMargin < 10 ? 'text-red-500 animate-pulse' : 'text-[#10B981]'
-                          }`}>
-                            {p.estimatedMargin < 10 && <AlertTriangle className="w-3 h-3 text-red-500 shrink-0" />}
-                            {p.estimatedMargin}%
-                          </span>
-                        </div>
-
-                        {/* Tendência icon */}
-                        <div className="text-right w-16 hidden sm:block">
-                          <span className="text-[9.5px] text-slate-500 block">Tendência</span>
-                          <span className="inline-flex items-center gap-1.5 text-[#10B981] font-bold ml-auto justify-end w-full mt-1">
-                            <TrendingUp className="w-4 h-4 text-[#10B981]" />
-                          </span>
-                        </div>
-
-                        {/* Action details Chevron */}
-                        <div className="pl-1 shrink-0 hidden lg:block">
-                          <ChevronRight className={`w-4 h-4 transition-all duration-150 ${
-                            isSelected 
-                              ? 'text-orange-500 translate-x-0.5' 
-                              : 'text-slate-600 group-hover:text-slate-355 group-hover:translate-x-0.5'
-                          }`} />
-                        </div>
-
+                      <div className="leading-tight text-right min-w-0">
+                        <span className="block text-[8px] text-slate-400 uppercase">Faixa</span>
+                        <span className={`block text-[10px] font-extrabold font-mono whitespace-nowrap ${p.estimatedMargin < 10 ? 'text-red-400' : 'text-[#10B981]'}`}>
+                          {p.priceRange || `R$${(p.pricePromo * 0.8).toFixed(0)}-${(p.pricePromo * 1.3).toFixed(0)}`}
+                        </span>
                       </div>
                     </div>
-
                   </div>
                 );
               })}
