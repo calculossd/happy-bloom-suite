@@ -13,6 +13,27 @@ const inputCls = "w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2
 const btnPrimary = "inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[var(--cat-lime,#A5D84B)] text-black text-[11px] font-bold hover:brightness-110";
 const chip = "inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold";
 
+const isBlockedGoogleUrl = (value?: string) => {
+  if (!value || !value.trim()) return true;
+  try {
+    const host = new URL(value).hostname.replace(/^www\./, '').toLowerCase();
+    return host === 'google.com' || host.endsWith('.google.com') || host === 'googleadservices.com' || host.endsWith('.googleadservices.com');
+  } catch {
+    return true;
+  }
+};
+
+const getSafeOfferUrl = (offer: any, fallbackQuery: string) => {
+  if (!isBlockedGoogleUrl(offer?.buyUrl)) return offer.buyUrl;
+  const productName = String(offer?.productName || fallbackQuery || 'produto');
+  const storeName = String(offer?.storeName || '').toLowerCase();
+  const query = encodeURIComponent(productName);
+  if (storeName.includes('amazon')) return `https://www.amazon.com.br/s?k=${query}`;
+  if (storeName.includes('shopee')) return `https://shopee.com.br/search?keyword=${query}`;
+  if (storeName.includes('voolt')) return `https://voolt3d.com.br/busca?q=${query}`;
+  return `https://lista.mercadolivre.com.br/${query}`;
+};
+
 /* =================== PESQUISA DE PREÇOS =================== */
 export function PriceResearchTab() {
   const [query, setQuery] = useState('');
@@ -111,11 +132,9 @@ export function PriceResearchTab() {
                   <div className="text-lg font-black text-[var(--cat-lime,#A5D84B)]">R$ {Number(offer.price || 0).toFixed(2)}</div>
                   <div className="text-[10px] text-zinc-500 flex items-center gap-1"><Star className="h-3 w-3 text-yellow-400" />{Number(offer.rating || 4.5).toFixed(1)}</div>
                 </div>
-                {offer.buyUrl && (
-                  <a href={offer.buyUrl} target="_blank" rel="noreferrer" className={btnPrimary + " bg-white/10 text-white hover:bg-white/15"}>
+                <a href={getSafeOfferUrl(offer, searched || query)} target="_blank" rel="noreferrer" className={btnPrimary + " bg-white/10 text-white hover:bg-white/15"}>
                     Abrir <ExternalLink className="h-3 w-3" />
-                  </a>
-                )}
+                </a>
               </div>
             </div>
           </div>
