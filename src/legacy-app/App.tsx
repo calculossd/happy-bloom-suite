@@ -1792,7 +1792,7 @@ export default function App() {
       <main className="flex-1 w-full px-3 sm:px-4 md:px-6 py-4 md:py-6 pb-28 space-y-4">
         {/* EXQUISITE NEW HEADER DE CADA PÁGINA (Título grande + Subtítulo curto + Relógio/Data ao vivo mounted) */}
         {(() => {
-          if (currentTab === 0 || currentTab === 2 || currentTab === 3) return null;
+          if (currentTab === 0 || currentTab === 1 || currentTab === 2 || currentTab === 3) return null;
           const headerInfo = getTabHeader(currentTab);
           const formattedDate = currentTime.toLocaleDateString('pt-BR', { 
             weekday: 'short', 
@@ -1961,6 +1961,11 @@ export default function App() {
           <div className="glow-card rounded-2xl p-4 sm:p-6 animate-fade-in transition-all duration-500">
         {currentTab === 1 && (
           <>
+            <div className="flex items-center gap-2 px-1 py-1 mb-2" id="view-page-header-production">
+              <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">
+                Produção
+              </div>
+            </div>
             <ProductionTab
               orders={orders}
               printers={printers}
