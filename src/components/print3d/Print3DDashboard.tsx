@@ -573,26 +573,36 @@ function AiPricing() {
 }
 
 /* ---------- Bar chart: top categories ---------- */
-function CategoriesChart({ data = [] }: { data?: Array<{ name: string; v: number }> }) {
+function TopProductsChart({ data = [] }: { data?: Array<{ name: string; v: number; revenue: number; image?: string }> }) {
   const max = Math.max(1, ...data.map((d) => d.v));
   return (
     <Card>
-      <h3 className="text-[14px] font-semibold text-white">Categorias de Produtos</h3>
-      <p className="text-[11px] text-white/45 mb-4">Participação na receita do mês por categoria</p>
+      <h3 className="text-[14px] font-semibold text-white">Produtos Mais Vendidos</h3>
+      <p className="text-[11px] text-white/45 mb-4">Top produtos por receita no mês</p>
       {data.length === 0 && <div className="text-[12px] text-white/40 py-6 text-center">Sem vendas neste mês.</div>}
-      <div className="space-y-3">
+      <ul className="space-y-3">
         {data.map((d, i) => (
-          <div key={i}>
-            <div className="flex justify-between text-[11.5px] mb-1">
-              <span className="text-white/75">{d.name}</span>
-              <span className="tabular-nums font-semibold" style={{ color: LIME }}>{d.v}%</span>
+          <li key={i} className="flex items-center gap-3">
+            <div className="size-10 rounded-lg overflow-hidden bg-white/[0.04] border border-white/[0.06] shrink-0 grid place-items-center">
+              {d.image ? (
+                <img src={d.image} alt={d.name} className="w-full h-full object-cover" />
+              ) : (
+                <Package2 className="size-4 text-white/40" />
+              )}
             </div>
-            <div className="h-1.5 rounded-full bg-white/[0.04] overflow-hidden">
-              <div className="h-full rounded-full" style={{ width: `${(d.v / max) * 100}%`, background: `linear-gradient(90deg,${LIME_DIM},${LIME})`, boxShadow: `0 0 6px ${LIME}55` }} />
+            <div className="flex-1 min-w-0">
+              <div className="flex justify-between text-[11.5px] mb-1 gap-2">
+                <span className="text-white/80 truncate">{d.name}</span>
+                <span className="tabular-nums font-semibold shrink-0" style={{ color: LIME }}>{d.v}%</span>
+              </div>
+              <div className="h-1.5 rounded-full bg-white/[0.04] overflow-hidden">
+                <div className="h-full rounded-full" style={{ width: `${(d.v / max) * 100}%`, background: `linear-gradient(90deg,${LIME_DIM},${LIME})`, boxShadow: `0 0 6px ${LIME}55` }} />
+              </div>
+              <div className="text-[10px] text-white/45 tabular-nums mt-0.5">{fmtBRL(d.revenue)}</div>
             </div>
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </Card>
   );
 }
@@ -740,21 +750,34 @@ export function Print3DPanel({
   const monthProfit = monthRevenue - monthExpenses;
   const monthMargin = monthRevenue > 0 ? (monthProfit / monthRevenue) * 100 : 0;
 
-  // Categories from product category in month
-  const catMap: Record<string, number> = {};
-  monthOrders.forEach((o: any) => {
-    const k =
-      o.category ||
-      o.productCategory ||
-      o.itemCategory ||
-      o.catalogCategory ||
-      "Outros";
-    catMap[k] = (catMap[k] || 0) + (o.priceCharged || 0);
+  // Top products by revenue in month (with catalog image lookup)
+  let catalog: any[] = [];
+  try {
+    catalog = JSON.parse(
+      (typeof localStorage !== "undefined" &&
+        localStorage.getItem("bambuzau_local_catalog_production")) || "[]",
+    );
+  } catch {
+    catalog = [];
+  }
+  const imageByName: Record<string, string | undefined> = {};
+  catalog.forEach((c: any) => {
+    if (c?.name) imageByName[String(c.name).toUpperCase().trim()] = c.imageUrl;
   });
-  const catTotal = Object.values(catMap).reduce((a, b) => a + b, 0) || 1;
-  const categories = Object.entries(catMap)
-    .map(([name, v]) => ({ name, v: Math.round((v / catTotal) * 100) }))
-    .sort((a, b) => b.v - a.v)
+  const prodMap: Record<string, number> = {};
+  monthOrders.forEach((o: any) => {
+    const k = o.itemName || "Peça Personalizada";
+    prodMap[k] = (prodMap[k] || 0) + (o.priceCharged || 0);
+  });
+  const prodTotal = Object.values(prodMap).reduce((a, b) => a + b, 0) || 1;
+  const topProducts = Object.entries(prodMap)
+    .map(([name, revenue]) => ({
+      name,
+      revenue,
+      v: Math.round((revenue / prodTotal) * 100),
+      image: imageByName[name.toUpperCase().trim()],
+    }))
+    .sort((a, b) => b.revenue - a.revenue)
     .slice(0, 5);
 
   // Revenue per weekday in current month
@@ -825,7 +848,7 @@ export function Print3DPanel({
 
           {/* Row 4: Categorias | Hora | Resumo Financeiro */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-            <CategoriesChart data={categories} />
+            <TopProductsChart data={topProducts} />
             <HourlyChart data={hourly} />
             <FinanceSummary revenue={monthRevenue} expense={monthExpenses} profit={monthProfit} margin={monthMargin} onSelectTab={onSelectTab} />
           </div>
