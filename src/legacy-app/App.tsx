@@ -7,6 +7,7 @@ import { Client, Printer, PrintOrder, FilamentStock, SupplyStock, Expense, Shopp
 import { useAppState } from './state/useAppState';
 import { useAutoQuotations } from './hooks/useAutoQuotations';
 import { useAutoBackup, runBackupNow } from './hooks/useAutoBackup';
+if (typeof window !== 'undefined') (window as any).backupNow = runBackupNow;
 import { DashboardTab } from './components/DashboardTab';
 import { ProductionTab } from './components/ProductionTab';
 import { ClientsTab } from './components/ClientsTab';
