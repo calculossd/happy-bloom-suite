@@ -1226,15 +1226,17 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
         )}
       </AnimatePresence>
 
-      {/* Floated single execution actions */}
-      <button
-        onClick={handleOpenAddDialog}
-        className="fixed bottom-24 right-5 z-40 bg-[#E5B242] text-[#0C0E0D] p-4.5 rounded-full shadow-2xl hover:bg-[#F5C75A] transition flex items-center justify-center cursor-pointer"
-        title="Cadastrar Novo Pedido"
-        id="btn-add-order-fab"
-      >
-        <Plus className="w-6 h-6 stroke-[3px]" />
-      </button>
+      {/* Floated single execution actions — hidden in Produção (full) */}
+      {viewMode !== 'full' && (
+        <button
+          onClick={handleOpenAddDialog}
+          className="fixed bottom-24 right-5 z-40 bg-[#E5B242] text-[#0C0E0D] p-4.5 rounded-full shadow-2xl hover:bg-[#F5C75A] transition flex items-center justify-center cursor-pointer"
+          title="Cadastrar Novo Pedido"
+          id="btn-add-order-fab"
+        >
+          <Plus className="w-6 h-6 stroke-[3px]" />
+        </button>
+      )}
 
       {/* Main Full Add/Edit form Dialog view screen */}
       <AnimatePresence>
@@ -1331,7 +1333,18 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                       {formItemName && !(catalogItems as any[]).some(item => item.name === formItemName) && (
                         <option value={formItemName}>{formItemName} (Do Banco de Dados)</option>
                       )}
+                      <option value="__CUSTOM__">+ Produto não cadastrado (digitar nome)</option>
                     </select>
+                    {(formItemName === '__CUSTOM__' || (formItemName && !(catalogItems as any[]).some(item => item.name === formItemName))) && (
+                      <input
+                        type="text"
+                        placeholder="Digite o nome do produto"
+                        value={formItemName === '__CUSTOM__' ? '' : formItemName}
+                        onChange={(e) => setFormItemName(e.target.value)}
+                        className="mt-2 w-full bg-[#0C0E0D] border border-[#E5B242]/40 rounded-lg py-2 px-3 text-white placeholder-[#8BA58D]/40 focus:border-[#E5B242] focus:outline-none"
+                        required
+                      />
+                    )}
                     {(catalogItems as any[]).length === 0 && (
                       <p className="text-[10px] text-amber-500 font-mono">
                         ⚠️ Nenhum produto no catálogo. Cadastre primeiro na aba "Banco de Dados & Catálogo"!
