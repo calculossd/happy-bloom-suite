@@ -693,56 +693,6 @@ export default function App() {
     };
   }, []);
 
-  const [expenses, setExpenses] = useState<Expense[]>(() => {
-    try {
-      const saved = localStorage.getItem('bambuzau_expenses');
-      return saved ? JSON.parse(saved) : initialExpenses;
-    } catch (e) {
-      console.warn("Failed to parse expenses state, returning initial dataset", e);
-      return initialExpenses;
-    }
-  });
-
-  const [shoppingItems, setShoppingItems] = useState<ShoppingItem[]>(() => {
-    try {
-      const saved = localStorage.getItem('bambuzau_shopping');
-      return saved ? JSON.parse(saved) : initialShoppingItems;
-    } catch (e) {
-      console.warn("Failed to parse shoppingItems state, returning initial dataset", e);
-      return initialShoppingItems;
-    }
-  });
-
-  const [importedExternalIds, setImportedExternalIds] = useState<string[]>(() => {
-    try {
-      const saved = localStorage.getItem('bambuzau_imported_external_ids');
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) {
-      console.warn("Failed to parse importedExternalIds state, returning empty array", e);
-      return [];
-    }
-  });
-
-  const [suppliesStocks, setSuppliesStocks] = useState<SupplyStock[]>(() => {
-    try {
-      const saved = localStorage.getItem('bambuzau_supplies');
-      if (saved) return JSON.parse(saved);
-    } catch (e) {
-      console.warn("Failed to parse suppliesStocks state, returning default empty list", e);
-    }
-    return [];
-  });
-
-  const [lastAuditDate, setLastAuditDate] = useState<number>(() => {
-    try {
-      const saved = localStorage.getItem('bambuzau_last_audit_ts');
-      // Default standard: 4 days ago to trigger the audit warnings by default!
-      return saved ? parseInt(saved, 10) : Date.now() - 4 * 24 * 60 * 60 * 1000;
-    } catch (e) {
-      return Date.now() - 4 * 24 * 60 * 60 * 1000;
-    }
-  });
-
   // Keep a running time state
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isClientMounted, setIsClientMounted] = useState(false);
