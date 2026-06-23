@@ -315,7 +315,7 @@ export const ReferenceDashboardHero: React.FC<any> = (props) => {
                 >
                   <div className="h-20 w-20 shrink-0 rounded-xl overflow-hidden bg-black/40 border border-white/5 grid place-items-center relative">
                     {p.imageUrl ? (
-                      <img src={p.imageUrl} alt={p.name} className="h-full w-full object-cover" />
+                      <img src={p.imageUrl} alt={p.name} className="h-full w-full object-cover" loading="lazy" decoding="async" />
                     ) : (
                       <Camera className="h-6 w-6 text-white/25" />
                     )}
