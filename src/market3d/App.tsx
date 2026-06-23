@@ -701,8 +701,8 @@ export default function App() {
                     }}
                     className={`group relative overflow-hidden flex-shrink-0 lg:w-full flex items-center justify-between text-left rounded-xl cursor-pointer transition-all duration-300 border h-[52px] ${
                       isSelected
-                        ? 'border-orange-500/70 shadow-orange-500/10 shadow-lg text-orange-400 font-bold scale-[1.01]'
-                        : 'text-slate-400 hover:text-slate-100 border-[#121927]/60 shadow-sm'
+                        ? 'border-[#b7ff00]/60 shadow-[0_0_18px_-6px_rgba(183,255,0,0.55)] text-[#b7ff00] font-bold scale-[1.01]'
+                        : 'text-slate-400 hover:text-slate-100 border-white/10 shadow-sm'
                     }`}
                   >
                     {/* Background Image Layer with Zoom Effect */}
@@ -717,7 +717,7 @@ export default function App() {
                     <div 
                       className={`absolute inset-0 transition-opacity duration-300 ${
                         isSelected 
-                          ? 'bg-gradient-to-r from-[#121726]/98 via-[#121726]/85 to-orange-500/10'
+                          ? 'bg-gradient-to-r from-[#0b0f08]/98 via-[#0b0f08]/85 to-[#b7ff00]/10'
                           : 'bg-gradient-to-r from-[#05080E]/98 via-[#05080E]/90 to-slate-900/30 group-hover:from-[#080C14]/96 group-hover:via-[#080C14]/85'
                       }`}
                     />
@@ -727,19 +727,19 @@ export default function App() {
                       <div className="flex items-center gap-2.5 truncate">
                         <span className={`flex items-center justify-center shrink-0 w-7 h-7 rounded-lg transition-all duration-300 ${
                           isSelected 
-                            ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' 
+                            ? 'bg-[#b7ff00]/15 text-[#b7ff00] border border-[#b7ff00]/30' 
                             : 'bg-slate-900/80 text-slate-450 border border-slate-800/60 group-hover:text-slate-200'
                         }`}>
                           {renderIcon(cat.iconName, "w-4 h-4")}
                         </span>
                         <span className={`truncate text-xs tracking-tight transition-colors duration-300 ${
-                          isSelected ? 'font-bold text-orange-400' : 'font-medium'
+                          isSelected ? 'font-bold text-[#b7ff00]' : 'font-medium'
                         }`}>{cat.name}</span>
                       </div>
                       
                       <span className={`text-[10px] font-mono font-bold py-0.5 px-2 rounded-md transition-all duration-300 ${
                         isSelected 
-                          ? 'bg-orange-500/25 text-orange-400 border border-orange-500/30' 
+                          ? 'bg-[#b7ff00]/15 text-[#b7ff00] border border-[#b7ff00]/30' 
                           : 'bg-[#05080D]/90 text-slate-500 border border-[#111A2E]/60 group-hover:text-slate-400'
                       }`}>
                         {count}
