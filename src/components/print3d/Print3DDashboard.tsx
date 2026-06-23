@@ -568,7 +568,49 @@ function FinanceSummary() {
 }
 
 /* ---------- PANEL (embeddable in legacy app) ---------- */
-export function Print3DPanel() {
+const fmtBRL = (v: number) =>
+  `R$ ${(v || 0).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+interface Print3DPanelProps {
+  orders?: any[];
+  printers?: any[];
+  filamentStocks?: any[];
+  expenses?: any[];
+  clients?: any[];
+  shoppingItems?: any[];
+  onSelectTab?: (tab: number) => void;
+}
+
+export function Print3DPanel({
+  orders = [],
+  printers = [],
+  filamentStocks = [],
+  expenses = [],
+  clients = [],
+  onSelectTab,
+}: Print3DPanelProps = {}) {
+  // === Real KPIs (today) ===
+  const today = new Date();
+  const isToday = (d: any) => {
+    if (!d) return false;
+    const dt = new Date(d);
+    return (
+      dt.getFullYear() === today.getFullYear() &&
+      dt.getMonth() === today.getMonth() &&
+      dt.getDate() === today.getDate()
+    );
+  };
+  const ordersToday = orders.filter((o: any) => isToday(o.createdAt || o.deliveryDate));
+  const revenueToday = ordersToday.reduce((s: number, o: any) => s + (o.priceCharged || 0), 0);
+  const piecesToday = ordersToday.reduce((s: number, o: any) => s + (o.quantity || 1), 0);
+  const hoursToday = ordersToday.reduce((s: number, o: any) => s + (o.printingTimeHours || 0), 0);
+  const hoursLabel = `${Math.floor(hoursToday)}h ${Math.round((hoursToday % 1) * 60)}m`;
+  const expensesToday = expenses
+    .filter((e: any) => isToday(e.date || e.createdAt))
+    .reduce((s: number, e: any) => s + (e.amount || e.value || 0), 0);
+  const activePrinters = printers.filter((p: any) => p.status === "PRINTING").length;
+  const printersTotal = printers.length;
+
   return (
     <div className="space-y-5 text-white">
       {/* Page header */}
@@ -579,12 +621,15 @@ export function Print3DPanel() {
             </div>
             <div className="flex items-center gap-2">
               <button className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white/[0.03] border border-white/[0.06] text-[12px] text-white/75 hover:bg-white/[0.06]">
-                <Calendar className="size-3.5" /> Hoje, 23 Nov <ChevronDown className="size-3" />
+                <Calendar className="size-3.5" />{" "}
+                {today.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })}{" "}
+                <ChevronDown className="size-3" />
               </button>
               <button className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white/[0.03] border border-white/[0.06] text-[12px] text-white/75 hover:bg-white/[0.06]">
                 <Filter className="size-3.5" /> Filtros <ChevronDown className="size-3" />
               </button>
               <button
+                onClick={() => onSelectTab?.(3)}
                 className="flex items-center gap-2 px-3.5 py-2 rounded-lg text-[12px] font-bold text-black hover:brightness-110 transition"
                 style={{ background: LIME, boxShadow: `0 6px 18px -6px ${LIME}aa` }}
               >
@@ -595,11 +640,11 @@ export function Print3DPanel() {
 
           {/* KPIs */}
           <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
-            <Kpi label="Pedidos Hoje"        value="47"          delta="+12%" Icon={ShoppingBag} />
-            <Kpi label="Faturamento Hoje"    value="R$ 3.892,50" delta="+18%" Icon={DollarSign} />
-            <Kpi label="Peças Impressas"     value="156"         delta="+9%"  Icon={Package2} />
-            <Kpi label="Horas de Impressão"  value="32h 45m"     delta="+14%" Icon={Clock} />
-            <Kpi label="Gastos Hoje"         value="R$ 842,30"   delta="+6%"  Icon={Wallet} />
+            <Kpi label="Pedidos Hoje"        value={String(ordersToday.length)}              delta={`${activePrinters}/${printersTotal}`} Icon={ShoppingBag} />
+            <Kpi label="Faturamento Hoje"    value={fmtBRL(revenueToday)}                    delta="hoje" Icon={DollarSign} />
+            <Kpi label="Peças Impressas"     value={String(piecesToday)}                     delta="hoje" Icon={Package2} />
+            <Kpi label="Horas de Impressão"  value={hoursLabel}                              delta="hoje" Icon={Clock} />
+            <Kpi label="Gastos Hoje"         value={fmtBRL(expensesToday)}                   delta="hoje" Icon={Wallet} />
           </div>
 
           {/* Row 2: Map | Live printers | Orders | Sensors */}
