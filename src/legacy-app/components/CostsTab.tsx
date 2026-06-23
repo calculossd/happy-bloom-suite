@@ -3426,6 +3426,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
           </div>
 
         </div>
+        </div>
       )}
 
       {/* SUBTAB 4: SHOPPING ITEMS LIST */}
