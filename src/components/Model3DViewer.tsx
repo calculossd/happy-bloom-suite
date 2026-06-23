@@ -22,20 +22,27 @@ export function Model3DViewer({
     const mount = mountRef.current;
     if (!mount) return;
 
-    const w = mount.clientWidth;
-    const h = mount.clientHeight;
+    const w = Math.max(1, mount.clientWidth || 1);
+    const h = Math.max(1, mount.clientHeight || 1);
 
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0a0a12);
+    let renderer: THREE.WebGLRenderer | null = null;
+    let controls: OrbitControls | null = null;
+    let mesh: THREE.Mesh | null = null;
+    let raf = 0;
+    let ro: ResizeObserver | null = null;
 
-    const camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 5000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(w, h);
-    mount.appendChild(renderer.domElement);
+    try {
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x0a0a12);
 
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
+      const camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 5000);
+      renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setSize(w, h);
+      mount.appendChild(renderer.domElement);
+
+      controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
 
     scene.add(new THREE.AmbientLight(0xffffff, 0.5));
     const dir = new THREE.DirectionalLight(0xffffff, 1.0);
@@ -50,8 +57,7 @@ export function Model3DViewer({
     const axes = new THREE.AxesHelper(50);
     scene.add(axes);
 
-    let mesh: THREE.Mesh | null = null;
-    let initialPos = new THREE.Vector3();
+      let initialPos = new THREE.Vector3();
 
     (async () => {
       try {
@@ -94,34 +100,39 @@ export function Model3DViewer({
       }
     })();
 
-    let raf = 0;
-    const animate = () => {
-      raf = requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
-    };
-    animate();
+      const animate = () => {
+        raf = requestAnimationFrame(animate);
+        controls?.update();
+        renderer?.render(scene, camera);
+      };
+      animate();
 
-    const onResize = () => {
-      const nw = mount.clientWidth, nh = mount.clientHeight;
-      camera.aspect = nw / nh;
-      camera.updateProjectionMatrix();
-      renderer.setSize(nw, nh);
-    };
-    const ro = new ResizeObserver(onResize);
-    ro.observe(mount);
+      const onResize = () => {
+        const nw = Math.max(1, mount.clientWidth || 1);
+        const nh = Math.max(1, mount.clientHeight || 1);
+        camera.aspect = nw / nh;
+        camera.updateProjectionMatrix();
+        renderer?.setSize(nw, nh);
+      };
+      ro = new ResizeObserver(onResize);
+      ro.observe(mount);
+    } catch (e: any) {
+      setErr(e?.message ?? "Falha ao iniciar visualizador 3D");
+    }
 
     return () => {
       alive = false;
       cancelAnimationFrame(raf);
-      ro.disconnect();
-      controls.dispose();
-      renderer.dispose();
+      ro?.disconnect();
+      controls?.dispose();
+      renderer?.dispose();
       if (mesh) {
         (mesh.material as THREE.Material).dispose();
         mesh.geometry.dispose();
       }
-      mount.removeChild(renderer.domElement);
+      if (renderer?.domElement.parentNode === mount) {
+        mount.removeChild(renderer.domElement);
+      }
     };
   }, [file, fileType, onBbox]);
 
