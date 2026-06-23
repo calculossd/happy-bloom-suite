@@ -3941,7 +3941,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                       <span className="text-[10px] text-[#8BA58D] font-mono font-normal shrink-0">· min R$ {alertLimit.toFixed(2)}</span>
                     </h4>
                     <a 
-                      href={`https://lista.mercadolivre.com.br/${encodeURIComponent(materialGroup.searchQuery || materialGroup.type || 'filamento impressora 3d')}`}
+                      href={`https://www.google.com/search?tbm=shop&q=${encodeURIComponent(materialGroup.searchQuery || materialGroup.type || 'filamento impressora 3d')}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="px-2 py-0.5 bg-[#95BBA2]/10 hover:bg-[#95BBA2]/25 border border-[#95BBA2]/30 text-[#95BBA2] text-[10px] font-black rounded-lg transition shrink-0"
