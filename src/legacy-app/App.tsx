@@ -1648,8 +1648,8 @@ export default function App() {
         </nav>
       </div>
 
-      {/* GLOBAL HEADER — Premium Glass */}
-      <header className="relative w-full mx-auto px-3 sm:px-6 py-4 sm:py-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition-all duration-500 overflow-hidden border-b border-white/[0.06] bg-gradient-to-b from-white/[0.02] to-transparent backdrop-blur-2xl">
+      {/* GLOBAL HEADER — hidden on Dashboard (Print3D has its own topbar) */}
+      <header className={`${currentTab === 0 ? 'hidden' : ''} relative w-full mx-auto px-3 sm:px-6 py-4 sm:py-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition-all duration-500 overflow-hidden border-b border-white/[0.06] bg-gradient-to-b from-white/[0.02] to-transparent backdrop-blur-2xl`}>
 
         {/* Soft ambient aura */}
         <div className="absolute -top-24 left-1/4 w-[420px] h-40 bg-[var(--brand-primary)]/[0.06] rounded-full blur-[90px] pointer-events-none" />
