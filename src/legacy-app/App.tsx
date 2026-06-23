@@ -1931,6 +1931,8 @@ export default function App() {
           />
         )}
 
+        {currentTab !== 0 && (
+          <div className="glow-card rounded-2xl p-4 sm:p-6 animate-fade-in transition-all duration-500">
         {currentTab === 1 && (
           <>
             <ProductionTab
@@ -2056,6 +2058,8 @@ export default function App() {
             {currentTab === 14 && <SitesTab />}
             {currentTab === 15 && <SitesTab />}
           </Suspense>
+        )}
+          </div>
         )}
       </main>
 
