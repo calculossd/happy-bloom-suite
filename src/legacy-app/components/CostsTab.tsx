@@ -5,6 +5,7 @@ import { staticFilamentOffers, initialMaterialProfiles, initialCatalogItems } fr
 import { getApiUrl, checkIsAndroidWebView } from '../utils/api';
 import { safeStorage } from '../utils/storage';
 import { dedupeOffers, dedupeQuotationGroups } from '../utils/offerDedupe';
+import { FilamentSpool, materialColor } from './FilamentSpool';
 import { 
   Disc, 
   ShoppingCart, 
@@ -3141,17 +3142,12 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
 
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-2.5 min-w-0">
-                        <span
-                          className="h-10 w-10 rounded-xl shrink-0 grid place-items-center font-mono text-[10px] font-black tracking-tight"
-                          style={{
-                            background: swatchBg,
-                            color: cStyle.bg === 'transparent' || ['Branco', 'Amarelo', 'White'].includes(fil.color) ? '#0C0E0D' : '#fff',
-                            border: `1px solid ${cStyle.border}`,
-                            boxShadow: `inset 0 0 0 2px rgba(255,255,255,0.06)`,
-                          }}
-                        >
-                          {fil.type.slice(0, 4)}
-                        </span>
+                        <FilamentSpool
+                          color={swatchBg}
+                          size={44}
+                          label={`${fil.type} ${fil.color}`}
+                          className="shrink-0 drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]"
+                        />
                         <div className="min-w-0">
                           <div className="eyebrow mb-0.5">{fil.type}</div>
                           <div className="text-sm font-bold text-white truncate">{fil.color}</div>
@@ -3969,7 +3965,9 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                           {offer.thumbnail ? (
                             <img src={offer.thumbnail} alt={offer.productName} className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
                           ) : (
-                            <div className="absolute inset-0 grid place-items-center text-[10px] text-zinc-600">sem foto</div>
+                            <div className="absolute inset-0 grid place-items-center bg-gradient-to-br from-[#15181a] to-[#0c0e0d]">
+                              <FilamentSpool color={materialColor(materialGroup.type)} size={56} label={`${materialGroup.type} filamento`} />
+                            </div>
                           )}
                           {isHotOpportunity && (
                             <span className="absolute top-1 right-1 text-[10px] bg-amber-500 text-black rounded-full px-1 leading-none py-0.5 font-black">🔥</span>
