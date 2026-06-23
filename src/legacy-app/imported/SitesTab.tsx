@@ -42,6 +42,7 @@ function SitesPage() {
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
   const [cat, setCat] = useState("Modelos");
+  const [showAdd, setShowAdd] = useState(false);
 
   useEffect(() => {
     try {
@@ -65,7 +66,7 @@ function SitesPage() {
     if (!name.trim() || !url.trim()) return;
     const full = url.startsWith("http") ? url : `https://${url}`;
     setExtra((x) => [...x, { id: crypto.randomUUID(), name: name.trim(), url: full, category: cat }]);
-    setName(""); setUrl("");
+    setName(""); setUrl(""); setShowAdd(false);
   };
 
   const remove = (id: string) => {
@@ -102,17 +103,28 @@ function SitesPage() {
           </div>
         </header>
 
-        {/* Add form */}
-        <form onSubmit={add} className="mb-6 grid grid-cols-1 gap-2 rounded-3xl border border-white/10 bg-white/[0.02] p-4 md:grid-cols-[1fr_1fr_160px_auto] backdrop-blur-xl">
-          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nome do site" className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:border-emerald-400/50 focus:outline-none" />
-          <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://..." className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:border-emerald-400/50 focus:outline-none" />
-          <select value={cat} onChange={(e) => setCat(e.target.value)} className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:border-[#b7ff00]/50 focus:outline-none">
-            {["Modelos","Modelagem","Software","Outros"].map((c) => <option key={c} value={c} className="bg-[#0a0a0f]">{c}</option>)}
-          </select>
-          <button type="submit" className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#b7ff00] px-4 py-2 text-sm font-bold text-black hover:brightness-110 active:scale-95 shadow-[0_0_18px_-6px_rgba(183,255,0,0.7)]">
+        {/* Add button + collapsible form */}
+        <div className="mb-6 flex justify-end">
+          <button
+            type="button"
+            onClick={() => setShowAdd((v) => !v)}
+            className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#b7ff00] px-4 py-2 text-sm font-bold text-black hover:brightness-110 active:scale-95 shadow-[0_0_18px_-6px_rgba(183,255,0,0.7)]"
+          >
             <Plus className="h-4 w-4" /> Adicionar
           </button>
-        </form>
+        </div>
+        {showAdd && (
+          <form onSubmit={add} className="mb-6 grid grid-cols-1 gap-2 rounded-3xl border border-white/10 bg-white/[0.02] p-4 md:grid-cols-[1fr_1fr_160px_auto] backdrop-blur-xl">
+            <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nome do site" className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:border-[#b7ff00]/50 focus:outline-none" />
+            <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://..." className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:border-[#b7ff00]/50 focus:outline-none" />
+            <select value={cat} onChange={(e) => setCat(e.target.value)} className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:border-[#b7ff00]/50 focus:outline-none">
+              {["Modelos","Modelagem","Software","Outros"].map((c) => <option key={c} value={c} className="bg-[#0a0a0f]">{c}</option>)}
+            </select>
+            <button type="submit" className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#b7ff00] px-4 py-2 text-sm font-bold text-black hover:brightness-110 active:scale-95 shadow-[0_0_18px_-6px_rgba(183,255,0,0.7)]">
+              <Plus className="h-4 w-4" /> Salvar
+            </button>
+          </form>
+        )}
 
         {/* Filters */}
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
