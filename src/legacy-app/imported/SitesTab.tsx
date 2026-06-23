@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Plus, Trash2, Search } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 
 type Link = { id: string; name: string; url: string; category: string; desc?: string };
 
@@ -37,8 +37,6 @@ const STORAGE_KEY = "sites-directory-v1";
 function SitesPage() {
   const [extra, setExtra] = useState<Link[]>([]);
   const [hidden, setHidden] = useState<string[]>([]);
-  const [q, setQ] = useState("");
-  const [activeCat, setActiveCat] = useState<string>("Todos");
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
   const [cat, setCat] = useState("Modelos");
@@ -55,11 +53,7 @@ function SitesPage() {
   }, [extra, hidden]);
 
   const all = useMemo(() => [...PRESETS.filter((p) => !hidden.includes(p.id)), ...extra], [extra, hidden]);
-  const categories = useMemo(() => ["Todos", ...Array.from(new Set(all.map((l) => l.category)))], [all]);
-  const filtered = all.filter((l) =>
-    (activeCat === "Todos" || l.category === activeCat) &&
-    (q === "" || l.name.toLowerCase().includes(q.toLowerCase()) || (l.desc || "").toLowerCase().includes(q.toLowerCase()))
-  );
+  const filtered = all;
 
   const add = (e: React.FormEvent) => {
     e.preventDefault();
@@ -105,21 +99,6 @@ function SitesPage() {
             </button>
           </form>
         )}
-
-        {/* Filters */}
-        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="relative max-w-sm flex-1">
-            <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white/40" />
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar…" className="w-full rounded-full border border-white/10 bg-white/5 py-2 pl-9 pr-3 text-sm focus:border-[#b7ff00]/50 focus:outline-none" />
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            {categories.map((c) => (
-              <button key={c} onClick={() => setActiveCat(c)} className={`rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-wider transition-all ${activeCat === c ? "bg-[#b7ff00] text-black shadow-[0_0_18px_-6px_rgba(183,255,0,0.7)]" : "border border-white/10 text-white/60 hover:bg-white/10"}`}>
-                {c}
-              </button>
-            ))}
-          </div>
-        </div>
 
         {/* Sections by category — logo-only tiles */}
         <div className="space-y-8">
