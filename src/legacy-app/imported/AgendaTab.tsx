@@ -626,3 +626,37 @@ function AgendaPage() {
 }
 
 export default AgendaPage;
+
+const BLOCK_TONE: Record<string, string> = {
+  emerald: "text-emerald-200",
+  cyan: "text-cyan-200",
+  amber: "text-amber-200",
+  rose: "text-rose-200",
+  violet: "text-violet-200",
+};
+
+function Block({
+  tone,
+  icon,
+  label,
+  items,
+}: {
+  tone: "emerald" | "cyan" | "amber" | "rose" | "violet";
+  icon: React.ReactNode;
+  label: string;
+  items: string[];
+}) {
+  return (
+    <div>
+      <p className={`mb-1 inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider ${BLOCK_TONE[tone]}`}>
+        {icon} {label} <span className="text-white/30">· {items.length}</span>
+      </p>
+      <ul className="space-y-0.5 text-white/70">
+        {items.slice(0, 3).map((t, i) => (
+          <li key={i} className="truncate">• {t}</li>
+        ))}
+        {items.length > 3 && <li className="text-white/30">+{items.length - 3}…</li>}
+      </ul>
+    </div>
+  );
+}
