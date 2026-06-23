@@ -18,6 +18,7 @@ import { PrintFlowTab } from './components/PrintFlowTab';
 import {
   PriceResearchTab, PreCheckTab, AgendaTab, ToolsTab, ModelsTab
 } from './components/NewTabs';
+import Market3DApp from '@/market3d/App';
 // Heavy tabs are code-split: only the chunk for the active tab is fetched.
 // Saves ~hundreds of KB on initial load (Market3D + 7 imported pages).
 // Recover from stale chunk references after a redeploy: when the browser
@@ -41,7 +42,6 @@ const lazyWithReload = <T extends React.ComponentType<any>>(
     })
   );
 
-const Market3DApp     = lazyWithReload(() => import('@/market3d/App'));
 const CatalogoTab     = lazyWithReload(() => import('./imported/CatalogoTab'));
 const MarketingTab    = lazyWithReload(() => import('./imported/MarketingTab'));
 const KanbanTab       = lazyWithReload(() => import('./imported/KanbanTab'));
