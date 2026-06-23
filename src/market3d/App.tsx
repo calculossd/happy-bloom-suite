@@ -15,6 +15,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { PriceConfidence } from '@/components/PriceConfidence';
 import { searchImage } from './lib/searchImage';
+import { loadProductImages, loadQueryImages, persistProductImage, persistQueryImage } from './lib/imageCache';
 
 export function getProductForSelectedPlatform(
   p: SellerReport, 
@@ -204,7 +205,7 @@ export default function App() {
 
   // Custom photo render prompt
   const [pixabayQuery, setPixabayQuery] = useState<string>('');
-  const [productImages, setProductImages] = useState<Record<string, string>>({});
+  const [productImages, setProductImages] = useState<Record<string, string>>(() => loadProductImages());
   const [brokenImageUrls, setBrokenImageUrls] = useState<Record<string, boolean>>({});
 
   // ===== Kanban de Ideias (persisted) =====
@@ -662,6 +663,7 @@ export default function App() {
       if (!query) return;
       searchImage(query, undefined, controller.signal).then((imageUrl) => {
         if (!cancelled && imageUrl) {
+          persistProductImage(product.id, imageUrl);
           setProductImages((prev) => ({ ...prev, [product.id]: imageUrl }));
         }
       });
@@ -1757,7 +1759,7 @@ function WorkbenchPanel({
   pixabayQuery, setPixabayQuery, setReport, copyToClipboard, copiedTag, copiedSEO,
   customKeys, selectedPlatform
 }: WorkbenchProps) {
-  const imageCacheRef = useRef<Record<string, string>>({});
+  const imageCacheRef = useRef<Record<string, string>>(loadQueryImages());
   const [isSearchingImage, setIsSearchingImage] = useState<boolean>(false);
   const kitCacheRef = useRef<Record<string, any>>({});
   const [kitIdeas, setKitIdeas] = useState<any>(null);
@@ -1847,7 +1849,8 @@ function WorkbenchPanel({
           if (imageUrl) {
             // Save to cache
             imageCacheRef.current[cleanSearchQuery] = imageUrl;
-            
+            persistQueryImage(cleanSearchQuery, imageUrl);
+
             setReport(prev => {
               if (prev && prev.id === report.id) {
                 return { ...prev, imageUrl };
@@ -1884,6 +1887,7 @@ function WorkbenchPanel({
       const imageUrl = await searchImage(cleanSearchQuery, customKeys);
       if (imageUrl) {
         imageCacheRef.current[cleanSearchQuery] = imageUrl;
+        persistQueryImage(cleanSearchQuery, imageUrl);
         setReport(prev => ({ ...prev, imageUrl }));
       }
     } catch (error) {
