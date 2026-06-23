@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { sanitizeQuery } from "./_sanitize";
 
 type Body = { query?: string };
 
@@ -100,7 +101,7 @@ export const Route = createFileRoute("/api/search-image")({
       POST: async ({ request }) => {
         let body: Body = {};
         try { body = await request.json(); } catch {}
-        const query = (body?.query || "").trim();
+        const query = sanitizeQuery(body?.query);
         if (!query) {
           return Response.json({ imageUrl: null, source: null, error: "empty query" }, { status: 400 });
         }
