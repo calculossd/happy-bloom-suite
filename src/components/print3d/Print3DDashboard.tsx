@@ -443,7 +443,7 @@ function CriticalStock({ filaments = [], onSelectTab }: { filaments?: any[]; onS
       <ul className="space-y-2">
         {items.map((c, i) => (
           <li key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/[0.03] transition">
-            <FilamentSpool color={colorHex(c.color)} size={32} className="shrink-0" label={c.name} />
+            <FilamentSpool type={c.type} color={colorHex(c.color)} size={32} className="shrink-0" label={c.name} />
             <div className="flex-1 min-w-0">
               <div className="text-[12px] font-medium text-white truncate flex items-center gap-1.5">
                 <span>{c.type}</span>
@@ -505,7 +505,7 @@ function FilamentQuotes() {
       <ul className="space-y-2.5">
         {rows.map((q, i) => (
           <li key={i} className="flex items-center gap-3 text-[12.5px]">
-            <FilamentSpool color={materialColor(q.name)} size={28} className="shrink-0" label={q.name} />
+            <FilamentSpool type={q.name} color={materialColor(q.name)} size={28} className="shrink-0" label={q.name} />
             <div className="flex-1 font-semibold text-white">{q.name}</div>
             <div className="text-white/70 tabular-nums">
               {q.price ? `R$ ${q.price.toFixed(2)}` : "—"}{" "}
