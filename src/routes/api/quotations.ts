@@ -82,6 +82,32 @@ const TOP_N = 5;
 const topByPrice = <T extends { price: number }>(offers: T[]): T[] =>
   [...offers].sort((a, b) => a.price - b.price).slice(0, TOP_N);
 
+// Two offers are considered the same product when the first three
+// significant words of their names match (case/accents/punct insensitive).
+const productKey = (name: string): string => {
+  return String(name || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s]/g, " ")
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 3)
+    .join(" ");
+};
+
+const dedupeOffers = <T extends { productName: string; price: number }>(offers: T[]): T[] => {
+  const seen = new Set<string>();
+  const out: T[] = [];
+  for (const o of [...offers].sort((a, b) => a.price - b.price)) {
+    const key = productKey(o.productName);
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    out.push(o);
+  }
+  return out;
+};
+
 export const Route = createFileRoute("/api/quotations")({
   server: {
     handlers: {
@@ -97,7 +123,7 @@ export const Route = createFileRoute("/api/quotations")({
           const offers = await fetchShopping(customQ, apiKey);
           const safeType = sanitizeType(url.searchParams.get("type")) || "Produtos";
           return Response.json([
-            { type: safeType, offers: topByPrice(offers), searchQuery: customQ },
+            { type: safeType, offers: topByPrice(dedupeOffers(offers)), searchQuery: customQ },
           ]);
         }
 
@@ -106,7 +132,7 @@ export const Route = createFileRoute("/api/quotations")({
           DEFAULT_MATERIALS.map(async (m) => ({
             type: m.type,
             searchQuery: m.query,
-            offers: topByPrice(await fetchShopping(m.query, apiKey)),
+            offers: topByPrice(dedupeOffers(await fetchShopping(m.query, apiKey))),
           })),
         );
         return Response.json(groups);
