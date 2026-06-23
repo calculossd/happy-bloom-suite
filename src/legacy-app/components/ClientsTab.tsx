@@ -1162,29 +1162,34 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
 
         {/* RIGHT COLUMN: 3D PRINTERS & HARDWARE CHECKLISTS */}
         {viewMode !== 'clients' && (
-        <div className="bg-[#151917] border border-[#232B27] p-6 rounded-2xl space-y-5 animate-in fade-in duration-300" id="printers-catalog" style={{ borderColor: 'var(--brand-border)' }}>
-          <div className="flex items-center justify-between flex-wrap gap-2">
-            <div>
-              <h3 className="text-base font-semibold text-[#F1F4EE] flex items-center gap-2">
-                <Cpu className="h-4 w-4 text-[#E5B242]" />
-                Cadastro de Impressoras Online & Checklist
-              </h3>
-              <p className="text-xs text-[#8BA58D]">Registre suas máquinas 3D e configure telemetria via Klipper/Octoprint</p>
+        <div className="glow-card border border-[#b7ff00]/15 p-6 rounded-2xl space-y-5 animate-in fade-in duration-300" id="printers-catalog">
+          <div className="flex items-center justify-between flex-wrap gap-2 pb-3 border-b border-[#b7ff00]/10">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none flex items-center gap-2">
+                  <Cpu className="h-4 w-4 text-[#b7ff00]" />
+                  Cadastro de Impressoras
+                </div>
+                <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">
+                  {printers.length} Cadastradas
+                </span>
+              </div>
+              <p className="text-xs text-[var(--brand-muted)]">Registre suas máquinas 3D e configure telemetria via Klipper / Octoprint</p>
             </div>
-            
+
             <button
               onClick={() => setShowAddPrinterForm(!showAddPrinterForm)}
-              className="px-3 py-1.5 bg-[#1C2420] hover:bg-[#2F3D35] border border-[#2F3D35] hover:border-[var(--brand-primary)] text-xs text-[#F1F4EE] font-bold rounded-xl transition flex items-center gap-1 cursor-pointer"
+              className="px-3 py-1.5 bg-[#b7ff00]/10 hover:bg-[#b7ff00]/20 text-[#b7ff00] border border-[#b7ff00]/25 font-bold text-xs rounded-xl transition flex items-center gap-1 cursor-pointer"
             >
-              <Plus className="h-3.5 w-3.5 text-[var(--brand-primary)]" />
+              <Plus className="h-3.5 w-3.5 text-[#b7ff00]" />
               {showAddPrinterForm ? 'Cancelar' : 'Cadastrar Impressora'}
             </button>
           </div>
 
           {/* Form to Register New Physical Printer */}
           {showAddPrinterForm && (
-            <form onSubmit={handleCreatePrinter} className="p-4 bg-[#0C0E0D] border border-amber-500/20 rounded-xl space-y-3.5 animate-in slide-in-from-top-2 duration-200">
-              <h4 className="text-xs font-bold text-amber-500 uppercase tracking-wider font-mono">Nova Impressora 3D</h4>
+            <form onSubmit={handleCreatePrinter} className="p-4 bg-[#0C0E0D] border border-[#b7ff00]/25 rounded-xl space-y-3.5 animate-in slide-in-from-top-2 duration-200 shadow-[0_0_24px_-12px_rgba(183,255,0,0.35)]">
+              <h4 className="text-xs font-bold text-[#b7ff00] uppercase tracking-wider font-mono">Nova Impressora 3D</h4>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="flex flex-col gap-1">
