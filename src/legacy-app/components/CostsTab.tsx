@@ -3934,7 +3934,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                 <div key={gIdx} className="bg-[#151917] border border-[#232B27] rounded-xl p-2.5 space-y-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
                   <div className="flex items-center justify-between gap-2 border-b border-[#232B27]/40 pb-1.5">
                     <h4 className="text-xs font-extrabold text-white flex items-center gap-1.5 font-sans min-w-0">
-                      <Tag className="h-3.5 w-3.5 text-[#E5B242] shrink-0" />
+                      <FilamentSpool color={materialColor(materialGroup.type)} size={28} label={materialGroup.type} className="shrink-0" />
                       <span className="truncate">{materialGroup.type}</span>
                       <span className="text-[10px] text-[#8BA58D] font-mono font-normal shrink-0">· min R$ {alertLimit.toFixed(2)}</span>
                     </h4>
