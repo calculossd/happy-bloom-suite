@@ -380,7 +380,7 @@ function AgendaPage() {
           <div className="rounded-3xl border border-white/10 bg-white/[0.02] p-4 backdrop-blur-xl">
             <div className="mb-3 flex items-center justify-between">
               <h3
-                className="text-lg font-semibold capitalize"
+                className="text-sm font-semibold capitalize"
                 style={{ fontFamily: "'Sora', sans-serif" }}
               >
                 {monthLabel || "\u00a0"}
@@ -392,7 +392,7 @@ function AgendaPage() {
                       c ? new Date(c.getFullYear(), c.getMonth() - 1, 1) : c,
                     )
                   }
-                  className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 hover:bg-white/10"
+                  className="grid h-7 w-7 place-items-center rounded-lg border border-white/10 hover:bg-white/10"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </button>
@@ -402,7 +402,7 @@ function AgendaPage() {
                     setCursor(new Date(d.getFullYear(), d.getMonth(), 1));
                     setSelected(fmt(d));
                   }}
-                  className="rounded-lg border border-white/10 px-3 text-xs hover:bg-white/10"
+                  className="rounded-lg border border-white/10 px-2 text-[11px] hover:bg-white/10"
                 >
                   Hoje
                 </button>
@@ -412,23 +412,23 @@ function AgendaPage() {
                       c ? new Date(c.getFullYear(), c.getMonth() + 1, 1) : c,
                     )
                   }
-                  className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 hover:bg-white/10"
+                  className="grid h-7 w-7 place-items-center rounded-lg border border-white/10 hover:bg-white/10"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </button>
               </div>
             </div>
-            <div className="mb-2 grid grid-cols-7 gap-1 text-center text-[10px] uppercase tracking-widest text-white/40">
+            <div className="mb-1 grid grid-cols-7 gap-0.5 text-center text-[9px] uppercase tracking-wider text-white/40">
               {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((d) => (
-                <div key={d}>{d}</div>
+                <div key={d}>{d[0]}</div>
               ))}
             </div>
-            <div className="grid grid-cols-7 gap-1">
+            <div className="grid grid-cols-7 gap-0.5">
               {!mounted
                 ? Array.from({ length: 42 }).map((_, i) => (
                     <div
                       key={i}
-                      className="aspect-square rounded-xl border border-white/5"
+                      className="aspect-square rounded-md border border-white/5"
                     />
                   ))
                 : cells.map((cell) => {
@@ -438,7 +438,7 @@ function AgendaPage() {
                       <button
                         key={cell.date + cell.day}
                         onClick={() => setSelected(cell.date)}
-                        className={`aspect-square grid place-items-center rounded-xl border text-xs transition-all
+                        className={`aspect-square grid place-items-center rounded-md border text-[11px] transition-all
                           ${isSel ? "border-cyan-400/60 bg-cyan-500/10" : "border-white/5 hover:border-white/20"}
                           ${cell.inMonth ? "text-white" : "text-white/20"}`}
                       >
@@ -452,7 +452,7 @@ function AgendaPage() {
           </div>
 
           {/* Day events */}
-          <div className="rounded-3xl border border-white/10 bg-white/[0.02] p-6 backdrop-blur-xl">
+          <div className="lg:col-span-2 rounded-3xl border border-white/10 bg-white/[0.02] p-6 backdrop-blur-xl">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-white/70">
               {mounted && selected
                 ? new Date(selected + "T00:00").toLocaleDateString("pt-BR", {
