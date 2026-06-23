@@ -195,8 +195,8 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm" id="sold-tab-header">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <h2 className="text-xl font-extrabold text-[var(--brand-text)] uppercase tracking-tight">Histórico de Vendas</h2>
-            <span className="px-2.5 py-0.5 bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] text-xs font-black rounded-full border border-[var(--brand-primary)]/20 shadow-sm">
+          <h2 className="text-xl font-extrabold uppercase tracking-tight text-gradient-lime">Histórico de Vendas</h2>
+            <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-black rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">
               {soldOrders.length} Concluídas
             </span>
           </div>
@@ -251,7 +251,7 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
               R$ {averageTicket.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
           </div>
-          <div className="p-2 sm:p-2.5 bg-[var(--brand-primary)]/10 rounded-xl text-[var(--brand-primary)] shrink-0">
+          <div className="p-2 sm:p-2.5 bg-[#b7ff00]/10 rounded-xl text-[#b7ff00] shrink-0">
             <TrendingUp className="h-4.5 w-4.5" />
           </div>
         </div>
