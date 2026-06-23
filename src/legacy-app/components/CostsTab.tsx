@@ -1736,8 +1736,8 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
         </div>
       </div>
 
-      {/* CAPSULE TAB CHANGER MENU */}
-      <div className="grid grid-cols-3 sm:grid-cols-6 items-center gap-2 p-2 bg-[#0a0d0c] border border-[#26332c] rounded-2xl shadow-xl" id="subtab-capsules">
+      {/* CAPSULE TAB CHANGER MENU — hidden: navigation moved to global sidebar */}
+      <div className="hidden grid-cols-3 sm:grid-cols-6 items-center gap-2 p-2 bg-[#0a0d0c] border border-[#26332c] rounded-2xl shadow-xl" id="subtab-capsules">
         <button
           onClick={() => setActiveSubTab('CALC')}
           className={`flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl text-xs font-black transition-all duration-300 whitespace-nowrap cursor-pointer ${
