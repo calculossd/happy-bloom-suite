@@ -1766,7 +1766,7 @@ export default function App() {
       <main className="flex-1 w-full px-3 sm:px-4 md:px-6 py-4 md:py-6 pb-28 space-y-4">
         {/* EXQUISITE NEW HEADER DE CADA PÁGINA (Título grande + Subtítulo curto + Relógio/Data ao vivo mounted) */}
         {(() => {
-          if (currentTab === 0) return null;
+          if (currentTab === 0 || currentTab === 3) return null;
           const headerInfo = getTabHeader(currentTab);
           const formattedDate = currentTime.toLocaleDateString('pt-BR', { 
             weekday: 'short', 

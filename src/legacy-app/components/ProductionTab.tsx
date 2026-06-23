@@ -592,29 +592,6 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
       )}
 
       {viewMode !== 'monitor' && (<>
-      {/* Compact status row grouping Total Pedidos & Faturamento for space saving */}
-      <div className="grid grid-cols-2 gap-4 bg-[#151917] p-3.5 rounded-xl border border-[#232B27] select-none">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-[#95BBA2]/10 rounded-lg text-[#95BBA2]">
-            <ClipboardList className="w-4 h-4" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-[9.5px] text-[#8BA58D] uppercase font-bold tracking-wider leading-none">Total Pedidos</p>
-            <p className="text-base font-bold text-[#F1F4EE] mt-0.5 truncate">{totalOrdersCount} <span className="text-[9.5px] text-[#8BA58D] font-normal font-sans">({printingCount} ativo)</span></p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3 border-l border-[#232B27] pl-3">
-          <div className="p-2 bg-[#5E8B61]/10 rounded-lg text-[#5E8B61]">
-            <Check className="w-4 h-4" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-[9.5px] text-[#8BA58D] uppercase font-bold tracking-wider leading-none">Faturamento</p>
-            <p className="text-base font-bold text-[#F1F4EE] mt-0.5 truncate">R$ {totalRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 0 })}</p>
-          </div>
-        </div>
-      </div>
-
       {/* Alerts for critical stocks */}
       {(lowFilaments.length > 0 || lowCatalogItems.length > 0) && (
         <div className="bg-[#2E1719] rounded-xl border border-[#EF5350]/30 p-4 space-y-3 shadow-xl transition-all">
@@ -721,6 +698,29 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
               </div>
             );
           })}
+        </div>
+      </div>
+
+      {/* Compact status row — moved BELOW the global execution bar */}
+      <div className="grid grid-cols-2 gap-4 glow-card p-3.5 rounded-xl select-none">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-[#b7ff00]/10 rounded-lg text-[#b7ff00]">
+            <ClipboardList className="w-4 h-4" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[9.5px] text-[#8BA58D] uppercase font-bold tracking-wider leading-none">Total Pedidos</p>
+            <p className="text-base font-bold text-[#F1F4EE] mt-0.5 truncate">{totalOrdersCount} <span className="text-[9.5px] text-[#8BA58D] font-normal font-sans">({printingCount} ativo)</span></p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3 border-l border-white/[0.06] pl-3">
+          <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-400">
+            <Check className="w-4 h-4" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[9.5px] text-[#8BA58D] uppercase font-bold tracking-wider leading-none">Faturamento</p>
+            <p className="text-base font-bold text-[#F1F4EE] mt-0.5 truncate">R$ {totalRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 0 })}</p>
+          </div>
         </div>
       </div>
 
