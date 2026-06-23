@@ -1309,23 +1309,64 @@ export default function App() {
       
       {/* GLOBAL SAFE TOAST NOTIFICATION CARD */}
       {globalToast && (
-        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[9999] w-[90%] max-w-sm p-4 bg-zinc-950 border-2 border-amber-500 rounded-2xl shadow-2xl shadow-black flex items-start gap-3 animate-bounce">
-          <div className="p-1 px-[7px] bg-amber-500/15 text-amber-400 rounded-lg shrink-0 mt-0.5">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" className="shrink-0">
-              <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"/>
-            </svg>
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed top-6 left-1/2 z-[9999] w-[92%] max-w-md -translate-x-1/2 group"
+          style={{ animation: "ttToastIn 480ms cubic-bezier(0.22, 1, 0.36, 1) both" }}
+        >
+          <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-zinc-950/70 px-4 py-3.5 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.02)_inset] backdrop-blur-2xl backdrop-saturate-150">
+            {/* subtle gradient sheen */}
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-amber-400/[0.06] via-transparent to-transparent" />
+            {/* accent rail */}
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-[2px] bg-gradient-to-b from-amber-300/0 via-amber-300/70 to-amber-300/0" />
+
+            <div className="relative flex items-start gap-3">
+              <div className="shrink-0 grid place-items-center h-8 w-8 rounded-xl bg-amber-400/10 ring-1 ring-inset ring-amber-300/20 text-amber-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
+                </svg>
+              </div>
+
+              <div className="flex-1 min-w-0">
+                <h4 className="text-[10px] font-semibold uppercase tracking-[0.16em] text-amber-300/90">
+                  Notificação
+                </h4>
+                <p className="mt-1 text-[13px] leading-relaxed text-zinc-100/95 font-medium tracking-[-0.005em]">
+                  {globalToast}
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setGlobalToast(null)}
+                aria-label="Fechar notificação"
+                className="shrink-0 -mr-1 -mt-1 grid h-7 w-7 place-items-center rounded-lg text-zinc-500 hover:text-white hover:bg-white/5 transition-all duration-200 active:scale-95"
+              >
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round">
+                  <path d="M2 2l8 8M10 2l-8 8" />
+                </svg>
+              </button>
+            </div>
+
+            {/* progress bar */}
+            <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-[2px] bg-white/5 overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-amber-300/80 via-amber-200 to-amber-400/40"
+                style={{ animation: "ttToastProgress 5s linear forwards" }}
+              />
+            </div>
           </div>
-          <div className="flex-1 text-[11px] font-sans">
-            <h4 className="font-extrabold text-amber-400 uppercase tracking-wider text-[10px] font-mono mb-0.5">Notificação Interna</h4>
-            <p className="text-zinc-200 leading-relaxed font-semibold">{globalToast}</p>
-          </div>
-          <button 
-            type="button" 
-            onClick={() => setGlobalToast(null)} 
-            className="text-zinc-500 hover:text-white transition-colors cursor-pointer text-xs font-bold leading-none p-1 shrink-0"
-          >
-            ✕
-          </button>
+          <style>{`
+            @keyframes ttToastIn {
+              0%   { opacity: 0; transform: translate(-50%, -16px) scale(0.96); filter: blur(6px); }
+              100% { opacity: 1; transform: translate(-50%, 0)     scale(1);    filter: blur(0); }
+            }
+            @keyframes ttToastProgress {
+              from { transform: translateX(-100%); }
+              to   { transform: translateX(0); }
+            }
+          `}</style>
         </div>
       )}
       
