@@ -1975,15 +1975,19 @@ export default function App() {
           />
         )}
 
-        {currentTab === 7  && <Market3DApp />}
-        {currentTab === 8  && <CatalogoTab />}
-        {currentTab === 9  && <MarketingTab />}
-        {currentTab === 10 && <KanbanTab />}
-        {currentTab === 11 && <MarketTab />}
-        {currentTab === 12 && <PreCheckTabNew />}
-        {currentTab === 13 && <AgendaTabNew />}
-        {currentTab === 14 && <SitesTab />}
-        {currentTab === 15 && <SitesTab />}
+        {currentTab >= 7 && (
+          <Suspense fallback={<TabFallback />}>
+            {currentTab === 7  && <Market3DApp />}
+            {currentTab === 8  && <CatalogoTab />}
+            {currentTab === 9  && <MarketingTab />}
+            {currentTab === 10 && <KanbanTab />}
+            {currentTab === 11 && <MarketTab />}
+            {currentTab === 12 && <PreCheckTabNew />}
+            {currentTab === 13 && <AgendaTabNew />}
+            {currentTab === 14 && <SitesTab />}
+            {currentTab === 15 && <SitesTab />}
+          </Suspense>
+        )}
       </main>
 
 
