@@ -159,6 +159,18 @@ export const CostsTab: React.FC<CostsTabProps> = ({
     window.scrollTo({ top: 0, behavior: 'auto' });
   }, [activeSubTab]);
 
+  // Allow external triggers (sidebar/mobile nav) to switch the internal sub-tab
+  React.useEffect(() => {
+    const handler = (e: any) => {
+      const sub = e?.detail;
+      if (sub === 'CALC' || sub === 'CATALOG' || sub === 'STOCK' || sub === 'SHOP' || sub === 'QUOTE' || sub === 'AI') {
+        setActiveSubTab(sub);
+      }
+    };
+    window.addEventListener('costs_set_subtab', handler as EventListener);
+    return () => window.removeEventListener('costs_set_subtab', handler as EventListener);
+  }, []);
+
   // Success/Info feedback messages
   const [alertMessage, setAlertMessage] = useState<{ text: string; type: 'success' | 'error' | 'info' | null }>({ text: '', type: null });
   const [checklistTrigger, setChecklistTrigger] = useState(0);
