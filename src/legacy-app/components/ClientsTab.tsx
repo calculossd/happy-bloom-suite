@@ -1755,9 +1755,9 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
 
         {/* CADASTRAR MANUAL LEAD EXPANDABLE FORM */}
         {showNewLeadForm && (
-          <form onSubmit={handleCreateManualLead} className="p-5 bg-[#0C0E0D] border border-cyan-500/25 rounded-2xl space-y-4 animate-in slide-in-from-top-4 duration-200">
+          <form onSubmit={handleCreateManualLead} className="p-5 bg-[#0C0E0D] border border-[#b7ff00]/25 rounded-2xl space-y-4 animate-in slide-in-from-top-4 duration-200">
             <div className="flex items-center justify-between border-b border-[#232B27] pb-2">
-              <h4 className="text-xs font-black text-cyan-400 uppercase tracking-widest font-mono flex items-center gap-1.5">
+              <h4 className="text-xs font-black text-[#b7ff00] uppercase tracking-widest font-mono flex items-center gap-1.5">
                 <Plus className="h-4 w-4" />
                 <span>Adicionar Prospecção Manual de Estabelecimento</span>
               </h4>
@@ -1779,7 +1779,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                   placeholder="Ex: Brinquedos & Papelaria Central"
                   value={newLeadName}
                   onChange={(e) => setNewLeadName(e.target.value)}
-                  className="w-full bg-[#151917] border border-[#232B27] rounded-xl px-3 py-2 text-[#F1F4EE] placeholder-zinc-650 text-xs focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-[#151917] border border-[#232B27] rounded-xl px-3 py-2 text-[#F1F4EE] placeholder-zinc-650 text-xs focus:outline-none focus:border-[#b7ff00]"
                 />
               </div>
 
@@ -1791,7 +1791,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                   placeholder="Ex: (11) 99876-5432"
                   value={newLeadPhone}
                   onChange={(e) => setNewLeadPhone(e.target.value)}
-                  className="w-full bg-[#151917] border border-[#232B27] rounded-xl px-3 py-2 text-[#F1F4EE] placeholder-zinc-650 text-xs focus:outline-none focus:border-cyan-500 font-mono"
+                  className="w-full bg-[#151917] border border-[#232B27] rounded-xl px-3 py-2 text-[#F1F4EE] placeholder-zinc-650 text-xs focus:outline-none focus:border-[#b7ff00] font-mono"
                 />
               </div>
 
@@ -1800,7 +1800,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                 <select
                   value={newLeadCategory}
                   onChange={(e) => setNewLeadCategory(e.target.value)}
-                  className="w-full bg-[#151917] border border-[#232B27] rounded-xl px-3 py-2 text-[#F1F4EE] text-xs focus:outline-none focus:border-cyan-400 hover:border-zinc-600 transition"
+                  className="w-full bg-[#151917] border border-[#232B27] rounded-xl px-3 py-2 text-[#F1F4EE] text-xs focus:outline-none focus:border-[#b7ff00] hover:border-zinc-600 transition"
                 >
                   {LEAD_CATEGORIES.map(cat => (
                     <option key={cat} value={cat}>{cat}</option>
@@ -1815,7 +1815,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                   placeholder="Rua, Número, Bairro, Cidade - SP"
                   value={newLeadAddress}
                   onChange={(e) => setNewLeadAddress(e.target.value)}
-                  className="w-full bg-[#151917] border border-[#232B27] rounded-xl px-3 py-2 text-[#F1F4EE] placeholder-zinc-650 text-xs focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-[#151917] border border-[#232B27] rounded-xl px-3 py-2 text-[#F1F4EE] placeholder-zinc-650 text-xs focus:outline-none focus:border-[#b7ff00]"
                 />
               </div>
 
@@ -1826,7 +1826,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                   placeholder="Ex: Entrar em contato após as 14h, falar com gerente."
                   value={newLeadNote}
                   onChange={(e) => setNewLeadNote(e.target.value)}
-                  className="w-full bg-[#151917] border border-[#232B27] rounded-xl px-3 py-2 text-[#F1F4EE] placeholder-zinc-650 text-xs focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-[#151917] border border-[#232B27] rounded-xl px-3 py-2 text-[#F1F4EE] placeholder-zinc-650 text-xs focus:outline-none focus:border-[#b7ff00]"
                 />
               </div>
             </div>
@@ -1838,13 +1838,13 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                 placeholder="Deixe em branco para usar o gerador inteligente ou descreva sua sugestão de peças (ex: Dragão articulado, Vasos decorados bicolores)."
                 value={newLeadPitch}
                 onChange={(e) => setNewLeadPitch(e.target.value)}
-                className="w-full bg-[#151917] border border-[#232B27] rounded-xl p-2.5 text-[#F1F4EE] placeholder-zinc-660 text-xs focus:outline-none focus:border-cyan-500 resize-none"
+                className="w-full bg-[#151917] border border-[#232B27] rounded-xl p-2.5 text-[#F1F4EE] placeholder-zinc-660 text-xs focus:outline-none focus:border-[#b7ff00] resize-none"
               />
             </div>
 
             <button
               type="submit"
-              className="px-4 py-2 bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-700 hover:to-cyan-600 text-black font-black text-xs rounded-xl transition shadow-md cursor-pointer"
+              className="px-4 py-2 bg-gradient-to-r from-[#a3e000] to-[#b7ff00] hover:from-[#8fcc00] hover:to-[#a3e000] text-black font-black text-xs rounded-xl transition shadow-md cursor-pointer"
             >
               Adicionar Lead ao CRM de Prospecção 📡
             </button>
@@ -1861,13 +1861,13 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                 📍 Região / Bairro de Busca
               </label>
               <div className="relative">
-                <MapPin className="absolute left-3 top-2.5 h-4 w-4 text-cyan-400" />
+                <MapPin className="absolute left-3 top-2.5 h-4 w-4 text-[#b7ff00]" />
                 <input 
                   type="text"
                   placeholder="Cidade, Bairro (ex: Copacabana, RJ)"
                   value={prospectRegion}
                   onChange={(e) => setProspectRegion(e.target.value)}
-                  className="w-full bg-[#151917] border border-[#232B27] rounded-xl pl-9 pr-3 py-2 text-xs text-[#F1F4EE] focus:outline-none focus:border-cyan-400 font-medium"
+                  className="w-full bg-[#151917] border border-[#232B27] rounded-xl pl-9 pr-3 py-2 text-xs text-[#F1F4EE] focus:outline-none focus:border-[#b7ff00] font-medium"
                 />
               </div>
             </div>
@@ -1893,7 +1893,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                 type="button"
                 disabled={searchingLeads}
                 onClick={handleSearchLeads}
-                className="w-full py-2 bg-gradient-to-r from-cyan-500 to-emerald-500 hover:opacity-90 disabled:opacity-50 text-black font-black text-xs rounded-xl transition duration-200 active:scale-98 cursor-pointer flex items-center justify-center gap-2 h-[37px] shadow-lg shadow-cyan-500/10"
+                className="w-full py-2 bg-gradient-to-r from-[#b7ff00] to-emerald-500 hover:opacity-90 disabled:opacity-50 text-black font-black text-xs rounded-xl transition duration-200 active:scale-98 cursor-pointer flex items-center justify-center gap-2 h-[37px] shadow-lg shadow-[#b7ff00]/10"
               >
                 {searchingLeads ? (
                   <>
@@ -1917,15 +1917,15 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
               
               {/* Radar Grid Graphic Cover */}
               <div className="absolute inset-0 opacity-[0.08]" style={{
-                backgroundImage: 'radial-gradient(circle, #22d3ee 1px, transparent 1px)',
+                backgroundImage: 'radial-gradient(circle, #b7ff00 1px, transparent 1px)',
                 backgroundSize: '16px 16px'
               }} />
 
               {/* Ping Radar Animation */}
               <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                <div className="w-[180px] h-[180px] border border-cyan-500/10 rounded-full animate-ping absolute duration-1000" />
-                <div className="w-[300px] h-[300px] border border-cyan-500/5 rounded-full animate-ping absolute duration-1500" />
-                <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full shadow-[0_0_8px_#22d3ee] absolute" />
+                <div className="w-[180px] h-[180px] border border-[#b7ff00]/10 rounded-full animate-ping absolute duration-1000" />
+                <div className="w-[300px] h-[300px] border border-[#b7ff00]/5 rounded-full animate-ping absolute duration-1500" />
+                <div className="w-1.5 h-1.5 bg-[#b7ff00] rounded-full shadow-[0_0_8px_#b7ff00] absolute" />
               </div>
 
               {/* Pin representations dynamically plotted based on available leads */}
@@ -1946,15 +1946,15 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                       style={{ top: pos.t, left: pos.l }}
                     >
                       <div className="relative">
-                        <span className={`absolute -top-1 -left-1 w-3 h-3 rounded-full animate-ping ${l.status === 'WON' ? 'bg-emerald-400/30' : 'bg-cyan-500/30'}`} />
+                        <span className={`absolute -top-1 -left-1 w-3 h-3 rounded-full animate-ping ${l.status === 'WON' ? 'bg-emerald-400/30' : 'bg-[#b7ff00]/30'}`} />
                         <MapPin className={`h-5 w-5 ${
                           l.status === 'WON' ? 'text-emerald-400' :
                           l.status === 'INTERESTED' ? 'text-amber-400' :
-                          'text-cyan-400'
+                          'text-[#b7ff00]'
                         } filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]`} />
                         
                         <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-[#0C0E0D]/95 border border-[#232B27] p-1.5 rounded-lg text-[8px] text-white font-mono whitespace-nowrap opacity-100 transition shadow-md z-10 scale-90">
-                          <span className="font-extrabold text-cyan-400">({l.category}) </span>
+                          <span className="font-extrabold text-[#b7ff00]">({l.category}) </span>
                           <span>{l.name.slice(0, 15)}...</span>
                         </div>
                       </div>
@@ -1966,13 +1966,13 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
               {/* Maps Header HUD */}
               <div className="flex items-center justify-between border-b border-[#232B27] pb-2 z-10">
                 <div className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+                  <span className="w-2 h-2 rounded-full bg-[#b7ff00] animate-pulse" />
                   <span className="text-[10px] font-mono uppercase font-black text-white tracking-widest">
                     Google Places API - Radar Geográfico
                   </span>
                 </div>
                 <div className="text-[9px] font-mono text-zinc-400 bg-black/40 px-2 py-0.5 rounded-md border border-[#232B27]">
-                  GPS Act: <span className="text-cyan-400 font-bold">{prospectRegion}</span>
+                  GPS Act: <span className="text-[#b7ff00] font-bold">{prospectRegion}</span>
                 </div>
               </div>
 
@@ -1987,7 +1987,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                   </div>
                 </div>
 
-                <div className="text-right text-[9px] font-mono text-zinc-400 bg-cyan-600/10 border border-cyan-500/20 px-2.5 py-1 rounded-lg">
+                <div className="text-right text-[9px] font-mono text-zinc-400 bg-[#a3e000]/10 border border-[#b7ff00]/20 px-2.5 py-1 rounded-lg">
                   <span className="block text-white font-extrabold text-[10px]">{prospectLeads.length} Lojas</span>
                   <span>no perímetro</span>
                 </div>
@@ -2073,17 +2073,17 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
               const activeWaUrl = `https://api.whatsapp.com/send?phone=${activeCleanPhone}&text=${encodeURIComponent(activeTextTailored)}`;
 
               return (
-                <div className="lg:col-span-5 bg-gradient-to-b from-[#101412] to-[#161D1A] border-2 border-cyan-500/20 rounded-2xl p-4 flex flex-col justify-between shadow-[0_0_20px_rgba(6,182,212,0.05)] relative overflow-hidden group">
+                <div className="lg:col-span-5 bg-gradient-to-b from-[#101412] to-[#161D1A] border-2 border-[#b7ff00]/20 rounded-2xl p-4 flex flex-col justify-between shadow-[0_0_20px_rgba(183,255,0,0.05)] relative overflow-hidden group">
                   
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 rounded-full filter blur-xl pointer-events-none group-hover:bg-cyan-400/10 transition duration-300" />
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-[#b7ff00]/5 rounded-full filter blur-xl pointer-events-none group-hover:bg-[#b7ff00]/10 transition duration-300" />
 
                   <div className="space-y-3.5">
                     
                     {/* Header */}
                     <div className="flex items-center justify-between border-b border-[#232B27] pb-2.5">
                       <div className="flex items-center gap-2">
-                        <div className="p-1.5 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
-                          <Cpu className="h-4 w-4 text-cyan-400 animate-pulse" />
+                        <div className="p-1.5 bg-[#b7ff00]/10 rounded-lg border border-[#b7ff00]/20">
+                          <Cpu className="h-4 w-4 text-[#b7ff00] animate-pulse" />
                         </div>
                         <div>
                           <strong className="text-xs font-black text-[#F1F4EE] uppercase tracking-wider block font-mono">
@@ -2100,7 +2100,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                     {activePitchLead ? (
                       <div className="p-3 bg-black/40 border border-[#232B27] rounded-xl space-y-1.5 relative">
                         <div className="flex items-center justify-between">
-                          <span className="px-1.5 py-0.5 bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 rounded text-[8px] font-mono font-bold uppercase">
+                          <span className="px-1.5 py-0.5 bg-[#b7ff00]/15 text-[#b7ff00] border border-[#b7ff00]/30 rounded text-[8px] font-mono font-bold uppercase">
                             {activePitchLead.category}
                           </span>
                           <span className="text-[8.5px] font-mono text-zinc-500">
@@ -2141,7 +2141,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                               }}
                               className={`py-1 rounded-md text-[9px] font-mono font-bold transition text-center cursor-pointer border ${
                                 aiTone === t.key 
-                                  ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30 shadow-sm shadow-cyan-400/10' 
+                                  ? 'bg-[#b7ff00]/10 text-[#b7ff00] border-[#b7ff00]/30 shadow-sm shadow-[#b7ff00]/10' 
                                   : 'bg-black/30 text-zinc-400 border-[#232B27] hover:bg-[#1C221F] hover:text-white'
                               }`}
                             >
@@ -2164,7 +2164,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                             readOnly
                             value={activeTextTailored}
                             rows={8}
-                            className="w-full text-[10.5px] p-2.5 bg-[#0A0D0B] border border-[#232B27] rounded-xl font-mono text-zinc-200 outline-none resize-none leading-relaxed focus:border-cyan-500/30 scrollbar-thin overflow-y-auto"
+                            className="w-full text-[10.5px] p-2.5 bg-[#0A0D0B] border border-[#232B27] rounded-xl font-mono text-zinc-200 outline-none resize-none leading-relaxed focus:border-[#b7ff00]/30 scrollbar-thin overflow-y-auto"
                           />
                         </div>
                       </div>
@@ -2195,7 +2195,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                           type="button"
                           onClick={handleRefineWithAiTop}
                           disabled={isGeneratingAi}
-                          className="px-3 py-1 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 text-[9px] font-mono font-black uppercase rounded-lg transition shrink-0 cursor-pointer disabled:opacity-40"
+                          className="px-3 py-1 bg-[#b7ff00]/10 hover:bg-[#b7ff00]/20 border border-[#b7ff00]/30 text-[#b7ff00] text-[9px] font-mono font-black uppercase rounded-lg transition shrink-0 cursor-pointer disabled:opacity-40"
                         >
                           {isGeneratingAi ? 'Pensando...' : 'Melhorar 🪄'}
                         </button>
@@ -2247,7 +2247,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
           {/* Header & Filter Row */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-[#232B27]/60 pb-3">
             <div className="flex items-center gap-2">
-              <span className="p-1 px-2.5 bg-cyan-500/15 text-cyan-400 text-xs font-black uppercase font-mono rounded-lg">
+              <span className="p-1 px-2.5 bg-[#b7ff00]/15 text-[#b7ff00] text-xs font-black uppercase font-mono rounded-lg">
                 CRM Leads
               </span>
               <span className="text-xs text-zinc-400">
@@ -2270,7 +2270,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                     onClick={() => setActiveCategoryFilter(cat)}
                     className={`px-2.5 py-1 rounded-lg text-[10.5px] font-bold transition duration-150 cursor-pointer ${
                       activeCategoryFilter === cat 
-                        ? 'bg-cyan-500 text-black font-black shadow-[0_0_8px_rgba(34,211,238,0.2)]' 
+                        ? 'bg-[#b7ff00] text-black font-black shadow-[0_0_8px_rgba(183,255,0,0.2)]' 
                         : 'bg-[#1C221E] hover:bg-[#232A25] text-zinc-300 border border-[#2A352F]'
                     }`}
                   >
@@ -2290,7 +2290,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                 const badgeStyle = 
                   lead.status === 'PROSPECT' ? { bg: 'bg-[#1A232F]', text: 'text-zinc-350', border: 'border-zinc-500/20', label: 'Prospecção Inicial' } :
                   lead.status === 'CONTACTED' ? { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/20', label: 'Mensagem Enviada ✓' } :
-                  lead.status === 'VISITED' ? { bg: 'bg-sky-500/10', text: 'text-sky-400', border: 'border-sky-500/20', label: 'Local Visitado 🚶‍♂️' } :
+                  lead.status === 'VISITED' ? { bg: 'bg-[#b7ff00]/10', text: 'text-[#b7ff00]', border: 'border-[#b7ff00]/20', label: 'Local Visitado 🚶‍♂️' } :
                   lead.status === 'INTERESTED' ? { bg: 'bg-amber-500/15', text: 'text-amber-400', border: 'border-amber-500/25', label: 'Gostou / Quer Comprar 😍' } :
                   { bg: 'bg-emerald-500/20', text: 'text-emerald-300', border: 'border-emerald-400/30', label: '🏆 Ganho (Virou Cliente!' };
 
@@ -2306,9 +2306,9 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                   <div 
                     key={lead.id} 
                     onClick={() => setFocusedLeadId(lead.id)}
-                    className={`bg-[#1A201C] border rounded-xl p-4 flex flex-col justify-between hover:border-cyan-500/50 hover:translate-y-[-2px] transition duration-200 shadow-md relative group cursor-pointer ${
+                    className={`bg-[#1A201C] border rounded-xl p-4 flex flex-col justify-between hover:border-[#b7ff00]/50 hover:translate-y-[-2px] transition duration-200 shadow-md relative group cursor-pointer ${
                       isCurrentlyFocused 
-                        ? 'border-cyan-400 ring-2 ring-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.1)]' 
+                        ? 'border-[#b7ff00] ring-2 ring-[#b7ff00]/20 shadow-[0_0_15px_rgba(183,255,0,0.1)]' 
                         : 'border-[#232B27]'
                     }`}
                     id={`lead_card_${lead.id}`}
@@ -2323,7 +2323,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                         
                         <div className="flex items-center gap-1.5">
                           {isCurrentlyFocused && (
-                            <span className="bg-cyan-500/10 text-cyan-400 text-[8.5px] font-mono border border-cyan-500/25 px-1 rounded">
+                            <span className="bg-[#b7ff00]/10 text-[#b7ff00] text-[8.5px] font-mono border border-[#b7ff00]/25 px-1 rounded">
                               Painel Ativo ⚡
                             </span>
                           )}
@@ -2339,7 +2339,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                           setFocusedLeadId(lead.id);
                           setSelectedLeadForModal(lead);
                         }}
-                        className="text-xs font-bold text-[#F1F4EE] hover:text-cyan-400 cursor-pointer flex items-center justify-between group-hover:underline "
+                        className="text-xs font-bold text-[#F1F4EE] hover:text-[#b7ff00] cursor-pointer flex items-center justify-between group-hover:underline "
                       >
                         <span className="truncate">{lead.name}</span>
                         <ChevronRight className="h-4 w-4 shrink-0 text-[#8BA58D]" />
@@ -2517,11 +2517,11 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
               {/* Header section with Close Button */}
               <div className="flex items-center justify-between border-b border-[#232B27] pb-4">
                 <div>
-                  <span className="px-2.5 py-1 bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-[10px] font-mono font-bold uppercase rounded-md tracking-wider">
+                  <span className="px-2.5 py-1 bg-[#b7ff00]/10 text-[#b7ff00] border border-[#b7ff00]/20 text-[10px] font-mono font-bold uppercase rounded-md tracking-wider">
                     FICHA DETALHADA DO LEAD COMERCIAL • CRM
                   </span>
                   <h3 className="text-base font-bold text-[#F1F4EE] flex items-center gap-2 mt-1.5">
-                    <Building2 className="h-4.5 w-4.5 text-cyan-400" />
+                    <Building2 className="h-4.5 w-4.5 text-[#b7ff00]" />
                     {lead.name}
                   </h3>
                 </div>
@@ -2545,7 +2545,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                     href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lead.name + ' ' + lead.address)}`}
                     target="_blank" 
                     rel="noreferrer"
-                    className="text-[10px] text-cyan-400 hover:underline flex items-center gap-1 mt-1 font-bold"
+                    className="text-[10px] text-[#b7ff00] hover:underline flex items-center gap-1 mt-1 font-bold"
                   >
                     <MapPin className="h-3 w-3 shrink-0" />
                     <span>Abrir Rota no Google Maps Oficial</span>
@@ -2568,14 +2568,14 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
               </div>
 
               {/* INTERACTIVE FUNNEL PROGRESS CHECKLIST */}
-              <div className="space-y-3 bg-[#0C0E0D] border border-cyan-500/15 p-4 rounded-2xl">
+              <div className="space-y-3 bg-[#0C0E0D] border border-[#b7ff00]/15 p-4 rounded-2xl">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-black text-cyan-400 uppercase tracking-widest font-mono flex items-center gap-1.5">
-                    <CheckSquare className="h-4 w-4 text-cyan-400" />
+                  <h4 className="text-xs font-black text-[#b7ff00] uppercase tracking-widest font-mono flex items-center gap-1.5">
+                    <CheckSquare className="h-4 w-4 text-[#b7ff00]" />
                     <span>Funil e Checklist de Prospecção</span>
                   </h4>
                   <span className="text-[10px] text-zinc-400 font-mono">
-                    Status Atual: <strong className="text-white bg-cyan-600/20 border border-cyan-500/30 px-2 py-0.5 rounded uppercase">{lead.status}</strong>
+                    Status Atual: <strong className="text-white bg-[#a3e000]/20 border border-[#b7ff00]/30 px-2 py-0.5 rounded uppercase">{lead.status}</strong>
                   </span>
                 </div>
 
@@ -2705,7 +2705,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                     onClick={() => setAiTone('curto')}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer ${
                       aiTone === 'curto'
-                        ? 'bg-cyan-600 text-white font-extrabold'
+                        ? 'bg-[#a3e000] text-white font-extrabold'
                         : 'bg-[#1C221E] text-zinc-300 border border-[#2A352F] hover:bg-[#232A25]'
                     }`}
                   >
@@ -2728,10 +2728,10 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
               {/* CUSTOM AI INSTRUCTION BOX */}
               <div className="bg-[#121614] border border-[#232B27] p-3.5 rounded-2xl space-y-2.5">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono text-cyan-400 font-bold uppercase flex items-center gap-1.5">
+                  <span className="text-[10px] font-mono text-[#b7ff00] font-bold uppercase flex items-center gap-1.5">
                     <span>✨</span> IA Melhora Abordagem (Adicione argumentos de vendas)
                   </span>
-                  {isGeneratingAi && <span className="text-[10px] text-cyan-400 animate-pulse bg-cyan-950 px-2 py-0.5 rounded font-mono font-black">Processando...</span>}
+                  {isGeneratingAi && <span className="text-[10px] text-[#b7ff00] animate-pulse bg-[#1a2a00] px-2 py-0.5 rounded font-mono font-black">Processando...</span>}
                 </div>
                 <div className="flex gap-2 font-sans">
                   <input
@@ -2739,7 +2739,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                     value={customInstruction}
                     onChange={(e) => setCustomInstruction(e.target.value)}
                     placeholder="Ex: Ofereça desconto de 20% no atacado, mencione frete grátis..."
-                    className="flex-1 bg-[#1A1F1C] border border-[#2A352F] rounded-xl px-3 py-2 text-xs text-[#F1F4EE] placeholder-zinc-650 focus:outline-none focus:border-cyan-400 font-sans"
+                    className="flex-1 bg-[#1A1F1C] border border-[#2A352F] rounded-xl px-3 py-2 text-xs text-[#F1F4EE] placeholder-zinc-650 focus:outline-none focus:border-[#b7ff00] font-sans"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         handleRefineWithAi();
@@ -2749,7 +2749,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                   <button
                     type="button"
                     onClick={handleRefineWithAi}
-                    className="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-black text-xs font-black rounded-xl transition cursor-pointer shrink-0 font-sans"
+                    className="px-4 py-2 bg-[#b7ff00] hover:bg-[#b7ff00] text-black text-xs font-black rounded-xl transition cursor-pointer shrink-0 font-sans"
                   >
                     Otimizar por IA 🪄
                   </button>
@@ -2793,7 +2793,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                 </label>
                 <textarea 
                   rows={2}
-                  className="w-full bg-black/40 border border-[#232B27] rounded-xl p-3 text-xs text-[#F1F4EE] placeholder-zinc-550 focus:outline-none focus:border-cyan-400"
+                  className="w-full bg-black/40 border border-[#232B27] rounded-xl p-3 text-xs text-[#F1F4EE] placeholder-zinc-550 focus:outline-none focus:border-[#b7ff00]"
                   placeholder="Escreva anotações como: 'Dono chamava Carlos, aceitou mostruário e quer resposta na próxima sexta-feira de manhã...'"
                   value={lead.note || ''}
                   onChange={(e) => {
