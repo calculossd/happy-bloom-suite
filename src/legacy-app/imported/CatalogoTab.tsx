@@ -10,6 +10,7 @@ import {
   Boxes,
   Archive,
   Tag as TagIcon,
+  X,
 } from "lucide-react";
 import {
   listModels,
@@ -24,6 +25,7 @@ import {
 import { loadAsStl } from "@/lib/threemf";
 import { renderStlThumbnail } from "@/lib/stl-thumbnail";
 import { SendToPrinterDialog } from "@/components/SendToPrinterDialog";
+import { Model3DViewer } from "@/components/Model3DViewer";
 import JSZip from "jszip";
 
 type UploadProgress = { name: string; pct: number; status: "uploading" | "done" | "dup" | "error"; message?: string };
@@ -38,6 +40,8 @@ function CatalogPage() {
   const [uploads, setUploads] = useState<UploadProgress[]>([]);
   const [dragOver, setDragOver] = useState(false);
   const [sendModel, setSendModel] = useState<ModelRecord | null>(null);
+  const [preview, setPreview] = useState<{ model: ModelRecord; file: Blob } | null>(null);
+  const [previewError, setPreviewError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const refresh = async () => setModels(await listModels());
@@ -170,6 +174,16 @@ function CatalogPage() {
     a.download = m.fileName;
     a.click();
     URL.revokeObjectURL(url);
+  };
+
+  const previewOne = async (m: ModelRecord) => {
+    setPreviewError(null);
+    const f = await getFile(m.id);
+    if (!f) {
+      setPreviewError(`Arquivo não encontrado para "${m.name}"`);
+      return;
+    }
+    setPreview({ model: m, file: f });
   };
 
   const removeOne = async (m: ModelRecord) => {
