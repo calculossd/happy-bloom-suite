@@ -347,8 +347,8 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
       {/* Unified header: title + active sales channels in a single card */}
       <div className="glow-card p-5 rounded-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-5">
         <div className="min-w-0">
-          <h2 className="text-lg font-bold flex items-center gap-2 select-none text-gradient-lime">
-            <Database className="h-5 w-5 text-[#b7ff00]" />
+          <h2 className="text-sm font-bold uppercase tracking-[0.14em] flex items-center gap-2 select-none text-gradient-lime font-sans">
+            <Database className="h-4 w-4 text-[#b7ff00]" />
             Integração Automática com E-Commerce
             <button
               type="button"
@@ -406,7 +406,7 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
         {/* Streaming orders backlog */}
         <div className="glow-card rounded-2xl p-5 space-y-4" id="streams-orders-backlog">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[#b7ff00] flex items-center gap-1.5">
+            <h3 className="text-sm font-bold uppercase tracking-[0.14em] flex items-center gap-2 text-gradient-lime font-sans">
               <span className="w-2 h-2 rounded-full bg-[#b7ff00] animate-pulse inline-block shadow-[0_0_10px_#b7ff00]" />
               Stream de Vendas Pendentes ({visibleOrders.filter(o => !o.isImported && !importedExternalIds.includes(o.id)).length})
             </h3>

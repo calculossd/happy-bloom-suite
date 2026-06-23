@@ -655,8 +655,8 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
       {/* Beautiful, professional, integrated manufacturing progress bar */}
       <div className="bg-[#151917] rounded-xl border border-[#232B27] p-4 space-y-3.5 shadow-md relative overflow-hidden select-none">
         <div className="flex items-center justify-between text-xs font-bold text-[#F1F4EE]">
-          <span className="flex items-center gap-1.5 uppercase tracking-wider text-[#95BBA2]">
-            <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_#10b981]" />
+          <span className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans">
+            <span className="w-2 h-2 bg-[#b7ff00] rounded-full animate-pulse shadow-[0_0_8px_#b7ff00]" />
             Acompanhamento de Execução Global
           </span>
           <span className="font-mono text-sm text-[var(--brand-primary)] animate-pulse">
@@ -727,7 +727,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
       {/* Filter and search row */}
       <div className="space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-          <h3 className="text-base font-bold text-[#F1F4EE]">Filtrar Produção</h3>
+          <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans">Filtrar Produção</h3>
           
           <input
             type="text"
