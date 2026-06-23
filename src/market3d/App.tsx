@@ -607,7 +607,7 @@ export default function App() {
       .replace(/\s+/g, ' ')
       .trim();
 
-  const seenTitlePrefixes = new Set<string>();
+  const seenTitles = new Set<string>();
   const filteredProducts = [...dynamicProducts, ...ALL_PRODUCTS]
     .map(p => getProductForSelectedPlatform(p, selectedPlatform, dynamicProducts))
     .filter(p => {
@@ -617,12 +617,11 @@ export default function App() {
         p.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.keywords.some(k => k.toLowerCase().includes(searchQuery.toLowerCase()));
       if (!matchesCategory || !matchesSearch) return false;
-      // Dedup: do not allow repeated products up to the second title word.
-      // Examples: "Vaso Geométrico ..." or "Kit Organizador ..." appear only once.
-      const titlePrefix = normalizeTitle(p.title).split(' ').slice(0, 2).join(' ');
-      const dedupeKey = titlePrefix || normalizeTitle(p.title);
-      if (seenTitlePrefixes.has(dedupeKey)) return false;
-      seenTitlePrefixes.add(dedupeKey);
+      // Dedup pelo título completo normalizado por categoria, garantindo
+      // ao menos 50 itens distintos por subcategoria sem repetição.
+      const dedupeKey = `${p.categoryId}::${normalizeTitle(p.title)}`;
+      if (seenTitles.has(dedupeKey)) return false;
+      seenTitles.add(dedupeKey);
       return true;
     })
     .sort((a, b) => b.monthlySales - a.monthlySales);
