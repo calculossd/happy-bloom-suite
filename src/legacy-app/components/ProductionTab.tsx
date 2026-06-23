@@ -102,6 +102,7 @@ interface ProductionTabProps {
   filamentStocks: FilamentStock[];
   clients: Array<{ id: number; name: string }>;
   onAddOrder: (order: Partial<PrintOrder>) => void;
+  onAddClient?: (client: any) => void;
   onUpdateOrder: (id: number, updated: Partial<PrintOrder>) => void;
   onDeleteOrder: (id: number) => void;
   onSimulateTick: () => void;
@@ -116,6 +117,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
   filamentStocks,
   clients,
   onAddOrder,
+  onAddClient,
   onUpdateOrder,
   onDeleteOrder,
   onSimulateTick,
@@ -351,6 +353,21 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
     if (!clientNameFinal.trim()) {
       alert('Por favor especifique o nome do cliente.');
       return;
+    }
+
+    // Auto-register manual buyer as a new client with generated code
+    if (formClientId === 'CUSTOM' && onAddClient) {
+      const nextNumeric = (clients.length > 0 ? Math.max(...clients.map((c: any) => c.id)) : 0) + 1;
+      const generatedCode = `CLI-${String(nextNumeric).padStart(4, '0')}`;
+      onAddClient({
+        name: clientNameFinal.trim(),
+        phone: '',
+        email: '',
+        address: '',
+        code: generatedCode,
+        note: `Cadastrado automaticamente via Pedido (${generatedCode})`,
+        lastContactDate: Date.now(),
+      });
     }
 
     const customCreatedAt = formCreatedAt ? new Date(formCreatedAt).getTime() : Date.now();
@@ -1267,26 +1284,34 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                 <div className="p-6 space-y-4 max-h-[68vh] overflow-y-auto scrollbar-thin">
                   <div className="space-y-1">
                     <label className="block text-[#8BA58D] font-extrabold">Cliente Relacionado</label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div className="flex flex-col gap-2">
                       <select
                         value={formClientId}
                         onChange={(e) => setFormClientId(e.target.value)}
                         className="w-full bg-[#0C0E0D] border border-[#232B27] rounded-lg py-2 px-3 text-white focus:border-[#95BBA2] focus:outline-none"
                       >
-                        {clients.map(c => (
-                          <option key={c.id} value={c.id.toString()}>{c.name}</option>
+                        {clients.map((c: any) => (
+                          <option key={c.id} value={c.id.toString()}>
+                            {c.name}{c.code ? ` — ${c.code}` : ''}
+                          </option>
                         ))}
                         <option value="CUSTOM">+ Novo Comprador Manual</option>
                       </select>
 
                       {formClientId === 'CUSTOM' && (
-                        <input
-                          type="text"
-                          placeholder="Nome do cliente"
-                          value={customClientName}
-                          onChange={(e) => setCustomClientName(e.target.value)}
-                          className="w-full bg-[#0C0E0D] border border-[#232B27] rounded-lg py-2 px-3 text-white placeholder-[#8BA58D]/40 focus:border-[#95BBA2]"
-                        />
+                        <div className="p-3 bg-[#0C0E0D] border border-[#b7ff00]/30 rounded-lg space-y-1.5 animate-in fade-in slide-in-from-top-1 duration-200">
+                          <label className="block text-[10px] text-[#b7ff00] font-bold uppercase tracking-wider">
+                            Nome do novo cliente (será cadastrado automaticamente com código)
+                          </label>
+                          <input
+                            type="text"
+                            autoFocus
+                            placeholder="Digite o nome do cliente..."
+                            value={customClientName}
+                            onChange={(e) => setCustomClientName(e.target.value)}
+                            className="w-full bg-[#151917] border border-[#232B27] rounded-lg py-2 px-3 text-white placeholder-[#8BA58D]/40 focus:border-[#b7ff00] focus:outline-none"
+                          />
+                        </div>
                       )}
                     </div>
                   </div>
