@@ -836,7 +836,7 @@ export default function App() {
               <button
                 onClick={() => handleLiveAnalysis(searchQuery)}
                 disabled={isLoading || !searchQuery.trim()}
-                className="w-full bg-[#121927] hover:bg-[#1C263A] disabled:bg-slate-900 border border-slate-800 disabled:text-slate-600 text-slate-200 font-bold py-2 px-3 rounded-lg transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full bg-black/40 hover:bg-[#b7ff00]/5 disabled:bg-slate-900 border border-[#b7ff00]/25 hover:border-[#b7ff00]/50 disabled:border-slate-800 disabled:text-slate-600 text-[#b7ff00] font-bold uppercase tracking-wider text-[11px] py-2 px-3 rounded-lg transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Search className="w-3.5 h-3.5" />
                 <span>Análise de Banco Local</span>
@@ -845,7 +845,7 @@ export default function App() {
               <button
                 onClick={() => handleRealtimeTrack(searchQuery)}
                 disabled={isLoading || !searchQuery.trim()}
-                className="w-full bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 disabled:from-slate-850 disabled:to-slate-800 disabled:text-slate-500 text-white font-bold py-2 px-3 rounded-lg transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full bg-[#b7ff00] hover:brightness-110 disabled:bg-slate-800 disabled:text-slate-500 text-black font-bold uppercase tracking-wider text-[11px] py-2 px-3 rounded-lg shadow-[0_0_18px_-6px_rgba(183,255,0,0.7)] transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer"
                 title="Consulte o mercado real na Shopee, Jina, Tavily e Groq em Tempo Real"
               >
                 <Sparkles className="w-3.5 h-3.5 animate-pulse" />
