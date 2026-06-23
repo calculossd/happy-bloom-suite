@@ -87,7 +87,10 @@ import {
   FileBox,
   ClipboardCheck,
   Calendar,
-  Globe
+  Globe,
+  Calculator,
+  BookOpen,
+  TrendingUp
 } from 'lucide-react';
 
 // STUNNING 3D CUBE & PRINTER EXTENSION GEOMETRIC LOGO
