@@ -45,8 +45,13 @@ async function fetchShopping(query: string, apiKey: string) {
 const DEFAULT_MATERIALS: Array<{ type: string; query: string }> = [
   { type: "PLA", query: "filamento pla 1.75mm 1kg impressora 3d" },
   { type: "PETG", query: "filamento petg 1.75mm 1kg impressora 3d" },
-  { type: "TPU", query: "filamento flexivel tpu 1.75mm impressora 3d" },
+  { type: "TPU", query: "filamento flexivel tpu 1.75mm 1kg impressora 3d" },
+  { type: "SILK", query: "filamento silk pla 1.75mm 1kg impressora 3d" },
 ];
+
+const TOP_N = 5;
+const topByPrice = <T extends { price: number }>(offers: T[]): T[] =>
+  [...offers].sort((a, b) => a.price - b.price).slice(0, TOP_N);
 
 export const Route = createFileRoute("/api/quotations")({
   server: {
@@ -62,7 +67,7 @@ export const Route = createFileRoute("/api/quotations")({
         if (customQ) {
           const offers = await fetchShopping(customQ, apiKey);
           return Response.json([
-            { type: url.searchParams.get("type") || "Produtos", offers, searchQuery: customQ },
+            { type: url.searchParams.get("type") || "Produtos", offers: topByPrice(offers), searchQuery: customQ },
           ]);
         }
 
@@ -71,7 +76,7 @@ export const Route = createFileRoute("/api/quotations")({
           DEFAULT_MATERIALS.map(async (m) => ({
             type: m.type,
             searchQuery: m.query,
-            offers: await fetchShopping(m.query, apiKey),
+            offers: topByPrice(await fetchShopping(m.query, apiKey)),
           })),
         );
         return Response.json(groups);
