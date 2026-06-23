@@ -1290,7 +1290,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col font-sans transition-colors duration-300 tt-shell">
+    <div className="min-h-screen flex flex-col font-sans transition-colors duration-300 tt-shell md:pl-[168px]">
       
       {/* GLOBAL SAFE TOAST NOTIFICATION CARD */}
       {globalToast && (
