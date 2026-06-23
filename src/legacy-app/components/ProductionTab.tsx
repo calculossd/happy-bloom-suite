@@ -727,7 +727,10 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
       {/* Filter and search row */}
       <div className="space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-          <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans">Filtrar Produção</h3>
+          <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans leading-none">
+            <span className="w-2 h-2 rounded-full bg-[#b7ff00] animate-pulse inline-block shadow-[0_0_10px_#b7ff00]" />
+            <span>Filtrar Produção</span>
+          </div>
           
           <input
             type="text"
