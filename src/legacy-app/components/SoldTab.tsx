@@ -192,7 +192,7 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
   return (
     <div className="space-y-6" id="sold-orders-tab-container">
       {/* Header Bento Title */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-[var(--brand-card)] border border-[var(--brand-border)] p-5 rounded-2xl shadow-sm" id="sold-tab-header">
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm" id="sold-tab-header">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <h2 className="text-xl font-extrabold text-[var(--brand-text)] uppercase tracking-tight">Histórico de Vendas</h2>
@@ -206,7 +206,7 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
         <button
           onClick={handleExportPDFReport}
           disabled={filteredSold.length === 0}
-          className="px-4 py-2.5 bg-[var(--brand-primary)] hover:opacity-90 disabled:opacity-50 text-black text-xs font-black uppercase tracking-wider rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-md shrink-0"
+          className="px-4 py-2.5 bg-gradient-lime text-black hover:shadow-[0_0_24px_-4px_rgba(183,255,0,0.55)] disabled:opacity-40 text-xs font-black uppercase tracking-wider rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-md shrink-0"
           id="btn_download_sales_report"
         >
           <Download className="h-4 w-4" />
@@ -218,7 +218,7 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4" id="sold-metrics-panels">
         
         {/* Metric 1 */}
-        <div className="bg-[var(--brand-card)] border border-[var(--brand-border)] p-3 px-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
+        <div className="glow-card p-3 px-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
           <div className="space-y-0.5">
             <span className="text-[9.5px] font-bold text-[var(--brand-muted)] uppercase tracking-wider block">Faturamento Real</span>
             <span className="text-xs md:text-base font-black text-[var(--brand-text)] font-mono block">
@@ -231,7 +231,7 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
         </div>
 
         {/* Metric 2 */}
-        <div className="bg-[var(--brand-card)] border border-[var(--brand-border)] p-3 px-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
+        <div className="glow-card p-3 px-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
           <div className="space-y-0.5">
             <span className="text-[9.5px] font-bold text-[var(--brand-muted)] uppercase tracking-wider block">Produtos Vendidos</span>
             <span className="text-xs md:text-base font-black text-[var(--brand-text)] font-mono block">
@@ -244,7 +244,7 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
         </div>
 
         {/* Metric 3 */}
-        <div className="bg-[var(--brand-card)] border border-[var(--brand-border)] p-3 px-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
+        <div className="glow-card p-3 px-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
           <div className="space-y-0.5">
             <span className="text-[9.5px] font-bold text-[var(--brand-muted)] uppercase tracking-wider block">Ticket Médio</span>
             <span className="text-xs md:text-base font-black text-[var(--brand-text)] font-mono block">
@@ -257,7 +257,7 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
         </div>
 
         {/* Metric 4 */}
-        <div className="bg-[var(--brand-card)] border border-[var(--brand-border)] p-3 px-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
+        <div className="glow-card p-3 px-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
           <div className="space-y-0.5">
             <span className="text-[9.5px] font-bold text-[var(--brand-muted)] uppercase tracking-wider block">Insumos Despachados</span>
             <span className="text-xs md:text-base font-black text-[var(--brand-text)] font-mono block">
@@ -272,7 +272,7 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
       </div>
 
       {/* Filter Options Row */}
-      <div className="bg-[var(--brand-card)] border border-[var(--brand-border)] p-4 rounded-2xl space-y-4 shadow-sm" id="sold-filters">
+      <div className="glow-card p-4 rounded-2xl space-y-4 shadow-sm" id="sold-filters">
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
           {/* Search Box */}
           <div className="relative flex-1">
