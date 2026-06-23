@@ -59,6 +59,49 @@ type DerivedItem = {
   amount?: number;
 };
 
+const TONE: Record<string, string> = {
+  emerald: "border-emerald-400/20 bg-emerald-500/5 text-emerald-200",
+  cyan: "border-cyan-400/20 bg-cyan-500/5 text-cyan-200",
+  amber: "border-amber-400/20 bg-amber-500/5 text-amber-200",
+  rose: "border-rose-400/20 bg-rose-500/5 text-rose-200",
+};
+
+function SummaryGroup({
+  icon,
+  label,
+  tone,
+  items,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  tone: "emerald" | "cyan" | "amber" | "rose";
+  items: DerivedItem[];
+}) {
+  return (
+    <div className={`rounded-xl border p-3 ${TONE[tone]}`}>
+      <p className="mb-2 inline-flex items-center gap-1.5 text-[11px] font-semibold">
+        {icon} {label} <span className="text-white/40">· {items.length}</span>
+      </p>
+      <ul className="space-y-1 text-xs text-white/80">
+        {items.slice(0, 6).map((it, i) => (
+          <li key={i} className="flex justify-between gap-2">
+            <span className="truncate">
+              {it.title}
+              {it.meta && <span className="ml-1 text-white/40">· {it.meta}</span>}
+            </span>
+            {typeof it.amount === "number" && it.amount > 0 && (
+              <span className="shrink-0 text-white/50">{brl(it.amount)}</span>
+            )}
+          </li>
+        ))}
+        {items.length > 6 && (
+          <li className="text-white/30">+{items.length - 6} itens…</li>
+        )}
+      </ul>
+    </div>
+  );
+}
+
 async function sendToHermes(cfg: HermesCfg, ev: Event) {
   if (!cfg.url) throw new Error("Webhook do Hermes não configurado");
   const res = await fetch(cfg.url, {
