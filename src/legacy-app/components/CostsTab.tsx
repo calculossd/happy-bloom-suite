@@ -1871,17 +1871,13 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       {/* SUBTAB 1: PRODUCT PRICE PRECISION CALCULATOR */}
       {activeSubTab === 'CALC' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-fade-in" id="precificator-active-panel">
-          <div className="lg:col-span-12 relative overflow-hidden bg-gradient-to-br from-[#1A1611] via-[#121613] to-[#0E1210] border border-white/[0.06] p-5 rounded-2xl shadow-[0_24px_60px_-30px_rgba(229,178,66,0.25)]">
-            <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-amber-500/10 blur-3xl opacity-60" />
-            <div className="relative flex items-center gap-3">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-amber-500/10 ring-1 ring-inset ring-amber-400/20 text-amber-300">
-                <Calculator className="h-4 w-4" />
+          <div className="lg:col-span-12 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Calculadora</div>
+                <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">Precificação</span>
               </div>
-              <div className="min-w-0">
-                <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-amber-300/80">Financeiro</span>
-                <h2 className="text-[18px] font-bold tracking-[-0.01em] text-[#F1F4EE] leading-tight">Calculadora</h2>
-                <p className="text-[11px] text-zinc-500">Precifique produtos com base no fatiador e seus custos reais</p>
-              </div>
+              <p className="text-xs text-[var(--brand-muted)]">Precifique produtos com base no fatiador e seus custos reais</p>
             </div>
           </div>
 
