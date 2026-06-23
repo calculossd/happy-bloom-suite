@@ -93,7 +93,7 @@ export const ReferenceDashboardHero: React.FC<any> = (props) => {
     const slot = months.find(m => m.idx === d.getMonth() && m.year === d.getFullYear());
     if (slot) slot.value += o.priceCharged || 0;
   });
-  if (months.every(m => m.value === 0)) [4000, 7000, 5500, 9800, 12500, 8200, 6800, 14200].forEach((v, i) => { months[i].value = v; });
+  const hasYearData = months.some(m => m.value > 0);
   const maxBar = Math.max(...months.map(m => m.value), 1);
   const peakIdx = months.reduce((mx, m, i, a) => (m.value > a[mx].value ? i : mx), 0);
 
@@ -183,7 +183,7 @@ export const ReferenceDashboardHero: React.FC<any> = (props) => {
         <Panel>
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-baseline gap-2">
-              <h2 className="text-sm sm:text-base font-bold text-white tracking-tight">Lucro do ano</h2>
+              <h2 className="text-sm sm:text-base font-bold text-white tracking-tight">Faturamento do ano</h2>
               <span className="text-xs text-white/40">{`{${monthProfitMargin.toFixed(0)}%}`}</span>
             </div>
             <div className="flex items-center gap-1">
@@ -192,9 +192,15 @@ export const ReferenceDashboardHero: React.FC<any> = (props) => {
             </div>
           </div>
           <div className="relative">
-            <div className="absolute -top-1 z-10 px-2 py-0.5 rounded-md bg-[#A5D84B] text-black text-[10px] font-bold" style={{ left: `${(peakIdx + 0.5) * (100 / months.length)}%`, transform: 'translateX(-50%)' }}>
-              {fmtBRLk(months[peakIdx].value)}
-            </div>
+            {hasYearData ? (
+              <div className="absolute -top-1 z-10 px-2 py-0.5 rounded-md bg-[#A5D84B] text-black text-[10px] font-bold" style={{ left: `${(peakIdx + 0.5) * (100 / months.length)}%`, transform: 'translateX(-50%)' }}>
+                {fmtBRLk(months[peakIdx].value)}
+              </div>
+            ) : (
+              <div className="absolute inset-0 z-10 grid place-items-center text-white/40 text-xs">
+                Sem faturamento registrado no período
+              </div>
+            )}
             <div className="grid grid-cols-8 gap-2 h-[180px] items-end mt-4">
               {months.map((m, i) => {
                 const isPeak = i === peakIdx;
