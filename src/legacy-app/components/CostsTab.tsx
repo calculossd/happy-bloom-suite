@@ -3003,22 +3003,25 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in" id="stocks-physical-layout">
           
           {/* Filamentos Stocks */}
-          <div className="bg-[#151917] border border-[#232B27] p-5 rounded-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-[#232B27] pb-3">
-              <div>
-                <h3 className="text-sm font-bold text-[#F1F4EE] flex items-center gap-1.5">
-                  <Disc className="h-4 w-4 text-[#95BBA2]" />
-                  Estoque de Carretéis de Filamento
-                </h3>
-                <p className="text-xs text-[#8BA58D]">Acompanhe suas bobinas ativas</p>
+          <div className="relative overflow-hidden bg-gradient-to-br from-[#161B19] via-[#121613] to-[#0E1210] border border-[#232B27] p-5 rounded-2xl space-y-4 shadow-[0_24px_60px_-30px_rgba(149,187,162,0.25)]">
+            <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-emerald-500/10 blur-3xl opacity-60" />
+            <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-white/5 pb-4">
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-emerald-500/10 ring-1 ring-inset ring-emerald-400/20 text-emerald-300">
+                  <Disc className="h-4 w-4" />
+                </div>
+                <div className="min-w-0">
+                  <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-emerald-300/80">Filamentos</span>
+                  <h3 className="text-[14px] font-bold tracking-[-0.01em] text-[#F1F4EE] truncate">Estoque de Carretéis</h3>
+                  <p className="text-[11px] text-zinc-500 truncate">Acompanhe suas bobinas ativas</p>
+                </div>
               </div>
-
               <button
                 onClick={() => setShowAddFilamentForm(!showAddFilamentForm)}
-                className="px-4 py-2 bg-[#95BBA2] hover:bg-[#b0d8bd] text-[#0C0E0D] font-black text-xs rounded-xl transition-all duration-200 flex items-center gap-1 shadow-[0_0_12px_rgba(149,187,162,0.4)] hover:scale-102 cursor-pointer active:scale-98"
+                className="shrink-0 inline-flex items-center gap-1.5 rounded-xl border border-emerald-400/30 bg-emerald-500/15 px-3.5 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-emerald-100 transition-all duration-300 hover:border-emerald-300/50 hover:bg-emerald-500/25 hover:shadow-[0_8px_24px_-8px_rgba(16,185,129,0.6)] active:scale-[0.97]"
                 id="btn-trigger-filament-form"
               >
-                <Plus className="h-4 w-4 text-[#0C0E0D] font-extrabold" />
+                <Plus className="h-3.5 w-3.5" />
                 Novo Carretel
               </button>
             </div>
@@ -3265,22 +3268,25 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
           </div>
 
           {/* Consumable Supplies Stocks */}
-          <div className="bg-[#151917] border border-[#232B27] p-5 rounded-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-[#232B27] pb-3">
-              <div>
-                <h3 className="text-sm font-bold text-[#F1F4EE] flex items-center gap-1.5">
-                  <Box className="h-4 w-4 text-[#E5B242]" />
-                  Estoque de Insumos & Hardware
-                </h3>
-                <p className="text-xs text-[#8BA58D]">Acompanhe caixas, componentes e bicos de reposição</p>
+          <div className="relative overflow-hidden bg-gradient-to-br from-[#1A1611] via-[#141210] to-[#0E0C0A] border border-[#2B2620] p-5 rounded-2xl space-y-4 shadow-[0_24px_60px_-30px_rgba(229,178,66,0.25)]">
+            <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-amber-500/10 blur-3xl opacity-60" />
+            <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-white/5 pb-4">
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-amber-500/10 ring-1 ring-inset ring-amber-400/20 text-amber-300">
+                  <Box className="h-4 w-4" />
+                </div>
+                <div className="min-w-0">
+                  <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-amber-300/80">Hardware</span>
+                  <h3 className="text-[14px] font-bold tracking-[-0.01em] text-[#F1F4EE] truncate">Estoque de Insumos</h3>
+                  <p className="text-[11px] text-zinc-500 truncate">Caixas, componentes e bicos de reposição</p>
+                </div>
               </div>
-
               <button
                 onClick={() => setShowAddSupplyForm(!showAddSupplyForm)}
-                className="px-4 py-2 bg-[#E5B242] hover:bg-[#ffd97d] text-[#0C0E0D] font-black text-xs rounded-xl transition-all duration-200 flex items-center gap-1 shadow-[0_0_12px_rgba(229,178,66,0.4)] hover:scale-102 cursor-pointer active:scale-98"
+                className="shrink-0 inline-flex items-center gap-1.5 rounded-xl border border-amber-400/30 bg-amber-500/15 px-3.5 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-amber-100 transition-all duration-300 hover:border-amber-300/50 hover:bg-amber-500/25 hover:shadow-[0_8px_24px_-8px_rgba(229,178,66,0.6)] active:scale-[0.97]"
                 id="btn-trigger-supply-form"
               >
-                <Plus className="h-4 w-4 text-[#0C0E0D] font-extrabold" />
+                <Plus className="h-3.5 w-3.5" />
                 Novo Insumo
               </button>
             </div>
