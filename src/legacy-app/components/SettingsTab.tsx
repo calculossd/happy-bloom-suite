@@ -39,6 +39,7 @@ import { Client, Printer, PrintOrder, FilamentStock, Expense, ShoppingItem } fro
 import { getApiUrl, validateApiKeyFormat, checkIsAndroidWebView, callGeminiGeneratePalette } from '../utils/api';
 import { safeStorage } from '../utils/storage';
 import { uploadWorkspace, downloadWorkspace, FirebaseSyncError } from '../sync/firebaseSync';
+import { useCustomKeys } from '../hooks/useCustomKeys';
 
 interface SettingsTabProps {
   clients: Client[];
@@ -499,12 +500,13 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   const [localCustomLogo, setLocalCustomLogo] = useState(brandConfig.customLogo || '');
   const [aiColors, setAiColors] = useState<any>(brandConfig.customThemeColors || null);
   const [showKey, setShowKey] = useState(false);
-  const [localGeminiKey, setLocalGeminiKey] = useState(() => {
-    return safeStorage.getItem('bambuzau_custom_gemini_key', '');
-  });
-  const [localGroqKey, setLocalGroqKey] = useState(() => {
-    return safeStorage.getItem('bambuzau_custom_groq_key', '');
-  });
+  const {
+    geminiKey: localGeminiKey, setGeminiKey: setLocalGeminiKey,
+    groqKey: localGroqKey, setGroqKey: setLocalGroqKey,
+    serpKey: localSerpKey, setSerpKey: setLocalSerpKey,
+    tavilyKey: localTavilyKey, setTavilyKey: setLocalTavilyKey,
+    jinaKey: localJinaKey, setJinaKey: setLocalJinaKey,
+  } = useCustomKeys();
   const [showGroqKey, setShowGroqKey] = useState(false);
 
   // Tuya device additions states
@@ -514,15 +516,6 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   const [newTuyaClientSecret, setNewTuyaClientSecret] = useState('');
   const [newTuyaRegion, setNewTuyaRegion] = useState('us');
 
-  const [localSerpKey, setLocalSerpKey] = useState(() => {
-    return safeStorage.getItem('bambuzau_custom_serp_key', '');
-  });
-  const [localTavilyKey, setLocalTavilyKey] = useState(() => {
-    return safeStorage.getItem('bambuzau_custom_tavily_key', '');
-  });
-  const [localJinaKey, setLocalJinaKey] = useState(() => {
-    return safeStorage.getItem('bambuzau_custom_jina_key', '');
-  });
   const [showTavilyKey, setShowTavilyKey] = useState(false);
   const [showJinaKey, setShowJinaKey] = useState(false);
   const [searchGroundingEnabled, setSearchGroundingEnabled] = useState(() => {
@@ -550,18 +543,6 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   const [showClipboardBackup, setShowClipboardBackup] = useState(false);
   const [okPopupMessage, setOkPopupMessage] = useState<string | null>(null);
   const [showSerpKey, setShowSerpKey] = useState(false);
-
-  React.useEffect(() => {
-    const handleKeysUpdated = () => {
-      setLocalGeminiKey(safeStorage.getItem('bambuzau_custom_gemini_key', ''));
-      setLocalGroqKey(safeStorage.getItem('bambuzau_custom_groq_key', ''));
-      setLocalSerpKey(safeStorage.getItem('bambuzau_custom_serp_key', ''));
-      setLocalTavilyKey(safeStorage.getItem('bambuzau_custom_tavily_key', ''));
-      setLocalJinaKey(safeStorage.getItem('bambuzau_custom_jina_key', ''));
-    };
-    window.addEventListener('bambuzau_keys_updated', handleKeysUpdated);
-    return () => window.removeEventListener('bambuzau_keys_updated', handleKeysUpdated);
-  }, []);
 
   const generatePaletteWithAI = async () => {
     if (!localCustomLogo) {
