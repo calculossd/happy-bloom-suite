@@ -30,7 +30,7 @@ function isBlockedGoogleUrl(value: string | null | undefined): boolean {
 
 function merchantSearchUrl(storeName: string, productName: string): string {
   const query = encodeURIComponent(productName || "filamento impressora 3d");
-  return `https://www.google.com/search?tbm=shop&q=${query}`;
+  return `https://www.buscape.com.br/search?q=${query}`;
 }
 
 async function fetchShopping(query: string, apiKey: string) {
