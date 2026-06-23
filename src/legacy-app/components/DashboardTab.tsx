@@ -21,7 +21,6 @@ import {
 } from 'lucide-react';
 import { PrinterCameraModal } from './PrinterCameraModal';
 import { ReferenceDashboardHero } from './ReferenceDashboardHero';
-import { Print3DPanel } from '@/components/print3d/Print3DDashboard';
 
 interface DashboardTabProps {
   orders: PrintOrder[];
@@ -157,8 +156,18 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
   return (
     <div className="space-y-6" id="dashboard_tab_container">
 
-      {/* ===== PRINT3D PANEL ===== */}
-      <Print3DPanel />
+      {/* ===== REFERENCE DASHBOARD HERO (real data) ===== */}
+      <ReferenceDashboardHero
+        orders={orders}
+        printers={printers}
+        filamentStocks={filamentStocks}
+        expenses={expenses}
+        shoppingItems={shoppingItems}
+        clients={clients}
+        onSelectTab={onSelectTab}
+        onUpdatePrinter={onUpdatePrinter}
+        onUpdateOrder={onUpdateOrder}
+      />
 
     </div>
   );
