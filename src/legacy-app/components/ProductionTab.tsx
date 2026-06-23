@@ -1226,15 +1226,17 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
         )}
       </AnimatePresence>
 
-      {/* Floated single execution actions */}
-      <button
-        onClick={handleOpenAddDialog}
-        className="fixed bottom-24 right-5 z-40 bg-[#E5B242] text-[#0C0E0D] p-4.5 rounded-full shadow-2xl hover:bg-[#F5C75A] transition flex items-center justify-center cursor-pointer"
-        title="Cadastrar Novo Pedido"
-        id="btn-add-order-fab"
-      >
-        <Plus className="w-6 h-6 stroke-[3px]" />
-      </button>
+      {/* Floated single execution actions — hidden in Produção (full) */}
+      {viewMode !== 'full' && (
+        <button
+          onClick={handleOpenAddDialog}
+          className="fixed bottom-24 right-5 z-40 bg-[#E5B242] text-[#0C0E0D] p-4.5 rounded-full shadow-2xl hover:bg-[#F5C75A] transition flex items-center justify-center cursor-pointer"
+          title="Cadastrar Novo Pedido"
+          id="btn-add-order-fab"
+        >
+          <Plus className="w-6 h-6 stroke-[3px]" />
+        </button>
+      )}
 
       {/* Main Full Add/Edit form Dialog view screen */}
       <AnimatePresence>
