@@ -41,6 +41,62 @@ import { safeStorage } from '../utils/storage';
 import { uploadWorkspace, downloadWorkspace, FirebaseSyncError } from '../sync/firebaseSync';
 import { useCustomKeys } from '../hooks/useCustomKeys';
 import { ApiKeyField } from './ApiKeyField';
+import { pickBackupFolder, getBackupFolderName, clearBackupFolder, runBackupNow } from '../hooks/useAutoBackup';
+
+function AutoBackupFolderControl() {
+  const [folder, setFolder] = React.useState<string | null>(null);
+  const [busy, setBusy] = React.useState(false);
+  React.useEffect(() => { getBackupFolderName().then(setFolder); }, []);
+  const supported = typeof window !== 'undefined' && 'showDirectoryPicker' in window;
+  const choose = async () => {
+    setBusy(true);
+    try {
+      const name = await pickBackupFolder();
+      if (name) setFolder(name);
+    } catch (e: any) {
+      if (e?.name !== 'AbortError') alert('Erro ao escolher pasta: ' + (e?.message || e));
+    } finally { setBusy(false); }
+  };
+  const clear = async () => { await clearBackupFolder(); setFolder(null); };
+  return (
+    <div className="mt-3 p-3 rounded-xl bg-[#0C0E0D] border border-[#232B27]/60 space-y-2">
+      <div className="text-[11px] font-bold text-[#E2B144] uppercase tracking-wide">Backup automático (a cada 6h)</div>
+      <div className="text-[10px] text-[#8BA58D] leading-relaxed">
+        {supported
+          ? (folder
+              ? <>Salvando em: <span className="text-[#F1F4EE] font-semibold">{folder}</span></>
+              : 'Nenhuma pasta escolhida — o backup vai para a pasta Downloads.')
+          : 'Seu navegador não suporta escolher pasta (use Chrome/Edge desktop). O backup será salvo em Downloads.'}
+      </div>
+      <div className="flex gap-2 flex-wrap">
+        <button
+          type="button"
+          disabled={!supported || busy}
+          onClick={choose}
+          className="px-3 py-1.5 rounded-lg bg-[#1C2420] hover:bg-[#232F2A] border border-[#2F3D35] text-[#F1F4EE] text-[11px] font-semibold disabled:opacity-50"
+        >
+          {folder ? 'Alterar pasta' : 'Escolher pasta'}
+        </button>
+        {folder && (
+          <button
+            type="button"
+            onClick={clear}
+            className="px-3 py-1.5 rounded-lg bg-transparent hover:bg-[#1C2420] border border-[#2F3D35] text-[#8BA58D] text-[11px]"
+          >
+            Remover
+          </button>
+        )}
+        <button
+          type="button"
+          onClick={() => runBackupNow()}
+          className="px-3 py-1.5 rounded-lg bg-[#1C2420] hover:bg-[#232F2A] border border-[#2F3D35] text-[#95BBA2] text-[11px] font-semibold"
+        >
+          Fazer backup agora
+        </button>
+      </div>
+    </div>
+  );
+}
 
 interface SettingsTabProps {
   clients: Client[];
@@ -1933,6 +1989,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
               <Sparkles className="h-3 w-3 animate-pulse text-purple-400" />
               {showClipboardBackup ? 'Ocultar Backup por Texto' : 'Backup por Texto (Área de Transferência / Sem Arquivo) ✨'}
             </button>
+            <AutoBackupFolderControl />
 
             {showClipboardBackup && (
               <div className="mt-3 bg-[#0C0E0D] border border-purple-500/10 p-3.5 rounded-xl space-y-3 animate-fade-in">
