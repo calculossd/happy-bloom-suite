@@ -159,7 +159,7 @@ function TopBar() {
         <div className="ml-2 flex items-center gap-2.5 pl-3 border-l border-white/[0.06]">
           <div className="size-9 rounded-full grid place-items-center text-[12px] font-bold text-black" style={{ background: `linear-gradient(135deg,${LIME},${LIME_DIM})` }}>A</div>
           <div className="leading-tight">
-            <div className="text-[12.5px] font-semibold text-white">Olá, Alex!</div>
+            <div className="text-[12.5px] font-semibold text-white">Olá, Inova Mundo!</div>
             <div className="text-[10.5px] text-white/45">Administrador</div>
           </div>
           <ChevronDown className="size-3.5 text-white/40" />
@@ -913,7 +913,7 @@ export function Print3DPanel({
       {/* Page header */}
       <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
-              <h1 className="text-[22px] font-bold tracking-tight text-white">Bem-vindo de volta, Alex! <span className="inline-block">👋</span></h1>
+              <h1 className="text-[22px] font-bold tracking-tight text-white">Bem-vindo de volta, Inova Mundo! <span className="inline-block">👋</span></h1>
               <p className="text-[12.5px] text-white/45">Aqui está o resumo da sua produção hoje.</p>
             </div>
             <div className="flex items-center gap-2">
