@@ -1759,7 +1759,7 @@ function WorkbenchPanel({
   pixabayQuery, setPixabayQuery, setReport, copyToClipboard, copiedTag, copiedSEO,
   customKeys, selectedPlatform
 }: WorkbenchProps) {
-  const imageCacheRef = useRef<Record<string, string>>({});
+  const imageCacheRef = useRef<Record<string, string>>(loadQueryImages());
   const [isSearchingImage, setIsSearchingImage] = useState<boolean>(false);
   const kitCacheRef = useRef<Record<string, any>>({});
   const [kitIdeas, setKitIdeas] = useState<any>(null);
@@ -1849,7 +1849,8 @@ function WorkbenchPanel({
           if (imageUrl) {
             // Save to cache
             imageCacheRef.current[cleanSearchQuery] = imageUrl;
-            
+            persistQueryImage(cleanSearchQuery, imageUrl);
+
             setReport(prev => {
               if (prev && prev.id === report.id) {
                 return { ...prev, imageUrl };
@@ -1886,6 +1887,7 @@ function WorkbenchPanel({
       const imageUrl = await searchImage(cleanSearchQuery, customKeys);
       if (imageUrl) {
         imageCacheRef.current[cleanSearchQuery] = imageUrl;
+        persistQueryImage(cleanSearchQuery, imageUrl);
         setReport(prev => ({ ...prev, imageUrl }));
       }
     } catch (error) {
