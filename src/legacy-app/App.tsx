@@ -1365,6 +1365,11 @@ export default function App() {
           border-radius: 0.75rem !important;
         }
 
+        /* Folder-style tabs keep flat bottom corners (browser tab look) */
+        button.folder-tab {
+          border-radius: 0.5rem 0.5rem 0 0 !important;
+        }
+
         /* Universal overrides for hardcoded Tailwind colors to dynamically tint the entire app */
         .text-\\[\\#95BBA2\\] { color: var(--brand-primary) !important; }
         .bg-\\[\\#95BBA2\\] { background-color: var(--brand-primary) !important; }
@@ -1541,7 +1546,7 @@ export default function App() {
                 borderTop: active ? `2px solid ${accentLine}` : `1px solid ${borderCol}`,
                 color: '#FFFFFF',
               }}
-              className={`relative inline-flex items-center justify-center gap-1 px-3 rounded-t-md text-[10.5px] sm:text-[11px] font-semibold whitespace-nowrap transition-all border border-b-0 -mr-px ${
+              className={`folder-tab relative inline-flex items-center justify-center gap-1 px-3 rounded-t-md text-[10.5px] sm:text-[11px] font-semibold whitespace-nowrap transition-all border border-b-0 -mr-px ${
                 active
                   ? 'py-2 z-10 -mb-px shadow-[0_-3px_10px_rgba(0,0,0,0.55)] text-white'
                   : 'py-1.5 mb-[2px] text-white/70 hover:text-white hover:brightness-125'
