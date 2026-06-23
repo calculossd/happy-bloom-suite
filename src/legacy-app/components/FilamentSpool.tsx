@@ -1,4 +1,10 @@
 import React from 'react';
+import plaAsset from '@/assets/spool-pla.png.asset.json';
+import petgAsset from '@/assets/spool-petg.png.asset.json';
+import absAsset from '@/assets/spool-abs.png.asset.json';
+import tpuAsset from '@/assets/spool-tpu.png.asset.json';
+import asaAsset from '@/assets/spool-asa.png.asset.json';
+import silkAsset from '@/assets/spool-silk.png.asset.json';
 
 const MATERIAL_COLORS: Record<string, string> = {
   PLA: '#b7ff00',
@@ -17,14 +23,44 @@ export function materialColor(type?: string, fallback = '#b7ff00') {
   return MATERIAL_COLORS[key] || fallback;
 }
 
+const SPOOL_IMAGES: Record<string, string> = {
+  PLA: plaAsset.url,
+  PETG: petgAsset.url,
+  ABS: absAsset.url,
+  TPU: tpuAsset.url,
+  ASA: asaAsset.url,
+  SILK: silkAsset.url,
+};
+
+export function spoolImage(type?: string): string | undefined {
+  if (!type) return undefined;
+  const key = String(type).toUpperCase().replace(/[^A-Z]/g, '');
+  return SPOOL_IMAGES[key];
+}
+
 interface FilamentSpoolProps {
   color?: string;
   size?: number;
   className?: string;
   label?: string;
+  type?: string;
 }
 
-export function FilamentSpool({ color = '#b7ff00', size = 40, className, label }: FilamentSpoolProps) {
+export function FilamentSpool({ color = '#b7ff00', size = 40, className, label, type }: FilamentSpoolProps) {
+  const img = spoolImage(type);
+  if (img) {
+    return (
+      <img
+        src={img}
+        alt={label || `${type} filamento`}
+        width={size}
+        height={size}
+        loading="lazy"
+        className={className}
+        style={{ width: size, height: size, objectFit: 'contain' }}
+      />
+    );
+  }
   return (
     <svg
       viewBox="0 0 64 64"
