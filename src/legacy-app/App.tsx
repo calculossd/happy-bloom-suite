@@ -6,6 +6,7 @@ import { dedupeOffers } from './utils/offerDedupe';
 import { Client, Printer, PrintOrder, FilamentStock, SupplyStock, Expense, ShoppingItem, ExternalPlatformOrder, CatalogItem } from './types';
 import { useAppState } from './state/useAppState';
 import { useAutoQuotations } from './hooks/useAutoQuotations';
+import { useAutoBackup, runBackupNow } from './hooks/useAutoBackup';
 import { DashboardTab } from './components/DashboardTab';
 import { ProductionTab } from './components/ProductionTab';
 import { ClientsTab } from './components/ClientsTab';
@@ -547,6 +548,9 @@ export default function App() {
 
   // Automatic Quotes Search 3x a day (Morning, Afternoon, Night)
   useAutoQuotations();
+
+  // Backup automático do banco de dados a cada 6 horas (download no PC)
+  useAutoBackup();
 
 
   // Keep a running time state
