@@ -38,6 +38,7 @@ import {
 import { Client, Printer, PrintOrder, FilamentStock, Expense, ShoppingItem } from '../types';
 import { getApiUrl, validateApiKeyFormat, checkIsAndroidWebView, callGeminiGeneratePalette } from '../utils/api';
 import { safeStorage } from '../utils/storage';
+import { uploadWorkspace, downloadWorkspace, FirebaseSyncError } from '../sync/firebaseSync';
 
 interface SettingsTabProps {
   clients: Client[];
@@ -105,86 +106,13 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   });
 
   const handleUploadToFirebase = async () => {
-    if (!firebaseUrl) {
-      showError('Por favor, informe a URL do seu Firebase Realtime Database.');
-      return;
-    }
-    if (!workspaceCode) {
-      showError('Por favor, informe o código do Workspace a ser utilizado.');
-      return;
-    }
-
-    let formattedUrl = firebaseUrl.trim();
-    if (formattedUrl.includes('console.firebase.google.com')) {
-      showError('Erro: Você informou o link do Painel Console do Firebase! Por favor, utilize a URL REST do seu Realtime Database (ex: https://sua-loja-default-rtdb.firebaseio.com).');
-      return;
-    }
-
     setIsSyncing(true);
     try {
-      if (!formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
-        formattedUrl = 'https://' + formattedUrl;
-      }
-      if (!formattedUrl.endsWith('/')) {
-        formattedUrl += '/';
-      }
-
-      // Read local catalogItems which is in localStorage
-      let localCatalog: any[] = [];
-      try {
-        const catStr = localStorage.getItem('bambuzau_local_catalog_production');
-        if (catStr) {
-          localCatalog = JSON.parse(catStr);
-        }
-      } catch (e) {
-        console.error('Error loading local catalog', e);
-      }
-
-      // Compile current state payload
-      const payload = {
-        updatedAt: Date.now(),
-        clients: clients || [],
-        printers: printers || [],
-        orders: orders || [],
-        filamentStocks: filamentStocks || [],
-        expenses: expenses || [],
-        shoppingItems: shoppingItems || [],
-        catalogItems: localCatalog,
-        brandConfig: brandConfig,
-        tuyaDevices: tuyaDevices || [],
-        customKeys: {
-          geminiKey: safeStorage.getItem('bambuzau_custom_gemini_key', ''),
-          groqKey: safeStorage.getItem('bambuzau_custom_groq_key', ''),
-          serpKey: safeStorage.getItem('bambuzau_custom_serp_key', ''),
-          tavilyKey: safeStorage.getItem('bambuzau_custom_tavily_key', ''),
-          jinaKey: safeStorage.getItem('bambuzau_custom_jina_key', ''),
-          aiProvider: safeStorage.getItem('bambuzau_ai_provider', 'gemini'),
-          webOrigin: safeStorage.getItem('bambuzau_web_origin', typeof window !== 'undefined' ? window.location.origin : '')
-        }
-      };
-
-      const targetUrl = `${formattedUrl}workspaces/${workspaceCode.trim()}.json`;
-
-      const response = await fetch(targetUrl, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Servidor retornou HTTP ${response.status}`);
-      }
-
-      // Save sync settings
-      localStorage.setItem('bambuzau_firebase_url', formattedUrl);
-      localStorage.setItem('bambuzau_workspace_code', workspaceCode.trim());
-      
-      const nowStr = new Date().toLocaleString('pt-BR');
-      localStorage.setItem('bambuzau_last_sync_time', nowStr);
+      const nowStr = await uploadWorkspace(
+        { firebaseUrl, workspaceCode },
+        { clients, printers, orders, filamentStocks, expenses, shoppingItems, brandConfig, tuyaDevices },
+      );
       setLastSyncTime(nowStr);
-
       showSuccess('Sincronização concluída com sucesso! Os dados foram enviados para a Nuvem Firebase.');
     } catch (err: any) {
       showError('Falha ao enviar dados para o Firebase: ' + err.message);
@@ -194,21 +122,6 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   };
 
   const handleDownloadFromFirebase = async () => {
-    if (!firebaseUrl) {
-      showError('Por favor, informe a URL do seu Firebase.');
-      return;
-    }
-    if (!workspaceCode) {
-      showError('Por favor, informe o código do Workspace.');
-      return;
-    }
-
-    let formattedUrl = firebaseUrl.trim();
-    if (formattedUrl.includes('console.firebase.google.com')) {
-      showError('Erro: Você informou o link do Painel Console do Firebase! Por favor, utilize a URL REST do seu Realtime Database (ex: https://sua-loja-default-rtdb.firebaseio.com).');
-      return;
-    }
-
     if (!confirm('ATENÇÃO: Esta ação substituirá COMPLETAMENTE todo o seu progresso local atual pelos dados salvados na Nuvem Firebase. Seu aplicativo será reiniciado para atualizar. Deseja prosseguir?')) {
       return;
     }
@@ -218,46 +131,10 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
 
     setIsSyncing(true);
     try {
-      if (!formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
-        formattedUrl = 'https://' + formattedUrl;
-      }
-      if (!formattedUrl.endsWith('/')) {
-        formattedUrl += '/';
-      }
+      const { data, syncedAt } = await downloadWorkspace({ firebaseUrl, workspaceCode });
 
-      const targetUrl = `${formattedUrl}workspaces/${workspaceCode.trim()}.json`;
-
-      const response = await fetch(targetUrl);
-      if (!response.ok) {
-        throw new Error(`Erro ao buscar dados na Nuvem: HTTP ${response.status}`);
-      }
-
-      const data = await response.json();
-      if (!data || data === 'null') {
-        throw new Error(`A pasta de nuvem '${workspaceCode.trim()}' está vazia ou ainda não possui registros.`);
-      }
-
-      // Success, write settings to localstorage
-      localStorage.setItem('bambuzau_firebase_url', formattedUrl);
-      localStorage.setItem('bambuzau_workspace_code', workspaceCode.trim());
-
-      // Recover and set synchronized API keys automatically on any new device (phone/PC)
-      if (data.customKeys) {
-        if (data.customKeys.geminiKey) safeStorage.setItem('bambuzau_custom_gemini_key', data.customKeys.geminiKey);
-        if (data.customKeys.groqKey) safeStorage.setItem('bambuzau_custom_groq_key', data.customKeys.groqKey);
-        if (data.customKeys.serpKey) safeStorage.setItem('bambuzau_custom_serp_key', data.customKeys.serpKey);
-        if (data.customKeys.tavilyKey) safeStorage.setItem('bambuzau_custom_tavily_key', data.customKeys.tavilyKey);
-        if (data.customKeys.jinaKey) safeStorage.setItem('bambuzau_custom_jina_key', data.customKeys.jinaKey);
-        if (data.customKeys.aiProvider) safeStorage.setItem('bambuzau_ai_provider', data.customKeys.aiProvider);
-        if (data.customKeys.webOrigin) {
-          safeStorage.setItem('bambuzau_web_origin', data.customKeys.webOrigin);
-          setAtiServerUrl(data.customKeys.webOrigin);
-        }
-      }
-
-      // Save catalogItems to local storage directly - guaranteed syncing
-      if (data.catalogItems) {
-        localStorage.setItem('bambuzau_local_catalog_production', JSON.stringify(data.catalogItems));
+      if (data.customKeys?.webOrigin) {
+        setAtiServerUrl(data.customKeys.webOrigin);
       }
 
       // Import the rest via prop callback
@@ -275,9 +152,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
         onUpdateBrandConfig(data.brandConfig);
       }
 
-      const nowStr = new Date().toLocaleString('pt-BR');
-      localStorage.setItem('bambuzau_last_sync_time', nowStr);
-      setLastSyncTime(nowStr);
+      setLastSyncTime(syncedAt);
 
       showSuccess('Banco de dados resgatado com sucesso! O aplicativo será recarregado em instantes para aplicar...');
       setTimeout(() => {
