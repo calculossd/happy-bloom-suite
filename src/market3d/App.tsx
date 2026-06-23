@@ -675,49 +675,13 @@ export default function App() {
   }, [selectedCategoryId, selectedPlatform, searchQuery]);
 
   return (
-    <div className="bg-[#03060A] text-[#EDF2F7] min-h-screen font-sans selection:bg-orange-500/30 selection:text-orange-100 flex flex-col justify-between overflow-x-hidden antialiased" id="intel-applet-root">
-      
-      {/* Exquisite Top Atmospheric Glow overlays */}
-      <div className="absolute top-0 left-1/4 w-[600px] h-[300px] bg-gradient-radial from-orange-500/10 via-transparent to-transparent pointer-events-none -z-10 blur-[80px]" />
-      <div className="absolute top-10 right-1/4 w-[400px] h-[250px] bg-gradient-radial from-amber-500/5 via-transparent to-transparent pointer-events-none -z-10 blur-[60px]" />
-
+    <div className="text-[#EDF2F7] font-sans selection:bg-orange-500/30 selection:text-orange-100 flex flex-col antialiased" id="intel-applet-root">
       {/* TRIPLE COLUMN WORKSPACE GRID */}
-      <main className="max-w-7xl mx-auto w-full px-4 sm:px-6 py-6 lg:py-8 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start flex-grow">
+      <main className="w-full grid grid-cols-1 lg:grid-cols-12 gap-4 items-start flex-grow">
         
         {/* COLUMN 1: SIDEBAR CATEGORY NAVIGATION STATUS (SPAN 3) */}
-        <aside className="col-span-12 lg:col-span-3 space-y-4">
-          <div className="bg-[#090D16]/95 border border-[#121826] rounded-2xl p-5 shadow-xl backdrop-blur-md flex flex-col h-[78vh]">
-            
-            {/* Sidebar title */}
-            <div className="flex items-center justify-between mb-4.5 px-1 pb-3 border-b border-[#121826]/85">
-              <span className="text-[10px] font-black uppercase tracking-[0.1em] text-slate-400">
-                Segmentos de Mercado
-              </span>
-              <span className="text-[10px] bg-slate-900 text-orange-400 border border-[#192236] px-2 py-0.5 rounded-full font-mono font-bold">
-                {categories.length}
-              </span>
-            </div>
-
-            {/* Quick Find Category Filter */}
-            <div className="relative mb-3.5 shrink-0">
-              <Search className="absolute left-3 top-2.5 text-slate-500 w-3.5 h-3.5" />
-              <input 
-                type="text"
-                placeholder="Filtrar nichos (ex: pet, brinquedo)..."
-                value={categorySearchQuery}
-                onChange={(e) => setCategorySearchQuery(e.target.value)}
-                className="w-full bg-[#05080E] hover:bg-[#080C16] text-slate-300 placeholder-slate-600 pl-8.5 pr-3 py-2 text-[11px] rounded-lg border border-[#141B2B] focus:outline-none focus:ring-1 focus:ring-orange-500/40 transition-all font-medium"
-              />
-              {categorySearchQuery && (
-                <button 
-                  onClick={() => setCategorySearchQuery('')}
-                  className="absolute right-2.5 top-2.5 text-slate-500 hover:text-white"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              )}
-            </div>
-
+        <aside className="col-span-12 lg:col-span-3">
+          <div className="flex flex-col max-h-[78vh]">
             {/* List scroll wrapper */}
             <div className="flex lg:flex-col overflow-x-auto lg:overflow-x-visible gap-2 pb-2.5 lg:pb-0 lg:overflow-y-auto scrollbar-thin scrollbar-thumb-[#151D2F] flex-grow pr-1">
               {filteredCategories.map((cat) => {
