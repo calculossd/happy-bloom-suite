@@ -9,6 +9,12 @@ import {
   CheckCircle2,
   XCircle,
   Loader2,
+  Package,
+  Truck,
+  ShoppingCart,
+  DollarSign,
+  Hammer,
+  CalendarClock,
 } from "lucide-react";
 
 type SendState = "idle" | "sending" | "ok" | "err";
@@ -34,6 +40,66 @@ function fmt(d: Date) {
   const m = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
   return `${y}-${m}-${day}`;
+}
+
+function fmtTs(ts: number) {
+  if (!ts) return "";
+  const d = new Date(ts);
+  return fmt(d);
+}
+
+function brl(n: number) {
+  return (Number(n) || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
+type DerivedItem = {
+  kind: "sale" | "delivery" | "expense" | "pending" | "shopping" | "produced";
+  title: string;
+  meta?: string;
+  amount?: number;
+};
+
+const TONE: Record<string, string> = {
+  emerald: "border-emerald-400/20 bg-emerald-500/5 text-emerald-200",
+  cyan: "border-cyan-400/20 bg-cyan-500/5 text-cyan-200",
+  amber: "border-amber-400/20 bg-amber-500/5 text-amber-200",
+  rose: "border-rose-400/20 bg-rose-500/5 text-rose-200",
+};
+
+function SummaryGroup({
+  icon,
+  label,
+  tone,
+  items,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  tone: "emerald" | "cyan" | "amber" | "rose";
+  items: DerivedItem[];
+}) {
+  return (
+    <div className={`rounded-xl border p-3 ${TONE[tone]}`}>
+      <p className="mb-2 inline-flex items-center gap-1.5 text-[11px] font-semibold">
+        {icon} {label} <span className="text-white/40">· {items.length}</span>
+      </p>
+      <ul className="space-y-1 text-xs text-white/80">
+        {items.slice(0, 6).map((it, i) => (
+          <li key={i} className="flex justify-between gap-2">
+            <span className="truncate">
+              {it.title}
+              {it.meta && <span className="ml-1 text-white/40">· {it.meta}</span>}
+            </span>
+            {typeof it.amount === "number" && it.amount > 0 && (
+              <span className="shrink-0 text-white/50">{brl(it.amount)}</span>
+            )}
+          </li>
+        ))}
+        {items.length > 6 && (
+          <li className="text-white/30">+{items.length - 6} itens…</li>
+        )}
+      </ul>
+    </div>
+  );
 }
 
 async function sendToHermes(cfg: HermesCfg, ev: Event) {
@@ -70,6 +136,10 @@ function AgendaPage() {
   const [time, setTime] = useState("");
   const [cfg, setCfg] = useState<HermesCfg>(DEFAULT_CFG);
   const [showCfg, setShowCfg] = useState(false);
+  const [orders, setOrders] = useState<any[]>([]);
+  const [expenses, setExpenses] = useState<any[]>([]);
+  const [shopping, setShopping] = useState<any[]>([]);
+  const [catalog, setCatalog] = useState<any[]>([]);
 
   // Mount-only date init (avoids SSR/CSR hydration mismatch)
   useEffect(() => {
@@ -83,6 +153,19 @@ function AgendaPage() {
       const rawCfg = localStorage.getItem(HERMES_CFG_KEY);
       if (rawCfg) setCfg({ ...DEFAULT_CFG, ...JSON.parse(rawCfg) });
     } catch {}
+    const loadData = () => {
+      try {
+        setOrders(JSON.parse(localStorage.getItem("bambuzau_orders") || "[]"));
+        setExpenses(JSON.parse(localStorage.getItem("bambuzau_expenses") || "[]"));
+        setShopping(JSON.parse(localStorage.getItem("bambuzau_shopping") || "[]"));
+        setCatalog(JSON.parse(localStorage.getItem("bambuzau_local_catalog_production") || "[]"));
+      } catch {}
+    };
+    loadData();
+    const onStorage = () => loadData();
+    window.addEventListener("storage", onStorage);
+    const t = window.setInterval(loadData, 4000);
+    return () => { window.removeEventListener("storage", onStorage); window.clearInterval(t); };
   }, []);
 
   useEffect(() => {
@@ -120,6 +203,64 @@ function AgendaPage() {
     ? cursor.toLocaleDateString("pt-BR", { month: "long", year: "numeric" })
     : "";
   const today = mounted ? fmt(new Date()) : "";
+
+  // Build a date → derived items map from orders/expenses/shopping
+  const derivedByDate = useMemo(() => {
+    const map = new Map<string, DerivedItem[]>();
+    const push = (date: string, item: DerivedItem) => {
+      if (!date) return;
+      if (!map.has(date)) map.set(date, []);
+      map.get(date)!.push(item);
+    };
+    for (const o of orders) {
+      const created = o.createdAt ? fmtTs(o.createdAt) : "";
+      const due = o.deadline ? fmtTs(o.deadline) : "";
+      const label = `${o.itemName || "Item"} × ${o.quantity || 1}`;
+      const meta = o.clientName ? `Cliente: ${o.clientName}` : undefined;
+      if (created) push(created, { kind: "sale", title: label, meta, amount: o.priceCharged });
+      if (due) {
+        if (o.status === "DELIVERED") {
+          push(due, { kind: "delivery", title: `Entrega: ${label}`, meta });
+        } else {
+          push(due, { kind: "pending", title: `Pendente: ${label}`, meta: `${o.status || ""}${meta ? " · " + meta : ""}` });
+        }
+      }
+    }
+    for (const e of expenses) {
+      const d = e.date ? fmtTs(e.date) : "";
+      if (!d) continue;
+      push(d, {
+        kind: "expense",
+        title: `${e.description || "Compra"}${e.qty > 1 ? ` × ${e.qty}` : ""}`,
+        meta: e.category,
+        amount: e.amount,
+      });
+    }
+    return map;
+  }, [orders, expenses]);
+
+  const pendingShopping = useMemo(
+    () => shopping.filter((s) => !s.isChecked),
+    [shopping],
+  );
+
+  const lowStockCatalog = useMemo(
+    () => catalog.filter((c) => Number(c.stockCount ?? 0) < Number(c.minStockCount ?? 0)),
+    [catalog],
+  );
+
+  const isPast = selected && today ? selected < today : false;
+  const isFuture = selected && today ? selected > today : false;
+
+  const dayDerived = derivedByDate.get(selected) || [];
+  const daySales = dayDerived.filter((d) => d.kind === "sale");
+  const dayDeliveries = dayDerived.filter((d) => d.kind === "delivery");
+  const dayExpenses = dayDerived.filter((d) => d.kind === "expense");
+  const dayPending = dayDerived.filter((d) => d.kind === "pending");
+
+  const totalSales = daySales.reduce((s, x) => s + (Number(x.amount) || 0), 0);
+  const totalSpent = dayExpenses.reduce((s, x) => s + (Number(x.amount) || 0), 0);
+
   const dayEvents = events
     .filter((e) => e.date === selected)
     .sort((a, b) => (a.time || "").localeCompare(b.time || ""));
@@ -291,7 +432,12 @@ function AgendaPage() {
                     />
                   ))
                 : cells.map((cell) => {
-                    const count = events.filter((e) => e.date === cell.date).length;
+                    const evCount = events.filter((e) => e.date === cell.date).length;
+                    const derived = derivedByDate.get(cell.date) || [];
+                    const hasSale = derived.some((d) => d.kind === "sale");
+                    const hasDelivery = derived.some((d) => d.kind === "delivery");
+                    const hasExpense = derived.some((d) => d.kind === "expense");
+                    const hasPending = derived.some((d) => d.kind === "pending");
                     const isToday = cell.date === today;
                     const isSel = cell.date === selected;
                     return (
@@ -306,14 +452,116 @@ function AgendaPage() {
                           <span className={isToday ? "font-bold text-cyan-300" : ""}>
                             {cell.day}
                           </span>
-                          {count > 0 && (
-                            <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
-                          )}
+                          <div className="flex gap-0.5">
+                            {evCount > 0 && <span className="h-1.5 w-1.5 rounded-full bg-violet-400" title="Compromisso" />}
+                            {hasSale && <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" title="Venda" />}
+                            {hasDelivery && <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" title="Entrega" />}
+                            {hasExpense && <span className="h-1.5 w-1.5 rounded-full bg-amber-400" title="Compra" />}
+                            {hasPending && <span className="h-1.5 w-1.5 rounded-full bg-rose-400" title="Pendente" />}
+                          </div>
                         </div>
                       </button>
                     );
                   })}
             </div>
+
+            {/* Day summary */}
+            {mounted && selected && (
+              <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.02] p-4">
+                <div className="mb-3 flex items-center justify-between">
+                  <p className="text-[11px] uppercase tracking-[0.2em] text-white/40">
+                    {isPast ? "Resumo do dia" : isFuture ? "Programado" : "Hoje"}
+                  </p>
+                  <div className="flex gap-3 text-[11px]">
+                    {totalSales > 0 && <span className="text-emerald-300">+{brl(totalSales)}</span>}
+                    {totalSpent > 0 && <span className="text-amber-300">-{brl(totalSpent)}</span>}
+                  </div>
+                </div>
+
+                {dayDerived.length === 0 && !isFuture && (
+                  <p className="text-xs text-white/30">Nada registrado neste dia.</p>
+                )}
+
+                <div className="grid gap-3 md:grid-cols-2">
+                  {daySales.length > 0 && (
+                    <SummaryGroup
+                      icon={<DollarSign className="h-3.5 w-3.5" />}
+                      label="Vendas"
+                      tone="emerald"
+                      items={daySales}
+                    />
+                  )}
+                  {dayDeliveries.length > 0 && (
+                    <SummaryGroup
+                      icon={<Truck className="h-3.5 w-3.5" />}
+                      label="Entregas"
+                      tone="cyan"
+                      items={dayDeliveries}
+                    />
+                  )}
+                  {dayExpenses.length > 0 && (
+                    <SummaryGroup
+                      icon={<ShoppingCart className="h-3.5 w-3.5" />}
+                      label="Compras / Insumos"
+                      tone="amber"
+                      items={dayExpenses}
+                    />
+                  )}
+                  {dayPending.length > 0 && (
+                    <SummaryGroup
+                      icon={<CalendarClock className="h-3.5 w-3.5" />}
+                      label={isPast ? "Atrasados" : "Pedidos a fazer"}
+                      tone="rose"
+                      items={dayPending}
+                    />
+                  )}
+                </div>
+
+                {/* Future-only: pending todos */}
+                {!isPast && (pendingShopping.length > 0 || lowStockCatalog.length > 0) && (
+                  <div className="mt-4 grid gap-3 md:grid-cols-2">
+                    {pendingShopping.length > 0 && (
+                      <div className="rounded-xl border border-amber-400/20 bg-amber-500/5 p-3">
+                        <p className="mb-2 inline-flex items-center gap-1.5 text-[11px] font-semibold text-amber-200">
+                          <ShoppingCart className="h-3.5 w-3.5" /> A comprar
+                        </p>
+                        <ul className="space-y-1 text-xs text-white/70">
+                          {pendingShopping.slice(0, 8).map((s) => (
+                            <li key={s.id} className="flex justify-between gap-2">
+                              <span className="truncate">{s.name}</span>
+                              {s.price > 0 && <span className="text-white/40">{brl(s.price)}</span>}
+                            </li>
+                          ))}
+                          {pendingShopping.length > 8 && (
+                            <li className="text-white/30">+{pendingShopping.length - 8} itens…</li>
+                          )}
+                        </ul>
+                      </div>
+                    )}
+                    {lowStockCatalog.length > 0 && (
+                      <div className="rounded-xl border border-violet-400/20 bg-violet-500/5 p-3">
+                        <p className="mb-2 inline-flex items-center gap-1.5 text-[11px] font-semibold text-violet-200">
+                          <Hammer className="h-3.5 w-3.5" /> A produzir (estoque baixo)
+                        </p>
+                        <ul className="space-y-1 text-xs text-white/70">
+                          {lowStockCatalog.slice(0, 8).map((c) => (
+                            <li key={c.id} className="flex justify-between gap-2">
+                              <span className="truncate">{c.name}</span>
+                              <span className="text-white/40">
+                                {c.stockCount}/{c.minStockCount}
+                              </span>
+                            </li>
+                          ))}
+                          {lowStockCatalog.length > 8 && (
+                            <li className="text-white/30">+{lowStockCatalog.length - 8} itens…</li>
+                          )}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Day events */}
