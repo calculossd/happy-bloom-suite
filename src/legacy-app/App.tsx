@@ -1275,7 +1275,7 @@ export default function App() {
           subtitle: "",
         };
       case 7:  return { title: "Pesquisa de Preços", subtitle: "Compare preços entre marketplaces e fornecedores" };
-      case 8:  return { title: "Catálogo 3D",        subtitle: "Biblioteca de produtos com material, tempo e preço" };
+      case 8:  return { title: "Stls",        subtitle: "Biblioteca de produtos com material, tempo e preço" };
       case 9:  return { title: "Marketing",          subtitle: "Campanhas, geração de posts e calendário de publicações" };
       case 10: return { title: "Kanban",             subtitle: "Fluxo visual dos pedidos da fila ao entregue" };
       case 11: return { title: "Modelos",            subtitle: "Biblioteca de arquivos STL e 3MF" };
@@ -1607,7 +1607,7 @@ export default function App() {
                 { id: 9, label: 'Marketing', icon: Megaphone },
                 { id: 4, label: 'Assistente', icon: Sparkles, onClick: () => openCostsSubtab('AI') },
                 { id: 11, label: 'Modelos', icon: FileBox },
-                { id: 8, label: 'Makeworld', icon: Box },
+                { id: 8, label: 'Stls', icon: Box },
                 { id: 4, label: 'Catálogo', icon: BookOpen, onClick: () => openCostsSubtab('CATALOG') },
                 { id: 10, label: 'Kanban', icon: Columns3 },
               ],
