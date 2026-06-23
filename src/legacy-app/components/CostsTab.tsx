@@ -3011,8 +3011,18 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
 
       {/* SUBTAB 3: DOUBLE SECTORS - RAW FILAMENTS AND CONSUMABLE SUPPLIES */}
       {activeSubTab === 'STOCK' && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in" id="stocks-physical-layout">
-          
+        <div className="space-y-6 animate-fade-in" id="stocks-physical-layout">
+          {/* Standardized subtab header */}
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Estoque</div>
+                <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">Físico</span>
+              </div>
+              <p className="text-xs text-[var(--brand-muted)]">Carretéis de filamento, insumos e hardware sincronizados em tempo real</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Filamentos Stocks */}
           <div className="relative overflow-hidden bg-gradient-to-br from-[#161B19] via-[#121613] to-[#0E1210] border border-[#232B27] p-5 rounded-2xl space-y-4 shadow-[0_24px_60px_-30px_rgba(149,187,162,0.25)]">
             <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-emerald-500/10 blur-3xl opacity-60" />
