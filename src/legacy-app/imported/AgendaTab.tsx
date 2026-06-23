@@ -376,11 +376,11 @@ function AgendaPage() {
         )}
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          {/* Calendar */}
-          <div className="lg:col-span-2 rounded-3xl border border-white/10 bg-white/[0.02] p-6 backdrop-blur-xl">
-            <div className="mb-6 flex items-center justify-between">
+          {/* Calendar (small) */}
+          <div className="rounded-3xl border border-white/10 bg-white/[0.02] p-4 backdrop-blur-xl">
+            <div className="mb-3 flex items-center justify-between">
               <h3
-                className="text-lg font-semibold capitalize"
+                className="text-sm font-semibold capitalize"
                 style={{ fontFamily: "'Sora', sans-serif" }}
               >
                 {monthLabel || "\u00a0"}
@@ -392,7 +392,7 @@ function AgendaPage() {
                       c ? new Date(c.getFullYear(), c.getMonth() - 1, 1) : c,
                     )
                   }
-                  className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 hover:bg-white/10"
+                  className="grid h-7 w-7 place-items-center rounded-lg border border-white/10 hover:bg-white/10"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </button>
@@ -402,7 +402,7 @@ function AgendaPage() {
                     setCursor(new Date(d.getFullYear(), d.getMonth(), 1));
                     setSelected(fmt(d));
                   }}
-                  className="rounded-lg border border-white/10 px-3 text-xs hover:bg-white/10"
+                  className="rounded-lg border border-white/10 px-2 text-[11px] hover:bg-white/10"
                 >
                   Hoje
                 </button>
@@ -412,23 +412,23 @@ function AgendaPage() {
                       c ? new Date(c.getFullYear(), c.getMonth() + 1, 1) : c,
                     )
                   }
-                  className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 hover:bg-white/10"
+                  className="grid h-7 w-7 place-items-center rounded-lg border border-white/10 hover:bg-white/10"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </button>
               </div>
             </div>
-            <div className="mb-2 grid grid-cols-7 gap-1 text-center text-[10px] uppercase tracking-widest text-white/40">
+            <div className="mb-1 grid grid-cols-7 gap-0.5 text-center text-[9px] uppercase tracking-wider text-white/40">
               {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((d) => (
-                <div key={d}>{d}</div>
+                <div key={d}>{d[0]}</div>
               ))}
             </div>
-            <div className="grid grid-cols-7 gap-1">
+            <div className="grid grid-cols-7 gap-0.5">
               {!mounted
                 ? Array.from({ length: 42 }).map((_, i) => (
                     <div
                       key={i}
-                      className="aspect-square rounded-xl border border-white/5"
+                      className="aspect-square rounded-md border border-white/5"
                     />
                   ))
                 : cells.map((cell) => {
@@ -438,7 +438,7 @@ function AgendaPage() {
                       <button
                         key={cell.date + cell.day}
                         onClick={() => setSelected(cell.date)}
-                        className={`aspect-square grid place-items-center rounded-xl border text-xs transition-all
+                        className={`aspect-square grid place-items-center rounded-md border text-[11px] transition-all
                           ${isSel ? "border-cyan-400/60 bg-cyan-500/10" : "border-white/5 hover:border-white/20"}
                           ${cell.inMonth ? "text-white" : "text-white/20"}`}
                       >
@@ -452,7 +452,7 @@ function AgendaPage() {
           </div>
 
           {/* Day events */}
-          <div className="rounded-3xl border border-white/10 bg-white/[0.02] p-6 backdrop-blur-xl">
+          <div className="lg:col-span-2 rounded-3xl border border-white/10 bg-white/[0.02] p-6 backdrop-blur-xl">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-white/70">
               {mounted && selected
                 ? new Date(selected + "T00:00").toLocaleDateString("pt-BR", {
@@ -551,9 +551,9 @@ function AgendaPage() {
           </div>
         </div>
 
-        {/* Próximos 6 dias em blocos */}
+        {/* Próximos 6 dias em blocos compridos */}
         {mounted && (
-          <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+          <div className="mt-6 flex flex-col gap-3">
             {Array.from({ length: 6 }).map((_, i) => {
               const d = new Date();
               d.setHours(0, 0, 0, 0);
@@ -571,29 +571,27 @@ function AgendaPage() {
                 <button
                   key={key}
                   onClick={() => setSelected(key)}
-                  className={`text-left rounded-2xl border p-4 transition-all backdrop-blur-xl ${
+                  className={`w-full text-left rounded-2xl border p-4 transition-all backdrop-blur-xl flex items-stretch gap-5 ${
                     isToday
                       ? "border-cyan-400/60 bg-cyan-500/10 shadow-[0_0_30px_-12px_rgba(34,211,238,0.6)]"
                       : "border-white/10 bg-white/[0.02] hover:border-white/20"
                   } ${selected === key ? "ring-1 ring-cyan-400/40" : ""}`}
                 >
-                  <div className="mb-3 flex items-baseline justify-between">
-                    <div>
-                      <p className={`text-[10px] uppercase tracking-widest ${isToday ? "text-cyan-300" : "text-white/40"}`}>
-                        {isToday ? "Hoje" : d.toLocaleDateString("pt-BR", { weekday: "short" })}
-                      </p>
-                      <p className="text-2xl font-bold leading-none" style={{ fontFamily: "'Sora', sans-serif" }}>
-                        {d.getDate()}
-                      </p>
-                    </div>
-                    <p className="text-[10px] text-white/40">
+                  <div className="shrink-0 w-20 border-r border-white/10 pr-4">
+                    <p className={`text-[10px] uppercase tracking-widest ${isToday ? "text-cyan-300" : "text-white/40"}`}>
+                      {isToday ? "Hoje" : d.toLocaleDateString("pt-BR", { weekday: "short" })}
+                    </p>
+                    <p className="text-3xl font-bold leading-none mt-1" style={{ fontFamily: "'Sora', sans-serif" }}>
+                      {d.getDate()}
+                    </p>
+                    <p className="mt-1 text-[10px] text-white/40">
                       {d.toLocaleDateString("pt-BR", { month: "short" })}
                     </p>
                   </div>
 
-                  {empty && <p className="text-[11px] text-white/30">Sem registros.</p>}
-
-                  <div className="space-y-2 text-[11px]">
+                  <div className="flex-1 min-w-0">
+                    {empty && <p className="text-[11px] text-white/30">Sem registros.</p>}
+                    <div className="grid gap-x-6 gap-y-2 text-[11px] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
                     {sales.length > 0 && (
                       <Block tone="emerald" icon={<DollarSign className="h-3 w-3" />} label="Vendas" items={sales.map((s) => s.title)} />
                     )}
@@ -614,6 +612,7 @@ function AgendaPage() {
                         items={evs.map((e) => (e.time ? `${e.time} · ${e.title}` : e.title))}
                       />
                     )}
+                    </div>
                   </div>
                 </button>
               );
