@@ -551,9 +551,9 @@ function AgendaPage() {
           </div>
         </div>
 
-        {/* Próximos 6 dias em blocos */}
+        {/* Próximos 6 dias em blocos compridos */}
         {mounted && (
-          <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+          <div className="mt-6 flex flex-col gap-3">
             {Array.from({ length: 6 }).map((_, i) => {
               const d = new Date();
               d.setHours(0, 0, 0, 0);
@@ -571,29 +571,27 @@ function AgendaPage() {
                 <button
                   key={key}
                   onClick={() => setSelected(key)}
-                  className={`text-left rounded-2xl border p-4 transition-all backdrop-blur-xl ${
+                  className={`w-full text-left rounded-2xl border p-4 transition-all backdrop-blur-xl flex items-stretch gap-5 ${
                     isToday
                       ? "border-cyan-400/60 bg-cyan-500/10 shadow-[0_0_30px_-12px_rgba(34,211,238,0.6)]"
                       : "border-white/10 bg-white/[0.02] hover:border-white/20"
                   } ${selected === key ? "ring-1 ring-cyan-400/40" : ""}`}
                 >
-                  <div className="mb-3 flex items-baseline justify-between">
-                    <div>
-                      <p className={`text-[10px] uppercase tracking-widest ${isToday ? "text-cyan-300" : "text-white/40"}`}>
-                        {isToday ? "Hoje" : d.toLocaleDateString("pt-BR", { weekday: "short" })}
-                      </p>
-                      <p className="text-2xl font-bold leading-none" style={{ fontFamily: "'Sora', sans-serif" }}>
-                        {d.getDate()}
-                      </p>
-                    </div>
-                    <p className="text-[10px] text-white/40">
+                  <div className="shrink-0 w-20 border-r border-white/10 pr-4">
+                    <p className={`text-[10px] uppercase tracking-widest ${isToday ? "text-cyan-300" : "text-white/40"}`}>
+                      {isToday ? "Hoje" : d.toLocaleDateString("pt-BR", { weekday: "short" })}
+                    </p>
+                    <p className="text-3xl font-bold leading-none mt-1" style={{ fontFamily: "'Sora', sans-serif" }}>
+                      {d.getDate()}
+                    </p>
+                    <p className="mt-1 text-[10px] text-white/40">
                       {d.toLocaleDateString("pt-BR", { month: "short" })}
                     </p>
                   </div>
 
-                  {empty && <p className="text-[11px] text-white/30">Sem registros.</p>}
-
-                  <div className="space-y-2 text-[11px]">
+                  <div className="flex-1 min-w-0">
+                    {empty && <p className="text-[11px] text-white/30">Sem registros.</p>}
+                    <div className="grid gap-x-6 gap-y-2 text-[11px] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
                     {sales.length > 0 && (
                       <Block tone="emerald" icon={<DollarSign className="h-3 w-3" />} label="Vendas" items={sales.map((s) => s.title)} />
                     )}
@@ -614,6 +612,7 @@ function AgendaPage() {
                         items={evs.map((e) => (e.time ? `${e.time} · ${e.title}` : e.title))}
                       />
                     )}
+                    </div>
                   </div>
                 </button>
               );
