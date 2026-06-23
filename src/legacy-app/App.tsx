@@ -1501,19 +1501,22 @@ export default function App() {
           { id: 5, label: 'Ajustes',   icon: Settings },
         ].map(item => {
           const active = currentTab === item.id;
-          // "Painel" até "Gestão" (ids 0,1,6,2,3,4) ganham uma cor distinta (cyan)
+          // Grupo de gestão de impressão 3D (dourado) vs grupo de marketing (azul)
           const isCoreGroup = [0, 1, 6, 2, 3, 4].includes(item.id);
-          const activeColor = isCoreGroup ? '#F5C842' : '#A5D84B';
-          const inactiveColor = isCoreGroup ? 'text-amber-300/70' : 'text-zinc-400';
+          const baseColor = isCoreGroup ? '#F5C842' : '#3B82F6';
           return (
             <button
               key={item.id}
               onClick={() => setCurrentTab(item.id)}
-              style={active ? { backgroundColor: activeColor, borderColor: activeColor, color: '#FFFFFF' } : undefined}
+              style={{
+                backgroundColor: active ? baseColor : `${baseColor}B3`,
+                borderColor: baseColor,
+                color: '#FFFFFF',
+              }}
               className={`relative inline-flex items-center justify-center gap-1 px-2 rounded-t-lg text-[10.5px] sm:text-[11px] font-bold whitespace-nowrap transition-all border border-b-0 -mb-px -mr-px ${
                 active
                   ? 'py-2 z-10 shadow-[0_-4px_14px_rgba(0,0,0,0.5)]'
-                  : `bg-black/20 ${inactiveColor} border-white/5 py-1.5 hover:bg-black/30 hover:text-white`
+                  : 'py-1.5 hover:brightness-110'
               }`}
             >
               <item.icon className="h-3 w-3 shrink-0" />
@@ -1521,7 +1524,7 @@ export default function App() {
               {item.badge ? (
                 <span
                   className="ml-1 px-1.5 py-0.5 rounded-full text-[9px] font-black"
-                  style={active ? { backgroundColor: 'rgba(0,0,0,0.35)', color: '#FFFFFF' } : { backgroundColor: `${activeColor}33`, color: activeColor }}
+                  style={{ backgroundColor: 'rgba(0,0,0,0.35)', color: '#FFFFFF' }}
                 >
                   {item.badge}
                 </span>
