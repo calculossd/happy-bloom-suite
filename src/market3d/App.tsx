@@ -14,6 +14,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { PriceConfidence } from '@/components/PriceConfidence';
+import { searchImage } from './lib/searchImage';
 
 export function getProductForSelectedPlatform(
   p: SellerReport, 
@@ -659,18 +660,11 @@ export default function App() {
     productsNeedingImages.forEach((product) => {
       const query = product.title.split(' ').slice(0, 5).join(' ').replace(/[^\w\sÀ-ÿ]/gi, '').trim();
       if (!query) return;
-      fetch('/api/search-image', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (!cancelled && data?.imageUrl) {
-            setProductImages((prev) => ({ ...prev, [product.id]: data.imageUrl }));
-          }
-        })
-        .catch(() => undefined);
+      searchImage(query).then((imageUrl) => {
+        if (!cancelled && imageUrl) {
+          setProductImages((prev) => ({ ...prev, [product.id]: imageUrl }));
+        }
+      });
     });
 
     return () => {
