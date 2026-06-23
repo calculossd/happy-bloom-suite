@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { PrinterCameraModal } from './PrinterCameraModal';
 import { ReferenceDashboardHero } from './ReferenceDashboardHero';
+import { Print3DPanel } from '@/components/print3d/Print3DDashboard';
 
 interface DashboardTabProps {
   orders: PrintOrder[];
@@ -156,26 +157,8 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
   return (
     <div className="space-y-6" id="dashboard_tab_container">
 
-      {/* ===== REFERENCE LAYOUT — DASHBOARD HERO (matches uploaded design) ===== */}
-      <ReferenceDashboardHero
-        monthRevenue={monthRevenue}
-        deliveredCount={parsedDeliveredOrdersCount}
-        openCount={parsedOpenOrdersCount}
-        orders={filteredOrders}
-        allOrders={safeOrders}
-        clients={clients}
-        printers={safePrinters}
-        activePrinters={activePrinters.length}
-        alertFilaments={alertFilaments.length}
-        filaments={safeFilaments}
-        monthExpense={monthExpense}
-        monthProfitMargin={monthProfitMargin}
-        pendingRevenue={pendingRevenue}
-        readyToDeliver={parsedReadyToDeliverCount}
-        calendar={{ year: calYear, month: calMonth, totalDays, firstDayIndex, getDaySales }}
-        monthLabel={formatMonthLabel(selectedMonth)}
-        onSelectTab={onSelectTab}
-      />
+      {/* ===== PRINT3D PANEL ===== */}
+      <Print3DPanel />
 
     </div>
   );
