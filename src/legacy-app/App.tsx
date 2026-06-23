@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { getApiUrl } from './utils/api';
 import { safeStorage } from './utils/storage';
+import { dedupeOffers } from './utils/offerDedupe';
 import { Client, Printer, PrintOrder, FilamentStock, SupplyStock, Expense, ShoppingItem, ExternalPlatformOrder, CatalogItem } from './types';
 import { useAppState } from './state/useAppState';
 import { useAutoQuotations } from './hooks/useAutoQuotations';
@@ -608,7 +609,7 @@ export default function App() {
           const list: Array<{ label: string; price: string; change: string; up: boolean | null }> = [];
           parsed.forEach((group: any) => {
             if (group.offers && Array.isArray(group.offers)) {
-              group.offers.slice(0, 4).forEach((offer: any) => {
+              dedupeOffers(group.offers).slice(0, 4).forEach((offer: any) => {
                 const priceNum = typeof offer.price === 'number' ? offer.price : parseFloat(offer.price) || 0;
                 const changePct = ((priceNum % 5) / 10).toFixed(1);
                 const isUp = priceNum % 2 === 0;
