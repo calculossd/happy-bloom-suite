@@ -1871,7 +1871,20 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       {/* SUBTAB 1: PRODUCT PRICE PRECISION CALCULATOR */}
       {activeSubTab === 'CALC' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-fade-in" id="precificator-active-panel">
-          
+          <div className="lg:col-span-12 relative overflow-hidden bg-gradient-to-br from-[#1A1611] via-[#121613] to-[#0E1210] border border-white/[0.06] p-5 rounded-2xl shadow-[0_24px_60px_-30px_rgba(229,178,66,0.25)]">
+            <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-amber-500/10 blur-3xl opacity-60" />
+            <div className="relative flex items-center gap-3">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-amber-500/10 ring-1 ring-inset ring-amber-400/20 text-amber-300">
+                <Calculator className="h-4 w-4" />
+              </div>
+              <div className="min-w-0">
+                <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-amber-300/80">Financeiro</span>
+                <h2 className="text-[18px] font-bold tracking-[-0.01em] text-[#F1F4EE] leading-tight">Calculadora</h2>
+                <p className="text-[11px] text-zinc-500">Precifique produtos com base no fatiador e seus custos reais</p>
+              </div>
+            </div>
+          </div>
+
           {/* Inputs Section */}
           <div className="lg:col-span-7 bg-[#151917] border border-[#232B27] p-5 rounded-2xl space-y-4">
             <div>
@@ -3413,13 +3426,26 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       {activeSubTab === 'SHOP' && (
         <div className="space-y-6 animate-fade-in" id="shopping-tab-panel">
 
-          {/* Compact total summary */}
-          <div className="flex items-center justify-end">
-            <div className="inline-flex items-center gap-3 px-4 py-2 bg-black/40 border border-white/[0.06] rounded-xl font-mono">
-              <span className="text-[9px] uppercase tracking-[0.18em] text-zinc-500">Despesas Total</span>
-              <strong className="text-sm text-rose-300">
-                R$ {(expenses.reduce((sum, e) => sum + (e.amount * e.qty), 0) + shoppingItems.reduce((sum, s) => sum + s.price, 0)).toFixed(2)}
-              </strong>
+          {/* Premium subtab header */}
+          <div className="relative overflow-hidden bg-gradient-to-br from-[#161B19] via-[#121613] to-[#0E1210] border border-white/[0.06] p-5 rounded-2xl shadow-[0_24px_60px_-30px_rgba(16,185,129,0.25)]">
+            <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-emerald-500/10 blur-3xl opacity-60" />
+            <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-emerald-500/10 ring-1 ring-inset ring-emerald-400/20 text-emerald-300">
+                  <DollarSign className="h-4 w-4" />
+                </div>
+                <div className="min-w-0">
+                  <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-emerald-300/80">Financeiro</span>
+                  <h2 className="text-[18px] font-bold tracking-[-0.01em] text-[#F1F4EE] leading-tight">Gastos</h2>
+                  <p className="text-[11px] text-zinc-500 truncate">Custos efetivados e carrinho de compras retroalimentam o Dashboard</p>
+                </div>
+              </div>
+              <div className="shrink-0 inline-flex items-center gap-3 px-3.5 py-2 bg-black/40 border border-white/[0.06] rounded-xl font-mono">
+                <span className="text-[9px] uppercase tracking-[0.18em] text-zinc-500">Total</span>
+                <strong className="text-sm text-rose-300">
+                  R$ {(expenses.reduce((sum, e) => sum + (e.amount * e.qty), 0) + shoppingItems.reduce((sum, s) => sum + s.price, 0)).toFixed(2)}
+                </strong>
+              </div>
             </div>
           </div>
 
@@ -3857,6 +3883,20 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       {/* SUBTAB 4.5: GOOGLE SHOPPING QUOTATIONS & MATERIAL MINIMUM PRICES */}
       {activeSubTab === 'QUOTE' && (
         <div className="space-y-3 animate-fade-in" id="quotations-view-container">
+          {/* Premium subtab header */}
+          <div className="relative overflow-hidden bg-gradient-to-br from-[#101822] via-[#0F1418] to-[#0B0F12] border border-white/[0.06] p-5 rounded-2xl shadow-[0_24px_60px_-30px_rgba(56,189,248,0.25)] mb-1">
+            <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-sky-500/10 blur-3xl opacity-60" />
+            <div className="relative flex items-center gap-3">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-sky-500/10 ring-1 ring-inset ring-sky-400/20 text-sky-300">
+                <TrendingUp className="h-4 w-4" />
+              </div>
+              <div className="min-w-0">
+                <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-sky-300/80">Financeiro</span>
+                <h2 className="text-[18px] font-bold tracking-[-0.01em] text-[#F1F4EE] leading-tight">Cotação</h2>
+                <p className="text-[11px] text-zinc-500 truncate">Compare preços ao vivo entre marketplaces e fornecedores</p>
+              </div>
+            </div>
+          </div>
           {/* Header Description */}
           <div className="p-3 bg-gradient-to-r from-[#17211B] to-[#121A15] border border-[#232B27] rounded-xl flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
             <div className="flex items-center gap-2 min-w-0 flex-1">
