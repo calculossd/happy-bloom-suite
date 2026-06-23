@@ -37,7 +37,7 @@ import { jsPDF } from 'jspdf';
 const getHexColorByName = (colorName: string): { bg: string; text: string; border: string } => {
   const lower = (colorName || '').toLowerCase().trim();
   if (lower.includes('transpar') || lower.includes('cristal') || lower.includes('clear') || lower.includes('natural') || lower.includes('sem cor') || lower.includes('transl')) {
-    return { bg: 'transparent', text: '#FFFFFF', border: '#95BBA2' };
+    return { bg: 'transparent', text: '#FFFFFF', border: '#b7ff00' };
   }
   if (lower.includes('pret') || lower.includes('black') || lower.includes('grafite') || lower.includes('carvão')) {
     return { bg: '#101010', text: '#FFFFFF', border: '#333333' };
@@ -1791,8 +1791,8 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
           onClick={() => setActiveSubTab('CALC')}
           className={`flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl text-xs font-black transition-all duration-300 whitespace-nowrap cursor-pointer ${
             activeSubTab === 'CALC' 
-              ? 'bg-[#E5B242] text-[#0C0E0D] border border-[#E5B242] shadow-[0_0_14px_rgba(229,178,66,0.55)] scale-[1.03] ring-1 ring-[#E5B242]/50' 
-              : 'bg-[#19211D] text-[#DCE8E0] hover:text-white hover:bg-[#222E27] border border-[#2A3B30] hover:border-[#95BBA2]/70 shadow-md'
+              ? 'bg-[#b7ff00] text-[#0C0E0D] border border-[#b7ff00] shadow-[0_0_14px_rgba(229,178,66,0.55)] scale-[1.03] ring-1 ring-[#b7ff00]/50' 
+              : 'bg-[#19211D] text-[#DCE8E0] hover:text-white hover:bg-[#222E27] border border-[#2A3B30] hover:border-[#b7ff00]/70 shadow-md'
           }`}
           id="btn_subtab_calc"
         >
@@ -1805,7 +1805,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
           className={`flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl text-xs font-black transition-all duration-300 whitespace-nowrap cursor-pointer ${
             activeSubTab === 'CATALOG' 
               ? 'bg-[var(--brand-primary)] text-[#0C0E0D] border border-[var(--brand-primary)] shadow-[0_0_14px_rgba(149,187,162,0.6)] scale-[1.03] ring-1 ring-[var(--brand-primary)]/50' 
-              : 'bg-[#19211D] text-[#DCE8E0] hover:text-white hover:bg-[#222E27] border border-[#2A3B30] hover:border-[#95BBA2]/70 shadow-md'
+              : 'bg-[#19211D] text-[#DCE8E0] hover:text-white hover:bg-[#222E27] border border-[#2A3B30] hover:border-[#b7ff00]/70 shadow-md'
           }`}
           id="btn_subtab_catalog"
         >
@@ -1818,7 +1818,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
           className={`flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl text-xs font-black transition-all duration-300 whitespace-nowrap cursor-pointer ${
             activeSubTab === 'STOCK' 
               ? 'bg-[var(--brand-primary)] text-[#0C0E0D] border border-[var(--brand-primary)] shadow-[0_0_14px_rgba(149,187,162,0.6)] scale-[1.03] ring-1 ring-[var(--brand-primary)]/50' 
-              : 'bg-[#19211D] text-[#DCE8E0] hover:text-white hover:bg-[#222E27] border border-[#2A3B30] hover:border-[#95BBA2]/70 shadow-md'
+              : 'bg-[#19211D] text-[#DCE8E0] hover:text-white hover:bg-[#222E27] border border-[#2A3B30] hover:border-[#b7ff00]/70 shadow-md'
           }`}
           id="btn_subtab_stock"
         >
@@ -1831,7 +1831,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
           className={`flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl text-xs font-black transition-all duration-300 whitespace-nowrap cursor-pointer ${
             activeSubTab === 'SHOP' 
               ? 'bg-[var(--brand-primary)] text-[#0C0E0D] border border-[var(--brand-primary)] shadow-[0_0_14px_rgba(149,187,162,0.6)] scale-[1.03] ring-1 ring-[var(--brand-primary)]/50' 
-              : 'bg-[#19211D] text-[#DCE8E0] hover:text-white hover:bg-[#222E27] border border-[#2A3B30] hover:border-[#95BBA2]/70 shadow-md'
+              : 'bg-[#19211D] text-[#DCE8E0] hover:text-white hover:bg-[#222E27] border border-[#2A3B30] hover:border-[#b7ff00]/70 shadow-md'
           }`}
           id="btn_subtab_shop"
         >
@@ -1843,8 +1843,8 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
           onClick={() => setActiveSubTab('QUOTE')}
           className={`flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl text-xs font-black transition-all duration-300 whitespace-nowrap cursor-pointer ${
             activeSubTab === 'QUOTE' 
-              ? 'bg-[#E5B242] text-[#0C0E0D] border border-[#E5B242] shadow-[0_0_14px_rgba(229,178,66,0.55)] scale-[1.03] ring-1 ring-[#E5B242]/50' 
-              : 'bg-[#19211D] text-[#DCE8E0] hover:text-white hover:bg-[#222E27] border border-[#2A3B30] hover:border-[#95BBA2]/70 shadow-md'
+              ? 'bg-[#b7ff00] text-[#0C0E0D] border border-[#b7ff00] shadow-[0_0_14px_rgba(229,178,66,0.55)] scale-[1.03] ring-1 ring-[#b7ff00]/50' 
+              : 'bg-[#19211D] text-[#DCE8E0] hover:text-white hover:bg-[#222E27] border border-[#2A3B30] hover:border-[#b7ff00]/70 shadow-md'
           }`}
           id="btn_subtab_quote"
         >
@@ -1857,7 +1857,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
           className={`flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl text-xs font-black transition-all duration-300 whitespace-nowrap cursor-pointer ${
             activeSubTab === 'AI' 
               ? 'bg-[var(--brand-primary)] text-[#0C0E0D] border border-[var(--brand-primary)] shadow-[0_0_14px_rgba(149,187,162,0.6)] scale-[1.03] ring-1 ring-[var(--brand-primary)]/50' 
-              : 'bg-[#19211D] text-[#DCE8E0] hover:text-white hover:bg-[#222E27] border border-[#2A3B30] hover:border-[#95BBA2]/70 shadow-md'
+              : 'bg-[#19211D] text-[#DCE8E0] hover:text-white hover:bg-[#222E27] border border-[#2A3B30] hover:border-[#b7ff00]/70 shadow-md'
           }`}
           id="btn_subtab_ai"
         >
@@ -1885,7 +1885,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
           <div className="lg:col-span-7 bg-[#151917] border border-[#232B27] p-5 rounded-2xl space-y-4">
             <div>
               <h3 className="text-sm font-bold text-[#F1F4EE] flex items-center gap-2">
-                <Calculator className="h-4 w-4 text-[#E5B242]" />
+                <Calculator className="h-4 w-4 text-[#b7ff00]" />
                 Variáveis do Produto do seu Fatiador 3D
               </h3>
               <p className="text-xs text-[#8BA58D]">Fórmula profissional baseada em filamento do estoque, perdas e comissão</p>
@@ -1949,7 +1949,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                 
                 {/* File Upload Input */}
                 <div className="flex items-center gap-1.5">
-                  <label className="text-[10px] bg-[#95BBA2]/15 text-[#95BBA2] hover:bg-[#95BBA2]/30 px-2.5 py-1 rounded-lg border border-[#95BBA2]/25 cursor-pointer font-bold select-none transition">
+                  <label className="text-[10px] bg-[#b7ff00]/15 text-[#b7ff00] hover:bg-[#b7ff00]/30 px-2.5 py-1 rounded-lg border border-[#b7ff00]/25 cursor-pointer font-bold select-none transition">
                     📂 Fazer Upload de Imagem
                     <input
                       type="file"
@@ -1974,7 +1974,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                         key={preset.url}
                         type="button"
                         onClick={() => setCalcProdImage(preset.url)}
-                        className={`p-1 border rounded-lg bg-[#0C0E0D] hover:border-[#95BBA2] transition text-left cursor-pointer flex flex-col items-center justify-center gap-1 ${calcProdImage === preset.url ? 'border-[#E5B242] ring-1 ring-[#E5B242]' : 'border-[#232B27]'}`}
+                        className={`p-1 border rounded-lg bg-[#0C0E0D] hover:border-[#b7ff00] transition text-left cursor-pointer flex flex-col items-center justify-center gap-1 ${calcProdImage === preset.url ? 'border-[#b7ff00] ring-1 ring-[#b7ff00]' : 'border-[#232B27]'}`}
                       >
                         <img
                           src={preset.url}
@@ -2101,7 +2101,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                             type="checkbox"
                             checked={!!linked}
                             onChange={() => handleToggleSupplyForCalc(sup.id)}
-                            className="rounded text-[#95BBA2] focus:ring-[#95BBA2] bg-[#151917] border-[#232B27]"
+                            className="rounded text-[#b7ff00] focus:ring-[#b7ff00] bg-[#151917] border-[#232B27]"
                           />
                           <span className="text-[#F1F4EE] font-medium block truncate w-24" title={sup.name}>{sup.name}</span>
                         </label>
@@ -2196,11 +2196,11 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
             {/* Main Precision Card */}
             <div className="bg-[#151917] border border-[#232B27] p-5 rounded-2xl space-y-4 relative overflow-hidden">
               <div className="absolute top-0 right-0 p-3 opacity-10">
-                <TrendingUp className="h-28 w-28 text-[#95BBA2]" />
+                <TrendingUp className="h-28 w-28 text-[#b7ff00]" />
               </div>
 
               <div className="border-b border-[#232B27] pb-3 z-10 relative">
-                <span className="text-[9px] uppercase font-mono tracking-widest text-[#E5B242] font-black">Detalhamento Técnico de Preços</span>
+                <span className="text-[9px] uppercase font-mono tracking-widest text-[#b7ff00] font-black">Detalhamento Técnico de Preços</span>
                 <h3 className="text-base font-bold text-[#F1F4EE] leading-tight">Engenharia Comercial de Custos</h3>
               </div>
 
@@ -2241,14 +2241,14 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                 </div>
 
                 <div className="flex justify-between items-center py-1">
-                  <span className="text-[#95BBA2] font-semibold">Lucro Líquido Real Esperado:</span>
-                  <span className="font-mono text-[#95BBA2] font-extrabold text-[13px]">R$ {netEarningsProfit.toFixed(2)}</span>
+                  <span className="text-[#b7ff00] font-semibold">Lucro Líquido Real Esperado:</span>
+                  <span className="font-mono text-[#b7ff00] font-extrabold text-[13px]">R$ {netEarningsProfit.toFixed(2)}</span>
                 </div>
               </div>
 
               {/* Big price tags box */}
-              <div className="p-4 bg-[#E5B242]/5 border border-[#E5B242]/20 rounded-2xl space-y-2 z-10 relative text-center">
-                <span className="text-[9px] uppercase tracking-wider text-[#E5B242] font-black block">Preço de Venda Final Sugerido</span>
+              <div className="p-4 bg-[#b7ff00]/5 border border-[#b7ff00]/20 rounded-2xl space-y-2 z-10 relative text-center">
+                <span className="text-[9px] uppercase tracking-wider text-[#b7ff00] font-black block">Preço de Venda Final Sugerido</span>
                 <p className="text-3xl font-black text-white font-mono">
                   R$ {finalPriceSuggested.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </p>
@@ -2260,7 +2260,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
               {/* Action and Register Button */}
               <button
                 onClick={handleSaveToCatalog}
-                className="w-full py-3 bg-[#E5B242] hover:bg-[#F5C75A] text-[#0C0E0D] text-xs font-black rounded-xl transition flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-3 bg-[#b7ff00] hover:bg-[#F5C75A] text-[#0C0E0D] text-xs font-black rounded-xl transition flex items-center justify-center gap-2 cursor-pointer"
                 id="btn_register_product_to_catalog"
               >
                 <Plus className="h-4 w-4 stroke-[3px]" />
@@ -2290,7 +2290,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
           <div className="p-5 bg-[#151917] border border-[#232B27] rounded-2xl flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <h3 className="text-base font-bold text-[#F1F4EE] flex items-center gap-2">
-                <BookOpen className="h-5 w-5 text-[#95BBA2]" />
+                <BookOpen className="h-5 w-5 text-[#b7ff00]" />
                 Catálogo de Peças & Produtos Registrados
               </h3>
               <p className="text-xs text-[#8BA58D]">Visualize e compartilhe sua tabela comercial indexável de serviços 3D</p>
@@ -2299,7 +2299,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
             <div className="flex flex-wrap gap-2 shrink-0">
               <button
                 onClick={() => setShowAddProductManualForm(!showAddProductManualForm)}
-                className="px-4 py-2 bg-[#95BBA2]/15 hover:bg-[#95BBA2]/30 text-[#95BBA2] text-xs font-black rounded-xl transition flex items-center gap-1.5 cursor-pointer border border-[#95BBA2]/25"
+                className="px-4 py-2 bg-[#b7ff00]/15 hover:bg-[#b7ff00]/30 text-[#b7ff00] text-xs font-black rounded-xl transition flex items-center gap-1.5 cursor-pointer border border-[#b7ff00]/25"
                 id="btn_open_manual_add_catalog"
               >
                 <Plus className="h-4 w-4" />
@@ -2329,7 +2329,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
           {showAddProductManualForm && (
             <form onSubmit={handleSaveManualProduct} className="p-5 bg-[#151917] border border-[#232B27] rounded-2xl space-y-4 animate-fade-in" id="manual_catalog_product_form">
               <div className="flex items-center justify-between border-b border-[#232B27]/40 pb-2">
-                <h4 className="text-sm font-bold text-[#E5B242] uppercase flex items-center gap-1.5" style={{ color: editingProduct ? '#E5B242' : '#95BBA2' }}>
+                <h4 className="text-sm font-bold text-[#b7ff00] uppercase flex items-center gap-1.5" style={{ color: editingProduct ? '#b7ff00' : '#b7ff00' }}>
                   <Edit3 className="h-4 w-4" />
                   {editingProduct ? `Editar Produto: ${editingProduct.name}` : 'Cadastrar Novo Produto Manualmente'}
                 </h4>
@@ -2466,7 +2466,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                   
                   {/* File Upload Input */}
                   <div className="flex items-center gap-1.5">
-                    <label className="text-[10px] bg-[#95BBA2]/15 text-[#95BBA2] hover:bg-[#95BBA2]/30 px-2.5 py-1 rounded-lg border border-[#95BBA2]/25 cursor-pointer font-bold select-none transition">
+                    <label className="text-[10px] bg-[#b7ff00]/15 text-[#b7ff00] hover:bg-[#b7ff00]/30 px-2.5 py-1 rounded-lg border border-[#b7ff00]/25 cursor-pointer font-bold select-none transition">
                       📂 Fazer Upload de Imagem
                       <input
                         type="file"
@@ -2491,7 +2491,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                           key={preset.url}
                           type="button"
                           onClick={() => setManualProdImage(preset.url)}
-                          className={`p-1 border rounded-lg bg-[#0C0E0D] hover:border-[#95BBA2] transition text-left cursor-pointer flex flex-col items-center justify-center gap-1 ${manualProdImage === preset.url ? 'border-[#E5B242] ring-1 ring-[#E5B242]' : 'border-[#232B27]'}`}
+                          className={`p-1 border rounded-lg bg-[#0C0E0D] hover:border-[#b7ff00] transition text-left cursor-pointer flex flex-col items-center justify-center gap-1 ${manualProdImage === preset.url ? 'border-[#b7ff00] ring-1 ring-[#b7ff00]' : 'border-[#232B27]'}`}
                         >
                           <img
                             src={preset.url}
@@ -2791,7 +2791,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                 )}
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-[#95BBA2] hover:bg-[#B6D8B4] text-[#0C0E0D] font-black text-xs uppercase tracking-wider rounded-xl transition cursor-pointer"
+                  className="px-6 py-2 bg-[#b7ff00] hover:bg-[#B6D8B4] text-[#0C0E0D] font-black text-xs uppercase tracking-wider rounded-xl transition cursor-pointer"
                 >
                   {editingProduct ? 'Salvar Edição ✓' : 'Confirmar Cadastro no Catálogo ✓'}
                 </button>
@@ -2821,11 +2821,11 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                     </div>
 
                     <div className="flex items-center justify-between gap-4">
-                      <span className="text-[9px] font-mono font-black tracking-widest text-[#E5B242] bg-[#E5B242]/10 px-2 py-0.5 rounded border border-[#E5B242]/20">
+                      <span className="text-[9px] font-mono font-black tracking-widest text-[#b7ff00] bg-[#b7ff00]/10 px-2 py-0.5 rounded border border-[#b7ff00]/20">
                         {item.productCode || 'PROD'}
                       </span>
                       {item.filamentType !== 'HARDWARE' && (
-                        <span className="text-[9px] font-bold text-[#95BBA2]">
+                        <span className="text-[9px] font-bold text-[#b7ff00]">
                           POLÍMERO: {item.filamentType}
                         </span>
                       )}
@@ -2864,7 +2864,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                             onClick={() => {
                               setCatalogItems(prev => prev.map(c => c.id === item.id ? { ...c, stockCount: c.stockCount + 1 } : c))
                             }}
-                            className="w-4 h-4 bg-[#0C0E0D] border border-[#232B27] rounded text-[#8BA58D] flex items-center justify-center text-[10px] font-bold hover:border-[#95BBA2]/50 hover:text-[#95BBA2] transition cursor-pointer"
+                            className="w-4 h-4 bg-[#0C0E0D] border border-[#232B27] rounded text-[#8BA58D] flex items-center justify-center text-[10px] font-bold hover:border-[#b7ff00]/50 hover:text-[#b7ff00] transition cursor-pointer"
                             title="Adicionar 1 unidade"
                           >
                             +
@@ -2939,7 +2939,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                   </div>
 
                   <div className="border-t border-[#232B27]/40 pt-3 flex items-center justify-between gap-4">
-                    <span className="text-sm font-black text-[#95BBA2] font-mono">
+                    <span className="text-sm font-black text-[#b7ff00] font-mono">
                       R$ {item.defaultPrice.toFixed(2)}
                     </span>
 
@@ -3010,7 +3010,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
             {/* Painel de Carretéis e Cores com Valor Médio por Tipo (v3.3.0.4) */}
             <div className="p-3.5 bg-black/50 border border-[#232B27] rounded-xl space-y-3.5">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-black text-[#95BBA2] uppercase tracking-wider block">📊 Painel de Carretéis & Cores</span>
+                <span className="text-[10px] font-mono font-black text-[#b7ff00] uppercase tracking-wider block">📊 Painel de Carretéis & Cores</span>
               </div>
 
               {/* Seção de Cores com o número de unidades dentro da bolinha */}
@@ -3066,7 +3066,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
 
             {showAddFilamentForm && (
               <form onSubmit={handleAddFilament} className="p-3.5 bg-[#0C0E0D] border border-[#232B27] rounded-xl space-y-3">
-                <h4 className="text-[10px] font-bold text-[#E5B242] uppercase">Cadastrar Novo Carretel Físico</h4>
+                <h4 className="text-[10px] font-bold text-[#b7ff00] uppercase">Cadastrar Novo Carretel Físico</h4>
                 
                 <div className="grid grid-cols-2 gap-2">
                   <div className="space-y-0.5">
@@ -3133,7 +3133,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
 
                 <button
                   type="submit"
-                  className="w-full py-1.5 bg-[#95BBA2] hover:bg-[#B6D8B4] text-[#0C0E0D] text-xs font-black rounded-lg transition"
+                  className="w-full py-1.5 bg-[#b7ff00] hover:bg-[#B6D8B4] text-[#0C0E0D] text-xs font-black rounded-lg transition"
                 >
                   Confirmar Cadastro
                 </button>
@@ -3274,7 +3274,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
 
             {showAddSupplyForm && (
               <form onSubmit={handleAddSupply} className="p-3.5 bg-[#0C0E0D] border border-[#232B27] rounded-xl space-y-3">
-                <h4 className="text-[10px] font-bold text-[#E5B242] uppercase">Cadastrar Novo Insumo Comercial</h4>
+                <h4 className="text-[10px] font-bold text-[#b7ff00] uppercase">Cadastrar Novo Insumo Comercial</h4>
 
                 <div className="space-y-0.5">
                   <label className="text-[9px] text-[#8BA58D]">Nome do Insumo</label>
@@ -3326,7 +3326,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
 
                 <button
                   type="submit"
-                  className="w-full py-1.5 bg-[#E5B242] hover:bg-yellow-500 text-[#0C0E0D] text-xs font-black rounded-lg transition"
+                  className="w-full py-1.5 bg-[#b7ff00] hover:bg-yellow-500 text-[#0C0E0D] text-xs font-black rounded-lg transition"
                 >
                   Salvar Insumo
                 </button>
@@ -3348,7 +3348,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                   }`}>
                     <div className="space-y-1">
                       <div className="flex items-center gap-1.5">
-                        <Box className="h-3.5 w-3.5 text-[#E5B242]" />
+                        <Box className="h-3.5 w-3.5 text-[#b7ff00]" />
                         <span className="text-xs font-bold text-white leading-tight">{sup.name}</span>
                         {low && <span className="text-[7.5px] font-mono uppercase bg-red-400/15 text-red-400 border border-red-500/30 px-1.5 py-0.5 rounded animate-pulse font-black">Estoque Baixo 🚨</span>}
                       </div>
@@ -3367,7 +3367,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                       </button>
                       <button
                         onClick={() => handleUpdateSupplyQty(sup.id, 1)}
-                        className="px-2 py-0.5 bg-[#151917] border border-[#232B27] hover:border-[#95BBA2] text-white rounded font-bold text-[11px]"
+                        className="px-2 py-0.5 bg-[#151917] border border-[#232B27] hover:border-[#b7ff00] text-white rounded font-bold text-[11px]"
                       >
                         +
                       </button>
@@ -3651,7 +3651,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
 
               {/* Relatórios & Filtro de Caixa (v3.3.0.4) */}
               <div className="p-3.5 bg-black/40 border border-[#232B27] rounded-xl space-y-2 flex flex-col">
-                <span className="text-[9.5px] font-mono font-black text-[#95BBA2] uppercase tracking-wider block">📊 Relatórios & Filtro por Período</span>
+                <span className="text-[9.5px] font-mono font-black text-[#b7ff00] uppercase tracking-wider block">📊 Relatórios & Filtro por Período</span>
                 <div className="flex gap-2">
                   <div className="flex-1 space-y-0.5">
                     <select
@@ -3698,7 +3698,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                     <div key={item.id} className="p-3 bg-[#0C0E0D] border border-[#232B27]/70 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-emerald-500/20 transition-colors duration-200">
                       <div className="space-y-1">
                         <div className="flex flex-wrap gap-1.5 items-center">
-                          <span className="text-[8.5px] font-mono font-black bg-[#95BBA2]/10 border border-[#95BBA2]/25 px-2 py-0.5 rounded text-[#95BBA2]">
+                          <span className="text-[8.5px] font-mono font-black bg-[#b7ff00]/10 border border-[#b7ff00]/25 px-2 py-0.5 rounded text-[#b7ff00]">
                             {getExpenseCategoryLabel(item.category)}
                           </span>
                           {item.supplier && (
@@ -3984,7 +3984,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                       href={`https://www.buscape.com.br/search?q=${encodeURIComponent(materialGroup.searchQuery || materialGroup.type || 'filamento impressora 3d')}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-2 py-0.5 bg-[#95BBA2]/10 hover:bg-[#95BBA2]/25 border border-[#95BBA2]/30 text-[#95BBA2] text-[10px] font-black rounded-lg transition shrink-0"
+                      className="px-2 py-0.5 bg-[#b7ff00]/10 hover:bg-[#b7ff00]/25 border border-[#b7ff00]/30 text-[#b7ff00] text-[10px] font-black rounded-lg transition shrink-0"
                     >
                       Ver todos 🔍
                     </a>
@@ -4016,7 +4016,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                           )}
                           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent p-1 text-white flex flex-col gap-0.5">
                             {feature && (
-                              <span className="text-[8px] uppercase tracking-wider text-[#95BBA2] truncate font-bold">{feature}</span>
+                              <span className="text-[8px] uppercase tracking-wider text-[#b7ff00] truncate font-bold">{feature}</span>
                             )}
                             <div className="flex items-center justify-between gap-1">
                               <span className={`text-[11px] font-black font-mono leading-none ${isHotOpportunity ? 'text-amber-400' : 'text-white'}`}>R${offer.price.toFixed(0)}</span>
@@ -4052,7 +4052,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
           <div className="bg-[#151917] border border-[#232B27] p-5 rounded-2xl space-y-4">
           <div>
             <h3 className="text-base font-bold text-[#F1F4EE] flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-[#E5B242] animate-pulse" />
+              <Sparkles className="h-5 w-5 text-[#b7ff00] animate-pulse" />
               Orientação Inteligente de Engenharia 3D (Fatiadores & Custos)
             </h3>
             <p className="text-xs text-[#8BA58D]">Fórmula automática, suporte a filamentos bicos de latão e dúvidas sobre warping</p>
@@ -4065,7 +4065,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                 className={`p-3.5 rounded-xl max-w-[80%] whitespace-pre-line ${
                   msg.role === 'assistant' 
                     ? 'bg-[#151917] text-[#F1F4EE] border border-[#232B27]' 
-                    : 'bg-[#95BBA2]/25 text-white ml-auto border border-[#95BBA2]/20'
+                    : 'bg-[#b7ff00]/25 text-white ml-auto border border-[#b7ff00]/20'
                 }`}
               >
                 {msg.text}
@@ -4073,7 +4073,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
             ))}
             {aiLoading && (
               <div className="p-3 bg-[#151917] text-[#8BA58D] border border-[#232B27] rounded-xl max-w-[50%] flex items-center gap-2 animate-pulse">
-                <RefreshCw className="h-3 w-3 animate-spin text-[#95BBA2]" />
+                <RefreshCw className="h-3 w-3 animate-spin text-[#b7ff00]" />
                 IA processando dados...
               </div>
             )}
@@ -4085,11 +4085,11 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
               placeholder="O que é brim? Como desentupir bico da Creality? Como calcular comissões do Mercado Livre?"
               value={aiInput}
               onChange={(e) => setAiInput(e.target.value)}
-              className="bg-[#0C0E0D] border border-[#232B27] rounded-xl px-4 py-2.5 text-xs text-[#F1F4EE] outline-none flex-1 focus:border-[#95BBA2]"
+              className="bg-[#0C0E0D] border border-[#232B27] rounded-xl px-4 py-2.5 text-xs text-[#F1F4EE] outline-none flex-1 focus:border-[#b7ff00]"
             />
             <button
               type="submit"
-              className="px-5 py-2.5 bg-[#95BBA2] hover:bg-[#B6D8B4] text-[#0C0E0D] rounded-xl text-xs font-black transition flex items-center gap-1.5"
+              className="px-5 py-2.5 bg-[#b7ff00] hover:bg-[#B6D8B4] text-[#0C0E0D] rounded-xl text-xs font-black transition flex items-center gap-1.5"
             >
               Consultar IA
             </button>
