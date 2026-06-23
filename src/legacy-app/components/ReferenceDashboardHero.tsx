@@ -237,28 +237,35 @@ export const ReferenceDashboardHero: React.FC<any> = (props) => {
           {recentOrders.length === 0 ? (
             <div className="text-center text-white/40 text-xs py-6">Sem pedidos recentes</div>
           ) : (
-            <div className="divide-y divide-white/[0.04]">
+            <ul className="divide-y divide-white/[0.04]">
+              <li className="grid grid-cols-[1fr_auto_auto_auto] items-center gap-3 py-1.5 text-[9px] uppercase tracking-wider text-white/40 font-bold">
+                <span>Produto</span>
+                <span className="text-center">Qtd</span>
+                <span className="text-right">Hora</span>
+                <span className="text-right">Status</span>
+              </li>
               {recentOrders.map((o: any) => {
                 const s = statusMap[o.status] || { label: o.status, color: '#888' };
                 return (
-                  <div key={o.id} className="flex items-center gap-3 py-2.5">
-                    <div className="h-8 w-8 rounded-lg grid place-items-center bg-white/[0.03] border border-white/[0.06] shrink-0">
-                      <ShoppingBag className="h-4 w-4 text-[#A5D84B]" />
+                  <li key={o.id} className="grid grid-cols-[1fr_auto_auto_auto] items-center gap-3 py-2.5">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="h-7 w-7 rounded-lg grid place-items-center bg-white/[0.03] border border-white/[0.06] shrink-0">
+                        <ShoppingBag className="h-3.5 w-3.5 text-[#A5D84B]" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-[13px] font-bold text-white truncate">{o.itemName}</div>
+                        <div className="text-[10px] text-white/45 truncate">{o.clientName}</div>
+                      </div>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-[13px] font-bold text-white truncate">{o.itemName}</div>
-                      <div className="text-[10px] text-white/45 truncate">{o.clientName} · {fmtDateTime(o.createdAt)}</div>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <div className="text-[13px] font-bold tabular text-white">{fmtBRLk(o.priceCharged || 0)}</div>
-                      <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-px rounded-full border" style={{ color: s.color, borderColor: `${s.color}55`, background: `${s.color}15` }}>
-                        {s.label}
-                      </span>
-                    </div>
-                  </div>
+                    <div className="text-center text-[12px] font-bold tabular text-white shrink-0">×{o.quantity ?? 1}</div>
+                    <div className="text-right text-[11px] tabular text-white/70 shrink-0">{fmtDateTime(o.createdAt)}</div>
+                    <span className="text-right text-[9px] font-bold uppercase tracking-wider px-1.5 py-px rounded-full border shrink-0" style={{ color: s.color, borderColor: `${s.color}55`, background: `${s.color}15` }}>
+                      {s.label}
+                    </span>
+                  </li>
                 );
               })}
-            </div>
+            </ul>
           )}
         </Panel>
 
