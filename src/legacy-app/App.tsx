@@ -1950,33 +1950,61 @@ export default function App() {
             else if (isTpuAlert) alertMsg = `TPU por R$ ${lowestTpu.toFixed(2)} (abaixo de R$ ${alertLimitTpu.toFixed(2)})`;
 
             return (
-              <div 
-                className="flex items-center justify-between p-3.5 bg-emerald-500/10 border border-emerald-500/25 text-[#34D399] rounded-xl shadow transition duration-200 animate-slide-in relative mb-2"
+              <div
                 id="global-price-opportunity-banner"
+                className="group relative mb-2 overflow-hidden rounded-2xl border border-emerald-400/15 bg-gradient-to-r from-emerald-950/50 via-zinc-950/70 to-zinc-950/50 backdrop-blur-xl shadow-[0_20px_50px_-20px_rgba(16,185,129,0.35)] transition-all duration-500 hover:border-emerald-400/30 hover:shadow-[0_24px_60px_-18px_rgba(16,185,129,0.5)]"
+                style={{ animation: "ttToastIn 480ms cubic-bezier(0.22, 1, 0.36, 1) both" }}
               >
-                <div className="flex items-center gap-2.5 min-w-0" id="opp-desc-container">
-                  <span className="text-sm shrink-0 animate-bounce">🔥</span>
-                  <span className="text-xs font-bold text-zinc-105" style={{ color: '#F1F4EE' }}>
-                    <strong className="text-emerald-400 font-extrabold">Oportunidade:</strong> {alertMsg}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <button 
-                    onClick={() => {
-                      localStorage.setItem('bambuzau_costs_subtab_override', 'QUOTE');
-                      setCurrentTab(4);
-                    }}
-                    className="px-2.5 py-1.5 bg-[#34D399] hover:bg-emerald-500 text-black text-[10px] font-black rounded-lg transition uppercase tracking-wider"
-                  >
-                    Ver Cotações 📈
-                  </button>
-                  <button 
-                    onClick={() => setDismissedPriceAlert(true)}
-                    className="p-1 px-2 hover:bg-white/10 rounded-lg text-zinc-400 hover:text-white transition text-xs font-bold font-sans"
-                    title="Fechar oportunidade"
-                  >
-                    ✕
-                  </button>
+                {/* ambient glow */}
+                <div aria-hidden className="pointer-events-none absolute -top-20 -left-16 h-56 w-56 rounded-full bg-emerald-500/20 blur-3xl opacity-60" />
+                <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-[2px] bg-gradient-to-b from-transparent via-emerald-400/80 to-transparent" />
+                {/* shimmer */}
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+                  style={{
+                    background:
+                      "linear-gradient(110deg, transparent 30%, rgba(16,185,129,0.10) 50%, transparent 70%)",
+                  }}
+                />
+
+                <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-5">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-emerald-500/10 ring-1 ring-inset ring-emerald-400/25 text-emerald-300">
+                      <span className="text-base leading-none">🔥</span>
+                    </div>
+                    <div className="min-w-0 flex flex-col">
+                      <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-emerald-300/90">
+                        Oportunidade
+                      </span>
+                      <span className="truncate text-[13px] font-semibold tracking-[-0.005em] text-zinc-50">
+                        {alertMsg}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <button
+                      onClick={() => {
+                        localStorage.setItem("bambuzau_costs_subtab_override", "QUOTE");
+                        setCurrentTab(4);
+                      }}
+                      className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-400/30 bg-emerald-500/15 px-3.5 py-2 text-[10px] font-bold uppercase tracking-[0.14em] text-emerald-100 transition-all duration-300 hover:border-emerald-300/50 hover:bg-emerald-500/25 hover:shadow-[0_8px_24px_-8px_rgba(16,185,129,0.6)] active:scale-[0.97]"
+                    >
+                      Ver cotações
+                      <span aria-hidden>↗</span>
+                    </button>
+                    <button
+                      onClick={() => setDismissedPriceAlert(true)}
+                      title="Fechar oportunidade"
+                      aria-label="Fechar"
+                      className="grid h-8 w-8 place-items-center rounded-lg text-zinc-500 hover:text-white hover:bg-white/5 transition-all duration-200 active:scale-95"
+                    >
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round">
+                        <path d="M2 2l8 8M10 2l-8 8" />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               </div>
             );
