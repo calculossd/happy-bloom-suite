@@ -93,16 +93,6 @@ function SitesPage() {
         <div className="absolute -top-40 left-1/3 h-[420px] w-[420px] rounded-full bg-[#b7ff00]/10 blur-[140px]" />
       </div>
       <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1600px] px-6 py-12 md:px-10">
-        <header className="mb-8 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">
-          <div className="flex items-center gap-3">
-            <span className="inline-block h-2 w-2 rounded-full bg-[#b7ff00] shadow-[0_0_10px_#b7ff00]" />
-            <div>
-              <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans leading-none">Sites</div>
-              <p className="mt-1.5 text-[11px] text-white/50">Diretório curado por categoria. Clique no logo para abrir.</p>
-            </div>
-          </div>
-        </header>
-
         {showAdd && (
           <form onSubmit={add} className="mb-6 grid grid-cols-1 gap-2 rounded-3xl border border-white/10 bg-white/[0.02] p-4 md:grid-cols-[1fr_1fr_160px_auto] backdrop-blur-xl">
             <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nome do site" className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:border-[#b7ff00]/50 focus:outline-none" />
