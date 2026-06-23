@@ -1952,29 +1952,29 @@ export default function App() {
             return (
               <div
                 id="global-price-opportunity-banner"
-                className="group relative mb-2 overflow-hidden rounded-2xl border border-emerald-400/15 bg-gradient-to-r from-emerald-950/50 via-zinc-950/70 to-zinc-950/50 backdrop-blur-xl shadow-[0_20px_50px_-20px_rgba(16,185,129,0.35)] transition-all duration-500 hover:border-emerald-400/30 hover:shadow-[0_24px_60px_-18px_rgba(16,185,129,0.5)]"
+                className="group relative mb-2 overflow-hidden rounded-2xl border border-sky-400/15 bg-gradient-to-r from-sky-950/50 via-zinc-950/70 to-zinc-950/50 backdrop-blur-xl shadow-[0_20px_50px_-20px_rgba(56,189,248,0.35)] transition-all duration-500 hover:border-sky-400/30 hover:shadow-[0_24px_60px_-18px_rgba(56,189,248,0.5)]"
                 style={{ animation: "ttToastIn 480ms cubic-bezier(0.22, 1, 0.36, 1) both" }}
               >
                 {/* ambient glow */}
-                <div aria-hidden className="pointer-events-none absolute -top-20 -left-16 h-56 w-56 rounded-full bg-emerald-500/20 blur-3xl opacity-60" />
-                <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-[2px] bg-gradient-to-b from-transparent via-emerald-400/80 to-transparent" />
+                <div aria-hidden className="pointer-events-none absolute -top-20 -left-16 h-56 w-56 rounded-full bg-sky-500/25 blur-3xl opacity-60" />
+                <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-[2px] bg-gradient-to-b from-transparent via-sky-400/80 to-transparent" />
                 {/* shimmer */}
                 <div
                   aria-hidden
                   className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
                   style={{
                     background:
-                      "linear-gradient(110deg, transparent 30%, rgba(16,185,129,0.10) 50%, transparent 70%)",
+                      "linear-gradient(110deg, transparent 30%, rgba(56,189,248,0.12) 50%, transparent 70%)",
                   }}
                 />
 
                 <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-5">
                   <div className="flex min-w-0 items-center gap-3">
-                    <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-emerald-500/10 ring-1 ring-inset ring-emerald-400/25 text-emerald-300">
+                    <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-sky-500/10 ring-1 ring-inset ring-sky-400/25 text-sky-300">
                       <span className="text-base leading-none">🔥</span>
                     </div>
                     <div className="min-w-0 flex flex-col">
-                      <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-emerald-300/90">
+                      <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-sky-300/90">
                         Oportunidade
                       </span>
                       <span className="truncate text-[13px] font-semibold tracking-[-0.005em] text-zinc-50">
@@ -1989,7 +1989,7 @@ export default function App() {
                         localStorage.setItem("bambuzau_costs_subtab_override", "QUOTE");
                         setCurrentTab(4);
                       }}
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-400/30 bg-emerald-500/15 px-3.5 py-2 text-[10px] font-bold uppercase tracking-[0.14em] text-emerald-100 transition-all duration-300 hover:border-emerald-300/50 hover:bg-emerald-500/25 hover:shadow-[0_8px_24px_-8px_rgba(16,185,129,0.6)] active:scale-[0.97]"
+                      className="inline-flex items-center gap-1.5 rounded-xl border border-sky-400/30 bg-sky-500/15 px-3.5 py-2 text-[10px] font-bold uppercase tracking-[0.14em] text-sky-100 transition-all duration-300 hover:border-sky-300/50 hover:bg-sky-500/25 hover:shadow-[0_8px_24px_-8px_rgba(56,189,248,0.6)] active:scale-[0.97]"
                     >
                       Ver cotações
                       <span aria-hidden>↗</span>
