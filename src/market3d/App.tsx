@@ -799,12 +799,34 @@ export default function App() {
           
           {/* Main search and count header */}
           <div className="bg-[#090D16]/95 border border-[#121826] rounded-2xl p-4.5 shadow-md space-y-3 shrink-0">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between flex-wrap gap-2">
               <h2 className="text-xs font-black tracking-widest text-slate-400 uppercase">
                 {currentCategoryName}
               </h2>
-              {/* VIEW MODE TOGGLE */}
-              <div className="flex items-center gap-1 bg-[#05080E] p-0.5 rounded-lg border border-[#121826]/60 shrink-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                {/* Marketplace selector */}
+                <div className="flex items-center gap-1 bg-[#05080E] p-0.5 rounded-lg border border-[#121826]/60 shrink-0">
+                  {(['shopee', 'mercadolivre', 'amazon'] as const).map((plat) => {
+                    const active = selectedPlatform === plat;
+                    const titles = { shopee: 'Shopee', mercadolivre: 'M. Livre', amazon: 'Amazon' };
+                    const colors = {
+                      shopee: active ? 'bg-[#FF4500] text-white' : 'text-slate-400 hover:text-slate-200',
+                      mercadolivre: active ? 'bg-[#FFE600] text-slate-950 font-bold' : 'text-slate-400 hover:text-slate-200',
+                      amazon: active ? 'bg-[#FF9900] text-slate-950 font-bold' : 'text-slate-400 hover:text-slate-200',
+                    };
+                    return (
+                      <button
+                        key={plat}
+                        onClick={() => setSelectedPlatform(plat)}
+                        className={`py-1 px-2.5 rounded-md text-[9px] font-bold uppercase tracking-wider transition-all duration-150 cursor-pointer ${colors[plat]}`}
+                      >
+                        {titles[plat]}
+                      </button>
+                    );
+                  })}
+                </div>
+                {/* VIEW MODE TOGGLE */}
+                <div className="flex items-center gap-1 bg-[#05080E] p-0.5 rounded-lg border border-[#121826]/60 shrink-0">
                 <button
                   type="button"
                   onClick={() => setViewMode('list')}
@@ -829,6 +851,7 @@ export default function App() {
                 >
                   Métricas
                 </button>
+                </div>
               </div>
             </div>
 
