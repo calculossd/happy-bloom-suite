@@ -1758,10 +1758,6 @@ export default function App() {
             {/* Live Sensor and Machine Indicators formatted in clean capsules */}
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5 mt-2.5 font-sans">
               <p className="text-[9.5px] text-emerald-300/90 font-semibold tracking-[0.18em] uppercase flex items-center gap-1.5 shrink-0 select-none">
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60"></span>
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400 shadow-[0_0_6px_#10b981]" />
-                </span>
                 GESTÃO OFICINA
               </p>
               
@@ -2108,7 +2104,7 @@ export default function App() {
           <>
             <div className="flex items-center gap-2 px-1 py-1 mb-2" id="view-page-header-costs">
               <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">
-                Custos
+                Estoque
               </div>
             </div>
             <CostsTab
