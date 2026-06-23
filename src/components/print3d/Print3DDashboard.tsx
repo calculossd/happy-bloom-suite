@@ -871,20 +871,31 @@ export function Print3DPanel({
   catalog.forEach((c: any) => {
     if (c?.name) imageByName[String(c.name).toUpperCase().trim()] = c.imageUrl;
   });
-  const prodMap: Record<string, number> = {};
-  monthOrders.forEach((o: any) => {
+  const prevMonthStart = new Date(today.getFullYear(), today.getMonth() - 1, 1).getTime();
+  const salesThis: Record<string, number> = {};
+  const salesPrev: Record<string, number> = {};
+  orders.forEach((o: any) => {
+    if (o.status === "WAITING") return;
+    const ts = o.createdAt || 0;
     const k = o.itemName || "Peça Personalizada";
-    prodMap[k] = (prodMap[k] || 0) + (o.priceCharged || 0);
+    const q = o.quantity || 1;
+    if (ts >= monthStart) salesThis[k] = (salesThis[k] || 0) + q;
+    else if (ts >= prevMonthStart) salesPrev[k] = (salesPrev[k] || 0) + q;
   });
-  const prodTotal = Object.values(prodMap).reduce((a, b) => a + b, 0) || 1;
-  const topProducts = Object.entries(prodMap)
-    .map(([name, revenue]) => ({
-      name,
-      revenue,
-      v: Math.round((revenue / prodTotal) * 100),
-      image: imageByName[name.toUpperCase().trim()],
-    }))
-    .sort((a, b) => b.revenue - a.revenue)
+  const topProducts = Object.entries(salesThis)
+    .map(([name, sales]) => {
+      const prev = salesPrev[name] || 0;
+      const trend = prev === 0
+        ? (sales > 0 ? 100 : 0)
+        : Math.round(((sales - prev) / prev) * 100);
+      return {
+        name,
+        sales,
+        trend,
+        image: imageByName[name.toUpperCase().trim()],
+      };
+    })
+    .sort((a, b) => b.sales - a.sales)
     .slice(0, 5);
 
   // Revenue per weekday in current month
