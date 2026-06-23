@@ -657,36 +657,45 @@ function AiPricing() {
   );
 }
 
-/* ---------- Bar chart: top categories ---------- */
-function TopProductsChart({ data = [] }: { data?: Array<{ name: string; v: number; revenue: number; image?: string }> }) {
-  const max = Math.max(1, ...data.map((d) => d.v));
+/* ---------- Top selling products ---------- */
+function TopProductsChart({
+  data = [],
+  onSelectTab,
+}: {
+  data?: Array<{ name: string; sales: number; trend: number; image?: string }>;
+  onSelectTab?: (t: number) => void;
+}) {
   return (
     <Card>
-      <h3 className="text-[14px] font-semibold text-white">Produtos Mais Vendidos</h3>
-      <p className="text-[11px] text-white/45 mb-4">Top produtos por receita no mês</p>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-[14px] font-semibold text-white">Produtos Mais Vendidos</h3>
+        <button className="text-[11px] text-white/50 hover:text-white" onClick={() => onSelectTab?.(4)}>Ver todos</button>
+      </div>
       {data.length === 0 && <div className="text-[12px] text-white/40 py-6 text-center">Sem vendas neste mês.</div>}
-      <ul className="space-y-3">
-        {data.map((d, i) => (
-          <li key={i} className="flex items-center gap-3">
-            <div className="size-10 rounded-lg overflow-hidden bg-white/[0.04] border border-white/[0.06] shrink-0 grid place-items-center">
-              {d.image ? (
-                <img src={d.image} alt={d.name} className="w-full h-full object-cover" />
-              ) : (
-                <Package2 className="size-4 text-white/40" />
-              )}
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex justify-between text-[11.5px] mb-1 gap-2">
-                <span className="text-white/80 truncate">{d.name}</span>
-                <span className="tabular-nums font-semibold shrink-0" style={{ color: LIME }}>{d.v}%</span>
+      <ul className="divide-y divide-white/[0.04]">
+        {data.map((d, i) => {
+          const up = d.trend >= 0;
+          const trendColor = up ? LIME : "#fb7185";
+          return (
+            <li key={i} className="flex items-center gap-3 py-2.5">
+              <div className="size-12 rounded-xl overflow-hidden bg-white/[0.04] border border-white/[0.06] shrink-0 grid place-items-center">
+                {d.image ? (
+                  <img src={d.image} alt={d.name} className="w-full h-full object-cover" />
+                ) : (
+                  <Package2 className="size-5 text-white/40" />
+                )}
               </div>
-              <div className="h-1.5 rounded-full bg-white/[0.04] overflow-hidden">
-                <div className="h-full rounded-full" style={{ width: `${(d.v / max) * 100}%`, background: `linear-gradient(90deg,${LIME_DIM},${LIME})`, boxShadow: `0 0 6px ${LIME}55` }} />
+              <div className="flex-1 min-w-0">
+                <div className="text-[13px] font-semibold text-white truncate">{d.name}</div>
+                <div className="text-[11px] text-white/45 tabular-nums">{d.sales} {d.sales === 1 ? "venda" : "vendas"}</div>
               </div>
-              <div className="text-[10px] text-white/45 tabular-nums mt-0.5">{fmtBRL(d.revenue)}</div>
-            </div>
-          </li>
-        ))}
+              <div className="flex items-center gap-1 text-[12px] font-semibold tabular-nums shrink-0" style={{ color: trendColor }}>
+                {up ? <TrendingUp className="size-3.5" /> : <TrendingDown className="size-3.5" />}
+                {up ? "+" : ""}{d.trend}%
+              </div>
+            </li>
+          );
+        })}
       </ul>
     </Card>
   );
