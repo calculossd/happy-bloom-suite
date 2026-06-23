@@ -3,14 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { getApiUrl } from './utils/api';
 import { safeStorage } from './utils/storage';
 import { Client, Printer, PrintOrder, FilamentStock, SupplyStock, Expense, ShoppingItem, ExternalPlatformOrder, CatalogItem } from './types';
-import { 
-  initialClients, 
-  initialPrinters, 
-  initialOrders, 
-  initialFilamentStock, 
-  initialExpenses, 
-  initialShoppingItems 
-} from './utils/initialData';
+import { useAppState } from './state/useAppState';
 import { DashboardTab } from './components/DashboardTab';
 import { ProductionTab } from './components/ProductionTab';
 import { ClientsTab } from './components/ClientsTab';
@@ -402,45 +395,17 @@ export default function App() {
     }
   });
 
-  const [clients, setClients] = useState<Client[]>(() => {
-    try {
-      const saved = localStorage.getItem('bambuzau_clients');
-      return saved ? JSON.parse(saved) : initialClients;
-    } catch (e) {
-      console.warn("Failed to parse clients state, returning initial dataset", e);
-      return initialClients;
-    }
-  });
-
-  const [printers, setPrinters] = useState<Printer[]>(() => {
-    try {
-      const saved = localStorage.getItem('bambuzau_printers');
-      return saved ? JSON.parse(saved) : initialPrinters;
-    } catch (e) {
-      console.warn("Failed to parse printers state, returning initial dataset", e);
-      return initialPrinters;
-    }
-  });
-
-  const [orders, setOrders] = useState<PrintOrder[]>(() => {
-    try {
-      const saved = localStorage.getItem('bambuzau_orders');
-      return saved ? JSON.parse(saved) : initialOrders;
-    } catch (e) {
-      console.warn("Failed to parse orders state, returning initial dataset", e);
-      return initialOrders;
-    }
-  });
-
-  const [filamentStocks, setFilamentStocks] = useState<FilamentStock[]>(() => {
-    try {
-      const saved = localStorage.getItem('bambuzau_filament');
-      return saved ? JSON.parse(saved) : initialFilamentStock;
-    } catch (e) {
-      console.warn("Failed to parse filamentStocks state, returning initial dataset", e);
-      return initialFilamentStock;
-    }
-  });
+  const {
+    clients, setClients,
+    printers, setPrinters,
+    orders, setOrders,
+    filamentStocks, setFilamentStocks,
+    expenses, setExpenses,
+    shoppingItems, setShoppingItems,
+    importedExternalIds, setImportedExternalIds,
+    suppliesStocks, setSuppliesStocks,
+    lastAuditDate, setLastAuditDate,
+  } = useAppState();
 
   // Tuya Wi-Fi Devices for Humidifier Telemetry
   const [tuyaDevices, setTuyaDevices] = useState<{
@@ -728,56 +693,6 @@ export default function App() {
     };
   }, []);
 
-  const [expenses, setExpenses] = useState<Expense[]>(() => {
-    try {
-      const saved = localStorage.getItem('bambuzau_expenses');
-      return saved ? JSON.parse(saved) : initialExpenses;
-    } catch (e) {
-      console.warn("Failed to parse expenses state, returning initial dataset", e);
-      return initialExpenses;
-    }
-  });
-
-  const [shoppingItems, setShoppingItems] = useState<ShoppingItem[]>(() => {
-    try {
-      const saved = localStorage.getItem('bambuzau_shopping');
-      return saved ? JSON.parse(saved) : initialShoppingItems;
-    } catch (e) {
-      console.warn("Failed to parse shoppingItems state, returning initial dataset", e);
-      return initialShoppingItems;
-    }
-  });
-
-  const [importedExternalIds, setImportedExternalIds] = useState<string[]>(() => {
-    try {
-      const saved = localStorage.getItem('bambuzau_imported_external_ids');
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) {
-      console.warn("Failed to parse importedExternalIds state, returning empty array", e);
-      return [];
-    }
-  });
-
-  const [suppliesStocks, setSuppliesStocks] = useState<SupplyStock[]>(() => {
-    try {
-      const saved = localStorage.getItem('bambuzau_supplies');
-      if (saved) return JSON.parse(saved);
-    } catch (e) {
-      console.warn("Failed to parse suppliesStocks state, returning default empty list", e);
-    }
-    return [];
-  });
-
-  const [lastAuditDate, setLastAuditDate] = useState<number>(() => {
-    try {
-      const saved = localStorage.getItem('bambuzau_last_audit_ts');
-      // Default standard: 4 days ago to trigger the audit warnings by default!
-      return saved ? parseInt(saved, 10) : Date.now() - 4 * 24 * 60 * 60 * 1000;
-    } catch (e) {
-      return Date.now() - 4 * 24 * 60 * 60 * 1000;
-    }
-  });
-
   // Keep a running time state
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isClientMounted, setIsClientMounted] = useState(false);
@@ -817,46 +732,15 @@ export default function App() {
     }
   }, []);
 
-  // Save states to localStorage upon changes
+  // Persistence for the slices above is handled by useAppState/usePersistedState.
+  // Brand config keeps its own effect because it lives outside useAppState for now.
   useEffect(() => {
-    localStorage.setItem('bambuzau_brand_config', JSON.stringify(brandConfig));
+    try {
+      localStorage.setItem('bambuzau_brand_config', JSON.stringify(brandConfig));
+    } catch (e) {
+      console.warn('Failed to persist brandConfig', e);
+    }
   }, [brandConfig]);
-
-  useEffect(() => {
-    localStorage.setItem('bambuzau_clients', JSON.stringify(clients));
-  }, [clients]);
-
-  useEffect(() => {
-    localStorage.setItem('bambuzau_printers', JSON.stringify(printers));
-  }, [printers]);
-
-  useEffect(() => {
-    localStorage.setItem('bambuzau_orders', JSON.stringify(orders));
-  }, [orders]);
-
-  useEffect(() => {
-    localStorage.setItem('bambuzau_filament', JSON.stringify(filamentStocks));
-  }, [filamentStocks]);
-
-  useEffect(() => {
-    localStorage.setItem('bambuzau_expenses', JSON.stringify(expenses));
-  }, [expenses]);
-
-  useEffect(() => {
-    localStorage.setItem('bambuzau_shopping', JSON.stringify(shoppingItems));
-  }, [shoppingItems]);
-
-  useEffect(() => {
-    localStorage.setItem('bambuzau_imported_external_ids', JSON.stringify(importedExternalIds));
-  }, [importedExternalIds]);
-
-  useEffect(() => {
-    localStorage.setItem('bambuzau_supplies', JSON.stringify(suppliesStocks));
-  }, [suppliesStocks]);
-
-  useEffect(() => {
-    localStorage.setItem('bambuzau_last_audit_ts', lastAuditDate.toString());
-  }, [lastAuditDate]);
 
   const [tickerQuotes, setTickerQuotes] = useState<Array<{ label: string; price: string; change: string; up: boolean | null }>>([]);
 
