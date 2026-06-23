@@ -3792,59 +3792,40 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
 
       {/* SUBTAB 4.5: GOOGLE SHOPPING QUOTATIONS & MATERIAL MINIMUM PRICES */}
       {activeSubTab === 'QUOTE' && (
-        <div className="space-y-6 animate-fade-in" id="quotations-view-container">
+        <div className="space-y-3 animate-fade-in" id="quotations-view-container">
           {/* Header Description */}
-          <div className="p-5 bg-gradient-to-r from-[#17211B] to-[#121A15] border border-[#232B27] rounded-xl sm:rounded-2xl relative overflow-hidden">
-            <div className="absolute right-3 top-3 opacity-[0.08] pointer-events-none select-none">
-              <TrendingUp className="h-28 w-28 text-[#E2B144]" />
+          <div className="p-3 bg-gradient-to-r from-[#17211B] to-[#121A15] border border-[#232B27] rounded-xl flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-2 min-w-0 flex-1">
+              <TrendingUp className="h-4 w-4 text-[#E2B144] shrink-0" />
+              <span className="text-[9px] bg-gradient-to-r from-amber-400 to-yellow-500 text-black px-2 py-0.5 rounded-full font-black uppercase font-mono tracking-wider shrink-0">AO VIVO</span>
+              <span className="text-[11px] font-bold text-white truncate">Top 5 ofertas — Google Shopping</span>
+              {lastQuotesUpdate && (
+                <span className="text-[10px] text-amber-400 font-mono hidden sm:inline shrink-0">· {lastQuotesUpdate}</span>
+              )}
             </div>
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative z-10 w-full">
-              <div className="space-y-1.5 max-w-2xl">
-                <span className="text-[9px] sm:text-[10px] bg-gradient-to-r from-amber-400 to-yellow-500 text-black px-2.5 py-0.5 rounded-full font-black uppercase font-mono tracking-wider">PREÇOS DA INTERNET EM TEMPO REAL</span>
-                <h3 className="text-sm sm:text-base font-extrabold text-white flex items-center gap-2">
-                  Comparador Multi-Marketplaces &amp; Configuração de Alertas 🤖
-                </h3>
-                <p className="text-xs text-[#8BA58D] leading-relaxed">
-                  O Gestão 3D monitora em tempo real os 5 melhores preços da internet conectando-se diretamente ao Google Shopping. Defina seu valor mínimo ideal: se detectarmos preços abaixo dele, um alerta flutuante de oportunidade será exibido no app!
-                </p>
-                {lastQuotesUpdate && (
-                  <p className="text-[10px] text-amber-400 font-mono mt-1">
-                    Última consulta ao vivo: <strong className="text-white">{lastQuotesUpdate}</strong>
-                  </p>
-                )}
-              </div>
-              <button
-                onClick={() => fetchLiveQuotes(false)}
-                disabled={loadingQuotes}
-                className={`w-full md:w-auto px-5 py-3.5 md:py-3 cursor-pointer rounded-xl font-black text-xs transition flex items-center justify-center gap-2 select-none border shrink-0 ${
-                  loadingQuotes 
-                  ? 'bg-[#151917] text-zinc-500 border-[#232B27] cursor-not-allowed' 
-                  : 'bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-500 hover:to-yellow-600 text-black border-amber-400 shadow-[0_4px_12px_rgba(245,158,11,0.2)] active:scale-95'
-                }`}
-              >
-                <RefreshCw className={`h-4 w-4 ${loadingQuotes ? 'animate-spin text-zinc-500' : 'text-black'}`} />
-                {loadingQuotes ? 'Consultando...' : 'Pesquisar Preços Padronizados 🌀'}
-              </button>
-            </div>
+            <button
+              onClick={() => fetchLiveQuotes(false)}
+              disabled={loadingQuotes}
+              className={`px-3 py-1.5 cursor-pointer rounded-lg font-black text-[11px] transition flex items-center justify-center gap-1.5 select-none border shrink-0 ${
+                loadingQuotes 
+                ? 'bg-[#151917] text-zinc-500 border-[#232B27] cursor-not-allowed' 
+                : 'bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-500 hover:to-yellow-600 text-black border-amber-400 active:scale-95'
+              }`}
+            >
+              <RefreshCw className={`h-3.5 w-3.5 ${loadingQuotes ? 'animate-spin text-zinc-500' : 'text-black'}`} />
+              {loadingQuotes ? 'Consultando...' : 'Atualizar Padrões'}
+            </button>
           </div>
 
-          {/* Interactive Search Box - Fully optimized for both cellphones and desktops */}
-          <div className="p-4 sm:p-5 bg-[#151917] border border-[#232B27] rounded-xl sm:rounded-2xl space-y-3.5">
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[#95BBA2] uppercase tracking-wider font-mono block">
-                🔍 Busca Personalizada no Google Shopping (Menor Preço)
-              </label>
-              <p className="text-xs text-[#8BA58D]">
-                Digite o termo de qualquer produto ou filamento abaixo. Forçamos a busca inteligente do Google Shopping trazendo os resultados reordenados pelo menor preço real!
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-2.5">
+          {/* Interactive Search Box - compact */}
+          <div className="p-2.5 bg-[#151917] border border-[#232B27] rounded-xl">
+            <div className="flex flex-col sm:flex-row gap-2">
               <input
                 type="text"
                 value={searchQueryInput}
                 onChange={(e) => setSearchQueryInput(e.target.value)}
-                placeholder="Exemplo: Filamento PLA Premium 1kg, Bico E3D, Resina..."
-                className="w-full flex-grow bg-[#0C0E0D] border border-[#232B27] px-4 py-3.5 sm:py-3 rounded-xl text-xs text-white placeholder-zinc-500 hover:border-[#38463F] focus:border-amber-500 outline-none font-sans"
+                placeholder="🔍 Buscar: PLA 1kg, Bico E3D, Resina..."
+                className="w-full flex-grow bg-[#0C0E0D] border border-[#232B27] px-3 py-2 rounded-lg text-xs text-white placeholder-zinc-500 hover:border-[#38463F] focus:border-amber-500 outline-none font-sans"
                 id="shopping-search-input-field"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && searchQueryInput.trim()) {
@@ -3862,25 +3843,25 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                   }
                 }}
                 disabled={loadingQuotes}
-                className="w-full sm:w-auto px-5 py-4 sm:py-3 bg-amber-500 hover:bg-amber-400 disabled:bg-[#151917] disabled:text-zinc-500 text-black font-extrabold text-xs rounded-xl cursor-pointer transition active:scale-95 flex items-center justify-center gap-2 select-none border border-amber-500"
+                className="w-full sm:w-auto px-3 py-2 bg-amber-500 hover:bg-amber-400 disabled:bg-[#151917] disabled:text-zinc-500 text-black font-extrabold text-xs rounded-lg cursor-pointer transition active:scale-95 flex items-center justify-center gap-1.5 select-none border border-amber-500"
               >
-                <Search className="h-4 w-4" />
-                {loadingQuotes ? 'Consultando...' : 'Buscar Menor Preço'}
+                <Search className="h-3.5 w-3.5" />
+                Buscar
               </button>
             </div>
           </div>
 
           {/* Pricing Config Form */}
-          <div className="p-5 bg-[#151917] border border-[#232B27] rounded-2xl space-y-4">
-            <h4 className="text-xs font-bold text-zinc-200 uppercase tracking-widest flex items-center gap-1.5 border-b border-[#232B27]/60 pb-2">
-              <DollarSign className="h-4 w-4 text-[#E2B144]" />
-              Configurar Alerta de Preço Mínimo (Notificação)
+          <div className="p-2.5 bg-[#151917] border border-[#232B27] rounded-xl space-y-2">
+            <h4 className="text-[10px] font-bold text-zinc-300 uppercase tracking-widest flex items-center gap-1.5">
+              <DollarSign className="h-3.5 w-3.5 text-[#E2B144]" />
+              Alertas de preço mínimo
             </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="space-y-1.5">
-                <label className="text-[11px] text-[#8BA58D] font-bold">Preço de Alerta PLA (R$)</label>
+            <div className="grid grid-cols-3 gap-2">
+              <div className="space-y-1">
+                <label className="text-[10px] text-[#8BA58D] font-bold">PLA</label>
                 <div className="relative">
-                  <span className="absolute left-3.5 top-2.5 text-xs text-zinc-500 font-bold font-mono">R$</span>
+                  <span className="absolute left-2 top-1.5 text-[10px] text-zinc-500 font-bold font-mono">R$</span>
                   <input 
                     type="number"
                     value={localStorage.getItem('bambuzau_alert_price_pla') || '85'}
@@ -3889,16 +3870,15 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                       triggerFeedback(`Alerta de PLA atualizado para R$ ${e.target.value}!`, 'success');
                       setChecklistTrigger(prev => prev + 1);
                     }}
-                    className="w-full bg-[#0C0E0D] border border-[#232B27] pl-9 pr-3 py-2.5 rounded-xl text-xs text-white font-mono font-bold outline-none focus:border-amber-500 transition"
+                    className="w-full bg-[#0C0E0D] border border-[#232B27] pl-7 pr-2 py-1.5 rounded-lg text-xs text-white font-mono font-bold outline-none focus:border-amber-500 transition"
                   />
                 </div>
-                <p className="text-[9px] text-zinc-500">Mostra alerta se PLA for menor que este preço.</p>
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-[11px] text-[#8BA58D] font-bold">Preço de Alerta PETG (R$)</label>
+              <div className="space-y-1">
+                <label className="text-[10px] text-[#8BA58D] font-bold">PETG</label>
                 <div className="relative">
-                  <span className="absolute left-3.5 top-2.5 text-xs text-zinc-500 font-bold font-mono">R$</span>
+                  <span className="absolute left-2 top-1.5 text-[10px] text-zinc-500 font-bold font-mono">R$</span>
                   <input 
                     type="number"
                     value={localStorage.getItem('bambuzau_alert_price_petg') || '80'}
@@ -3907,16 +3887,15 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                       triggerFeedback(`Alerta de PETG atualizado para R$ ${e.target.value}!`, 'success');
                       setChecklistTrigger(prev => prev + 1);
                     }}
-                    className="w-full bg-[#0C0E0D] border border-[#232B27] pl-9 pr-3 py-2.5 rounded-xl text-xs text-white font-mono font-bold outline-none focus:border-amber-500 transition"
+                    className="w-full bg-[#0C0E0D] border border-[#232B27] pl-7 pr-2 py-1.5 rounded-lg text-xs text-white font-mono font-bold outline-none focus:border-amber-500 transition"
                   />
                 </div>
-                <p className="text-[9px] text-zinc-500">Mostra alerta se PETG for menor que este preço.</p>
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-[11px] text-[#8BA58D] font-bold">Preço de Alerta TPU (R$)</label>
+              <div className="space-y-1">
+                <label className="text-[10px] text-[#8BA58D] font-bold">TPU</label>
                 <div className="relative">
-                  <span className="absolute left-3.5 top-2.5 text-xs text-zinc-500 font-bold font-mono">R$</span>
+                  <span className="absolute left-2 top-1.5 text-[10px] text-zinc-500 font-bold font-mono">R$</span>
                   <input 
                     type="number"
                     value={localStorage.getItem('bambuzau_alert_price_tpu') || '115'}
@@ -3925,36 +3904,32 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                       triggerFeedback(`Alerta de TPU atualizado para R$ ${e.target.value}!`, 'success');
                       setChecklistTrigger(prev => prev + 1);
                     }}
-                    className="w-full bg-[#0C0E0D] border border-[#232B27] pl-9 pr-3 py-2.5 rounded-xl text-xs text-white font-mono font-bold outline-none focus:border-amber-500 transition"
+                    className="w-full bg-[#0C0E0D] border border-[#232B27] pl-7 pr-2 py-1.5 rounded-lg text-xs text-white font-mono font-bold outline-none focus:border-amber-500 transition"
                   />
                 </div>
-                <p className="text-[9px] text-zinc-500">Mostra alerta se TPU for menor que este preço.</p>
               </div>
             </div>
           </div>
 
           {/* Quotations List container */}
-          <div className="space-y-5">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
             {quotationGroups.map((materialGroup, gIdx) => {
               const alertLimit = parseFloat(localStorage.getItem(`bambuzau_alert_price_${materialGroup.type.toLowerCase()}`) || (materialGroup.type === 'PLA' ? '85' : materialGroup.type === 'PETG' ? '80' : '115'));
               return (
-                <div key={gIdx} className="bg-[#151917] border border-[#232B27] rounded-2xl p-5 space-y-3.5 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-[#232B27]/40 pb-3">
-                    <div className="space-y-0.5">
-                      <h4 className="text-sm font-extrabold text-white flex items-center gap-1.5 font-sans">
-                        <Tag className="h-4 w-4 text-[#E5B242]" />
-                        Melhores Ofertas de {materialGroup.type}
-                      </h4>
-                      <p className="text-[10.5px] text-[#8BA58D]">Seu limite de oportunidade configurado: <strong className="text-amber-400 font-mono">R$ {alertLimit.toFixed(2)}</strong></p>
-                    </div>
-                    
+                <div key={gIdx} className="bg-[#151917] border border-[#232B27] rounded-xl p-2.5 space-y-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                  <div className="flex items-center justify-between gap-2 border-b border-[#232B27]/40 pb-1.5">
+                    <h4 className="text-xs font-extrabold text-white flex items-center gap-1.5 font-sans min-w-0">
+                      <Tag className="h-3.5 w-3.5 text-[#E5B242] shrink-0" />
+                      <span className="truncate">{materialGroup.type}</span>
+                      <span className="text-[10px] text-[#8BA58D] font-mono font-normal shrink-0">· min R$ {alertLimit.toFixed(2)}</span>
+                    </h4>
                     <a 
                       href={`https://www.google.com/search?tbm=shop&q=${materialGroup.searchQuery}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-4 py-1.5 bg-[#95BBA2]/10 hover:bg-[#95BBA2]/25 border border-[#95BBA2]/30 text-[#95BBA2] text-[10.5px] font-black rounded-xl transition flex items-center gap-1.5 shadow"
+                      className="px-2 py-0.5 bg-[#95BBA2]/10 hover:bg-[#95BBA2]/25 border border-[#95BBA2]/30 text-[#95BBA2] text-[10px] font-black rounded-lg transition shrink-0"
                     >
-                      Ver Tudo no Google Shopping 🔍
+                      Ver todos 🔍
                     </a>
                   </div>
 
@@ -3962,37 +3937,25 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                     {[...materialGroup.offers].sort((a, b) => a.price - b.price).map((offer, oIdx) => {
                       const isHotOpportunity = offer.price < alertLimit;
                       return (
-                        <div key={oIdx} className="py-2.5 flex justify-between items-center gap-4 hover:bg-black/10 px-2 rounded-lg transition">
-                          <div className="min-w-0 flex-1">
-                            <span className="text-[10px] uppercase font-extrabold px-1.5 py-0.5 rounded bg-[#1C2420] border border-[#2F3D35] text-[#95BBA2] inline-block mb-1">
-                              {offer.storeName}
-                            </span>
-                            <p className="text-xs font-bold text-zinc-100 truncate">{offer.productName}</p>
-                          </div>
-                          
-                          <div className="flex items-center gap-3 shrink-0">
-                            <div className="text-right">
-                              <p className="text-sm font-black text-amber-400 font-mono leading-none mb-0.5">
-                                R$ {offer.price.toFixed(2)}
-                              </p>
-                              {isHotOpportunity ? (
-                                <span className="inline-block text-[8.5px] font-black bg-amber-500 text-black px-1.5 py-0.5 rounded-full shadow-[0_0_8px_rgba(245,158,11,0.5)] animate-pulse uppercase tracking-wider scale-90Origin">
-                                  🔥 Oportunidade!
-                                </span>
-                              ) : (
-                                <span className="inline-block text-[8px] font-bold text-zinc-500 uppercase">Preço normal</span>
-                              )}
-                            </div>
-
-                            <a 
-                              href={offer.buyUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="px-3 py-1.5 bg-[#95BBA2] hover:bg-[#B6D8B4] text-[#0C0E0D] text-[10px] uppercase tracking-wide font-black rounded-lg transition duration-150 flex items-center gap-1"
-                            >
-                              Comprar 🛒
-                            </a>
-                          </div>
+                        <div key={oIdx} className="py-1.5 flex items-center gap-2 hover:bg-black/10 px-1.5 rounded transition">
+                          <span className="text-[9px] uppercase font-extrabold px-1 py-0.5 rounded bg-[#1C2420] border border-[#2F3D35] text-[#95BBA2] shrink-0 max-w-[70px] truncate">
+                            {offer.storeName}
+                          </span>
+                          <p className="text-[11px] font-bold text-zinc-100 truncate flex-1 min-w-0">{offer.productName}</p>
+                          <p className={`text-xs font-black font-mono leading-none shrink-0 ${isHotOpportunity ? 'text-amber-400' : 'text-zinc-200'}`}>
+                            R${offer.price.toFixed(2)}
+                          </p>
+                          {isHotOpportunity && (
+                            <span className="text-[10px] shrink-0" title="Oportunidade">🔥</span>
+                          )}
+                          <a 
+                            href={offer.buyUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-2 py-1 bg-[#95BBA2] hover:bg-[#B6D8B4] text-[#0C0E0D] text-[10px] uppercase font-black rounded transition shrink-0"
+                          >
+                            🛒
+                          </a>
                         </div>
                       );
                     })}
