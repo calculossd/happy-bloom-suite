@@ -38,6 +38,7 @@ import {
 import { Client, Printer, PrintOrder, FilamentStock, Expense, ShoppingItem } from '../types';
 import { getApiUrl, validateApiKeyFormat, checkIsAndroidWebView, callGeminiGeneratePalette } from '../utils/api';
 import { safeStorage } from '../utils/storage';
+import { uploadWorkspace, downloadWorkspace, FirebaseSyncError } from '../sync/firebaseSync';
 
 interface SettingsTabProps {
   clients: Client[];
