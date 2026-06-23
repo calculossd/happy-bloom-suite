@@ -966,7 +966,7 @@ export function Print3DPanel({
 
           {/* Row 4: Categorias | Hora | Resumo Financeiro */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-            <TopProductsChart data={topProducts} />
+            <TopProductsChart data={topProducts} onSelectTab={onSelectTab} />
             <HourlyChart data={hourly} />
             <FinanceSummary revenue={monthRevenue} expense={monthExpenses} profit={monthProfit} margin={monthMargin} onSelectTab={onSelectTab} />
           </div>
