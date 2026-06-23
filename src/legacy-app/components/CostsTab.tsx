@@ -92,8 +92,8 @@ const getHexColorByName = (colorName: string): { bg: string; text: string; borde
 const isBlockedGoogleUrl = (value?: string) => {
   if (!value || !value.trim()) return true;
   try {
-    const host = new URL(value).hostname.replace(/^www\./, '').toLowerCase();
-    return host === 'google.com' || host.endsWith('.google.com') || host === 'googleadservices.com' || host.endsWith('.googleadservices.com');
+    new URL(value);
+    return false;
   } catch {
     return true;
   }

@@ -33,6 +33,17 @@ function merchantSearchUrl(storeName: string, productName: string): string {
   return `https://www.buscape.com.br/search?q=${query}`;
 }
 
+function pickProductUrl(r: any, query: string): string {
+  // Prefer direct merchant URL, then SerpApi's product page, then the
+  // Google Shopping redirect link (works in a new tab — redirects to the
+  // merchant product page). Fall back to a Buscapé search by title.
+  const candidates = [r.product_link, r.link, r.serpapi_product_api];
+  for (const c of candidates) {
+    if (typeof c === "string" && /^https?:\/\//i.test(c)) return c;
+  }
+  return merchantSearchUrl(r.source || r.store || "", r.title || query);
+}
+
 async function fetchShopping(query: string, apiKey: string) {
   const url = `https://serpapi.com/search.json?engine=google_shopping&q=${encodeURIComponent(query)}&gl=br&hl=pt&tbs=p_ord:p&api_key=${apiKey}`;
   const controller = new AbortController();
@@ -49,7 +60,7 @@ async function fetchShopping(query: string, apiKey: string) {
         rating: typeof r.rating === "number" ? r.rating : 4.5,
         reviews: typeof r.reviews === "number" ? r.reviews : 0,
         feature: Array.isArray(r.extensions) && r.extensions.length ? String(r.extensions[0]) : (r.delivery || ""),
-        buyUrl: !isBlockedGoogleUrl(r.link) ? r.link : merchantSearchUrl(r.source || r.store || "", r.title || query),
+        buyUrl: pickProductUrl(r, query),
         thumbnail: r.thumbnail || "",
       }))
       .filter((o: any) => o.price > 0);
