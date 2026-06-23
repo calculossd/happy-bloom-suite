@@ -3912,7 +3912,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
           </div>
 
           {/* Quotations List container */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          <div className="space-y-3">
             {quotationGroups.map((materialGroup, gIdx) => {
               const alertLimit = parseFloat(localStorage.getItem(`bambuzau_alert_price_${materialGroup.type.toLowerCase()}`) || (materialGroup.type === 'PLA' ? '85' : materialGroup.type === 'PETG' ? '80' : '115'));
               return (
