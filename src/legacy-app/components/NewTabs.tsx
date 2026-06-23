@@ -63,7 +63,7 @@ export function PriceResearchTab() {
       const list = Array.isArray(group?.offers) ? group.offers : Array.isArray(data?.offers) ? data.offers : [];
 
       const cleanList = dedupeOffers(list);
-      setOffers(cleanList.slice(0, 12));
+      setOffers(cleanList.slice(0, 15));
       if (!list.length) setError('Nenhum preço encontrado para este produto.');
     } catch (err: any) {
       setError(err?.message || 'Falha ao pesquisar preços.');
