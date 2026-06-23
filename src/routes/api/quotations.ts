@@ -32,6 +32,8 @@ async function fetchShopping(query: string, apiKey: string) {
         productName: r.title || "",
         price: typeof r.extracted_price === "number" ? r.extracted_price : Number(String(r.price || "").replace(/[^0-9,.-]/g, "").replace(",", ".")) || 0,
         rating: typeof r.rating === "number" ? r.rating : 4.5,
+        reviews: typeof r.reviews === "number" ? r.reviews : 0,
+        feature: Array.isArray(r.extensions) && r.extensions.length ? String(r.extensions[0]) : (r.delivery || ""),
         buyUrl: r.product_link || r.link || "",
         thumbnail: r.thumbnail || "",
       }))
