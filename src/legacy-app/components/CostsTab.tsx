@@ -2287,56 +2287,6 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
             </div>
           </div>
 
-          {/* PAINEL DE CONFIGURAÇÃO E COMPARTILHAMENTO DO SITE DE VENDAS ONLINE */}
-          <div className="p-5 bg-gradient-to-b from-[#121614] to-[#0A0D0B] border border-[#232B27] rounded-3xl relative overflow-hidden space-y-4">
-            <div className="absolute top-0 right-0 h-32 w-32 bg-[#95BBA2]/5 rounded-full blur-2xl pointer-events-none"></div>
-            
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#232B27]/40 pb-4">
-              <div className="space-y-1">
-                <span className="text-[9px] font-black tracking-widest text-[#95BBA2] uppercase font-mono px-2.5 py-0.5 bg-[#95BBA2]/10 border border-[#95BBA2]/20 rounded-full inline-block">
-                  🌐 INTEGRAÇÃO COM SEU SITE EXTERNO PRÓPRIO
-                </span>
-                <h4 className="text-sm font-black text-white">Configuração de Pedidos & API do Catálogo</h4>
-                <p className="text-xs text-[#8BA58D]">Como o seu site será desenvolvido externamente de forma terceirizada, configure abaixo o número de celular comercial para sincronizar pedidos de cotação.</p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* WhatsApp setup */}
-              <div className="space-y-2 bg-[#151917] p-4 border border-[#232B27]/60 rounded-2xl flex flex-col justify-between">
-                <div>
-                  <label className="block text-[10px] uppercase font-mono font-bold text-[#8BA58D]">WhatsApp para Recebimento de Cotações</label>
-                  <p className="text-[9.5px] text-[#8BA58D] mb-2 leading-tight">DDD + Número de celular (ex: 419988887777). Seu site externo poderá usar este número para envio direto dos pedidos!</p>
-                </div>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="Ex: 41991234567"
-                    value={whatsappInput}
-                    onChange={(e) => setWhatsappInput(e.target.value.replace(/\D/g, ''))}
-                    className="flex-1 bg-[#0A0D0B] border border-[#232B27] rounded-xl px-3 py-1.5 text-xs text-white placeholder-zinc-700 outline-none font-sans"
-                  />
-                  <button
-                    onClick={handleSaveWhatsapp}
-                    className="px-3.5 py-1.5 bg-[#9dcdb4] text-black font-black text-xs rounded-xl cursor-pointer hover:bg-white select-none transition shrink-0"
-                  >
-                    Salvar
-                  </button>
-                </div>
-              </div>
-
-              {/* API Integration Instruction */}
-              <div className="space-y-2 bg-[#151917] p-4 border border-[#232B27]/60 rounded-2xl flex flex-col justify-between font-sans">
-                <div>
-                  <label className="block text-[10px] uppercase font-mono font-bold text-amber-400">💡 Como Integrar Seu Site Profissional Extra</label>
-                  <p className="text-[9.5px] text-[#8BA58D] leading-relaxed">
-                    Sua tabela de preços e catálogo de itens cadastrados no app ficam guardados de forma segura e estruturada comercialmente. Seus desenvolvedores externos podem puxar e ler sua lista de itens inteira em formato JSON bastando acessar a aba de <strong>Configurações do App</strong> e clicando em exportar banco de dados.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          
           <div className="p-5 bg-[#151917] border border-[#232B27] rounded-2xl flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <h3 className="text-base font-bold text-[#F1F4EE] flex items-center gap-2">
