@@ -79,7 +79,7 @@ const DEFAULT_MATERIALS: Array<{ type: string; query: string }> = [
   { type: "SILK", query: "filamento silk pla 1.75mm 1kg impressora 3d" },
 ];
 
-const TOP_N = 5;
+const TOP_N = 15;
 const topByPrice = <T extends { price: number }>(offers: T[]): T[] =>
   [...offers].sort((a, b) => a.price - b.price).slice(0, TOP_N);
 
@@ -112,7 +112,8 @@ const offerDedupeKeys = (offer: { productName?: string; productId?: string; buyU
       keys.push(`url:${u.hostname.replace(/^www\./, "")}${u.pathname}`.toLowerCase());
     } catch {}
   }
-  if (offer.thumbnail) keys.push(`thumb:${offer.thumbnail}`);
+  // Não dedupar por thumbnail: produtos diferentes podem compartilhar a mesma
+  // imagem genérica e sumiriam da lista.
   return keys.filter((key) => !key.endsWith(":"));
 };
 
