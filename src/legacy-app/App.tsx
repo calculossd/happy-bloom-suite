@@ -1501,22 +1501,29 @@ export default function App() {
           { id: 5, label: 'Ajustes',   icon: Settings },
         ].map(item => {
           const active = currentTab === item.id;
-          // Grupo de gestão de impressão 3D (dourado) vs grupo de marketing (azul)
+          // Grupo de gestão de impressão 3D (dourado escuro) vs grupo de marketing (azul escuro)
           const isCoreGroup = [0, 1, 6, 2, 3, 4].includes(item.id);
-          const baseColor = isCoreGroup ? '#F5C842' : '#3B82F6';
+          // Tons escuros estilo aba de navegador
+          const activeBg   = isCoreGroup ? '#7A5A12' : '#1E3A8A';
+          const inactiveBg = isCoreGroup ? '#3D2E0A' : '#0F1E45';
+          const borderCol  = isCoreGroup ? '#5C460F' : '#16275C';
+          const accentLine = isCoreGroup ? '#D4A017' : '#3B82F6';
           return (
             <button
               key={item.id}
               onClick={() => setCurrentTab(item.id)}
               style={{
-                backgroundColor: active ? baseColor : `${baseColor}B3`,
-                borderColor: baseColor,
+                background: active
+                  ? `linear-gradient(180deg, ${activeBg} 0%, ${inactiveBg} 100%)`
+                  : `linear-gradient(180deg, ${inactiveBg} 0%, rgba(0,0,0,0.55) 100%)`,
+                borderColor: borderCol,
+                borderTop: active ? `2px solid ${accentLine}` : `1px solid ${borderCol}`,
                 color: '#FFFFFF',
               }}
-              className={`relative inline-flex items-center justify-center gap-1 px-2 rounded-t-lg text-[10.5px] sm:text-[11px] font-bold whitespace-nowrap transition-all border border-b-0 -mb-px -mr-px ${
+              className={`relative inline-flex items-center justify-center gap-1 px-3 rounded-t-md text-[10.5px] sm:text-[11px] font-semibold whitespace-nowrap transition-all border border-b-0 -mr-px ${
                 active
-                  ? 'py-2 z-10 shadow-[0_-4px_14px_rgba(0,0,0,0.5)]'
-                  : 'py-1.5 hover:brightness-110'
+                  ? 'py-2 z-10 -mb-px shadow-[0_-3px_10px_rgba(0,0,0,0.55)] text-white'
+                  : 'py-1.5 mb-[2px] text-white/70 hover:text-white hover:brightness-125'
               }`}
             >
               <item.icon className="h-3 w-3 shrink-0" />
