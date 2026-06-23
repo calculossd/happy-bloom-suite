@@ -20,14 +20,35 @@ import {
 } from './components/NewTabs';
 // Heavy tabs are code-split: only the chunk for the active tab is fetched.
 // Saves ~hundreds of KB on initial load (Market3D + 7 imported pages).
-const Market3DApp     = lazy(() => import('@/market3d/App'));
-const CatalogoTab     = lazy(() => import('./imported/CatalogoTab'));
-const MarketingTab    = lazy(() => import('./imported/MarketingTab'));
-const KanbanTab       = lazy(() => import('./imported/KanbanTab'));
-const MarketTab       = lazy(() => import('./imported/MarketTab'));
-const AgendaTabNew    = lazy(() => import('./imported/AgendaTab'));
-const SitesTab        = lazy(() => import('./imported/SitesTab'));
-const PreCheckTabNew  = lazy(() => import('./imported/PreCheckTab'));
+// Recover from stale chunk references after a redeploy: when the browser
+// holds an old HTML referencing chunks that no longer exist on the server,
+// the dynamic import 404s. We reload once to pick up the fresh chunks.
+const lazyWithReload = <T extends React.ComponentType<any>>(
+  factory: () => Promise<{ default: T }>
+) =>
+  lazy(() =>
+    factory().catch((err) => {
+      if (typeof window !== 'undefined') {
+        const flag = 'lov_chunk_reloaded';
+        if (!sessionStorage.getItem(flag)) {
+          sessionStorage.setItem(flag, '1');
+          window.location.reload();
+          // Return a never-resolving promise while the reload happens
+          return new Promise<{ default: T }>(() => {});
+        }
+      }
+      throw err;
+    })
+  );
+
+const Market3DApp     = lazyWithReload(() => import('@/market3d/App'));
+const CatalogoTab     = lazyWithReload(() => import('./imported/CatalogoTab'));
+const MarketingTab    = lazyWithReload(() => import('./imported/MarketingTab'));
+const KanbanTab       = lazyWithReload(() => import('./imported/KanbanTab'));
+const MarketTab       = lazyWithReload(() => import('./imported/MarketTab'));
+const AgendaTabNew    = lazyWithReload(() => import('./imported/AgendaTab'));
+const SitesTab        = lazyWithReload(() => import('./imported/SitesTab'));
+const PreCheckTabNew  = lazyWithReload(() => import('./imported/PreCheckTab'));
 
 const TabFallback = () => (
   <div className="flex items-center justify-center py-20 text-[var(--brand-text-muted)] text-sm gap-2">
