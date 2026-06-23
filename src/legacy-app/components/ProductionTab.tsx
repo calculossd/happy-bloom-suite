@@ -1307,21 +1307,6 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                     <label className="block text-[#8BA58D] font-extrabold flex items-center justify-between">
                       <span>Classe do Modelo / Descrição (Do Catálogo)</span>
                     </label>
-                    {(catalogItems as any[]).length === 0 ? (
-                      <>
-                        <input
-                          type="text"
-                          placeholder="Digite o nome do produto"
-                          value={formItemName === '__CUSTOM__' ? '' : formItemName}
-                          onChange={(e) => setFormItemName(e.target.value)}
-                          className="w-full bg-[#0C0E0D] border border-[#E5B242]/40 rounded-lg py-2 px-3 text-white placeholder-[#8BA58D]/40 focus:border-[#E5B242] focus:outline-none"
-                          required
-                        />
-                        <p className="text-[10px] text-amber-500 font-mono">
-                          ⚠️ Nenhum produto no catálogo. Digite o nome do produto acima ou cadastre na aba "Banco de Dados & Catálogo".
-                        </p>
-                      </>
-                    ) : (<>
                     <select
                       value={formItemName}
                       onChange={(e) => {
@@ -1337,7 +1322,6 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                         }
                       }}
                       className="w-full bg-[#0C0E0D] border border-[#232B27] rounded-lg py-2 px-3 text-white focus:border-[#95BBA2] text-xs font-mono select-text focus:outline-none"
-                      required
                     >
                       <option value="">-- Selecione do catálogo de produtos --</option>
                       {(catalogItems as any[]).map((item) => (
@@ -1350,6 +1334,11 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                       )}
                       <option value="__CUSTOM__">+ Produto não cadastrado (digitar nome)</option>
                     </select>
+                    {(catalogItems as any[]).length === 0 && (
+                      <p className="text-[10px] text-amber-500 font-mono">
+                        ⚠️ Nenhum produto no catálogo. Selecione "+ Produto não cadastrado" para digitar o nome, ou cadastre na aba "Banco de Dados & Catálogo".
+                      </p>
+                    )}
                     {(formItemName === '__CUSTOM__' || (formItemName && !(catalogItems as any[]).some(item => item.name === formItemName))) && (
                       <input
                         type="text"
@@ -1360,7 +1349,6 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                         required
                       />
                     )}
-                    </>)}
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
