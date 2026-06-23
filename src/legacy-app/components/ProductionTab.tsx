@@ -355,6 +355,21 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
       return;
     }
 
+    // Auto-register manual buyer as a new client with generated code
+    if (formClientId === 'CUSTOM' && onAddClient) {
+      const nextNumeric = (clients.length > 0 ? Math.max(...clients.map((c: any) => c.id)) : 0) + 1;
+      const generatedCode = `CLI-${String(nextNumeric).padStart(4, '0')}`;
+      onAddClient({
+        name: clientNameFinal.trim(),
+        phone: '',
+        email: '',
+        address: '',
+        code: generatedCode,
+        note: `Cadastrado automaticamente via Pedido (${generatedCode})`,
+        lastContactDate: Date.now(),
+      });
+    }
+
     const customCreatedAt = formCreatedAt ? new Date(formCreatedAt).getTime() : Date.now();
 
     const payload: Partial<PrintOrder> = {
