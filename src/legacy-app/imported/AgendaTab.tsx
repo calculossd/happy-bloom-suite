@@ -376,9 +376,9 @@ function AgendaPage() {
         )}
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          {/* Calendar */}
-          <div className="lg:col-span-2 rounded-3xl border border-white/10 bg-white/[0.02] p-6 backdrop-blur-xl">
-            <div className="mb-6 flex items-center justify-between">
+          {/* Calendar (small) */}
+          <div className="rounded-3xl border border-white/10 bg-white/[0.02] p-4 backdrop-blur-xl">
+            <div className="mb-3 flex items-center justify-between">
               <h3
                 className="text-lg font-semibold capitalize"
                 style={{ fontFamily: "'Sora', sans-serif" }}
