@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import LegacyApp from "@/legacy-app/App";
+import Print3DDashboard from "@/components/print3d/Print3DDashboard";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -18,5 +18,5 @@ function Index() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
-  return <LegacyApp />;
+  return <Print3DDashboard />;
 }
