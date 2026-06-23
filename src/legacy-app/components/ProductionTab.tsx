@@ -1307,6 +1307,21 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                     <label className="block text-[#8BA58D] font-extrabold flex items-center justify-between">
                       <span>Classe do Modelo / Descrição (Do Catálogo)</span>
                     </label>
+                    {(catalogItems as any[]).length === 0 ? (
+                      <>
+                        <input
+                          type="text"
+                          placeholder="Digite o nome do produto"
+                          value={formItemName === '__CUSTOM__' ? '' : formItemName}
+                          onChange={(e) => setFormItemName(e.target.value)}
+                          className="w-full bg-[#0C0E0D] border border-[#E5B242]/40 rounded-lg py-2 px-3 text-white placeholder-[#8BA58D]/40 focus:border-[#E5B242] focus:outline-none"
+                          required
+                        />
+                        <p className="text-[10px] text-amber-500 font-mono">
+                          ⚠️ Nenhum produto no catálogo. Digite o nome do produto acima ou cadastre na aba "Banco de Dados & Catálogo".
+                        </p>
+                      </>
+                    ) : (<>
                     <select
                       value={formItemName}
                       onChange={(e) => {
@@ -1345,11 +1360,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                         required
                       />
                     )}
-                    {(catalogItems as any[]).length === 0 && (
-                      <p className="text-[10px] text-amber-500 font-mono">
-                        ⚠️ Nenhum produto no catálogo. Cadastre primeiro na aba "Banco de Dados & Catálogo"!
-                      </p>
-                    )}
+                    </>)}
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
