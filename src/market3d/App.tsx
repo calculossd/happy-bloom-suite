@@ -596,7 +596,7 @@ export default function App() {
 
   // Filter category list with quick-finder
   const filteredCategories = categories.filter(cat => 
-    cat.name.toLowerCase().includes(categorySearchQuery.toLowerCase()) || cat.id === 'todos'
+    cat.id !== 'todos' && cat.name.toLowerCase().includes(categorySearchQuery.toLowerCase())
   );
 
   // Filter products feed by search query and platform popularity
