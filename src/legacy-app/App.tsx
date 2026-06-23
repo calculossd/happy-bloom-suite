@@ -1282,7 +1282,6 @@ export default function App() {
       case 12: return { title: "Pré-check",          subtitle: "Checklist antes de iniciar a impressão" };
       case 13: return { title: "Agenda",             subtitle: "Eventos, entregas e manutenções programadas" };
       case 14: return { title: "Sites",              subtitle: "Lojas e sites conectados ao seu ateliê" };
-      case 15: return { title: "Ferramentas",        subtitle: "Calculadoras e utilitários para impressão 3D" };
       default:
         return {
           title: "Ateliê 3D",
@@ -2159,7 +2158,6 @@ export default function App() {
             {currentTab === 12 && <PreCheckTabNew />}
             {currentTab === 13 && <AgendaTabNew />}
             {currentTab === 14 && <SitesTab />}
-            {currentTab === 15 && <SitesTab />}
           </Suspense>
         )}
           </div>
