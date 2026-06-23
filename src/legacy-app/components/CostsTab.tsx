@@ -3422,26 +3422,16 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       {activeSubTab === 'SHOP' && (
         <div className="space-y-6 animate-fade-in" id="shopping-tab-panel">
 
-          {/* Premium subtab header */}
-          <div className="relative overflow-hidden bg-gradient-to-br from-[#161B19] via-[#121613] to-[#0E1210] border border-white/[0.06] p-5 rounded-2xl shadow-[0_24px_60px_-30px_rgba(16,185,129,0.25)]">
-            <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-emerald-500/10 blur-3xl opacity-60" />
-            <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
-              <div className="flex min-w-0 items-center gap-3">
-                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-emerald-500/10 ring-1 ring-inset ring-emerald-400/20 text-emerald-300">
-                  <DollarSign className="h-4 w-4" />
-                </div>
-                <div className="min-w-0">
-                  <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-emerald-300/80">Financeiro</span>
-                  <h2 className="text-[18px] font-bold tracking-[-0.01em] text-[#F1F4EE] leading-tight">Gastos</h2>
-                  <p className="text-[11px] text-zinc-500 truncate">Custos efetivados e carrinho de compras retroalimentam o Dashboard</p>
-                </div>
-              </div>
-              <div className="shrink-0 inline-flex items-center gap-3 px-3.5 py-2 bg-black/40 border border-white/[0.06] rounded-xl font-mono">
-                <span className="text-[9px] uppercase tracking-[0.18em] text-zinc-500">Total</span>
-                <strong className="text-sm text-rose-300">
+          {/* Standardized subtab header */}
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Gastos</div>
+                <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">
                   R$ {(expenses.reduce((sum, e) => sum + (e.amount * e.qty), 0) + shoppingItems.reduce((sum, s) => sum + s.price, 0)).toFixed(2)}
-                </strong>
+                </span>
               </div>
+              <p className="text-xs text-[var(--brand-muted)]">Custos efetivados e carrinho de compras retroalimentam o Dashboard</p>
             </div>
           </div>
 
