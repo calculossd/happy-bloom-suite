@@ -192,11 +192,11 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
   return (
     <div className="space-y-6" id="sold-orders-tab-container">
       {/* Header Bento Title */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-[var(--brand-card)] border border-[var(--brand-border)] p-5 rounded-2xl shadow-sm" id="sold-tab-header">
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm" id="sold-tab-header">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <h2 className="text-xl font-extrabold text-[var(--brand-text)] uppercase tracking-tight">Histórico de Vendas</h2>
-            <span className="px-2.5 py-0.5 bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] text-xs font-black rounded-full border border-[var(--brand-primary)]/20 shadow-sm">
+          <h2 className="text-xl font-extrabold uppercase tracking-tight text-gradient-lime">Histórico de Vendas</h2>
+            <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-black rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">
               {soldOrders.length} Concluídas
             </span>
           </div>
@@ -206,7 +206,7 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
         <button
           onClick={handleExportPDFReport}
           disabled={filteredSold.length === 0}
-          className="px-4 py-2.5 bg-[var(--brand-primary)] hover:opacity-90 disabled:opacity-50 text-black text-xs font-black uppercase tracking-wider rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-md shrink-0"
+          className="px-4 py-2.5 bg-gradient-lime text-black hover:shadow-[0_0_24px_-4px_rgba(183,255,0,0.55)] disabled:opacity-40 text-xs font-black uppercase tracking-wider rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-md shrink-0"
           id="btn_download_sales_report"
         >
           <Download className="h-4 w-4" />
@@ -218,7 +218,7 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4" id="sold-metrics-panels">
         
         {/* Metric 1 */}
-        <div className="bg-[var(--brand-card)] border border-[var(--brand-border)] p-3 px-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
+        <div className="glow-card p-3 px-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
           <div className="space-y-0.5">
             <span className="text-[9.5px] font-bold text-[var(--brand-muted)] uppercase tracking-wider block">Faturamento Real</span>
             <span className="text-xs md:text-base font-black text-[var(--brand-text)] font-mono block">
@@ -231,7 +231,7 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
         </div>
 
         {/* Metric 2 */}
-        <div className="bg-[var(--brand-card)] border border-[var(--brand-border)] p-3 px-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
+        <div className="glow-card p-3 px-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
           <div className="space-y-0.5">
             <span className="text-[9.5px] font-bold text-[var(--brand-muted)] uppercase tracking-wider block">Produtos Vendidos</span>
             <span className="text-xs md:text-base font-black text-[var(--brand-text)] font-mono block">
@@ -244,20 +244,20 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
         </div>
 
         {/* Metric 3 */}
-        <div className="bg-[var(--brand-card)] border border-[var(--brand-border)] p-3 px-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
+        <div className="glow-card p-3 px-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
           <div className="space-y-0.5">
             <span className="text-[9.5px] font-bold text-[var(--brand-muted)] uppercase tracking-wider block">Ticket Médio</span>
             <span className="text-xs md:text-base font-black text-[var(--brand-text)] font-mono block">
               R$ {averageTicket.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
           </div>
-          <div className="p-2 sm:p-2.5 bg-[var(--brand-primary)]/10 rounded-xl text-[var(--brand-primary)] shrink-0">
+          <div className="p-2 sm:p-2.5 bg-[#b7ff00]/10 rounded-xl text-[#b7ff00] shrink-0">
             <TrendingUp className="h-4.5 w-4.5" />
           </div>
         </div>
 
         {/* Metric 4 */}
-        <div className="bg-[var(--brand-card)] border border-[var(--brand-border)] p-3 px-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
+        <div className="glow-card p-3 px-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
           <div className="space-y-0.5">
             <span className="text-[9.5px] font-bold text-[var(--brand-muted)] uppercase tracking-wider block">Insumos Despachados</span>
             <span className="text-xs md:text-base font-black text-[var(--brand-text)] font-mono block">
@@ -272,7 +272,7 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
       </div>
 
       {/* Filter Options Row */}
-      <div className="bg-[var(--brand-card)] border border-[var(--brand-border)] p-4 rounded-2xl space-y-4 shadow-sm" id="sold-filters">
+      <div className="glow-card p-4 rounded-2xl space-y-4 shadow-sm" id="sold-filters">
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
           {/* Search Box */}
           <div className="relative flex-1">
@@ -282,7 +282,7 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
               placeholder="Pesquise por item vendido, cliente ou canal..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[var(--brand-bg)] border border-[var(--brand-border)] rounded-xl pl-9 pr-4 py-2 text-xs text-[var(--brand-text)] placeholder-[var(--brand-muted)]/60 focus:outline-none focus:border-[var(--brand-primary)]"
+              className="w-full bg-[var(--brand-bg)] border border-[var(--brand-border)] rounded-xl pl-9 pr-4 py-2 text-xs text-[var(--brand-text)] placeholder-[var(--brand-muted)]/60 focus:outline-none focus:border-[#b7ff00]/60"
             />
           </div>
 
@@ -302,7 +302,7 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
                 onClick={() => setPlatformFilter(p.key as any)}
                 className={`px-3 py-1.5 text-[11px] font-bold rounded-lg transition whitespace-nowrap cursor-pointer ${
                   platformFilter === p.key 
-                    ? 'bg-[var(--brand-primary)] text-black font-extrabold' 
+                    ? 'bg-gradient-lime text-black font-extrabold shadow-[0_0_16px_-4px_rgba(183,255,0,0.5)]' 
                     : 'bg-[var(--brand-bg)] border border-[var(--brand-border)] text-[var(--brand-muted)] hover:text-white'
                 }`}
               >
@@ -381,7 +381,7 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
             {filteredSold.map((item) => (
               <div 
                 key={item.id} 
-                className="bg-[var(--brand-bg)] border border-[var(--brand-border)]/80 p-4 rounded-xl flex flex-col justify-between gap-4 hover:border-[var(--brand-primary)]/40 transition shadow-sm relative overflow-hidden"
+                className="bg-[var(--brand-bg)] border border-[var(--brand-border)]/80 p-4 rounded-xl flex flex-col justify-between gap-4 hover:border-[#b7ff00]/40 transition shadow-sm relative overflow-hidden"
               >
                 {/* Platform Badge Overlay */}
                 <div className="absolute top-0 right-0">
@@ -473,7 +473,7 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
 
                   <button
                     onClick={() => handleExportReceipt(item)}
-                    className="px-2.5 py-1.2 bg-[#232B27]/40 hover:bg-[var(--brand-primary)]/15 border border-[var(--brand-border)] hover:border-[var(--brand-primary)] text-[var(--brand-text)] rounded-lg transition text-[9.5px] font-bold flex items-center gap-1 cursor-pointer"
+                    className="px-2.5 py-1.2 bg-[#232B27]/40 hover:bg-[#b7ff00]/15 border border-[var(--brand-border)] hover:border-[#b7ff00] text-[var(--brand-text)] rounded-lg transition text-[9.5px] font-bold flex items-center gap-1 cursor-pointer"
                   >
                     <FileText className="h-3 w-3" />
                     Recibo
