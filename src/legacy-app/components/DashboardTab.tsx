@@ -157,7 +157,73 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
     <div className="space-y-6" id="dashboard_tab_container">
 
       {/* ===== REFERENCE DASHBOARD HERO (real data) ===== */}
-      <ReferenceDashboardHero
+      {(() => {
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = now.getMonth();
+        const totalDays = new Date(y, m + 1, 0).getDate();
+        const firstDayIndex = new Date(y, m, 1).getDay();
+        const monthLabel = now.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+        const daySalesMap: Record<number, number> = {};
+        (orders || []).forEach((o: any) => {
+          const d = o.deliveryDate || o.createdAt;
+          if (!d) return;
+          const dt = new Date(d);
+          if (dt.getFullYear() === y && dt.getMonth() === m) {
+            daySalesMap[dt.getDate()] = (daySalesMap[dt.getDate()] || 0) + (o.priceCharged || 0);
+          }
+        });
+        const monthRevenue = (orders || [])
+          .filter((o: any) => {
+            const d = o.deliveryDate || o.createdAt;
+            if (!d) return false;
+            const dt = new Date(d);
+            return dt.getFullYear() === y && dt.getMonth() === m;
+          })
+          .reduce((s: number, o: any) => s + (o.priceCharged || 0), 0);
+        const monthExpense = (expenses || [])
+          .filter((e: any) => {
+            const d = e.date || e.createdAt;
+            if (!d) return false;
+            const dt = new Date(d);
+            return dt.getFullYear() === y && dt.getMonth() === m;
+          })
+          .reduce((s: number, e: any) => s + (e.amount || e.value || 0), 0);
+        const deliveredCount = (orders || []).filter((o: any) => o.status === 'DELIVERED').length;
+        const openCount = (orders || []).filter((o: any) => o.status !== 'DELIVERED' && o.status !== 'CANCELED').length;
+        const readyToDeliver = (orders || []).filter((o: any) => o.status === 'READY').length;
+        const activePrinters = (printers || []).filter((p: any) => p.status === 'PRINTING').length;
+        const alertFilaments = (filamentStocks || []).filter((f: any) => (f.quantity ?? 0) < (f.minQuantity ?? 0)).length;
+        const monthProfitMargin = monthRevenue > 0 ? ((monthRevenue - monthExpense) / monthRevenue) * 100 : 0;
+        const calendar = {
+          totalDays,
+          firstDayIndex,
+          getDaySales: (d: number) => daySalesMap[d] || 0,
+        };
+        return (
+          <ReferenceDashboardHero
+            monthRevenue={monthRevenue}
+            monthExpense={monthExpense}
+            monthProfitMargin={monthProfitMargin}
+            deliveredCount={deliveredCount}
+            openCount={openCount}
+            readyToDeliver={readyToDeliver}
+            activePrinters={activePrinters}
+            alertFilaments={alertFilaments}
+            filaments={filamentStocks}
+            orders={orders}
+            allOrders={orders}
+            clients={clients}
+            printers={printers}
+            calendar={calendar}
+            monthLabel={monthLabel}
+            onSelectTab={onSelectTab}
+            onUpdatePrinter={onUpdatePrinter}
+            onUpdateOrder={onUpdateOrder}
+          />
+        );
+      })()}
+      {false && (<ReferenceDashboardHero
         orders={orders}
         printers={printers}
         filamentStocks={filamentStocks}
@@ -167,7 +233,7 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
         onSelectTab={onSelectTab}
         onUpdatePrinter={onUpdatePrinter}
         onUpdateOrder={onUpdateOrder}
-      />
+      />)}
 
     </div>
   );
