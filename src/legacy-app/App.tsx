@@ -1544,50 +1544,52 @@ export default function App() {
             {
               section: 'Principal',
               items: [
+                { id: 2, label: 'Clientes', icon: Users },
                 { id: 3, label: 'Pedidos', icon: GitPullRequest, badge: pendingOrdersCount },
                 { id: 6, label: 'Histórico', icon: ShoppingBag },
-                { id: 2, label: 'Clientes', icon: Users },
-                { id: 8, label: 'Catálogo 3D', icon: Box },
-              ],
-            },
-            {
-              section: 'Produção',
-              items: [
                 { id: 1, label: 'Produção', icon: Activity },
-                { id: 10, label: 'Kanban', icon: Columns3 },
-                { id: 11, label: 'Modelos', icon: FileBox },
-                { id: 12, label: 'Pré-check', icon: ClipboardCheck },
+                { id: 4, label: 'Estoque', icon: Layers, onClick: () => openCostsSubtab('STOCK') },
               ],
             },
             {
-              section: 'Gestão',
+              section: 'Financeiro',
               items: [
-                { id: 4, label: 'Cálculo', icon: Calculator, onClick: () => openCostsSubtab('CALC') },
-                { id: 4, label: 'Catálogo Inova', icon: BookOpen, onClick: () => openCostsSubtab('CATALOG') },
-                { id: 4, label: 'Estoque', icon: Layers, onClick: () => openCostsSubtab('STOCK') },
                 { id: 4, label: 'Gastos', icon: DollarSign, onClick: () => openCostsSubtab('SHOP') },
                 { id: 4, label: 'Cotação', icon: TrendingUp, onClick: () => openCostsSubtab('QUOTE') },
-                { id: 7, label: 'Preços', icon: Search },
-                { id: 13, label: 'Agenda', icon: Calendar },
+                { id: 4, label: 'Calculadora', icon: Calculator, onClick: () => openCostsSubtab('CALC') },
               ],
             },
             {
-              section: 'Crescimento',
+              section: 'Marketing',
               items: [
+                { id: 7, label: 'Preços', icon: Search },
                 { id: 9, label: 'Marketing', icon: Megaphone },
                 { id: 4, label: 'Assistente', icon: Sparkles, onClick: () => openCostsSubtab('AI') },
+                { id: 11, label: 'Modelos', icon: FileBox },
+                { id: 8, label: 'Makeworld', icon: Box },
+                { id: 4, label: 'Catálogo', icon: BookOpen, onClick: () => openCostsSubtab('CATALOG') },
+                { id: 10, label: 'Kanban', icon: Columns3 },
+              ],
+            },
+            {
+              section: 'Operacional',
+              items: [
+                { id: 12, label: 'Pré-check', icon: ClipboardCheck },
                 { id: 14, label: 'Sites', icon: Globe },
                 { id: 15, label: 'Ferramentas', icon: Wrench },
               ],
             },
             {
               section: 'Configurações',
-              items: [{ id: 5, label: 'Ajustes', icon: Settings }],
+              items: [
+                { id: 13, label: 'Agenda', icon: Calendar },
+                { id: 5, label: 'Ajustes', icon: Settings },
+              ],
             },
           ] as Array<{ section: string | null; items: Array<{ id: number; label: string; icon: any; badge?: number; onClick?: () => void }> }>).map((group, gi) => (
             <div key={gi} className="flex flex-col gap-0.5">
               {group.section && (
-                <div className="px-3 mb-1 text-[9px] uppercase tracking-[0.22em] text-white/30 font-semibold">
+                <div className="px-3 mb-1 text-[9px] uppercase tracking-[0.22em] text-[#b7ff00] font-semibold">
                   {group.section}
                 </div>
               )}
