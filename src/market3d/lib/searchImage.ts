@@ -19,6 +19,7 @@ const trimKeys = (k?: CustomKeys) => ({
 export const searchImage = async (
   query: string,
   customKeys?: CustomKeys,
+  signal?: AbortSignal,
 ): Promise<string | null> => {
   try {
     const body: Record<string, unknown> = { query };
@@ -28,10 +29,12 @@ export const searchImage = async (
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
+      signal,
     });
     const data = await response.json();
     return data?.imageUrl ?? null;
-  } catch (error) {
+  } catch (error: any) {
+    if (error?.name === 'AbortError') return null;
     console.error('[searchImage] failed:', error);
     return null;
   }
