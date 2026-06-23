@@ -1717,18 +1717,6 @@ export default function App() {
                   {headerInfo.subtitle}
                 </p>
               </div>
-              {isClientMounted && (
-                <div className="flex items-center gap-1.5 self-start sm:self-center font-mono text-[10px] text-[var(--brand-text-accent)] shrink-0 bg-white/5 border border-white/10 px-2.5 py-1.5 rounded-lg shadow-inner">
-                  <Clock className={`h-3 w-3 ${
-                    currentTab === 1 || currentTab === 2 ? 'text-zinc-300' :
-                    currentTab === 3 || currentTab === 6 ? 'text-pink-400' :
-                    currentTab === 4 ? 'text-emerald-400' : 'text-amber-400'
-                  } animate-spin-slow`} />
-                  <span className="text-zinc-305 font-bold uppercase">{formattedDate}</span>
-                  <span className="text-zinc-600 font-sans">•</span>
-                  <span className="font-extrabold text-white">{formattedTime}</span>
-                </div>
-              )}
             </div>
           );
         })()}

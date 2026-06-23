@@ -677,7 +677,7 @@ export default function App() {
   return (
     <div className="text-[#EDF2F7] font-sans selection:bg-orange-500/30 selection:text-orange-100 flex flex-col antialiased" id="intel-applet-root">
       {/* TRIPLE COLUMN WORKSPACE GRID */}
-      <main className="w-full grid grid-cols-1 lg:grid-cols-12 gap-4 items-start flex-grow">
+      <main className="w-full grid grid-cols-1 lg:grid-cols-12 gap-4 items-start flex-grow -mt-2">
         
         {/* COLUMN 1: SIDEBAR CATEGORY NAVIGATION STATUS (SPAN 3) */}
         <aside className="col-span-12 lg:col-span-3">
