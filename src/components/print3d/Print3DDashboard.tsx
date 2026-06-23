@@ -10,6 +10,29 @@ import {
   ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, BarChart, Bar,
   PieChart, Pie, Cell,
 } from "recharts";
+import { FilamentSpool, materialColor } from "@/legacy-app/components/FilamentSpool";
+
+// Color name → hex swatch for filament color chips
+const COLOR_HEX: Record<string, string> = {
+  preto: "#111", black: "#111",
+  branco: "#f5f5f5", white: "#f5f5f5",
+  cinza: "#9ca3af", gray: "#9ca3af",
+  vermelho: "#ef4444", red: "#ef4444",
+  laranja: "#f97316", orange: "#f97316",
+  amarelo: "#facc15", yellow: "#facc15",
+  verde: "#22c55e", green: "#22c55e",
+  azul: "#3b82f6", blue: "#3b82f6",
+  roxo: "#a855f7", purple: "#a855f7",
+  rosa: "#ec4899", pink: "#ec4899",
+  marrom: "#92400e", brown: "#92400e",
+  dourado: "#d4a017", gold: "#d4a017",
+  prata: "#c0c0c0", silver: "#c0c0c0",
+  transparente: "rgba(255,255,255,0.25)", transparent: "rgba(255,255,255,0.25)",
+};
+function colorHex(name?: string) {
+  if (!name) return "#9ca3af";
+  return COLOR_HEX[String(name).toLowerCase().trim()] || "#9ca3af";
+}
 
 const LIME = "#a3e635";
 const LIME_DIM = "#84cc16";
@@ -403,6 +426,8 @@ function CriticalStock({ filaments = [], onSelectTab }: { filaments?: any[]; onS
     .slice(0, 6)
     .map((f: any) => ({
       name: `${f.type} ${f.color}`,
+      type: f.type,
+      color: f.color,
       qty: `${(f.stockGrams / 1000).toFixed(2)}kg`,
       level: f.stockGrams < f.minStockGrams ? "Crítico" : "Atenção",
     }));
@@ -418,9 +443,17 @@ function CriticalStock({ filaments = [], onSelectTab }: { filaments?: any[]; onS
       <ul className="space-y-2">
         {items.map((c, i) => (
           <li key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/[0.03] transition">
-            <div className="size-8 rounded bg-white/[0.04] grid place-items-center"><Layers className="size-4 text-white/55" /></div>
-            <div className="flex-1">
-              <div className="text-[12px] font-medium text-white">{c.name}</div>
+            <FilamentSpool color={colorHex(c.color)} size={32} className="shrink-0" label={c.name} />
+            <div className="flex-1 min-w-0">
+              <div className="text-[12px] font-medium text-white truncate flex items-center gap-1.5">
+                <span>{c.type}</span>
+                <span
+                  className="inline-block size-2 rounded-full shrink-0 ring-1 ring-white/15"
+                  style={{ background: colorHex(c.color) }}
+                  aria-hidden
+                />
+                <span className="text-white/70 truncate">{c.color}</span>
+              </div>
               <div className="text-[10px] text-white/40 tabular-nums">{c.qty}</div>
             </div>
             <span className={`text-[10px] font-semibold ${c.level === "Crítico" ? "text-rose-400" : "text-amber-300"}`}>{c.level}</span>
@@ -472,7 +505,7 @@ function FilamentQuotes() {
       <ul className="space-y-2.5">
         {rows.map((q, i) => (
           <li key={i} className="flex items-center gap-3 text-[12.5px]">
-            <div className="size-7 rounded bg-white/[0.04] grid place-items-center"><Layers className="size-3.5 text-white/60" /></div>
+            <FilamentSpool color={materialColor(q.name)} size={28} className="shrink-0" label={q.name} />
             <div className="flex-1 font-semibold text-white">{q.name}</div>
             <div className="text-white/70 tabular-nums">
               {q.price ? `R$ ${q.price.toFixed(2)}` : "—"}{" "}
