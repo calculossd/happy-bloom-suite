@@ -195,8 +195,8 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm" id="sold-tab-header">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-          <h2 className="text-xl font-extrabold uppercase tracking-tight text-gradient-lime">Histórico de Vendas</h2>
-            <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-black rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">
+          <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Histórico de Vendas</div>
+            <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">
               {soldOrders.length} Concluídas
             </span>
           </div>
@@ -220,8 +220,8 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
         {/* Metric 1 */}
         <div className="glow-card p-3 px-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
           <div className="space-y-0.5">
-            <span className="text-[9.5px] font-bold text-[var(--brand-muted)] uppercase tracking-wider block">Faturamento Real</span>
-            <span className="text-xs md:text-base font-black text-[var(--brand-text)] font-mono block">
+            <span className="text-[9.5px] font-bold text-[var(--brand-muted)] uppercase tracking-[0.14em] font-sans block">Faturamento Real</span>
+            <span className="text-xs md:text-base font-bold text-[var(--brand-text)] font-sans block">
               R$ {totalSales.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
           </div>
@@ -233,8 +233,8 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
         {/* Metric 2 */}
         <div className="glow-card p-3 px-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
           <div className="space-y-0.5">
-            <span className="text-[9.5px] font-bold text-[var(--brand-muted)] uppercase tracking-wider block">Produtos Vendidos</span>
-            <span className="text-xs md:text-base font-black text-[var(--brand-text)] font-mono block">
+            <span className="text-[9.5px] font-bold text-[var(--brand-muted)] uppercase tracking-[0.14em] font-sans block">Produtos Vendidos</span>
+            <span className="text-xs md:text-base font-bold text-[var(--brand-text)] font-sans block">
               {totalItems} Peças
             </span>
           </div>
@@ -246,8 +246,8 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
         {/* Metric 3 */}
         <div className="glow-card p-3 px-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
           <div className="space-y-0.5">
-            <span className="text-[9.5px] font-bold text-[var(--brand-muted)] uppercase tracking-wider block">Ticket Médio</span>
-            <span className="text-xs md:text-base font-black text-[var(--brand-text)] font-mono block">
+            <span className="text-[9.5px] font-bold text-[var(--brand-muted)] uppercase tracking-[0.14em] font-sans block">Ticket Médio</span>
+            <span className="text-xs md:text-base font-bold text-[var(--brand-text)] font-sans block">
               R$ {averageTicket.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
           </div>
@@ -259,8 +259,8 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
         {/* Metric 4 */}
         <div className="glow-card p-3 px-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
           <div className="space-y-0.5">
-            <span className="text-[9.5px] font-bold text-[var(--brand-muted)] uppercase tracking-wider block">Insumos Despachados</span>
-            <span className="text-xs md:text-base font-black text-[var(--brand-text)] font-mono block">
+            <span className="text-[9.5px] font-bold text-[var(--brand-muted)] uppercase tracking-[0.14em] font-sans block">Insumos Despachados</span>
+            <span className="text-xs md:text-base font-bold text-[var(--brand-text)] font-sans block">
               {(totalWeightDelivered / 1000).toFixed(2)} kg
             </span>
           </div>
