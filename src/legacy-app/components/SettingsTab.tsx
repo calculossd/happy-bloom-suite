@@ -40,6 +40,7 @@ import { getApiUrl, validateApiKeyFormat, checkIsAndroidWebView, callGeminiGener
 import { safeStorage } from '../utils/storage';
 import { uploadWorkspace, downloadWorkspace, FirebaseSyncError } from '../sync/firebaseSync';
 import { useCustomKeys } from '../hooks/useCustomKeys';
+import { ApiKeyField } from './ApiKeyField';
 
 interface SettingsTabProps {
   clients: Client[];
