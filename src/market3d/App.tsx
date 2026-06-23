@@ -2045,27 +2045,14 @@ function WorkbenchPanel({
       const autoFetchImage = async () => {
         setIsSearchingImage(true);
         try {
-          const response = await fetch("/api/search-image", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ 
-              query: cleanSearchQuery,
-              customKeys: {
-                GEMINI_API_KEY: customKeys.GEMINI_API_KEY.trim(),
-                TAVILY_API_KEY: customKeys.TAVILY_API_KEY.trim(),
-                GROQ_API_KEY: customKeys.GROQ_API_KEY.trim(),
-                JINA_API_KEY: customKeys.JINA_API_KEY.trim(),
-              }
-            })
-          });
-          const data = await response.json();
-          if (data && data.imageUrl) {
+          const imageUrl = await searchImage(cleanSearchQuery, customKeys);
+          if (imageUrl) {
             // Save to cache
-            imageCacheRef.current[cleanSearchQuery] = data.imageUrl;
+            imageCacheRef.current[cleanSearchQuery] = imageUrl;
             
             setReport(prev => {
               if (prev && prev.id === report.id) {
-                return { ...prev, imageUrl: data.imageUrl };
+                return { ...prev, imageUrl };
               }
               return prev;
             });
@@ -2096,23 +2083,10 @@ function WorkbenchPanel({
     
     setIsSearchingImage(true);
     try {
-      const response = await fetch("/api/search-image", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          query: cleanSearchQuery,
-          customKeys: {
-            GEMINI_API_KEY: customKeys.GEMINI_API_KEY.trim(),
-            TAVILY_API_KEY: customKeys.TAVILY_API_KEY.trim(),
-            GROQ_API_KEY: customKeys.GROQ_API_KEY.trim(),
-            JINA_API_KEY: customKeys.JINA_API_KEY.trim(),
-          }
-        })
-      });
-      const data = await response.json();
-      if (data && data.imageUrl) {
-        imageCacheRef.current[cleanSearchQuery] = data.imageUrl;
-        setReport(prev => ({ ...prev, imageUrl: data.imageUrl }));
+      const imageUrl = await searchImage(cleanSearchQuery, customKeys);
+      if (imageUrl) {
+        imageCacheRef.current[cleanSearchQuery] = imageUrl;
+        setReport(prev => ({ ...prev, imageUrl }));
       }
     } catch (error) {
       console.error("Manual image search error:", error);
