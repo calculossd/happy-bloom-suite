@@ -2108,7 +2108,7 @@ export default function App() {
           <>
             <div className="flex items-center gap-2 px-1 py-1 mb-2" id="view-page-header-costs">
               <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">
-                Custos
+                Estoque
               </div>
             </div>
             <CostsTab
