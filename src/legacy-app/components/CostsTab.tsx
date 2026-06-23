@@ -3933,30 +3933,40 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                     </a>
                   </div>
 
-                  <div className="divide-y divide-[#232B27]/30">
-                    {[...materialGroup.offers].sort((a, b) => a.price - b.price).map((offer, oIdx) => {
+                  <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-1.5">
+                    {[...materialGroup.offers].sort((a, b) => a.price - b.price).map((offer: any, oIdx) => {
                       const isHotOpportunity = offer.price < alertLimit;
+                      const sales = offer.reviews || 0;
+                      const feature = offer.feature || offer.storeName || '';
                       return (
-                        <div key={oIdx} className="py-1.5 flex items-center gap-2 hover:bg-black/10 px-1.5 rounded transition">
-                          <span className="text-[9px] uppercase font-extrabold px-1 py-0.5 rounded bg-[#1C2420] border border-[#2F3D35] text-[#95BBA2] shrink-0 max-w-[70px] truncate">
-                            {offer.storeName}
-                          </span>
-                          <p className="text-[11px] font-bold text-zinc-100 truncate flex-1 min-w-0">{offer.productName}</p>
-                          <p className={`text-xs font-black font-mono leading-none shrink-0 ${isHotOpportunity ? 'text-amber-400' : 'text-zinc-200'}`}>
-                            R${offer.price.toFixed(2)}
-                          </p>
-                          {isHotOpportunity && (
-                            <span className="text-[10px] shrink-0" title="Oportunidade">🔥</span>
+                        <a
+                          key={oIdx}
+                          href={offer.buyUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title={offer.productName}
+                          className={`group relative aspect-square overflow-hidden rounded-lg border bg-[#0C0E0D] hover:scale-[1.03] transition ${isHotOpportunity ? 'border-amber-500/60 shadow-[0_0_8px_rgba(245,158,11,0.35)]' : 'border-[#232B27]'}`}
+                        >
+                          {offer.thumbnail ? (
+                            <img src={offer.thumbnail} alt={offer.productName} className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+                          ) : (
+                            <div className="absolute inset-0 grid place-items-center text-[10px] text-zinc-600">sem foto</div>
                           )}
-                          <a 
-                            href={offer.buyUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-2 py-1 bg-[#95BBA2] hover:bg-[#B6D8B4] text-[#0C0E0D] text-[10px] uppercase font-black rounded transition shrink-0"
-                          >
-                            🛒
-                          </a>
-                        </div>
+                          {isHotOpportunity && (
+                            <span className="absolute top-1 right-1 text-[10px] bg-amber-500 text-black rounded-full px-1 leading-none py-0.5 font-black">🔥</span>
+                          )}
+                          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent p-1 text-white flex flex-col gap-0.5">
+                            {feature && (
+                              <span className="text-[8px] uppercase tracking-wider text-[#95BBA2] truncate font-bold">{feature}</span>
+                            )}
+                            <div className="flex items-center justify-between gap-1">
+                              <span className={`text-[11px] font-black font-mono leading-none ${isHotOpportunity ? 'text-amber-400' : 'text-white'}`}>R${offer.price.toFixed(0)}</span>
+                              {sales > 0 && (
+                                <span className="text-[8px] text-zinc-300 font-mono">{sales}+ vd/mês</span>
+                              )}
+                            </div>
+                          </div>
+                        </a>
                       );
                     })}
                   </div>
