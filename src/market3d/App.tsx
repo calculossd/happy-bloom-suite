@@ -1839,7 +1839,7 @@ export default function App() {
                         {items.map(item => (
                           <div key={item.id} className="bg-[#05080E] border border-[#1F2B48] rounded-lg p-2 flex gap-2">
                             {item.imageUrl ? (
-                              <img src={item.imageUrl} alt={item.title} className="w-12 h-12 rounded-md object-cover shrink-0" referrerPolicy="no-referrer" />
+                              <img src={item.imageUrl} alt={item.title} className="w-12 h-12 rounded-md object-cover shrink-0" referrerPolicy="no-referrer" loading="lazy" decoding="async" />
                             ) : (
                               <div className="w-12 h-12 rounded-md bg-[#0E1524] flex items-center justify-center shrink-0">
                                 <ImageIcon className="w-4 h-4 text-slate-600" />
@@ -2548,6 +2548,8 @@ function WorkbenchPanel({
                   alt="3D model illustration schematic" 
                   className="w-full h-full object-cover transition-transform duration-350 group-hover:scale-105" 
                   referrerPolicy="no-referrer"
+                  loading="lazy"
+                  decoding="async"
                   onError={() => setReport(prev => prev && prev.id === report.id ? { ...prev, imageUrl: '' } : prev)}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 to-transparent flex items-end p-3">
