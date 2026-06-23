@@ -1317,7 +1317,7 @@ export default function App() {
       {/* GLOBAL BRAND STYLING INJECTOR */}
       <style>{`
         :root {
-          --brand-bg: ${activeTheme.bgMain};
+          --brand-bg: #000000;
           --brand-card: ${activeTheme.bgCard};
           --brand-border: ${activeTheme.borderColor};
           --brand-primary: ${domainColorPrimary};
@@ -1330,7 +1330,7 @@ export default function App() {
         
         body {
           background-color: var(--brand-bg) !important;
-          background-image: radial-gradient(at 0% 0%, color-mix(in srgb, var(--brand-primary) 8%, transparent) 0, transparent 40%), radial-gradient(at 50% 0%, color-mix(in srgb, var(--brand-accent) 6%, transparent) 0, transparent 60%), linear-gradient(135deg, var(--brand-bg) 0%, color-mix(in srgb, var(--brand-bg) 70%, #000000) 100%) !important;
+          background-image: none !important;
           color: var(--brand-text) !important;
           transition: background-color 0.3s ease, color 0.3s ease;
         }
