@@ -327,13 +327,6 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
 
   return (
     <div className="space-y-6" id="integration_tab_container">
-      <header className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <div className="eyebrow mb-1">Vendas</div>
-          <h1 className="text-glow-amber" style={{ fontSize: 'clamp(1.75rem, 1.2rem + 2vw, 2.75rem)', lineHeight: 1, fontWeight: 800 }}>Pedidos</h1>
-          <p className="text-sm text-[var(--brand-text-muted)] mt-1">Integrações, pedidos externos e novas requisições.</p>
-        </div>
-      </header>
       {/* Floating Auto-dismissing connection status success indicator */}
       {saveSuccessMessage && (
         <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-xl flex items-center justify-between text-xs animate-in slide-in-from-top-4 duration-300">
