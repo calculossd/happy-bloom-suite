@@ -84,16 +84,16 @@ export function Model3DViewer({
         const d = maxDim * 2;
         camera.position.set(d, d * 0.8, d);
         initialPos = camera.position.clone();
-        controls.target.set(0, 0, 0);
-        controls.update();
+        controls?.target.set(0, 0, 0);
+        controls?.update();
 
         grid.scale.setScalar(Math.max(1, maxDim / 50));
         axes.scale.setScalar(Math.max(1, maxDim / 50));
 
         resetRef.current = () => {
           camera.position.copy(initialPos);
-          controls.target.set(0, 0, 0);
-          controls.update();
+          controls?.target.set(0, 0, 0);
+          controls?.update();
         };
       } catch (e: any) {
         setErr(e?.message ?? "Falha ao carregar modelo");
