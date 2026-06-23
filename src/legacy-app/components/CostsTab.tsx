@@ -3883,6 +3883,20 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       {/* SUBTAB 4.5: GOOGLE SHOPPING QUOTATIONS & MATERIAL MINIMUM PRICES */}
       {activeSubTab === 'QUOTE' && (
         <div className="space-y-3 animate-fade-in" id="quotations-view-container">
+          {/* Premium subtab header */}
+          <div className="relative overflow-hidden bg-gradient-to-br from-[#101822] via-[#0F1418] to-[#0B0F12] border border-white/[0.06] p-5 rounded-2xl shadow-[0_24px_60px_-30px_rgba(56,189,248,0.25)] mb-1">
+            <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-sky-500/10 blur-3xl opacity-60" />
+            <div className="relative flex items-center gap-3">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-sky-500/10 ring-1 ring-inset ring-sky-400/20 text-sky-300">
+                <TrendingUp className="h-4 w-4" />
+              </div>
+              <div className="min-w-0">
+                <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-sky-300/80">Financeiro</span>
+                <h2 className="text-[18px] font-bold tracking-[-0.01em] text-[#F1F4EE] leading-tight">Cotação</h2>
+                <p className="text-[11px] text-zinc-500 truncate">Compare preços ao vivo entre marketplaces e fornecedores</p>
+              </div>
+            </div>
+          </div>
           {/* Header Description */}
           <div className="p-3 bg-gradient-to-r from-[#17211B] to-[#121A15] border border-[#232B27] rounded-xl flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
             <div className="flex items-center gap-2 min-w-0 flex-1">
