@@ -544,8 +544,8 @@ function CategoriesChart({ data = [] }: { data?: Array<{ name: string; v: number
   const max = Math.max(1, ...data.map((d) => d.v));
   return (
     <Card>
-      <h3 className="text-[14px] font-semibold text-white">Materiais Mais Vendidos</h3>
-      <p className="text-[11px] text-white/45 mb-4">Participação na receita do mês</p>
+      <h3 className="text-[14px] font-semibold text-white">Categorias de Produtos</h3>
+      <p className="text-[11px] text-white/45 mb-4">Participação na receita do mês por categoria</p>
       {data.length === 0 && <div className="text-[12px] text-white/40 py-6 text-center">Sem vendas neste mês.</div>}
       <div className="space-y-3">
         {data.map((d, i) => (
@@ -567,14 +567,14 @@ function CategoriesChart({ data = [] }: { data?: Array<{ name: string; v: number
 /* ---------- Area chart: prints per hour ---------- */
 function HourlyChart({ data }: { data?: Array<{ h: string; v: number }> }) {
   const fallback = useMemo(
-    () => Array.from({ length: 24 }, (_, h) => ({ h: `${String(h).padStart(2, "0")}:00`, v: 0 })),
+    () => ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((h) => ({ h, v: 0 })),
     [],
   );
   const chartData = data && data.length ? data : fallback;
   return (
     <Card>
-      <h3 className="text-[14px] font-semibold text-white">Impressões por Hora (Hoje)</h3>
-      <p className="text-[11px] text-white/45 mb-3">Total de horas de impressão por hora</p>
+      <h3 className="text-[14px] font-semibold text-white">Faturamento por Dia da Semana</h3>
+      <p className="text-[11px] text-white/45 mb-3">Receita acumulada por dia da semana no mês</p>
       <div className="h-[180px] -mx-2">
         <ResponsiveContainer>
           <AreaChart data={chartData}>
@@ -584,9 +584,13 @@ function HourlyChart({ data }: { data?: Array<{ h: string; v: number }> }) {
                 <stop offset="100%" stopColor={LIME} stopOpacity={0} />
               </linearGradient>
             </defs>
-            <XAxis dataKey="h" tick={{ fill: "rgba(255,255,255,0.35)", fontSize: 10 }} ticks={["00:00","04:00","08:00","12:00","16:00","20:00","23:00"]} axisLine={false} tickLine={false} />
+            <XAxis dataKey="h" tick={{ fill: "rgba(255,255,255,0.35)", fontSize: 10 }} axisLine={false} tickLine={false} />
             <YAxis hide />
-            <Tooltip contentStyle={{ background: "#0f1311", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, fontSize: 11 }} labelStyle={{ color: "#fff" }} />
+            <Tooltip
+              contentStyle={{ background: "#0f1311", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, fontSize: 11 }}
+              labelStyle={{ color: "#fff" }}
+              formatter={(v: any) => [fmtBRL(Number(v) || 0), "Faturamento"]}
+            />
             <Area type="monotone" dataKey="v" stroke={LIME} strokeWidth={2} fill="url(#g1)" />
           </AreaChart>
         </ResponsiveContainer>
@@ -703,10 +707,15 @@ export function Print3DPanel({
   const monthProfit = monthRevenue - monthExpenses;
   const monthMargin = monthRevenue > 0 ? (monthProfit / monthRevenue) * 100 : 0;
 
-  // Categories from filament type usage in month
+  // Categories from product category in month
   const catMap: Record<string, number> = {};
   monthOrders.forEach((o: any) => {
-    const k = o.filamentType || "Outros";
+    const k =
+      o.category ||
+      o.productCategory ||
+      o.itemCategory ||
+      o.catalogCategory ||
+      "Outros";
     catMap[k] = (catMap[k] || 0) + (o.priceCharged || 0);
   });
   const catTotal = Object.values(catMap).reduce((a, b) => a + b, 0) || 1;
@@ -715,12 +724,14 @@ export function Print3DPanel({
     .sort((a, b) => b.v - a.v)
     .slice(0, 5);
 
-  // Hourly distribution today
-  const hourly = Array.from({ length: 24 }, (_, h) => ({ h: `${String(h).padStart(2, "0")}:00`, v: 0 }));
-  orders.forEach((o: any) => {
-    if (!isToday(o.createdAt)) return;
-    const hh = new Date(o.createdAt).getHours();
-    hourly[hh].v += o.printTimeHours || 0;
+  // Revenue per weekday in current month
+  const weekdayLabels = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+  const hourly = weekdayLabels.map((h) => ({ h, v: 0 }));
+  monthOrders.forEach((o: any) => {
+    const ts = o.createdAt || o.deliveryDate;
+    if (!ts) return;
+    const dow = new Date(ts).getDay();
+    hourly[dow].v += o.priceCharged || 0;
   });
 
   return (
