@@ -1592,13 +1592,13 @@ export default function App() {
                 </div>
               )}
               {group.items.map((item) => {
-                const active = currentTab === item.id;
+                const active = currentTab === item.id && !item.onClick;
                 const isCoreGroup = [0, 1, 6, 2, 3, 4].includes(item.id);
                 const accent = isCoreGroup ? '#D4A017' : '#3B82F6';
                 return (
                   <button
                     key={item.id}
-                    onClick={() => setCurrentTab(item.id)}
+                    onClick={() => (item.onClick ? item.onClick() : setCurrentTab(item.id))}
                     className={`group relative flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12px] font-medium tracking-wide w-full text-left transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                       active
                         ? 'text-white bg-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_4px_16px_-6px_rgba(0,0,0,0.6)]'
