@@ -34,7 +34,7 @@ async function fetchShopping(query: string, apiKey: string) {
         rating: typeof r.rating === "number" ? r.rating : 4.5,
         reviews: typeof r.reviews === "number" ? r.reviews : 0,
         feature: Array.isArray(r.extensions) && r.extensions.length ? String(r.extensions[0]) : (r.delivery || ""),
-        buyUrl: r.product_link || r.link || "",
+        buyUrl: r.link || r.product_link || r.serpapi_product_api || (r.title ? `https://www.google.com/search?tbm=shop&q=${encodeURIComponent(r.title)}` : ""),
         thumbnail: r.thumbnail || "",
       }))
       .filter((o: any) => o.price > 0);
