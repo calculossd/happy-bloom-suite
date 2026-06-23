@@ -9,6 +9,7 @@ export interface Client {
   lastContactDate?: number;
   stockCount?: number;
   stockValue?: number;
+  code?: string;
 }
 
 export interface Printer {
