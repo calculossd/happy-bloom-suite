@@ -1575,25 +1575,22 @@ export default function App() {
         </nav>
       </div>
 
-      {/* GLOBAL HEADER (Full-Width Glassmorphism Header) */}
-      <header className="relative w-full border-y border-white/15 bg-black/40 backdrop-blur-2xl px-3 sm:px-6 py-3 sm:py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 transition-all duration-300 shadow-[0_24px_50px_rgba(0,0,0,0.8)] overflow-hidden">
-        
-        {/* Subtle geometric digital background pattern */}
-        <div className="absolute inset-0 pointer-events-none opacity-[0.04] select-none bg-[radial-gradient(var(--brand-primary)_1.2px,transparent_1.2px)] [background-size:16px_16px]" />
+      {/* GLOBAL HEADER — Premium Glass */}
+      <header className="relative w-full mx-auto px-3 sm:px-6 py-4 sm:py-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition-all duration-500 overflow-hidden border-b border-white/[0.06] bg-gradient-to-b from-white/[0.02] to-transparent backdrop-blur-2xl">
 
-        {/* Dynamic ambient accent glow (Cybernetic Premium Aura) */}
-        <div className="absolute -top-16 left-1/3 w-80 h-32 bg-[var(--brand-primary)]/10 rounded-full blur-[65px] pointer-events-none select-none" />
-        <div className="absolute -top-16 right-1/4 w-80 h-32 bg-[var(--brand-accent)]/5 rounded-full blur-[65px] pointer-events-none select-none" />
+        {/* Soft ambient aura */}
+        <div className="absolute -top-24 left-1/4 w-[420px] h-40 bg-[var(--brand-primary)]/[0.06] rounded-full blur-[90px] pointer-events-none" />
+        <div className="absolute -top-24 right-1/4 w-[420px] h-40 bg-[var(--brand-accent)]/[0.05] rounded-full blur-[90px] pointer-events-none" />
 
-        {/* Futuristic top margin neon line */}
-        <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-transparent via-[var(--brand-primary)] to-transparent opacity-85 shadow-[0_1px_10px_rgba(244,110,31,0.4)]" />
+        {/* Hairline top accent */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
 
         <div className="flex items-center gap-4 w-full md:w-auto relative z-10">
-          {/* Circular Glassmorphic Logo Container with status breath glow */}
-          <div className={`p-2.5 bg-[#0C0E0D]/85 border rounded-2xl flex items-center justify-center transition-all duration-500 shrink-0 shadow-lg ${
-            printers.some(p => p.status === 'PRINTING') 
-              ? 'border-[var(--brand-primary)] shadow-[0_0_20px_rgba(244,110,31,0.35)] scale-[1.04]' 
-              : 'border-[#232B27]'
+          {/* Logo container — refined glass */}
+          <div className={`p-3 bg-white/[0.03] border rounded-2xl flex items-center justify-center transition-all duration-500 shrink-0 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_24px_-12px_rgba(0,0,0,0.8)] ${
+            printers.some(p => p.status === 'PRINTING')
+              ? 'border-[var(--brand-primary)]/40 shadow-[0_0_28px_-4px_rgba(244,110,31,0.45)]'
+              : 'border-white/[0.08]'
           }`}>
             {brandConfig.customLogo ? (
               <img src={brandConfig.customLogo} alt="Logo" className="h-10 w-10 object-contain rounded-xl" referrerPolicy="no-referrer" />
@@ -1608,32 +1605,35 @@ export default function App() {
           
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2.5 flex-wrap">
-              <h1 className="text-xl md:text-2xl font-black tracking-tight text-white flex items-center gap-2.5 font-sans select-none drop-shadow-sm">
-                <span className="bg-gradient-to-r from-white via-[#FFF] to-[#CCCCCC] bg-clip-text text-transparent">
+              <h1 className="text-[22px] md:text-[26px] font-semibold tracking-[-0.02em] text-white flex items-center gap-2.5 font-sans select-none leading-none">
+                <span className="bg-gradient-to-b from-white to-white/70 bg-clip-text text-transparent">
                   {brandConfig.name}
                 </span>
               </h1>
-              <span className="text-[9.5px] tracking-wider bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-black font-black px-2.5 py-0.5 rounded-full shadow-[0_2px_10px_rgba(16,185,129,0.3)] shrink-0 transition-all duration-350 select-none">
+              <span className="text-[9.5px] tracking-[0.08em] bg-emerald-400/10 border border-emerald-400/25 text-emerald-300 font-semibold px-2 py-0.5 rounded-full shrink-0 transition-all duration-300 select-none backdrop-blur-sm">
                 v3.3.0.4
               </span>
             </div>
             
             {/* Live Sensor and Machine Indicators formatted in clean capsules */}
-            <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 mt-2 font-sans">
-              <p className="text-[9.5px] text-[#8BA58D] font-black tracking-widest uppercase opacity-95 flex items-center gap-1 shrink-0 select-none">
-                <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_5px_#10b981]" />
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5 mt-2.5 font-sans">
+              <p className="text-[9.5px] text-emerald-300/90 font-semibold tracking-[0.18em] uppercase flex items-center gap-1.5 shrink-0 select-none">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60"></span>
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400 shadow-[0_0_6px_#10b981]" />
+                </span>
                 GESTÃO OFICINA
               </p>
               
-              <span className="text-[#232B27] text-xs hidden sm:inline select-none">|</span>
+              <span className="hidden sm:inline-block w-px h-3 bg-white/10 mx-1 select-none" />
 
               {/* Greenhouse Sensors Monitor (Túnel das Estufas) */}
               <div className="flex items-center gap-1.5">
-                <span className="text-[9px] font-black uppercase text-zinc-300 tracking-wider select-none">Estufas:</span>
+                <span className="text-[9px] font-semibold uppercase text-white/50 tracking-[0.14em] select-none">Estufas</span>
                 {tuyaDevices.length === 0 ? (
                   <button 
                     onClick={restoreDefaultEstufas}
-                    className="inline-flex items-center gap-1 bg-amber-500/5 hover:bg-amber-500/15 border border-amber-500/20 px-1.5 py-0.5 rounded-lg cursor-pointer transition text-[8px] font-sans font-bold text-amber-200 select-none active:scale-95"
+                    className="inline-flex items-center gap-1 bg-amber-500/[0.06] hover:bg-amber-500/15 border border-amber-500/20 px-2 py-0.5 rounded-full cursor-pointer transition-all duration-300 text-[8px] font-sans font-semibold text-amber-200 select-none active:scale-95"
                     title="Nenhuma estufa ativa encontrada. Clique para restaurar as padrão."
                   >
                     <span>Restaurar Estufas ↺</span>
@@ -1643,46 +1643,46 @@ export default function App() {
                     <div 
                       key={dev.id} 
                       onClick={() => setCurrentTab(5)} 
-                      className="inline-flex items-center gap-1 bg-black/60 border border-white/10 hover:border-white/25 px-1.5 py-0.5 rounded-lg cursor-pointer transition text-[9px] font-mono text-zinc-200 select-none active:scale-95 hover:bg-black/80"
+                      className="inline-flex items-center gap-1.5 bg-white/[0.03] border border-white/[0.08] hover:border-white/20 hover:bg-white/[0.06] px-2 py-0.5 rounded-full cursor-pointer transition-all duration-300 text-[9px] font-mono text-white/85 select-none active:scale-95 backdrop-blur-sm"
                       title={`${dev.name} • Umidade Atual: ${dev.currentHumidity}% • Clique para configurar`}
                     >
-                      <span className="relative flex h-1 w-1">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-300 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-1 w-1 bg-zinc-200"></span>
+                      <span className="relative flex h-1.5 w-1.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white/40 opacity-60"></span>
+                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white/80"></span>
                       </span>
-                      <span className="font-sans font-bold text-zinc-400 uppercase text-[7px]">{dev.name.replace('Estufa ', '')}:</span>
-                      <span className="font-black text-zinc-100">{dev.currentHumidity}%</span>
+                      <span className="font-sans font-semibold text-white/45 uppercase text-[8px] tracking-wider">{dev.name.replace('Estufa ', '')}</span>
+                      <span className="font-semibold text-white tabular-nums">{dev.currentHumidity}%</span>
                     </div>
                   ))
                 )}
               </div>
 
-              <span className="text-[#232B27] text-xs hidden sm:inline select-none">|</span>
+              <span className="hidden sm:inline-block w-px h-3 bg-white/10 mx-1 select-none" />
 
               {/* SerpApi Connectivity Indicator */}
               <ConnectivityIndicator onConfigure={() => setCurrentTab(5)} />
 
-              <span className="text-[#232B27] text-xs hidden sm:inline select-none">|</span>
+              <span className="hidden sm:inline-block w-px h-3 bg-white/10 mx-1 select-none" />
 
               {/* Machinery Status Badge with modern capsule look */}
-              <div 
+              <div
                 onClick={() => setCurrentTab(0)}
-                className="inline-flex items-center gap-1 bg-emerald-500/5 border border-emerald-550/15 hover:border-emerald-500/40 px-1.5 py-0.5 rounded-lg cursor-pointer transition text-[9px] font-sans active:scale-95 select-none hover:bg-emerald-500/10"
+                className="inline-flex items-center gap-1.5 bg-emerald-500/[0.06] border border-emerald-500/15 hover:border-emerald-500/35 px-2 py-0.5 rounded-full cursor-pointer transition-all duration-300 text-[9px] font-sans active:scale-95 select-none hover:bg-emerald-500/[0.12] backdrop-blur-sm"
                 title="Lista de Impressoras Online • Clique para visualizar"
               >
-                <span className="relative flex h-1 w-1">
-                  <span className={`${printers.some(p => p.status === 'PRINTING') ? 'animate-ping' : ''} absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75`}></span>
-                  <span className="relative inline-flex rounded-full h-1 w-1 bg-emerald-450"></span>
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className={`${printers.some(p => p.status === 'PRINTING') ? 'animate-ping' : ''} absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60`}></span>
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400"></span>
                 </span>
-                <span className="font-sans font-extrabold text-zinc-400 uppercase text-[7px]">MÁQUINAS:</span>
-                <span className="text-emerald-300 font-bold">{printers.filter(p => p.status === 'PRINTING').length}/{printers.length} Ativas</span>
+                <span className="font-sans font-semibold text-white/50 uppercase text-[8px] tracking-wider">Máquinas</span>
+                <span className="text-emerald-300 font-semibold tabular-nums">{printers.filter(p => p.status === 'PRINTING').length}/{printers.length}</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Abstract futuristic grid lines under the header */}
-        <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#232B27] to-transparent" />
+        {/* Hairline bottom */}
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       </header>
 
       {/* 3D FILAMENT STOCK-MARKET LIVE TICKER TAPE */}
