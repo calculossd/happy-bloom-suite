@@ -1256,8 +1256,8 @@ export default function App() {
         };
       case 6:
         return {
-          title: "Vendas & Vitrine",
-          subtitle: "Pedidos finalizados, lucros e vitrine de catálogos",
+          title: "",
+          subtitle: "",
         };
       case 7:  return { title: "Pesquisa de Preços", subtitle: "Compare preços entre marketplaces e fornecedores" };
       case 8:  return { title: "Catálogo 3D",        subtitle: "Biblioteca de produtos com material, tempo e preço" };
