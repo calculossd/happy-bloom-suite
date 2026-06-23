@@ -4,6 +4,7 @@ import { FilamentStock, ShoppingItem, MaterialProfile, SupplyStock, CatalogItem,
 import { staticFilamentOffers, initialMaterialProfiles, initialCatalogItems } from '../utils/initialData';
 import { getApiUrl, checkIsAndroidWebView } from '../utils/api';
 import { safeStorage } from '../utils/storage';
+import { dedupeOffers, dedupeQuotationGroups } from '../utils/offerDedupe';
 import { 
   Disc, 
   ShoppingCart, 
@@ -218,30 +219,18 @@ export const CostsTab: React.FC<CostsTabProps> = ({
     if (!Array.isArray(groups)) return [];
     return groups.filter(Boolean).map(g => {
       const type = g.type || 'PLA';
-      const offers = Array.isArray(g.offers) ? [...g.offers] : [];
+      const offers = dedupeOffers(Array.isArray(g.offers) ? g.offers : []);
       if (offers.length < 5) {
         const fb = getClientFallbackOffers(type);
         for (const fallbackOffer of fb) {
           if (offers.length >= 5) break;
-          // Precision match: only treat as duplicate if both same store name AND same start of product description
-          const exists = offers.some((o: any) => 
-            String(o?.storeName || "").toLowerCase() === String(fallbackOffer.storeName).toLowerCase() &&
-            String(o?.productName || "").toLowerCase().slice(0, 35) === String(fallbackOffer.productName).toLowerCase().slice(0, 35)
-          );
-          if (!exists) {
-            offers.push(fallbackOffer);
-          }
-        }
-        if (offers.length < 5) {
-          for (const fallbackOffer of fb) {
-            if (offers.length >= 5) break;
-            offers.push(fallbackOffer);
-          }
+          const next = dedupeOffers([...offers, fallbackOffer]);
+          if (next.length > offers.length) offers.push(fallbackOffer);
         }
       }
       return {
         ...g,
-        offers
+        offers: dedupeOffers(offers)
       };
     });
   };
@@ -362,8 +351,9 @@ export const CostsTab: React.FC<CostsTabProps> = ({
             });
             triggerFeedback('Resultado da pesquisa atualizado com sucesso! 🔍', 'success');
           } else {
-            setQuotationGroups(data);
-            localStorage.setItem('bambuzau_cached_quotes', JSON.stringify(data));
+            const cleanData = dedupeQuotationGroups(data);
+            setQuotationGroups(cleanData);
+            localStorage.setItem('bambuzau_cached_quotes', JSON.stringify(cleanData));
           }
           const timeStr = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
           const dateStr = new Date().toLocaleDateString('pt-BR');

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { getApiUrl } from '../utils/api';
 import { safeStorage } from '../utils/storage';
+import { dedupeQuotationGroups } from '../utils/offerDedupe';
 
 const MATERIALS = ['PLA', 'PETG', 'TPU'] as const;
 const EXPANDED_TERMS: Record<string, string> = {
@@ -94,13 +95,14 @@ const optimizeOffers = async (data: any[], key: string, signal: AbortSignal): Pr
 };
 
 const persistQuotations = (data: any[], period: string): void => {
-  safeStorage.setItem('bambuzau_cached_quotes', JSON.stringify(data));
+  const cleanData = dedupeQuotationGroups(data);
+  safeStorage.setItem('bambuzau_cached_quotes', JSON.stringify(cleanData));
   safeStorage.setItem('bambuzau_last_quotes_period', period);
   const now = new Date();
   const timeStr = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
   const fullTimeStr = `${now.toLocaleDateString('pt-BR')} às ${timeStr}`;
   safeStorage.setItem('bambuzau_last_quotes_update', fullTimeStr);
-  window.dispatchEvent(new CustomEvent('bambuzau_quotes_updated', { detail: data }));
+  window.dispatchEvent(new CustomEvent('bambuzau_quotes_updated', { detail: cleanData }));
 };
 
 const runAutoQuoteFetch = async (signal: AbortSignal): Promise<void> => {

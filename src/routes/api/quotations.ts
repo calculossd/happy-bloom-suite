@@ -54,6 +54,7 @@ async function fetchShopping(query: string, apiKey: string) {
     const data: any = await res.json();
     return (data.shopping_results || [])
       .map((r: any) => ({
+        productId: r.product_id || r.serpapi_product_api || "",
         storeName: r.source || r.store || "Loja",
         productName: r.title || "",
         price: typeof r.extracted_price === "number" ? r.extracted_price : Number(String(r.price || "").replace(/[^0-9,.-]/g, "").replace(",", ".")) || 0,
@@ -82,27 +83,46 @@ const TOP_N = 5;
 const topByPrice = <T extends { price: number }>(offers: T[]): T[] =>
   [...offers].sort((a, b) => a.price - b.price).slice(0, TOP_N);
 
-// Two offers are considered the same product when the first three
-// significant words of their names match (case/accents/punct insensitive).
-const productKey = (name: string): string => {
-  return String(name || "")
+const normalizeOfferText = (value: string): string => {
+  return String(value || "")
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9\s]/g, " ")
     .split(/\s+/)
     .filter(Boolean)
-    .slice(0, 3)
     .join(" ");
 };
 
-const dedupeOffers = <T extends { productName: string; price: number }>(offers: T[]): T[] => {
+// Products are duplicates when the first 3 normalized words match. We also
+// catch exact-title, product-id, URL and image duplicates that Google may send.
+const offerDedupeKeys = (offer: { productName?: string; productId?: string; buyUrl?: string; thumbnail?: string }): string[] => {
+  const keys: string[] = [];
+  const name = normalizeOfferText(offer.productName || "");
+  if (name) {
+    const words = name.split(" ").filter(Boolean);
+    keys.push(`name:${name}`);
+    keys.push(`start:${words.slice(0, 3).join(" ")}`);
+  }
+  const id = normalizeOfferText(offer.productId || "");
+  if (id) keys.push(`id:${id}`);
+  if (offer.buyUrl) {
+    try {
+      const u = new URL(offer.buyUrl);
+      keys.push(`url:${u.hostname.replace(/^www\./, "")}${u.pathname}`.toLowerCase());
+    } catch {}
+  }
+  if (offer.thumbnail) keys.push(`thumb:${offer.thumbnail}`);
+  return keys.filter((key) => !key.endsWith(":"));
+};
+
+const dedupeOffers = <T extends { productName: string; price: number; productId?: string; buyUrl?: string; thumbnail?: string }>(offers: T[]): T[] => {
   const seen = new Set<string>();
   const out: T[] = [];
   for (const o of [...offers].sort((a, b) => a.price - b.price)) {
-    const key = productKey(o.productName);
-    if (!key || seen.has(key)) continue;
-    seen.add(key);
+    const keys = offerDedupeKeys(o);
+    if (!keys.length || keys.some((key) => seen.has(key))) continue;
+    keys.forEach((key) => seen.add(key));
     out.push(o);
   }
   return out;

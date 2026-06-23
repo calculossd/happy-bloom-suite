@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { getApiUrl } from '../utils/api';
 import { safeStorage } from '../utils/storage';
+import { dedupeOffers } from '../utils/offerDedupe';
 
 const panel = "rounded-2xl border border-white/10 bg-black/30 backdrop-blur-md p-4";
 const sectionTitle = "text-[13px] font-bold text-[var(--cat-lime,#A5D84B)] uppercase tracking-wider mb-3";
@@ -61,7 +62,8 @@ export function PriceResearchTab() {
       const group = Array.isArray(data) ? data[0] : data;
       const list = Array.isArray(group?.offers) ? group.offers : Array.isArray(data?.offers) ? data.offers : [];
 
-      setOffers([...list].sort((a, b) => Number(a.price || 0) - Number(b.price || 0)).slice(0, 12));
+      const cleanList = dedupeOffers(list);
+      setOffers(cleanList.slice(0, 12));
       if (!list.length) setError('Nenhum preço encontrado para este produto.');
     } catch (err: any) {
       setError(err?.message || 'Falha ao pesquisar preços.');
