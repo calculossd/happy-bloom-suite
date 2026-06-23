@@ -8,9 +8,9 @@ beforeEach(() => {
   } catch {
     /* noop */
   }
-  // Reset bambuzau fallback store
-  // @ts-expect-error test global
-  if (typeof window !== "undefined") (window as any)._bambuzau_fallback_store = {};
+  if (typeof window !== "undefined") {
+    (window as unknown as { _bambuzau_fallback_store: Record<string, string> })._bambuzau_fallback_store = {};
+  }
 });
 
 afterEach(() => {
