@@ -282,7 +282,7 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
               placeholder="Pesquise por item vendido, cliente ou canal..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[var(--brand-bg)] border border-[var(--brand-border)] rounded-xl pl-9 pr-4 py-2 text-xs text-[var(--brand-text)] placeholder-[var(--brand-muted)]/60 focus:outline-none focus:border-[var(--brand-primary)]"
+              className="w-full bg-[var(--brand-bg)] border border-[var(--brand-border)] rounded-xl pl-9 pr-4 py-2 text-xs text-[var(--brand-text)] placeholder-[var(--brand-muted)]/60 focus:outline-none focus:border-[#b7ff00]/60"
             />
           </div>
 
@@ -302,7 +302,7 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
                 onClick={() => setPlatformFilter(p.key as any)}
                 className={`px-3 py-1.5 text-[11px] font-bold rounded-lg transition whitespace-nowrap cursor-pointer ${
                   platformFilter === p.key 
-                    ? 'bg-[var(--brand-primary)] text-black font-extrabold' 
+                    ? 'bg-gradient-lime text-black font-extrabold shadow-[0_0_16px_-4px_rgba(183,255,0,0.5)]' 
                     : 'bg-[var(--brand-bg)] border border-[var(--brand-border)] text-[var(--brand-muted)] hover:text-white'
                 }`}
               >
@@ -381,7 +381,7 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
             {filteredSold.map((item) => (
               <div 
                 key={item.id} 
-                className="bg-[var(--brand-bg)] border border-[var(--brand-border)]/80 p-4 rounded-xl flex flex-col justify-between gap-4 hover:border-[var(--brand-primary)]/40 transition shadow-sm relative overflow-hidden"
+                className="bg-[var(--brand-bg)] border border-[var(--brand-border)]/80 p-4 rounded-xl flex flex-col justify-between gap-4 hover:border-[#b7ff00]/40 transition shadow-sm relative overflow-hidden"
               >
                 {/* Platform Badge Overlay */}
                 <div className="absolute top-0 right-0">
@@ -473,7 +473,7 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
 
                   <button
                     onClick={() => handleExportReceipt(item)}
-                    className="px-2.5 py-1.2 bg-[#232B27]/40 hover:bg-[var(--brand-primary)]/15 border border-[var(--brand-border)] hover:border-[var(--brand-primary)] text-[var(--brand-text)] rounded-lg transition text-[9.5px] font-bold flex items-center gap-1 cursor-pointer"
+                    className="px-2.5 py-1.2 bg-[#232B27]/40 hover:bg-[#b7ff00]/15 border border-[var(--brand-border)] hover:border-[#b7ff00] text-[var(--brand-text)] rounded-lg transition text-[9.5px] font-bold flex items-center gap-1 cursor-pointer"
                   >
                     <FileText className="h-3 w-3" />
                     Recibo
