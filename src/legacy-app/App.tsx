@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { getApiUrl } from './utils/api';
 import { safeStorage } from './utils/storage';
 import { Client, Printer, PrintOrder, FilamentStock, SupplyStock, Expense, ShoppingItem, ExternalPlatformOrder, CatalogItem } from './types';
@@ -18,14 +18,23 @@ import { PrintFlowTab } from './components/PrintFlowTab';
 import {
   PriceResearchTab, PreCheckTab, AgendaTab, ToolsTab, ModelsTab
 } from './components/NewTabs';
-import Market3DApp from '@/market3d/App';
-import CatalogoTab from './imported/CatalogoTab';
-import MarketingTab from './imported/MarketingTab';
-import KanbanTab from './imported/KanbanTab';
-import MarketTab from './imported/MarketTab';
-import AgendaTabNew from './imported/AgendaTab';
-import SitesTab from './imported/SitesTab';
-import PreCheckTabNew from './imported/PreCheckTab';
+// Heavy tabs are code-split: only the chunk for the active tab is fetched.
+// Saves ~hundreds of KB on initial load (Market3D + 7 imported pages).
+const Market3DApp     = lazy(() => import('@/market3d/App'));
+const CatalogoTab     = lazy(() => import('./imported/CatalogoTab'));
+const MarketingTab    = lazy(() => import('./imported/MarketingTab'));
+const KanbanTab       = lazy(() => import('./imported/KanbanTab'));
+const MarketTab       = lazy(() => import('./imported/MarketTab'));
+const AgendaTabNew    = lazy(() => import('./imported/AgendaTab'));
+const SitesTab        = lazy(() => import('./imported/SitesTab'));
+const PreCheckTabNew  = lazy(() => import('./imported/PreCheckTab'));
+
+const TabFallback = () => (
+  <div className="flex items-center justify-center py-20 text-[var(--brand-text-muted)] text-sm gap-2">
+    <div className="h-4 w-4 rounded-full border-2 border-current border-t-transparent animate-spin" />
+    Carregando módulo...
+  </div>
+);
 import { 
   Wrench, 
   RefreshCw, 
