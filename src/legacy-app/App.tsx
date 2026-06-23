@@ -1919,6 +1919,10 @@ export default function App() {
 
         {currentTab === 3 && (
           <>
+            <IntegrationTab
+              onImportOrder={handleImportExternalOrder}
+              importedExternalIds={importedExternalIds}
+            />
             <ProductionTab
               orders={orders}
               printers={printers}
@@ -1931,10 +1935,6 @@ export default function App() {
               onUpdateFilament={handleUpdateFilamentStock}
               onUpdatePrinter={handleUpdatePrinter}
               viewMode="orders"
-            />
-            <IntegrationTab
-              onImportOrder={handleImportExternalOrder}
-              importedExternalIds={importedExternalIds}
             />
           </>
         )}
