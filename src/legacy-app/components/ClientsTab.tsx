@@ -909,7 +909,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
           <div className="flex items-center justify-between pb-2 border-b border-[#232B27]">
             <div>
               <h3 className="text-base font-semibold text-[#F1F4EE] flex items-center gap-2">
-                <User className="h-4 w-4 text-[var(--brand-primary)]" />
+                <User className="h-4 w-4 text-[#b7ff00]" />
                 Cadastro de Clientes ({clients.length})
               </h3>
               <p className="text-xs text-[#8BA58D]">Ficha cadastral de contato para envios directos</p>
@@ -926,7 +926,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                 setCStockValue('0');
                 setShowClientForm(!showClientForm);
               }}
-              className="px-3 py-1.5 bg-[var(--brand-primary)]/10 hover:bg-[var(--brand-primary)]/20 text-[var(--brand-primary)] border border-[var(--brand-primary)]/25 font-bold text-xs rounded-xl transition flex items-center gap-1"
+              className="px-3 py-1.5 bg-[#b7ff00]/10 hover:bg-[#b7ff00]/20 text-[#b7ff00] border border-[#b7ff00]/25 font-bold text-xs rounded-xl transition flex items-center gap-1"
               id="add-client-toggle"
             >
               <Plus className="h-3.5 w-3.5" />
@@ -1713,15 +1713,15 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
       <div className="bg-[#151917] border border-[#232B27] p-6 rounded-2xl space-y-6 mt-6 relative" id="crm-b2b-leads-section" style={{ borderColor: 'var(--brand-border)' }}>
         
         {/* Glow Header */}
-        <div className="absolute top-0 left-10 right-10 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
+        <div className="absolute top-0 left-10 right-10 h-[1px] bg-gradient-to-r from-transparent via-[#b7ff00]/50 to-transparent" />
         
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#232B27] pb-5">
           <div>
-            <span className="px-2 py-0.5 bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-[9px] font-mono font-bold uppercase rounded-md tracking-wider">
+            <span className="px-2 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] border border-[#b7ff00]/25 text-[9px] font-mono font-bold uppercase rounded-md tracking-wider">
               Mapeamento de Clientes & Vendas Ativas
             </span>
             <h3 className="text-lg font-bold text-[#F1F4EE] flex items-center gap-2 mt-1">
-              <Compass className="h-5 w-5 text-cyan-400 animate-spin-slow" />
+              <Compass className="h-5 w-5 text-[#b7ff00] animate-spin-slow" />
               Radar B2B Google Maps • Captador de Lojas & Leads
             </h3>
             <p className="text-xs text-[#8BA58D] mt-0.5">
@@ -1733,7 +1733,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
             <button
               type="button"
               onClick={() => setShowNewLeadForm(!showNewLeadForm)}
-              className="px-3.5 py-2 bg-[#1C2420] hover:bg-[#232F2A] border border-[#2F3D35] text-cyan-400 font-bold text-xs rounded-xl transition flex items-center gap-2 cursor-pointer shadow-md"
+              className="px-3.5 py-2 bg-[#1C2420] hover:bg-[#232F2A] border border-[#2F3D35] text-[#b7ff00] font-bold text-xs rounded-xl transition flex items-center gap-2 cursor-pointer shadow-md"
             >
               <Plus className="h-4 w-4" />
               <span>Cadastrar Loja Manual</span>
