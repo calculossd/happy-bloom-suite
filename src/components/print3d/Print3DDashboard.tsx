@@ -719,7 +719,20 @@ function HourlyChart({ data }: { data?: Array<{ h: string; v: number }> }) {
               labelStyle={{ color: "#fff" }}
               formatter={(v: any) => [fmtBRL(Number(v) || 0), "Faturamento"]}
             />
-            <Area type="monotone" dataKey="v" stroke={LIME} strokeWidth={2} fill="url(#g1)" />
+            <Area type="monotone" dataKey="v" stroke={LIME} strokeWidth={2} fill="url(#g1)" dot={{ r: 3, fill: LIME, stroke: "#0a0d0c", strokeWidth: 1 }}>
+              <LabelList
+                dataKey="v"
+                position="top"
+                formatter={(v: any) => {
+                  const n = Number(v) || 0;
+                  if (n === 0) return "";
+                  if (n >= 1000) return `R$ ${(n / 1000).toFixed(1)}k`;
+                  return `R$ ${n.toFixed(0)}`;
+                }}
+                fill="#fff"
+                fontSize={10}
+              />
+            </Area>
           </AreaChart>
         </ResponsiveContainer>
       </div>
