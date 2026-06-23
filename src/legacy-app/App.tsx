@@ -1501,20 +1501,28 @@ export default function App() {
           { id: 5, label: 'Ajustes',   icon: Settings },
         ].map(item => {
           const active = currentTab === item.id;
+          // "Painel" até "Gestão" (ids 0,1,6,2,3,4) ganham uma cor distinta (cyan)
+          const isCoreGroup = [0, 1, 6, 2, 3, 4].includes(item.id);
+          const activeColor = isCoreGroup ? '#22D3EE' : '#A5D84B';
+          const inactiveColor = isCoreGroup ? 'text-cyan-300/70' : 'text-zinc-400';
           return (
             <button
               key={item.id}
               onClick={() => setCurrentTab(item.id)}
+              style={active ? { color: activeColor } : undefined}
               className={`relative inline-flex items-center justify-center gap-1 px-2 rounded-t-lg text-[10.5px] sm:text-[11px] font-bold whitespace-nowrap transition-all border border-b-0 -mb-px -mr-px ${
                 active
-                  ? 'bg-black/40 text-[var(--cat-lime,#A5D84B)] border-white/15 py-2 z-10 shadow-[0_-4px_14px_rgba(0,0,0,0.5)]'
-                  : 'bg-black/20 text-zinc-400 border-white/5 py-1.5 hover:bg-black/30 hover:text-white'
+                  ? 'bg-black/40 border-white/15 py-2 z-10 shadow-[0_-4px_14px_rgba(0,0,0,0.5)]'
+                  : `bg-black/20 ${inactiveColor} border-white/5 py-1.5 hover:bg-black/30 hover:text-white`
               }`}
             >
               <item.icon className="h-3 w-3 shrink-0" />
               <span className="truncate">{item.label}</span>
               {item.badge ? (
-                <span className="ml-1 px-1.5 py-0.5 rounded-full text-[9px] font-black bg-[var(--cat-lime,#A5D84B)]/20 text-[var(--cat-lime,#A5D84B)]">
+                <span
+                  className="ml-1 px-1.5 py-0.5 rounded-full text-[9px] font-black"
+                  style={{ backgroundColor: `${activeColor}33`, color: activeColor }}
+                >
                   {item.badge}
                 </span>
               ) : null}
