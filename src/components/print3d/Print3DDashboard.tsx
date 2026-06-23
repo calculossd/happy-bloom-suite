@@ -567,16 +567,12 @@ function FinanceSummary() {
   );
 }
 
-/* ---------- MAIN ---------- */
-export default function Print3DDashboard() {
+/* ---------- PANEL (embeddable in legacy app) ---------- */
+export function Print3DPanel() {
   return (
-    <div className="min-h-screen bg-[#050908] text-white flex">
-      <Sidebar />
-      <div className="flex-1 min-w-0 flex flex-col">
-        <TopBar />
-        <main className="flex-1 p-6 space-y-5">
-          {/* Page header */}
-          <div className="flex flex-wrap items-end justify-between gap-3">
+    <div className="space-y-5 text-white">
+      {/* Page header */}
+      <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
               <h1 className="text-[22px] font-bold tracking-tight text-white">Bem-vindo de volta, Alex! <span className="inline-block">👋</span></h1>
               <p className="text-[12.5px] text-white/45">Aqui está o resumo da sua produção hoje.</p>
@@ -635,7 +631,18 @@ export default function Print3DDashboard() {
           <div className="grid grid-cols-1 xl:grid-cols-1 gap-4">
             <AiPricing />
           </div>
-        </main>
+    </div>
+  );
+}
+
+/* ---------- STANDALONE (with sidebar/topbar) ---------- */
+export default function Print3DDashboard() {
+  return (
+    <div className="min-h-screen bg-[#050908] text-white flex">
+      <Sidebar />
+      <div className="flex-1 min-w-0 flex flex-col">
+        <TopBar />
+        <main className="flex-1 p-6"><Print3DPanel /></main>
       </div>
     </div>
   );
