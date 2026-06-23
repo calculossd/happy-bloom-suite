@@ -1871,17 +1871,13 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       {/* SUBTAB 1: PRODUCT PRICE PRECISION CALCULATOR */}
       {activeSubTab === 'CALC' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-fade-in" id="precificator-active-panel">
-          <div className="lg:col-span-12 relative overflow-hidden bg-gradient-to-br from-[#1A1611] via-[#121613] to-[#0E1210] border border-white/[0.06] p-5 rounded-2xl shadow-[0_24px_60px_-30px_rgba(229,178,66,0.25)]">
-            <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-amber-500/10 blur-3xl opacity-60" />
-            <div className="relative flex items-center gap-3">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-amber-500/10 ring-1 ring-inset ring-amber-400/20 text-amber-300">
-                <Calculator className="h-4 w-4" />
+          <div className="lg:col-span-12 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Calculadora</div>
+                <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">Precificação</span>
               </div>
-              <div className="min-w-0">
-                <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-amber-300/80">Financeiro</span>
-                <h2 className="text-[18px] font-bold tracking-[-0.01em] text-[#F1F4EE] leading-tight">Calculadora</h2>
-                <p className="text-[11px] text-zinc-500">Precifique produtos com base no fatiador e seus custos reais</p>
-              </div>
+              <p className="text-xs text-[var(--brand-muted)]">Precifique produtos com base no fatiador e seus custos reais</p>
             </div>
           </div>
 
@@ -2280,6 +2276,16 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       {/* SUBTAB 2: CATALOG PORTFOLIO & PDF DOWNLOAD */}
       {activeSubTab === 'CATALOG' && (
         <div className="space-y-4 animate-fade-in" id="portfolio-catalog-panel">
+          {/* Standardized subtab header */}
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Catálogo</div>
+                <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">Portfólio</span>
+              </div>
+              <p className="text-xs text-[var(--brand-muted)]">Portfólio de modelos para download, compartilhamento e integração com seu site</p>
+            </div>
+          </div>
 
           {/* PAINEL DE CONFIGURAÇÃO E COMPARTILHAMENTO DO SITE DE VENDAS ONLINE */}
           <div className="p-5 bg-gradient-to-b from-[#121614] to-[#0A0D0B] border border-[#232B27] rounded-3xl relative overflow-hidden space-y-4">
@@ -3015,8 +3021,18 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
 
       {/* SUBTAB 3: DOUBLE SECTORS - RAW FILAMENTS AND CONSUMABLE SUPPLIES */}
       {activeSubTab === 'STOCK' && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in" id="stocks-physical-layout">
-          
+        <div className="space-y-6 animate-fade-in" id="stocks-physical-layout">
+          {/* Standardized subtab header */}
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Estoque</div>
+                <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">Físico</span>
+              </div>
+              <p className="text-xs text-[var(--brand-muted)]">Carretéis de filamento, insumos e hardware sincronizados em tempo real</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Filamentos Stocks */}
           <div className="relative overflow-hidden bg-gradient-to-br from-[#161B19] via-[#121613] to-[#0E1210] border border-[#232B27] p-5 rounded-2xl space-y-4 shadow-[0_24px_60px_-30px_rgba(149,187,162,0.25)]">
             <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-emerald-500/10 blur-3xl opacity-60" />
@@ -3420,32 +3436,23 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
           </div>
 
         </div>
+        </div>
       )}
 
       {/* SUBTAB 4: SHOPPING ITEMS LIST */}
       {activeSubTab === 'SHOP' && (
         <div className="space-y-6 animate-fade-in" id="shopping-tab-panel">
 
-          {/* Premium subtab header */}
-          <div className="relative overflow-hidden bg-gradient-to-br from-[#161B19] via-[#121613] to-[#0E1210] border border-white/[0.06] p-5 rounded-2xl shadow-[0_24px_60px_-30px_rgba(16,185,129,0.25)]">
-            <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-emerald-500/10 blur-3xl opacity-60" />
-            <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
-              <div className="flex min-w-0 items-center gap-3">
-                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-emerald-500/10 ring-1 ring-inset ring-emerald-400/20 text-emerald-300">
-                  <DollarSign className="h-4 w-4" />
-                </div>
-                <div className="min-w-0">
-                  <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-emerald-300/80">Financeiro</span>
-                  <h2 className="text-[18px] font-bold tracking-[-0.01em] text-[#F1F4EE] leading-tight">Gastos</h2>
-                  <p className="text-[11px] text-zinc-500 truncate">Custos efetivados e carrinho de compras retroalimentam o Dashboard</p>
-                </div>
-              </div>
-              <div className="shrink-0 inline-flex items-center gap-3 px-3.5 py-2 bg-black/40 border border-white/[0.06] rounded-xl font-mono">
-                <span className="text-[9px] uppercase tracking-[0.18em] text-zinc-500">Total</span>
-                <strong className="text-sm text-rose-300">
+          {/* Standardized subtab header */}
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Gastos</div>
+                <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">
                   R$ {(expenses.reduce((sum, e) => sum + (e.amount * e.qty), 0) + shoppingItems.reduce((sum, s) => sum + s.price, 0)).toFixed(2)}
-                </strong>
+                </span>
               </div>
+              <p className="text-xs text-[var(--brand-muted)]">Custos efetivados e carrinho de compras retroalimentam o Dashboard</p>
             </div>
           </div>
 
@@ -3883,18 +3890,14 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       {/* SUBTAB 4.5: GOOGLE SHOPPING QUOTATIONS & MATERIAL MINIMUM PRICES */}
       {activeSubTab === 'QUOTE' && (
         <div className="space-y-3 animate-fade-in" id="quotations-view-container">
-          {/* Premium subtab header */}
-          <div className="relative overflow-hidden bg-gradient-to-br from-[#101822] via-[#0F1418] to-[#0B0F12] border border-white/[0.06] p-5 rounded-2xl shadow-[0_24px_60px_-30px_rgba(56,189,248,0.25)] mb-1">
-            <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-sky-500/10 blur-3xl opacity-60" />
-            <div className="relative flex items-center gap-3">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-sky-500/10 ring-1 ring-inset ring-sky-400/20 text-sky-300">
-                <TrendingUp className="h-4 w-4" />
+          {/* Standardized subtab header */}
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Cotação</div>
+                <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">Ao vivo</span>
               </div>
-              <div className="min-w-0">
-                <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-sky-300/80">Financeiro</span>
-                <h2 className="text-[18px] font-bold tracking-[-0.01em] text-[#F1F4EE] leading-tight">Cotação</h2>
-                <p className="text-[11px] text-zinc-500 truncate">Compare preços ao vivo entre marketplaces e fornecedores</p>
-              </div>
+              <p className="text-xs text-[var(--brand-muted)]">Compare preços ao vivo entre marketplaces e fornecedores</p>
             </div>
           </div>
           {/* Header Description */}
@@ -4085,7 +4088,18 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
 
       {/* SUBTAB 5: AI CHAT DIRECTIVE */}
       {activeSubTab === 'AI' && (
-        <div className="bg-[#151917] border border-[#232B27] p-5 rounded-2xl space-y-4 animate-fade-in" id="ai-chat-full-panel">
+        <div className="space-y-4 animate-fade-in" id="ai-chat-full-panel">
+          {/* Standardized subtab header */}
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Assistente</div>
+                <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">IA</span>
+              </div>
+              <p className="text-xs text-[var(--brand-muted)]">Orientação inteligente de engenharia 3D — fatiadores, materiais e custos</p>
+            </div>
+          </div>
+          <div className="bg-[#151917] border border-[#232B27] p-5 rounded-2xl space-y-4">
           <div>
             <h3 className="text-base font-bold text-[#F1F4EE] flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-[#E5B242] animate-pulse" />
@@ -4130,6 +4144,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
               Consultar IA
             </button>
           </form>
+          </div>
         </div>
       )}
 
