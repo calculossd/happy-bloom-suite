@@ -2276,6 +2276,16 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       {/* SUBTAB 2: CATALOG PORTFOLIO & PDF DOWNLOAD */}
       {activeSubTab === 'CATALOG' && (
         <div className="space-y-4 animate-fade-in" id="portfolio-catalog-panel">
+          {/* Standardized subtab header */}
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Catálogo</div>
+                <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">Portfólio</span>
+              </div>
+              <p className="text-xs text-[var(--brand-muted)]">Portfólio de modelos para download, compartilhamento e integração com seu site</p>
+            </div>
+          </div>
 
           {/* PAINEL DE CONFIGURAÇÃO E COMPARTILHAMENTO DO SITE DE VENDAS ONLINE */}
           <div className="p-5 bg-gradient-to-b from-[#121614] to-[#0A0D0B] border border-[#232B27] rounded-3xl relative overflow-hidden space-y-4">
