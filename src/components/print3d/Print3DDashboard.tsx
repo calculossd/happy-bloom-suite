@@ -540,18 +540,13 @@ function AiPricing() {
 }
 
 /* ---------- Bar chart: top categories ---------- */
-function CategoriesChart() {
-  const data = [
-    { name: "Peças Técnicas", v: 35 },
-    { name: "Decoração",      v: 25 },
-    { name: "Acessórios",     v: 18 },
-    { name: "Organização",    v: 12 },
-    { name: "Outros",         v: 10 },
-  ];
+function CategoriesChart({ data = [] }: { data?: Array<{ name: string; v: number }> }) {
+  const max = Math.max(1, ...data.map((d) => d.v));
   return (
     <Card>
-      <h3 className="text-[14px] font-semibold text-white">Categorias Mais Vendidas</h3>
-      <p className="text-[11px] text-white/45 mb-4">Com base nos últimos 30 dias</p>
+      <h3 className="text-[14px] font-semibold text-white">Materiais Mais Vendidos</h3>
+      <p className="text-[11px] text-white/45 mb-4">Participação na receita do mês</p>
+      {data.length === 0 && <div className="text-[12px] text-white/40 py-6 text-center">Sem vendas neste mês.</div>}
       <div className="space-y-3">
         {data.map((d, i) => (
           <div key={i}>
@@ -560,7 +555,7 @@ function CategoriesChart() {
               <span className="tabular-nums font-semibold" style={{ color: LIME }}>{d.v}%</span>
             </div>
             <div className="h-1.5 rounded-full bg-white/[0.04] overflow-hidden">
-              <div className="h-full rounded-full" style={{ width: `${(d.v / 35) * 100}%`, background: `linear-gradient(90deg,${LIME_DIM},${LIME})`, boxShadow: `0 0 6px ${LIME}55` }} />
+              <div className="h-full rounded-full" style={{ width: `${(d.v / max) * 100}%`, background: `linear-gradient(90deg,${LIME_DIM},${LIME})`, boxShadow: `0 0 6px ${LIME}55` }} />
             </div>
           </div>
         ))}
@@ -570,18 +565,19 @@ function CategoriesChart() {
 }
 
 /* ---------- Area chart: prints per hour ---------- */
-function HourlyChart() {
-  const data = useMemo(() => Array.from({ length: 24 }, (_, h) => {
-    const peak = Math.exp(-Math.pow((h - 13) / 5, 2)) * 4;
-    return { h: `${String(h).padStart(2, "0")}:00`, v: +(peak + Math.random() * 0.6).toFixed(2) };
-  }), []);
+function HourlyChart({ data }: { data?: Array<{ h: string; v: number }> }) {
+  const fallback = useMemo(
+    () => Array.from({ length: 24 }, (_, h) => ({ h: `${String(h).padStart(2, "0")}:00`, v: 0 })),
+    [],
+  );
+  const chartData = data && data.length ? data : fallback;
   return (
     <Card>
       <h3 className="text-[14px] font-semibold text-white">Impressões por Hora (Hoje)</h3>
       <p className="text-[11px] text-white/45 mb-3">Total de horas de impressão por hora</p>
       <div className="h-[180px] -mx-2">
         <ResponsiveContainer>
-          <AreaChart data={data}>
+          <AreaChart data={chartData}>
             <defs>
               <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor={LIME} stopOpacity={0.45} />
@@ -600,28 +596,34 @@ function HourlyChart() {
 }
 
 /* ---------- Financial summary ---------- */
-function FinanceSummary() {
-  const data = [{ v: 82 }, { v: 18 }];
+function FinanceSummary({
+  revenue = 0,
+  expense = 0,
+  profit = 0,
+  margin = 0,
+  onSelectTab,
+}: { revenue?: number; expense?: number; profit?: number; margin?: number; onSelectTab?: (t: number) => void }) {
+  const m = Math.max(0, Math.min(100, Math.round(margin)));
+  const data = [{ v: m }, { v: 100 - m }];
   return (
     <Card>
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-[14px] font-semibold text-white">Resumo Financeiro</h3>
-        <button className="text-[11px] text-white/50 hover:text-white">Ver todos</button>
+        <button className="text-[11px] text-white/50 hover:text-white" onClick={() => onSelectTab?.(5)}>Ver todos</button>
       </div>
       <div className="grid grid-cols-[1fr_auto] gap-4 items-center">
         <ul className="space-y-3">
           {[
-            { ic: Receipt, l: "Faturamento (mês)", v: "R$ 128.450,00", d: "+28%", c: "text-emerald-400" },
-            { ic: TrendingDown, l: "Gastos (mês)",     v: "R$ 22.780,00",  d: "-8%",  c: "text-rose-400" },
-            { ic: TrendingUp,   l: "Lucro líquido (mês)", v: "R$ 105.670,00", d: "+35%", c: "text-emerald-400" },
+            { ic: Receipt, l: "Faturamento (mês)", v: fmtBRL(revenue), c: "text-emerald-400" },
+            { ic: TrendingDown, l: "Gastos (mês)",     v: fmtBRL(expense),  c: "text-rose-400" },
+            { ic: TrendingUp,   l: "Lucro líquido (mês)", v: fmtBRL(profit), c: profit >= 0 ? "text-emerald-400" : "text-rose-400" },
           ].map((r, i) => {
             const Ic = r.ic;
             return (
               <li key={i} className="flex items-center gap-3 text-[12.5px]">
                 <div className="size-8 rounded bg-white/[0.04] grid place-items-center"><Ic className="size-4 text-white/60" /></div>
                 <div className="flex-1 text-white/70">{r.l}</div>
-                <div className="text-white font-semibold tabular-nums">{r.v}</div>
-                <div className={`w-10 text-right text-[11px] font-semibold tabular-nums ${r.c}`}>{r.d}</div>
+                <div className={`text-white font-semibold tabular-nums ${r.c}`}>{r.v}</div>
               </li>
             );
           })}
@@ -637,7 +639,7 @@ function FinanceSummary() {
           </ResponsiveContainer>
           <div className="absolute inset-0 grid place-items-center">
             <div className="text-center">
-              <div className="text-[20px] font-bold tabular-nums" style={{ color: LIME }}>82%</div>
+              <div className="text-[20px] font-bold tabular-nums" style={{ color: LIME }}>{m}%</div>
               <div className="text-[9px] text-white/45">Margem de<br/>lucro</div>
             </div>
           </div>
