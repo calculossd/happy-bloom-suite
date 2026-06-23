@@ -352,6 +352,18 @@ export function safeGetLocalStorageItem(key: string, defaultValue: string = ''):
 export default function App() {
   const [currentTab, setCurrentTab] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Open the Costs tab (id=4) jumping to a specific internal sub-tab.
+  // CostsTab listens for the 'costs_set_subtab' event and also reads the
+  // localStorage override on mount.
+  const openCostsSubtab = (sub: 'CALC' | 'CATALOG' | 'STOCK' | 'SHOP' | 'QUOTE' | 'AI') => {
+    try { localStorage.setItem('bambuzau_costs_subtab_override', sub); } catch {}
+    setCurrentTab(4);
+    setSidebarOpen(false);
+    try {
+      window.dispatchEvent(new CustomEvent('costs_set_subtab', { detail: sub }));
+    } catch {}
+  };
   const [dismissedPriceAlert, setDismissedPriceAlert] = useState(false);
   const [dismissedStockAlert, setDismissedStockAlert] = useState(false);
 
