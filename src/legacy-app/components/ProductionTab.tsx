@@ -102,6 +102,7 @@ interface ProductionTabProps {
   filamentStocks: FilamentStock[];
   clients: Array<{ id: number; name: string }>;
   onAddOrder: (order: Partial<PrintOrder>) => void;
+  onAddClient?: (client: any) => void;
   onUpdateOrder: (id: number, updated: Partial<PrintOrder>) => void;
   onDeleteOrder: (id: number) => void;
   onSimulateTick: () => void;
@@ -116,6 +117,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
   filamentStocks,
   clients,
   onAddOrder,
+  onAddClient,
   onUpdateOrder,
   onDeleteOrder,
   onSimulateTick,
