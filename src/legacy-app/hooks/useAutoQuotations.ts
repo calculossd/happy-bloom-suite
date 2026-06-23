@@ -27,9 +27,10 @@ const buildQuotationsUrl = (key: string, query?: string): string => {
   return getApiUrl(`/api/quotations${qs}`);
 };
 
-const fetchQuotations = async (url: string, key: string): Promise<any> => {
+const fetchQuotations = async (url: string, key: string, signal?: AbortSignal): Promise<any> => {
   const res = await fetch(url, {
     headers: { 'X-Custom-Serpapi-Key': key.trim() },
+    signal,
   });
   if (!res.ok) {
     throw new Error(`HTTP ${res.status} (${res.statusText})`);
@@ -37,12 +38,14 @@ const fetchQuotations = async (url: string, key: string): Promise<any> => {
   return res.json();
 };
 
-const fetchWithRetries = async (key: string, attempts = 3): Promise<any[] | null> => {
+const fetchWithRetries = async (key: string, signal: AbortSignal, attempts = 3): Promise<any[] | null> => {
   for (let i = 0; i < attempts; i++) {
+    if (signal.aborted) return null;
     try {
-      const data = await fetchQuotations(buildQuotationsUrl(key), key);
+      const data = await fetchQuotations(buildQuotationsUrl(key), key, signal);
       if (Array.isArray(data) && data.length > 0) return data;
     } catch (err) {
+      if ((err as any)?.name === 'AbortError') return null;
       console.warn(`[Auto-Quotes] Attempt ${i + 1} failed:`, err);
     }
     if (i < attempts - 1) {
@@ -52,9 +55,10 @@ const fetchWithRetries = async (key: string, attempts = 3): Promise<any[] | null
   return null;
 };
 
-const optimizeOffers = async (data: any[], key: string): Promise<any[]> => {
+const optimizeOffers = async (data: any[], key: string, signal: AbortSignal): Promise<any[]> => {
   const cleaned = [...data];
   for (const mat of MATERIALS) {
+    if (signal.aborted) return cleaned;
     let group = cleaned.find(
       (g: any) => g && String(g.type || '').toUpperCase() === mat,
     );
@@ -69,6 +73,7 @@ const optimizeOffers = async (data: any[], key: string): Promise<any[]> => {
       const customData = await fetchQuotations(
         buildQuotationsUrl(key, queryStr),
         key,
+        signal,
       );
       const newOffers = customData?.[0]?.offers;
       if (
@@ -80,6 +85,7 @@ const optimizeOffers = async (data: any[], key: string): Promise<any[]> => {
         group.searchQuery = queryStr;
       }
     } catch (e) {
+      if ((e as any)?.name === 'AbortError') return cleaned;
       console.warn(`[Auto-Quotes] Expanded query for ${mat} failed:`, e);
     }
     await new Promise((r) => setTimeout(r, 600));
@@ -97,38 +103,41 @@ const persistQuotations = (data: any[], period: string): void => {
   window.dispatchEvent(new CustomEvent('bambuzau_quotes_updated', { detail: data }));
 };
 
-const runAutoQuoteFetch = async (): Promise<void> => {
+const runAutoQuoteFetch = async (signal: AbortSignal): Promise<void> => {
   const currentPeriod = getCurrentQuotationsPeriod();
   const lastPeriod = safeStorage.getItem('bambuzau_last_quotes_period', '');
   if (currentPeriod === lastPeriod) return;
 
   const key = safeStorage.getItem('bambuzau_custom_serp_key', '');
-  const data = await fetchWithRetries(key);
-  if (!data) {
+  const data = await fetchWithRetries(key, signal);
+  if (!data || signal.aborted) {
     console.warn('[Auto-Quotes] No valid data fetched.');
     return;
   }
 
   let finalData = data;
   try {
-    finalData = await optimizeOffers(data, key);
+    finalData = await optimizeOffers(data, key, signal);
   } catch (err) {
     console.warn('[Auto-Quotes] Optimization failed:', err);
   }
+  if (signal.aborted) return;
   persistQuotations(finalData, currentPeriod);
 };
 
 export const useAutoQuotations = (): void => {
   useEffect(() => {
+    const controller = new AbortController();
     const initialTimer = setTimeout(() => {
-      runAutoQuoteFetch();
+      runAutoQuoteFetch(controller.signal);
     }, 4500);
     const periodicTimer = setInterval(() => {
-      runAutoQuoteFetch();
+      runAutoQuoteFetch(controller.signal);
     }, 15 * 60 * 1000);
     return () => {
       clearTimeout(initialTimer);
       clearInterval(periodicTimer);
+      controller.abort();
     };
   }, []);
 };

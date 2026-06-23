@@ -657,10 +657,11 @@ export default function App() {
     if (productsNeedingImages.length === 0) return;
 
     let cancelled = false;
+    const controller = new AbortController();
     productsNeedingImages.forEach((product) => {
       const query = product.title.split(' ').slice(0, 5).join(' ').replace(/[^\w\sÀ-ÿ]/gi, '').trim();
       if (!query) return;
-      searchImage(query).then((imageUrl) => {
+      searchImage(query, undefined, controller.signal).then((imageUrl) => {
         if (!cancelled && imageUrl) {
           setProductImages((prev) => ({ ...prev, [product.id]: imageUrl }));
         }
@@ -669,6 +670,7 @@ export default function App() {
 
     return () => {
       cancelled = true;
+      controller.abort();
     };
   }, [selectedCategoryId, selectedPlatform, searchQuery]);
 
