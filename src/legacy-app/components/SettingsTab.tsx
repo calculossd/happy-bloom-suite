@@ -1933,6 +1933,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
               <Sparkles className="h-3 w-3 animate-pulse text-purple-400" />
               {showClipboardBackup ? 'Ocultar Backup por Texto' : 'Backup por Texto (Área de Transferência / Sem Arquivo) ✨'}
             </button>
+            <AutoBackupFolderControl />
 
             {showClipboardBackup && (
               <div className="mt-3 bg-[#0C0E0D] border border-purple-500/10 p-3.5 rounded-xl space-y-3 animate-fade-in">
