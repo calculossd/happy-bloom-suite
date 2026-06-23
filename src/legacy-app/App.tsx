@@ -1840,19 +1840,22 @@ export default function App() {
           const formattedTime = currentTime.toLocaleTimeString('pt-BR');
 
           return (
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 px-1 py-1 transition-all duration-300" id="view-page-header">
-              <div>
-                <h2 className="text-sm sm:text-base font-bold text-gradient-lime tracking-tight flex items-center gap-2">
-                  <span className={`w-1.5 h-1.5 rounded-full ${
-                    currentTab === 1 || currentTab === 2 ? 'bg-zinc-300 animate-pulse' :
-                    currentTab === 3 || currentTab === 6 ? 'bg-pink-400 animate-pulse' :
-                    currentTab === 4 ? 'bg-emerald-400 animate-pulse' : 'bg-white/40'
-                  }`} />
-                  {headerInfo.title}
-                </h2>
-                <p className="text-[10px] sm:text-[11px] text-[var(--brand-muted)] max-w-xl mt-0.5">
-                  {headerInfo.subtitle}
-                </p>
+            <div
+              className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]"
+              id="view-page-header"
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <span className="inline-block h-2 w-2 rounded-full bg-[#b7ff00] shadow-[0_0_8px_rgba(183,255,0,0.8)]" />
+                <div className="min-w-0">
+                  <h2 className="text-sm sm:text-base font-bold text-gradient-lime tracking-[0.18em] uppercase">
+                    {headerInfo.title}
+                  </h2>
+                  {headerInfo.subtitle && (
+                    <p className="text-[10px] sm:text-[11px] text-[var(--brand-muted)] max-w-xl mt-0.5">
+                      {headerInfo.subtitle}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
           );
