@@ -13,6 +13,7 @@ import { Route as StoriesRouteImport } from './routes/stories'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiSearchImageRouteImport } from './routes/api/search-image'
 import { Route as ApiQuotationsRouteImport } from './routes/api/quotations'
+import { Route as ApiLocalLeadsRouteImport } from './routes/api/local-leads'
 import { Route as ApiKeysStatusRouteImport } from './routes/api/keys-status'
 import { Route as Api3dTrendsRouteImport } from './routes/api/3d-trends'
 import { Route as ApiSerpapiStatusRouteImport } from './routes/api/serpapi.status'
@@ -37,6 +38,11 @@ const ApiQuotationsRoute = ApiQuotationsRouteImport.update({
   path: '/api/quotations',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiLocalLeadsRoute = ApiLocalLeadsRouteImport.update({
+  id: '/api/local-leads',
+  path: '/api/local-leads',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiKeysStatusRoute = ApiKeysStatusRouteImport.update({
   id: '/api/keys-status',
   path: '/api/keys-status',
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/stories': typeof StoriesRoute
   '/api/3d-trends': typeof Api3dTrendsRoute
   '/api/keys-status': typeof ApiKeysStatusRoute
+  '/api/local-leads': typeof ApiLocalLeadsRoute
   '/api/quotations': typeof ApiQuotationsRoute
   '/api/search-image': typeof ApiSearchImageRoute
   '/api/serpapi/status': typeof ApiSerpapiStatusRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/stories': typeof StoriesRoute
   '/api/3d-trends': typeof Api3dTrendsRoute
   '/api/keys-status': typeof ApiKeysStatusRoute
+  '/api/local-leads': typeof ApiLocalLeadsRoute
   '/api/quotations': typeof ApiQuotationsRoute
   '/api/search-image': typeof ApiSearchImageRoute
   '/api/serpapi/status': typeof ApiSerpapiStatusRoute
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/stories': typeof StoriesRoute
   '/api/3d-trends': typeof Api3dTrendsRoute
   '/api/keys-status': typeof ApiKeysStatusRoute
+  '/api/local-leads': typeof ApiLocalLeadsRoute
   '/api/quotations': typeof ApiQuotationsRoute
   '/api/search-image': typeof ApiSearchImageRoute
   '/api/serpapi/status': typeof ApiSerpapiStatusRoute
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
     | '/stories'
     | '/api/3d-trends'
     | '/api/keys-status'
+    | '/api/local-leads'
     | '/api/quotations'
     | '/api/search-image'
     | '/api/serpapi/status'
@@ -97,6 +107,7 @@ export interface FileRouteTypes {
     | '/stories'
     | '/api/3d-trends'
     | '/api/keys-status'
+    | '/api/local-leads'
     | '/api/quotations'
     | '/api/search-image'
     | '/api/serpapi/status'
@@ -106,6 +117,7 @@ export interface FileRouteTypes {
     | '/stories'
     | '/api/3d-trends'
     | '/api/keys-status'
+    | '/api/local-leads'
     | '/api/quotations'
     | '/api/search-image'
     | '/api/serpapi/status'
@@ -116,6 +128,7 @@ export interface RootRouteChildren {
   StoriesRoute: typeof StoriesRoute
   Api3dTrendsRoute: typeof Api3dTrendsRoute
   ApiKeysStatusRoute: typeof ApiKeysStatusRoute
+  ApiLocalLeadsRoute: typeof ApiLocalLeadsRoute
   ApiQuotationsRoute: typeof ApiQuotationsRoute
   ApiSearchImageRoute: typeof ApiSearchImageRoute
   ApiSerpapiStatusRoute: typeof ApiSerpapiStatusRoute
@@ -151,6 +164,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiQuotationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/local-leads': {
+      id: '/api/local-leads'
+      path: '/api/local-leads'
+      fullPath: '/api/local-leads'
+      preLoaderRoute: typeof ApiLocalLeadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/keys-status': {
       id: '/api/keys-status'
       path: '/api/keys-status'
@@ -180,6 +200,7 @@ const rootRouteChildren: RootRouteChildren = {
   StoriesRoute: StoriesRoute,
   Api3dTrendsRoute: Api3dTrendsRoute,
   ApiKeysStatusRoute: ApiKeysStatusRoute,
+  ApiLocalLeadsRoute: ApiLocalLeadsRoute,
   ApiQuotationsRoute: ApiQuotationsRoute,
   ApiSearchImageRoute: ApiSearchImageRoute,
   ApiSerpapiStatusRoute: ApiSerpapiStatusRoute,
@@ -187,13 +208,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
