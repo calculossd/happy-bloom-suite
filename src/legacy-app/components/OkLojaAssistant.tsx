@@ -646,8 +646,8 @@ export function OkLojaAssistant({
 
   return (
     <>
-      {/* FLOATING ACTION TRIGGER ORB (Ok Google floating widget feel) - Repositioned to left side to make sure it never overlaps with bottom-right floating actions like CADASTRO buttons */}
-      <div className="fixed bottom-22 left-6 z-50 animate-bounce select-none" style={{ animationDuration: '3s' }}>
+      {/* FLOATING ACTION TRIGGER ORB — moved to top-right to avoid overlapping the left sidebar nav and bottom-right CADASTRO buttons */}
+      <div className="fixed top-4 right-4 z-50 select-none">
         <button
           onClick={() => {
             setIsOpen(true);
