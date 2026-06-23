@@ -1702,37 +1702,83 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       })()}
 
       {/* THREE D DAYS STOCK AUDIT BANNER */}
-      <div className={`p-4.5 rounded-2xl border transition relative overflow-hidden ${
-        isAuditOverdue 
-          ? 'bg-red-500/[0.03] border-red-500/30 text-rose-300' 
-          : 'bg-[#95BBA2]/5 border-[#95BBA2]/10 text-[#8BA58D]'
-      }`} id="audit_period_safety_banner">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-start gap-3">
-            <Calendar className={`h-5 w-5 mt-0.5 shrink-0 ${isAuditOverdue ? 'text-red-400 animate-bounce' : 'text-[#8BA58D]'}`} />
-            <div className="space-y-0.5">
-              <p className="text-xs font-bold text-[#F1F4EE]">
-                {isAuditOverdue ? 'Recontagem de Estoques Pendente!' : 'Auditoria em Dia'}
-              </p>
-              <p className="text-[11px] opacity-80 leading-relaxed max-w-2xl">
-                {isAuditOverdue 
-                  ? `Última recontagem realizada há ${daysSinceAudit} dias. Faça a conferência física e confirme clicando no botão ao lado.`
-                  : `Estoque físico auditado há ${daysSinceAudit} dias. Dados reais sincronizados!`
-                }
+      <div
+        id="audit_period_safety_banner"
+        className={`group relative overflow-hidden rounded-2xl border backdrop-blur-xl transition-all duration-500 ${
+          isAuditOverdue
+            ? 'border-rose-500/20 bg-gradient-to-br from-rose-950/40 via-zinc-950/60 to-zinc-950/40'
+            : 'border-emerald-500/15 bg-gradient-to-br from-emerald-950/30 via-zinc-950/60 to-zinc-950/40'
+        }`}
+      >
+        {/* ambient glow */}
+        <div
+          aria-hidden
+          className={`pointer-events-none absolute -top-24 -left-24 h-64 w-64 rounded-full blur-3xl opacity-40 ${
+            isAuditOverdue ? 'bg-rose-500/20' : 'bg-emerald-500/15'
+          }`}
+        />
+        {/* accent rail */}
+        <div
+          aria-hidden
+          className={`pointer-events-none absolute inset-y-0 left-0 w-[2px] ${
+            isAuditOverdue
+              ? 'bg-gradient-to-b from-transparent via-rose-400/70 to-transparent'
+              : 'bg-gradient-to-b from-transparent via-emerald-400/60 to-transparent'
+          }`}
+        />
+
+        <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 py-4 sm:px-6 sm:py-5">
+          <div className="flex min-w-0 items-start gap-3.5">
+            <div
+              className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ring-1 ring-inset ${
+                isAuditOverdue
+                  ? 'bg-rose-500/10 text-rose-300 ring-rose-400/20'
+                  : 'bg-emerald-500/10 text-emerald-300 ring-emerald-400/20'
+              }`}
+            >
+              <Calendar className="h-4 w-4" />
+            </div>
+            <div className="min-w-0 space-y-1">
+              <div className="flex items-center gap-2">
+                <span
+                  className={`inline-block h-1.5 w-1.5 rounded-full ${
+                    isAuditOverdue ? 'bg-rose-400 animate-pulse' : 'bg-emerald-400'
+                  }`}
+                  style={{
+                    boxShadow: isAuditOverdue
+                      ? '0 0 10px rgba(244,63,94,0.8)'
+                      : '0 0 10px rgba(52,211,153,0.6)',
+                  }}
+                />
+                <span
+                  className={`text-[10px] font-semibold uppercase tracking-[0.18em] ${
+                    isAuditOverdue ? 'text-rose-300/90' : 'text-emerald-300/90'
+                  }`}
+                >
+                  {isAuditOverdue ? 'Ação Necessária' : 'Tudo Certo'}
+                </span>
+              </div>
+              <h3 className="text-[14px] font-bold tracking-[-0.01em] text-zinc-50 truncate">
+                {isAuditOverdue ? 'Recontagem de estoques pendente' : 'Auditoria em dia'}
+              </h3>
+              <p className="text-[12px] leading-relaxed text-zinc-400 max-w-2xl">
+                {isAuditOverdue
+                  ? `Última recontagem realizada há ${daysSinceAudit} dias. Faça a conferência física e confirme ao lado.`
+                  : `Estoque físico auditado há ${daysSinceAudit} dias. Dados reais sincronizados.`}
               </p>
             </div>
           </div>
 
           <button
-            onClick={handleConfirmAudit}
-            className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider shrink-0 transition-all shadow border ${
-              isAuditOverdue
-                ? 'bg-red-500/10 hover:bg-red-500/25 border-red-500/40 text-red-300'
-                : 'bg-[#95BBA2]/10 hover:bg-[#95BBA2]/20 border-[#95BBA2]/25 text-[#95BBA2]'
-            }`}
             id="btn_confirm_stock_audit"
+            onClick={handleConfirmAudit}
+            className={`shrink-0 inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.12em] transition-all duration-300 active:scale-[0.97] ${
+              isAuditOverdue
+                ? 'bg-rose-500/15 text-rose-100 border border-rose-400/30 hover:bg-rose-500/25 hover:border-rose-400/50 hover:shadow-[0_8px_28px_-10px_rgba(244,63,94,0.55)]'
+                : 'bg-emerald-500/10 text-emerald-100 border border-emerald-400/25 hover:bg-emerald-500/20 hover:border-emerald-400/40 hover:shadow-[0_8px_28px_-10px_rgba(52,211,153,0.45)]'
+            }`}
           >
-            Confirmar Auditoria Física Hoje
+            {isAuditOverdue ? 'Confirmar auditoria' : 'Reauditar agora'}
           </button>
         </div>
       </div>
