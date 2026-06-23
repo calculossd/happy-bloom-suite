@@ -432,136 +432,23 @@ function AgendaPage() {
                     />
                   ))
                 : cells.map((cell) => {
-                    const evCount = events.filter((e) => e.date === cell.date).length;
-                    const derived = derivedByDate.get(cell.date) || [];
-                    const hasSale = derived.some((d) => d.kind === "sale");
-                    const hasDelivery = derived.some((d) => d.kind === "delivery");
-                    const hasExpense = derived.some((d) => d.kind === "expense");
-                    const hasPending = derived.some((d) => d.kind === "pending");
                     const isToday = cell.date === today;
                     const isSel = cell.date === selected;
                     return (
                       <button
                         key={cell.date + cell.day}
                         onClick={() => setSelected(cell.date)}
-                        className={`aspect-square rounded-xl border p-1.5 text-left text-xs transition-all
+                        className={`aspect-square grid place-items-center rounded-xl border text-xs transition-all
                           ${isSel ? "border-cyan-400/60 bg-cyan-500/10" : "border-white/5 hover:border-white/20"}
                           ${cell.inMonth ? "text-white" : "text-white/20"}`}
                       >
-                        <div className="flex items-center justify-between">
-                          <span className={isToday ? "font-bold text-cyan-300" : ""}>
-                            {cell.day}
-                          </span>
-                          <div className="flex gap-0.5">
-                            {evCount > 0 && <span className="h-1.5 w-1.5 rounded-full bg-violet-400" title="Compromisso" />}
-                            {hasSale && <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" title="Venda" />}
-                            {hasDelivery && <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" title="Entrega" />}
-                            {hasExpense && <span className="h-1.5 w-1.5 rounded-full bg-amber-400" title="Compra" />}
-                            {hasPending && <span className="h-1.5 w-1.5 rounded-full bg-rose-400" title="Pendente" />}
-                          </div>
-                        </div>
+                        <span className={isToday ? "font-bold text-cyan-300" : ""}>
+                          {cell.day}
+                        </span>
                       </button>
                     );
                   })}
             </div>
-
-            {/* Day summary */}
-            {mounted && selected && (
-              <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.02] p-4">
-                <div className="mb-3 flex items-center justify-between">
-                  <p className="text-[11px] uppercase tracking-[0.2em] text-white/40">
-                    {isPast ? "Resumo do dia" : isFuture ? "Programado" : "Hoje"}
-                  </p>
-                  <div className="flex gap-3 text-[11px]">
-                    {totalSales > 0 && <span className="text-emerald-300">+{brl(totalSales)}</span>}
-                    {totalSpent > 0 && <span className="text-amber-300">-{brl(totalSpent)}</span>}
-                  </div>
-                </div>
-
-                {dayDerived.length === 0 && !isFuture && (
-                  <p className="text-xs text-white/30">Nada registrado neste dia.</p>
-                )}
-
-                <div className="grid gap-3 md:grid-cols-2">
-                  {daySales.length > 0 && (
-                    <SummaryGroup
-                      icon={<DollarSign className="h-3.5 w-3.5" />}
-                      label="Vendas"
-                      tone="emerald"
-                      items={daySales}
-                    />
-                  )}
-                  {dayDeliveries.length > 0 && (
-                    <SummaryGroup
-                      icon={<Truck className="h-3.5 w-3.5" />}
-                      label="Entregas"
-                      tone="cyan"
-                      items={dayDeliveries}
-                    />
-                  )}
-                  {dayExpenses.length > 0 && (
-                    <SummaryGroup
-                      icon={<ShoppingCart className="h-3.5 w-3.5" />}
-                      label="Compras / Insumos"
-                      tone="amber"
-                      items={dayExpenses}
-                    />
-                  )}
-                  {dayPending.length > 0 && (
-                    <SummaryGroup
-                      icon={<CalendarClock className="h-3.5 w-3.5" />}
-                      label={isPast ? "Atrasados" : "Pedidos a fazer"}
-                      tone="rose"
-                      items={dayPending}
-                    />
-                  )}
-                </div>
-
-                {/* Future-only: pending todos */}
-                {!isPast && (pendingShopping.length > 0 || lowStockCatalog.length > 0) && (
-                  <div className="mt-4 grid gap-3 md:grid-cols-2">
-                    {pendingShopping.length > 0 && (
-                      <div className="rounded-xl border border-amber-400/20 bg-amber-500/5 p-3">
-                        <p className="mb-2 inline-flex items-center gap-1.5 text-[11px] font-semibold text-amber-200">
-                          <ShoppingCart className="h-3.5 w-3.5" /> A comprar
-                        </p>
-                        <ul className="space-y-1 text-xs text-white/70">
-                          {pendingShopping.slice(0, 8).map((s) => (
-                            <li key={s.id} className="flex justify-between gap-2">
-                              <span className="truncate">{s.name}</span>
-                              {s.price > 0 && <span className="text-white/40">{brl(s.price)}</span>}
-                            </li>
-                          ))}
-                          {pendingShopping.length > 8 && (
-                            <li className="text-white/30">+{pendingShopping.length - 8} itens…</li>
-                          )}
-                        </ul>
-                      </div>
-                    )}
-                    {lowStockCatalog.length > 0 && (
-                      <div className="rounded-xl border border-violet-400/20 bg-violet-500/5 p-3">
-                        <p className="mb-2 inline-flex items-center gap-1.5 text-[11px] font-semibold text-violet-200">
-                          <Hammer className="h-3.5 w-3.5" /> A produzir (estoque baixo)
-                        </p>
-                        <ul className="space-y-1 text-xs text-white/70">
-                          {lowStockCatalog.slice(0, 8).map((c) => (
-                            <li key={c.id} className="flex justify-between gap-2">
-                              <span className="truncate">{c.name}</span>
-                              <span className="text-white/40">
-                                {c.stockCount}/{c.minStockCount}
-                              </span>
-                            </li>
-                          ))}
-                          {lowStockCatalog.length > 8 && (
-                            <li className="text-white/30">+{lowStockCatalog.length - 8} itens…</li>
-                          )}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
           </div>
 
           {/* Day events */}
