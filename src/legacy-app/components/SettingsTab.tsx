@@ -40,6 +40,7 @@ import { getApiUrl, validateApiKeyFormat, checkIsAndroidWebView, callGeminiGener
 import { safeStorage } from '../utils/storage';
 import { uploadWorkspace, downloadWorkspace, FirebaseSyncError } from '../sync/firebaseSync';
 import { useCustomKeys } from '../hooks/useCustomKeys';
+import { ApiKeyField } from './ApiKeyField';
 
 interface SettingsTabProps {
   clients: Client[];
@@ -1558,229 +1559,87 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
         </div>
 
         {/* 2. GROQ KEY FIELD */}
-        <div className="p-4 bg-[#0A0D0B] border border-[#232B27] rounded-2xl space-y-3">
-          <div className="space-y-0.5">
-            <label className="text-xs font-bold text-gray-200 flex items-center gap-1 font-sans">
-              <Zap className="h-3.5 w-3.5 text-purple-400 animate-pulse" />
-              Chave de API da Groq (Llama Ultra Veloz)
-            </label>
-            <p className="text-[10px] text-[#8BA58D]">Motor alternativo secundário com processamento em velocidade recorde.</p>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-2.5">
-            <div className="relative flex-grow flex">
-              <input
-                type={showGroqKey ? "text" : "password"}
-                placeholder="Cole sua GROQ_API_KEY aqui (ex: gsk_...)"
-                value={localGroqKey}
-                onChange={(e) => setLocalGroqKey(e.target.value)}
-                className="flex-grow bg-[#151917] border border-[#232B27] pl-3.5 pr-10 py-2.5 rounded-xl text-xs text-white placeholder-zinc-800 hover:border-[#38463F] focus:border-[#52b788] outline-none font-mono"
-                id="input-groq-key-unified"
-              />
-              <button
-                type="button"
-                onClick={() => setShowGroqKey(!showGroqKey)}
-                className="absolute right-3 top-3 text-[#8BA58D] hover:text-white transition p-0.5 rounded cursor-pointer"
-              >
-                {showGroqKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-              </button>
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                try {
-                  const trimmedKey = (localGroqKey || '').trim();
-                  setLocalGroqKey(trimmedKey);
-
-                  const check = validateApiKeyFormat(trimmedKey);
-                  if (!check.isValid) {
-                    showError(check.reason || 'Chave da Groq inválida!');
-                    return;
-                  }
-
-                  safeStorage.setItem('bambuzau_custom_groq_key', trimmedKey);
-                  window.dispatchEvent(new Event('bambuzau_keys_updated'));
-                  showSuccess('Chave de API da Groq salva com sucesso! Seu assistente Llama está operacional.');
-                } catch (e: any) {
-                  showError('Erro ao salvar Groq: ' + e.message);
-                }
-              }}
-              className="px-5 py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-black text-xs rounded-xl transition cursor-pointer select-none shrink-0"
-              id="btn-save-groq-unified"
-            >
-              Salvar Groq
-            </button>
-          </div>
-        </div>
+        <ApiKeyField
+          icon={<Zap className="h-3.5 w-3.5 text-purple-400 animate-pulse" />}
+          label="Chave de API da Groq (Llama Ultra Veloz)"
+          description="Motor alternativo secundário com processamento em velocidade recorde."
+          placeholder="Cole sua GROQ_API_KEY aqui (ex: gsk_...)"
+          value={localGroqKey}
+          onChange={setLocalGroqKey}
+          storageKey="bambuzau_custom_groq_key"
+          inputId="input-groq-key-unified"
+          buttonId="btn-save-groq-unified"
+          saveLabel="Salvar Groq"
+          buttonClass="bg-purple-600 hover:bg-purple-500 text-white"
+          validateFormat
+          invalidMsg="Chave da Groq inválida!"
+          successMsg="Chave de API da Groq salva com sucesso! Seu assistente Llama está operacional."
+          errorPrefix="Erro ao salvar Groq"
+          showSuccess={showSuccess}
+          showError={showError}
+        />
 
         {/* 3. SERPAPI KEY FIELD */}
-        <div className="p-4 bg-[#0A0D0B] border border-[#232B27] rounded-2xl space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <label className="text-xs font-bold text-gray-200 flex items-center gap-1 font-sans">
-                <Search className="h-3.5 w-3.5 text-sky-400" />
-                Chave de API do SerpApi (Cotações Reais)
-              </label>
-              <p className="text-[10px] text-[#8BA58D]">Garante cotações de preços de insumos em tempo real direto da web.</p>
-            </div>
-            <a href="https://serpapi.com/" target="_blank" rel="noreferrer" className="text-[10px] text-sky-400 hover:underline font-semibold font-sans flex items-center gap-0.5">
-              Criar Conta Grátis ↗
-            </a>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-2.5">
-            <div className="relative flex-grow flex">
-              <input
-                type={showSerpKey ? "text" : "password"}
-                placeholder="Cole sua SerpApi Key aqui (ex: 5bc8b89...)"
-                value={localSerpKey}
-                onChange={(e) => setLocalSerpKey(e.target.value)}
-                className="flex-grow bg-[#151917] border border-[#232B27] pl-3.5 pr-10 py-2.5 rounded-xl text-xs text-white placeholder-zinc-800 hover:border-[#38463F] focus:border-[#52b788] outline-none font-mono"
-                id="input-serp-key-unified"
-              />
-              <button
-                type="button"
-                onClick={() => setShowSerpKey(!showSerpKey)}
-                className="absolute right-3 top-3 text-[#8BA58D] hover:text-white transition p-0.5 rounded cursor-pointer"
-              >
-                {showSerpKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-              </button>
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                try {
-                  const trimmedKey = (localSerpKey || '').trim();
-                  setLocalSerpKey(trimmedKey);
-
-                  const check = validateApiKeyFormat(trimmedKey);
-                  if (!check.isValid) {
-                    showError(check.reason || 'Chave SerpApi inválida!');
-                    return;
-                  }
-
-                  safeStorage.setItem('bambuzau_custom_serp_key', trimmedKey);
-                  window.dispatchEvent(new Event('bambuzau_keys_updated'));
-                  showSuccess('Sua chave SerpApi pessoal foi salva! Suas buscas de cotação usarão sua cota.');
-                } catch (e: any) {
-                  showError('Erro ao salvar SerpApi: ' + e.message);
-                }
-              }}
-              className="px-5 py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-black text-xs rounded-xl transition cursor-pointer select-none shrink-0"
-              id="btn-save-serp-unified"
-            >
-              Salvar Serp
-            </button>
-          </div>
-        </div>
+        <ApiKeyField
+          icon={<Search className="h-3.5 w-3.5 text-sky-400" />}
+          label="Chave de API do SerpApi (Cotações Reais)"
+          description="Garante cotações de preços de insumos em tempo real direto da web."
+          placeholder="Cole sua SerpApi Key aqui (ex: 5bc8b89...)"
+          value={localSerpKey}
+          onChange={setLocalSerpKey}
+          storageKey="bambuzau_custom_serp_key"
+          inputId="input-serp-key-unified"
+          buttonId="btn-save-serp-unified"
+          saveLabel="Salvar Serp"
+          buttonClass="bg-sky-600 hover:bg-sky-500 text-white"
+          validateFormat
+          invalidMsg="Chave SerpApi inválida!"
+          successMsg="Sua chave SerpApi pessoal foi salva! Suas buscas de cotação usarão sua cota."
+          errorPrefix="Erro ao salvar SerpApi"
+          link={{ href: "https://serpapi.com/", text: "Criar Conta Grátis ↗", className: "text-[10px] text-sky-400 hover:underline font-semibold font-sans flex items-center gap-0.5" }}
+          showSuccess={showSuccess}
+          showError={showError}
+        />
 
         {/* 4. TAVILY API KEY FIELD */}
-        <div className="p-4 bg-[#0A0D0B] border border-[#232B27] rounded-2xl space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <label className="text-xs font-bold text-gray-200 flex items-center gap-1 font-sans">
-                <Search className="h-3.5 w-3.5 text-amber-400" />
-                Chave de API do Tavily (Busca Web IA)
-              </label>
-              <p className="text-[10px] text-[#8BA58D]">Garante resultados de busca detalhados integrando web e blogs especializados.</p>
-            </div>
-            <a href="https://tavily.com/" target="_blank" rel="noreferrer" className="text-[10px] text-amber-400 hover:underline font-semibold font-sans flex items-center gap-0.5">
-              Criar Conta Grátis ↗
-            </a>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-2.5">
-            <div className="relative flex-grow flex">
-              <input
-                type={showTavilyKey ? "text" : "password"}
-                placeholder="Cole sua Tavily API Key aqui (ex: tvly-...)"
-                value={localTavilyKey}
-                onChange={(e) => setLocalTavilyKey(e.target.value)}
-                className="flex-grow bg-[#151917] border border-[#232B27] pl-3.5 pr-10 py-2.5 rounded-xl text-xs text-white placeholder-zinc-800 hover:border-[#38463F] focus:border-[#52b788] outline-none font-mono"
-                id="input-tavily-key-unified"
-              />
-              <button
-                type="button"
-                onClick={() => setShowTavilyKey(!showTavilyKey)}
-                className="absolute right-3 top-3 text-[#8BA58D] hover:text-white transition p-0.5 rounded cursor-pointer"
-              >
-                {showTavilyKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-              </button>
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                try {
-                  const trimmedKey = (localTavilyKey || '').trim();
-                  setLocalTavilyKey(trimmedKey);
-                  safeStorage.setItem('bambuzau_custom_tavily_key', trimmedKey);
-                  window.dispatchEvent(new Event('bambuzau_keys_updated'));
-                  showSuccess('Sua chave de API do Tavily foi salva com sucesso!');
-                } catch (e: any) {
-                  showError('Erro ao salvar Tavily: ' + e.message);
-                }
-              }}
-              className="px-5 py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-black text-xs rounded-xl transition cursor-pointer select-none shrink-0"
-              id="btn-save-tavily-unified"
-            >
-              Salvar Tavily
-            </button>
-          </div>
-        </div>
+        <ApiKeyField
+          icon={<Search className="h-3.5 w-3.5 text-amber-400" />}
+          label="Chave de API do Tavily (Busca Web IA)"
+          description="Garante resultados de busca detalhados integrando web e blogs especializados."
+          placeholder="Cole sua Tavily API Key aqui (ex: tvly-...)"
+          value={localTavilyKey}
+          onChange={setLocalTavilyKey}
+          storageKey="bambuzau_custom_tavily_key"
+          inputId="input-tavily-key-unified"
+          buttonId="btn-save-tavily-unified"
+          saveLabel="Salvar Tavily"
+          buttonClass="bg-amber-600 hover:bg-amber-500 text-white"
+          successMsg="Sua chave de API do Tavily foi salva com sucesso!"
+          errorPrefix="Erro ao salvar Tavily"
+          link={{ href: "https://tavily.com/", text: "Criar Conta Grátis ↗", className: "text-[10px] text-amber-400 hover:underline font-semibold font-sans flex items-center gap-0.5" }}
+          showSuccess={showSuccess}
+          showError={showError}
+        />
 
         {/* 5. JINA AI SEARCH KEY FIELD */}
-        <div className="p-4 bg-[#0A0D0B] border border-[#232B27] rounded-2xl space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <label className="text-xs font-bold text-gray-200 flex items-center gap-1 font-sans">
-                <Search className="h-3.5 w-3.5 text-emerald-400" />
-                Chave de API do Jina AI Reader/Search
-              </label>
-              <p className="text-[10px] text-[#8BA58D]">Converte qualquer página da web e resultados do Google em markdown limpo de preços.</p>
-            </div>
-            <a href="https://jina.ai/" target="_blank" rel="noreferrer" className="text-[10px] text-[#52b788] hover:underline font-semibold font-sans flex items-center gap-0.5">
-              Criar Conta Grátis ↗
-            </a>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-2.5">
-            <div className="relative flex-grow flex">
-              <input
-                type={showJinaKey ? "text" : "password"}
-                placeholder="Cole sua Jina API Key aqui (ex: jina_...)"
-                value={localJinaKey}
-                onChange={(e) => setLocalJinaKey(e.target.value)}
-                className="flex-grow bg-[#151917] border border-[#232B27] pl-3.5 pr-10 py-2.5 rounded-xl text-xs text-white placeholder-zinc-800 hover:border-[#38463F] focus:border-[#52b788] outline-none font-mono"
-                id="input-jina-key-unified"
-              />
-              <button
-                type="button"
-                onClick={() => setShowJinaKey(!showJinaKey)}
-                className="absolute right-3 top-3 text-[#8BA58D] hover:text-white transition p-0.5 rounded cursor-pointer"
-              >
-                {showJinaKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-              </button>
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                try {
-                  const trimmedKey = (localJinaKey || '').trim();
-                  setLocalJinaKey(trimmedKey);
-                  safeStorage.setItem('bambuzau_custom_jina_key', trimmedKey);
-                  window.dispatchEvent(new Event('bambuzau_keys_updated'));
-                  showSuccess('Sua chave de API do Jina AI foi salva com sucesso!');
-                } catch (e: any) {
-                  showError('Erro ao salvar Jina: ' + e.message);
-                }
-              }}
-              className="px-5 py-2.5 bg-emerald-750 hover:bg-emerald-600 text-white font-black text-xs rounded-xl transition cursor-pointer select-none shrink-0"
-              id="btn-save-jina-unified"
-            >
-              Salvar Jina
-            </button>
-          </div>
-        </div>
+        <ApiKeyField
+          icon={<Search className="h-3.5 w-3.5 text-emerald-400" />}
+          label="Chave de API do Jina AI Reader/Search"
+          description="Converte qualquer página da web e resultados do Google em markdown limpo de preços."
+          placeholder="Cole sua Jina API Key aqui (ex: jina_...)"
+          value={localJinaKey}
+          onChange={setLocalJinaKey}
+          storageKey="bambuzau_custom_jina_key"
+          inputId="input-jina-key-unified"
+          buttonId="btn-save-jina-unified"
+          saveLabel="Salvar Jina"
+          buttonClass="bg-emerald-750 hover:bg-emerald-600 text-white"
+          successMsg="Sua chave de API do Jina AI foi salva com sucesso!"
+          errorPrefix="Erro ao salvar Jina"
+          link={{ href: "https://jina.ai/", text: "Criar Conta Grátis ↗", className: "text-[10px] text-[#52b788] hover:underline font-semibold font-sans flex items-center gap-0.5" }}
+          showSuccess={showSuccess}
+          showError={showError}
+        />
 
         {/* 6. GOOGLE SEARCH GROUNDING TOGGLE */}
         <div className="flex items-center justify-between p-4 bg-[#0A0D0B] border border-[#232B27] rounded-2xl font-sans">
