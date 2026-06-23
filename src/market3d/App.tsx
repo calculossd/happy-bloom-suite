@@ -205,7 +205,7 @@ export default function App() {
 
   // Custom photo render prompt
   const [pixabayQuery, setPixabayQuery] = useState<string>('');
-  const [productImages, setProductImages] = useState<Record<string, string>>({});
+  const [productImages, setProductImages] = useState<Record<string, string>>(() => loadProductImages());
   const [brokenImageUrls, setBrokenImageUrls] = useState<Record<string, boolean>>({});
 
   // ===== Kanban de Ideias (persisted) =====
@@ -663,6 +663,7 @@ export default function App() {
       if (!query) return;
       searchImage(query, undefined, controller.signal).then((imageUrl) => {
         if (!cancelled && imageUrl) {
+          persistProductImage(product.id, imageUrl);
           setProductImages((prev) => ({ ...prev, [product.id]: imageUrl }));
         }
       });
