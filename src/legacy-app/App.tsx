@@ -87,7 +87,10 @@ import {
   FileBox,
   ClipboardCheck,
   Calendar,
-  Globe
+  Globe,
+  Calculator,
+  BookOpen,
+  TrendingUp
 } from 'lucide-react';
 
 // STUNNING 3D CUBE & PRINTER EXTENSION GEOMETRIC LOGO
@@ -349,6 +352,18 @@ export function safeGetLocalStorageItem(key: string, defaultValue: string = ''):
 export default function App() {
   const [currentTab, setCurrentTab] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Open the Costs tab (id=4) jumping to a specific internal sub-tab.
+  // CostsTab listens for the 'costs_set_subtab' event and also reads the
+  // localStorage override on mount.
+  const openCostsSubtab = (sub: 'CALC' | 'CATALOG' | 'STOCK' | 'SHOP' | 'QUOTE' | 'AI') => {
+    try { localStorage.setItem('bambuzau_costs_subtab_override', sub); } catch {}
+    setCurrentTab(4);
+    setSidebarOpen(false);
+    try {
+      window.dispatchEvent(new CustomEvent('costs_set_subtab', { detail: sub }));
+    } catch {}
+  };
   const [dismissedPriceAlert, setDismissedPriceAlert] = useState(false);
   const [dismissedStockAlert, setDismissedStockAlert] = useState(false);
 
@@ -1547,7 +1562,11 @@ export default function App() {
             {
               section: 'Gestão',
               items: [
-                { id: 4, label: 'Gestão', icon: Layers },
+                { id: 4, label: 'Cálculo', icon: Calculator, onClick: () => openCostsSubtab('CALC') },
+                { id: 4, label: 'Catálogo Inova', icon: BookOpen, onClick: () => openCostsSubtab('CATALOG') },
+                { id: 4, label: 'Estoque', icon: Layers, onClick: () => openCostsSubtab('STOCK') },
+                { id: 4, label: 'Gastos', icon: DollarSign, onClick: () => openCostsSubtab('SHOP') },
+                { id: 4, label: 'Cotação', icon: TrendingUp, onClick: () => openCostsSubtab('QUOTE') },
                 { id: 7, label: 'Preços', icon: Search },
                 { id: 13, label: 'Agenda', icon: Calendar },
               ],
@@ -1556,6 +1575,7 @@ export default function App() {
               section: 'Crescimento',
               items: [
                 { id: 9, label: 'Marketing', icon: Megaphone },
+                { id: 4, label: 'Assistente', icon: Sparkles, onClick: () => openCostsSubtab('AI') },
                 { id: 14, label: 'Sites', icon: Globe },
                 { id: 15, label: 'Ferramentas', icon: Wrench },
               ],
@@ -1564,21 +1584,21 @@ export default function App() {
               section: 'Configurações',
               items: [{ id: 5, label: 'Ajustes', icon: Settings }],
             },
-          ] as Array<{ section: string | null; items: Array<{ id: number; label: string; icon: any; badge?: number }> }>).map((group, gi) => (
+          ] as Array<{ section: string | null; items: Array<{ id: number; label: string; icon: any; badge?: number; onClick?: () => void }> }>).map((group, gi) => (
             <div key={gi} className="flex flex-col gap-0.5">
               {group.section && (
                 <div className="px-3 mb-1 text-[9px] uppercase tracking-[0.22em] text-white/30 font-semibold">
                   {group.section}
                 </div>
               )}
-              {group.items.map((item) => {
-                const active = currentTab === item.id;
+              {group.items.map((item, ii) => {
+                const active = currentTab === item.id && !item.onClick;
                 const isCoreGroup = [0, 1, 6, 2, 3, 4].includes(item.id);
                 const accent = isCoreGroup ? '#D4A017' : '#3B82F6';
                 return (
                   <button
-                    key={item.id}
-                    onClick={() => setCurrentTab(item.id)}
+                    key={`${item.id}-${item.label}-${ii}`}
+                    onClick={() => (item.onClick ? item.onClick() : setCurrentTab(item.id))}
                     className={`group relative flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12px] font-medium tracking-wide w-full text-left transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                       active
                         ? 'text-white bg-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_4px_16px_-6px_rgba(0,0,0,0.6)]'
@@ -1622,15 +1642,19 @@ export default function App() {
             { id: 6, label: 'Histórico', icon: ShoppingBag },
             { id: 2, label: 'Clientes', icon: Users },
             { id: 3, label: 'Pedidos', icon: GitPullRequest, badge: pendingOrdersCount },
-            { id: 4, label: 'Gestão', icon: Layers },
+            { id: 4, label: 'Cálculo', icon: Calculator, onClick: () => openCostsSubtab('CALC') },
+            { id: 4, label: 'Catálogo Inova', icon: BookOpen, onClick: () => openCostsSubtab('CATALOG') },
+            { id: 4, label: 'Estoque', icon: Layers, onClick: () => openCostsSubtab('STOCK') },
+            { id: 4, label: 'Gastos', icon: DollarSign, onClick: () => openCostsSubtab('SHOP') },
+            { id: 4, label: 'Cotação', icon: TrendingUp, onClick: () => openCostsSubtab('QUOTE') },
             { id: 7, label: 'Preços', icon: Search },
             { id: 5, label: 'Ajustes', icon: Settings },
-          ].map(item => {
-            const active = currentTab === item.id;
+          ].map((item: any, ii: number) => {
+            const active = currentTab === item.id && !item.onClick;
             return (
               <button
-                key={item.id}
-                onClick={() => setCurrentTab(item.id)}
+                key={`${item.id}-${item.label}-${ii}`}
+                onClick={() => (item.onClick ? item.onClick() : setCurrentTab(item.id))}
                 className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-medium whitespace-nowrap shrink-0 transition-all ${
                   active ? 'text-white bg-white/[0.08]' : 'text-white/55 hover:text-white hover:bg-white/[0.04]'
                 }`}
