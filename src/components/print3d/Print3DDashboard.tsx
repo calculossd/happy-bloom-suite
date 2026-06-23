@@ -750,13 +750,7 @@ export function Print3DPanel({
             </div>
           </div>
 
-          {/* TOP: SerpAPI quotes + Machines (as requested) */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <FilamentQuotes />
-            <LivePrinters printers={printers} orders={orders} />
-          </div>
-
-          {/* KPIs */}
+          {/* KPIs (Row 1 — exatamente como o layout) */}
           <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
             <Kpi label="Pedidos Hoje"        value={String(ordersToday.length)}              delta={`${activePrinters}/${printersTotal}`} Icon={ShoppingBag} />
             <Kpi label="Faturamento Hoje"    value={fmtBRL(revenueToday)}                    delta="hoje" Icon={DollarSign} />
@@ -765,32 +759,31 @@ export function Print3DPanel({
             <Kpi label="Gastos Hoje"         value={fmtBRL(expensesToday)}                   delta="hoje" Icon={Wallet} />
           </div>
 
-          {/* Row 2: Map | Orders | Filament health */}
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          {/* Row 2: Mapa | Impressão ao Vivo | Pedidos | Higrômetros */}
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
             <Card>
               <h3 className="text-[14px] font-semibold text-white">Mapa de Clientes</h3>
               <p className="text-[11px] text-white/45 mb-2">{clients.length} clientes cadastrados</p>
               <BrazilMap />
             </Card>
+            <LivePrinters printers={printers} orders={orders} />
             <OrdersList orders={orders} clients={clients} onSelectTab={onSelectTab} />
             <Sensors filaments={filamentStocks} />
           </div>
 
-          {/* Row 3 */}
+          {/* Row 3: STL | Estoque Crítico | Cotação | IA Precificação */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-            <div className="md:col-span-2 xl:col-span-3"><StlGallery orders={orders} /></div>
+            <div className="md:col-span-2 xl:col-span-1"><StlGallery orders={orders} /></div>
             <CriticalStock filaments={filamentStocks} onSelectTab={onSelectTab} />
+            <FilamentQuotes />
+            <AiPricing />
           </div>
 
-          {/* Row 4 */}
+          {/* Row 4: Categorias | Hora | Resumo Financeiro */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             <CategoriesChart data={categories} />
             <HourlyChart data={hourly} />
             <FinanceSummary revenue={monthRevenue} expense={monthExpenses} profit={monthProfit} margin={monthMargin} onSelectTab={onSelectTab} />
-          </div>
-
-          <div className="grid grid-cols-1 xl:grid-cols-1 gap-4">
-            <AiPricing />
           </div>
     </div>
   );
