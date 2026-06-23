@@ -3941,7 +3941,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                       return (
                         <a
                           key={oIdx}
-                          href={offer.buyUrl}
+                          href={offer.buyUrl && offer.buyUrl.trim() ? offer.buyUrl : `https://www.google.com/search?tbm=shop&q=${encodeURIComponent(offer.productName || materialGroup.searchQuery || materialGroup.type)}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           title={offer.productName}
