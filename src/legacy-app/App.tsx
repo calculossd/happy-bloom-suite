@@ -4,6 +4,7 @@ import { getApiUrl } from './utils/api';
 import { safeStorage } from './utils/storage';
 import { Client, Printer, PrintOrder, FilamentStock, SupplyStock, Expense, ShoppingItem, ExternalPlatformOrder, CatalogItem } from './types';
 import { useAppState } from './state/useAppState';
+import { useAutoQuotations } from './hooks/useAutoQuotations';
 import { DashboardTab } from './components/DashboardTab';
 import { ProductionTab } from './components/ProductionTab';
 import { ClientsTab } from './components/ClientsTab';
