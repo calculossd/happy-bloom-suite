@@ -73,34 +73,43 @@ function SitesPage() {
     else setExtra((x) => x.filter((l) => l.id !== id));
   };
 
-  const favicon = (u: string) => `https://www.google.com/s2/favicons?domain=${new URL(u).hostname}&sz=64`;
-  const screenshot = (u: string) => `https://image.thum.io/get/width/800/crop/500/${u}`;
+  const favicon = (u: string) => `https://www.google.com/s2/favicons?domain=${new URL(u).hostname}&sz=128`;
   const hostname = (u: string) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return u; } };
+
+  // Group filtered links by category for the sectioned logo grid
+  const grouped = useMemo(() => {
+    const map = new Map<string, Link[]>();
+    for (const l of filtered) {
+      if (!map.has(l.category)) map.set(l.category, []);
+      map.get(l.category)!.push(l);
+    }
+    return Array.from(map.entries());
+  }, [filtered]);
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-[#050507] text-white">
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-40 left-1/3 h-[420px] w-[420px] rounded-full bg-emerald-500/10 blur-[140px]" />
+        <div className="absolute -top-40 left-1/3 h-[420px] w-[420px] rounded-full bg-[#b7ff00]/10 blur-[140px]" />
       </div>
       <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1600px] px-6 py-12 md:px-10">
-        <header className="mb-10 border-b border-white/10 pb-6">
-          <p className="mb-2 text-[10px] font-medium uppercase tracking-[0.3em] text-emerald-400">Recursos</p>
-          <h1 className="text-4xl font-extrabold tracking-tight md:text-5xl" style={{ fontFamily: "'Sora', sans-serif" }}>
-            Sites & Ferramentas
-          </h1>
-          <p className="mt-2 text-sm text-white/50">
-            Diretório curado com MakerWorld, Printables, Cults, Thangs, fatiadores, calibração e mais. Adicione os seus.
-          </p>
+        <header className="mb-8 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">
+          <div className="flex items-center gap-3">
+            <span className="inline-block h-2 w-2 rounded-full bg-[#b7ff00] shadow-[0_0_10px_#b7ff00]" />
+            <div>
+              <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans leading-none">Sites</div>
+              <p className="mt-1.5 text-[11px] text-white/50">Diretório curado por categoria. Clique no logo para abrir.</p>
+            </div>
+          </div>
         </header>
 
         {/* Add form */}
         <form onSubmit={add} className="mb-6 grid grid-cols-1 gap-2 rounded-3xl border border-white/10 bg-white/[0.02] p-4 md:grid-cols-[1fr_1fr_160px_auto] backdrop-blur-xl">
           <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nome do site" className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:border-emerald-400/50 focus:outline-none" />
           <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://..." className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:border-emerald-400/50 focus:outline-none" />
-          <select value={cat} onChange={(e) => setCat(e.target.value)} className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:border-emerald-400/50 focus:outline-none">
+          <select value={cat} onChange={(e) => setCat(e.target.value)} className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:border-[#b7ff00]/50 focus:outline-none">
             {["Modelos","Modelagem","Software","Outros"].map((c) => <option key={c} value={c} className="bg-[#0a0a0f]">{c}</option>)}
           </select>
-          <button type="submit" className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-white px-4 py-2 text-sm font-bold text-black hover:bg-emerald-300 active:scale-95">
+          <button type="submit" className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#b7ff00] px-4 py-2 text-sm font-bold text-black hover:brightness-110 active:scale-95 shadow-[0_0_18px_-6px_rgba(183,255,0,0.7)]">
             <Plus className="h-4 w-4" /> Adicionar
           </button>
         </form>
@@ -109,58 +118,60 @@ function SitesPage() {
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="relative max-w-sm flex-1">
             <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white/40" />
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar…" className="w-full rounded-full border border-white/10 bg-white/5 py-2 pl-9 pr-3 text-sm focus:border-emerald-400/50 focus:outline-none" />
+            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar…" className="w-full rounded-full border border-white/10 bg-white/5 py-2 pl-9 pr-3 text-sm focus:border-[#b7ff00]/50 focus:outline-none" />
           </div>
           <div className="flex flex-wrap gap-1.5">
             {categories.map((c) => (
-              <button key={c} onClick={() => setActiveCat(c)} className={`rounded-full px-3 py-1 text-[11px] font-medium uppercase tracking-wider transition-all ${activeCat === c ? "bg-white text-black" : "border border-white/10 text-white/60 hover:bg-white/10"}`}>
+              <button key={c} onClick={() => setActiveCat(c)} className={`rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-wider transition-all ${activeCat === c ? "bg-[#b7ff00] text-black shadow-[0_0_18px_-6px_rgba(183,255,0,0.7)]" : "border border-white/10 text-white/60 hover:bg-white/10"}`}>
                 {c}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((l) => (
-            <div key={l.id} className="group relative">
-              <a
-                href={l.url}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="block overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] transition-all hover:-translate-y-1 hover:border-emerald-400/40 hover:shadow-[0_20px_60px_-15px_rgba(16,185,129,0.35)]"
-              >
-                <div className="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-white/[0.06] to-white/[0.01]">
-                  <img
-                    src={screenshot(l.url)}
-                    alt={l.name}
-                    loading="lazy"
-                    className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.opacity = "0"; }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  <span className="absolute top-3 right-3 rounded-full bg-black/60 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-emerald-300 backdrop-blur">{l.category}</span>
-                  <div className="absolute bottom-3 left-3 right-3 flex items-center gap-2">
-                    <img src={favicon(l.url)} alt="" className="h-8 w-8 shrink-0 rounded-lg border border-white/20 bg-white/10 p-1 backdrop-blur" />
-                    <div className="min-w-0 flex-1">
-                      <h3 className="truncate text-sm font-bold text-white">{l.name}</h3>
-                      <p className="truncate text-[10px] text-white/60">{hostname(l.url)}</p>
-                    </div>
-                    <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-black transition-transform group-hover:translate-x-0.5">
-                      <ExternalLink className="h-3.5 w-3.5" />
-                    </span>
+        {/* Sections by category — logo-only tiles */}
+        <div className="space-y-8">
+          {grouped.map(([category, items]) => (
+            <section key={category}>
+              <div className="mb-3 flex items-center gap-3">
+                <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#b7ff00]">{category}</span>
+                <span className="h-px flex-1 bg-gradient-to-r from-[#b7ff00]/30 to-transparent" />
+                <span className="text-[10px] text-white/40 font-mono">{items.length}</span>
+              </div>
+              <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
+                {items.map((l) => (
+                  <div key={l.id} className="group relative">
+                    <a
+                      href={l.url}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      title={`${l.name} — ${hostname(l.url)}`}
+                      className="flex aspect-square flex-col items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] p-3 transition-all hover:-translate-y-0.5 hover:border-[#b7ff00]/50 hover:bg-white/[0.05] hover:shadow-[0_12px_40px_-12px_rgba(183,255,0,0.35)]"
+                    >
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/95 p-1.5 shadow-inner">
+                        <img
+                          src={favicon(l.url)}
+                          alt={l.name}
+                          loading="lazy"
+                          className="h-full w-full object-contain"
+                          onError={(e) => { (e.currentTarget as HTMLImageElement).style.opacity = "0.3"; }}
+                        />
+                      </div>
+                      <span className="block w-full truncate text-center text-[10px] font-semibold text-white/80 group-hover:text-[#b7ff00]">
+                        {l.name}
+                      </span>
+                    </a>
+                    <button
+                      onClick={() => remove(l.id)}
+                      aria-label="Remover"
+                      className="absolute top-1 right-1 z-10 rounded-full bg-black/70 p-1 text-white/60 opacity-0 backdrop-blur transition-opacity hover:text-rose-400 group-hover:opacity-100"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </button>
                   </div>
-                </div>
-                {l.desc && <p className="px-4 py-3 text-xs text-white/50 line-clamp-2">{l.desc}</p>}
-              </a>
-              <button
-                onClick={() => remove(l.id)}
-                aria-label="Remover"
-                className="absolute top-2 left-2 z-10 rounded-full bg-black/60 p-1.5 text-white/60 opacity-0 backdrop-blur transition-opacity hover:text-rose-400 group-hover:opacity-100"
-              >
-                <Trash2 className="h-3.5 w-3.5" />
-              </button>
-            </div>
+                ))}
+              </div>
+            </section>
           ))}
         </div>
 
