@@ -732,46 +732,15 @@ export default function App() {
     }
   }, []);
 
-  // Save states to localStorage upon changes
+  // Persistence for the slices above is handled by useAppState/usePersistedState.
+  // Brand config keeps its own effect because it lives outside useAppState for now.
   useEffect(() => {
-    localStorage.setItem('bambuzau_brand_config', JSON.stringify(brandConfig));
+    try {
+      localStorage.setItem('bambuzau_brand_config', JSON.stringify(brandConfig));
+    } catch (e) {
+      console.warn('Failed to persist brandConfig', e);
+    }
   }, [brandConfig]);
-
-  useEffect(() => {
-    localStorage.setItem('bambuzau_clients', JSON.stringify(clients));
-  }, [clients]);
-
-  useEffect(() => {
-    localStorage.setItem('bambuzau_printers', JSON.stringify(printers));
-  }, [printers]);
-
-  useEffect(() => {
-    localStorage.setItem('bambuzau_orders', JSON.stringify(orders));
-  }, [orders]);
-
-  useEffect(() => {
-    localStorage.setItem('bambuzau_filament', JSON.stringify(filamentStocks));
-  }, [filamentStocks]);
-
-  useEffect(() => {
-    localStorage.setItem('bambuzau_expenses', JSON.stringify(expenses));
-  }, [expenses]);
-
-  useEffect(() => {
-    localStorage.setItem('bambuzau_shopping', JSON.stringify(shoppingItems));
-  }, [shoppingItems]);
-
-  useEffect(() => {
-    localStorage.setItem('bambuzau_imported_external_ids', JSON.stringify(importedExternalIds));
-  }, [importedExternalIds]);
-
-  useEffect(() => {
-    localStorage.setItem('bambuzau_supplies', JSON.stringify(suppliesStocks));
-  }, [suppliesStocks]);
-
-  useEffect(() => {
-    localStorage.setItem('bambuzau_last_audit_ts', lastAuditDate.toString());
-  }, [lastAuditDate]);
 
   const [tickerQuotes, setTickerQuotes] = useState<Array<{ label: string; price: string; change: string; up: boolean | null }>>([]);
 
