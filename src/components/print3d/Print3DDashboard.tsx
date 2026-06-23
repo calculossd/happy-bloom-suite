@@ -916,7 +916,7 @@ export function Print3DPanel({
             <Card>
               <h3 className="text-[14px] font-semibold text-white">Mapa de Clientes</h3>
               <p className="text-[11px] text-white/45 mb-2">{clients.length} clientes cadastrados</p>
-              <BrazilMap />
+              <ClientsMap clients={clients} />
             </Card>
             <LivePrinters printers={printers} orders={orders} />
             <OrdersList orders={orders} clients={clients} onSelectTab={onSelectTab} />
