@@ -102,14 +102,8 @@ const isBlockedGoogleUrl = (value?: string) => {
 const getSafeOfferUrl = (offer: any, fallbackQuery: string) => {
   if (!isBlockedGoogleUrl(offer?.buyUrl)) return offer.buyUrl;
   const productName = String(offer?.productName || fallbackQuery || 'filamento impressora 3d');
-  const storeName = String(offer?.storeName || '').toLowerCase();
   const query = encodeURIComponent(productName);
-  if (storeName.includes('amazon')) return `https://www.amazon.com.br/s?k=${query}`;
-  if (storeName.includes('shopee')) return `https://shopee.com.br/search?keyword=${query}`;
-  if (storeName.includes('voolt')) return `https://voolt3d.com.br/busca?q=${query}`;
-  if (storeName.includes('3d fila') || storeName.includes('3dfila')) return `https://3dfila.com.br/?s=${query}&post_type=product`;
-  if (storeName.includes('3d lab') || storeName.includes('3dlab')) return `https://3dlab.com.br/?s=${query}&post_type=product`;
-  return `https://lista.mercadolivre.com.br/${query}`;
+  return `https://www.google.com/search?tbm=shop&q=${query}`;
 };
 
 interface CostsTabProps {
@@ -3947,7 +3941,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                       <span className="text-[10px] text-[#8BA58D] font-mono font-normal shrink-0">· min R$ {alertLimit.toFixed(2)}</span>
                     </h4>
                     <a 
-                      href={`https://lista.mercadolivre.com.br/${encodeURIComponent(materialGroup.searchQuery || materialGroup.type || 'filamento impressora 3d')}`}
+                      href={`https://www.google.com/search?tbm=shop&q=${encodeURIComponent(materialGroup.searchQuery || materialGroup.type || 'filamento impressora 3d')}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="px-2 py-0.5 bg-[#95BBA2]/10 hover:bg-[#95BBA2]/25 border border-[#95BBA2]/30 text-[#95BBA2] text-[10px] font-black rounded-lg transition shrink-0"
