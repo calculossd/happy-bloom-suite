@@ -1518,63 +1518,98 @@ export default function App() {
           <div className="text-[10px] uppercase tracking-[0.2em] text-white/40 font-semibold">Navegação</div>
         </div>
         <nav
-          className="flex-1 flex flex-col gap-0.5 overflow-y-auto no-scrollbar px-2 py-3"
+          className="flex-1 flex flex-col gap-4 overflow-y-auto no-scrollbar px-2 py-3"
           style={{ scrollbarWidth: 'none' }}
         >
-          {[
-            { id: 0, label: 'Painel',     icon: Home },
-            { id: 1, label: 'Produção',   icon: Activity },
-            { id: 6, label: 'Histórico',  icon: ShoppingBag },
-            { id: 2, label: 'Clientes',   icon: Users },
-            { id: 3, label: 'Pedidos',    icon: GitPullRequest, badge: pendingOrdersCount },
-            { id: 4, label: 'Gestão',     icon: Layers },
-            { id: 7, label: 'Preços',     icon: Search },
-            { id: 8, label: 'Catálogo 3D', icon: Box },
-            { id: 9, label: 'Marketing',  icon: Megaphone },
-            { id: 10, label: 'Kanban',    icon: Columns3 },
-            { id: 11, label: 'Modelos',   icon: FileBox },
-            { id: 12, label: 'Pré-check', icon: ClipboardCheck },
-            { id: 13, label: 'Agenda',    icon: Calendar },
-            { id: 14, label: 'Sites',     icon: Globe },
-            { id: 15, label: 'Ferramentas', icon: Wrench },
-            { id: 5, label: 'Ajustes',    icon: Settings },
-          ].map(item => {
-            const active = currentTab === item.id;
-            const isCoreGroup = [0, 1, 6, 2, 3, 4].includes(item.id);
-            const accent = isCoreGroup ? '#D4A017' : '#3B82F6';
-            return (
-              <button
-                key={item.id}
-                onClick={() => setCurrentTab(item.id)}
-                className={`group relative flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[12px] font-medium tracking-wide w-full text-left transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                  active
-                    ? 'text-white bg-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_4px_16px_-6px_rgba(0,0,0,0.6)]'
-                    : 'text-white/55 hover:text-white hover:bg-white/[0.04]'
-                }`}
-              >
-                {active && (
-                  <span
-                    aria-hidden
-                    className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-full"
-                    style={{ background: accent, boxShadow: `0 0 12px ${accent}80` }}
-                  />
-                )}
-                <item.icon
-                  className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:scale-110"
-                  style={active ? { color: accent } : undefined}
-                />
-                <span className="flex-1 truncate">{item.label}</span>
-                {item.badge ? (
-                  <span
-                    className="ml-auto min-w-[18px] h-[18px] px-1.5 inline-flex items-center justify-center rounded-full text-[9px] font-bold text-white"
-                    style={{ background: accent, boxShadow: `0 0 10px ${accent}66` }}
+          {([
+            {
+              section: null,
+              items: [{ id: 0, label: 'Painel', icon: Home }],
+            },
+            {
+              section: 'Principal',
+              items: [
+                { id: 3, label: 'Pedidos', icon: GitPullRequest, badge: pendingOrdersCount },
+                { id: 6, label: 'Histórico', icon: ShoppingBag },
+                { id: 2, label: 'Clientes', icon: Users },
+                { id: 8, label: 'Catálogo 3D', icon: Box },
+              ],
+            },
+            {
+              section: 'Produção',
+              items: [
+                { id: 1, label: 'Produção', icon: Activity },
+                { id: 10, label: 'Kanban', icon: Columns3 },
+                { id: 11, label: 'Modelos', icon: FileBox },
+                { id: 12, label: 'Pré-check', icon: ClipboardCheck },
+              ],
+            },
+            {
+              section: 'Gestão',
+              items: [
+                { id: 4, label: 'Gestão', icon: Layers },
+                { id: 7, label: 'Preços', icon: Search },
+                { id: 13, label: 'Agenda', icon: Calendar },
+              ],
+            },
+            {
+              section: 'Crescimento',
+              items: [
+                { id: 9, label: 'Marketing', icon: Megaphone },
+                { id: 14, label: 'Sites', icon: Globe },
+                { id: 15, label: 'Ferramentas', icon: Wrench },
+              ],
+            },
+            {
+              section: 'Configurações',
+              items: [{ id: 5, label: 'Ajustes', icon: Settings }],
+            },
+          ] as Array<{ section: string | null; items: Array<{ id: number; label: string; icon: any; badge?: number }> }>).map((group, gi) => (
+            <div key={gi} className="flex flex-col gap-0.5">
+              {group.section && (
+                <div className="px-3 mb-1 text-[9px] uppercase tracking-[0.22em] text-white/30 font-semibold">
+                  {group.section}
+                </div>
+              )}
+              {group.items.map((item) => {
+                const active = currentTab === item.id;
+                const isCoreGroup = [0, 1, 6, 2, 3, 4].includes(item.id);
+                const accent = isCoreGroup ? '#D4A017' : '#3B82F6';
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setCurrentTab(item.id)}
+                    className={`group relative flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12px] font-medium tracking-wide w-full text-left transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                      active
+                        ? 'text-white bg-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_4px_16px_-6px_rgba(0,0,0,0.6)]'
+                        : 'text-white/55 hover:text-white hover:bg-white/[0.04]'
+                    }`}
                   >
-                    {item.badge}
-                  </span>
-                ) : null}
-              </button>
-            );
-          })}
+                    {active && (
+                      <span
+                        aria-hidden
+                        className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-full"
+                        style={{ background: accent, boxShadow: `0 0 12px ${accent}80` }}
+                      />
+                    )}
+                    <item.icon
+                      className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:scale-110"
+                      style={active ? { color: accent } : undefined}
+                    />
+                    <span className="flex-1 truncate">{item.label}</span>
+                    {item.badge ? (
+                      <span
+                        className="ml-auto min-w-[18px] h-[18px] px-1.5 inline-flex items-center justify-center rounded-full text-[9px] font-bold text-white"
+                        style={{ background: accent, boxShadow: `0 0 10px ${accent}66` }}
+                      >
+                        {item.badge}
+                      </span>
+                    ) : null}
+                  </button>
+                );
+              })}
+            </div>
+          ))}
         </nav>
       </aside>
 
