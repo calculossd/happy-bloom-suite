@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { sanitizeQuery, isAllowedScrapeUrl } from "./_sanitize";
 
 export type TrendItem = {
   id: string;
@@ -170,13 +171,20 @@ export const Route = createFileRoute("/api/3d-trends")({
       GET: async ({ request }) => {
         const url = new URL(request.url);
         const force = url.searchParams.get("refresh") === "1";
-        const q = (url.searchParams.get("q") || "").trim();
-        const cat = (url.searchParams.get("cat") || "").trim();
+        const rawQ = (url.searchParams.get("q") || "").trim();
+        const q = sanitizeQuery(rawQ);
+        const cat = sanitizeQuery(url.searchParams.get("cat"));
 
-        // Direct lookup by URL or numeric ID
-        if (q && (/^https?:\/\//i.test(q) || /^\d{3,}$/.test(q.replace(/[^0-9]/g, "")))) {
+        // Direct lookup by URL or numeric ID — host-allowlisted (anti-SSRF)
+        if (rawQ && (/^https?:\/\//i.test(rawQ) || /^\d{3,}$/.test(rawQ.replace(/[^0-9]/g, "")))) {
+          if (/^https?:\/\//i.test(rawQ) && !isAllowedScrapeUrl(rawQ)) {
+            return Response.json(
+              { items: [], errors: [{ source: "direct", message: "URL host not allowed" }], updated_at: Date.now() },
+              { status: 400 },
+            );
+          }
           try {
-            const items = await scrapeDirect(q);
+            const items = await scrapeDirect(rawQ);
             return Response.json({ items, errors: [], updated_at: Date.now() });
           } catch (e: any) {
             return Response.json({ items: [], errors: [{ source: "direct", message: String(e?.message || e) }], updated_at: Date.now() });

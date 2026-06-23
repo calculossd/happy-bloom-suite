@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { sanitizeQuery, sanitizeType } from "./_sanitize";
 
 function isValidKey(k: string | null | undefined): boolean {
   if (!k) return false;
@@ -62,12 +63,13 @@ export const Route = createFileRoute("/api/quotations")({
         if (!apiKey) {
           return Response.json([{ type: "PLA", offers: [], error: "Chave SerpApi ausente ou inválida." }]);
         }
-        const customQ = (url.searchParams.get("q") || url.searchParams.get("query") || "").trim();
+        const customQ = sanitizeQuery(url.searchParams.get("q") || url.searchParams.get("query"));
 
         if (customQ) {
           const offers = await fetchShopping(customQ, apiKey);
+          const safeType = sanitizeType(url.searchParams.get("type")) || "Produtos";
           return Response.json([
-            { type: url.searchParams.get("type") || "Produtos", offers: topByPrice(offers), searchQuery: customQ },
+            { type: safeType, offers: topByPrice(offers), searchQuery: customQ },
           ]);
         }
 
