@@ -3933,7 +3933,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                     </a>
                   </div>
 
-                  <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-1.5">
+                  <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-8 xl:grid-cols-10 gap-1">
                     {[...materialGroup.offers].sort((a, b) => a.price - b.price).map((offer: any, oIdx) => {
                       const isHotOpportunity = offer.price < alertLimit;
                       const sales = offer.reviews || 0;
