@@ -505,7 +505,7 @@ function FilamentQuotes() {
       <ul className="space-y-2.5">
         {rows.map((q, i) => (
           <li key={i} className="flex items-center gap-3 text-[12.5px]">
-            <div className="size-7 rounded bg-white/[0.04] grid place-items-center"><Layers className="size-3.5 text-white/60" /></div>
+            <FilamentSpool color={materialColor(q.name)} size={28} className="shrink-0" label={q.name} />
             <div className="flex-1 font-semibold text-white">{q.name}</div>
             <div className="text-white/70 tabular-nums">
               {q.price ? `R$ ${q.price.toFixed(2)}` : "—"}{" "}
