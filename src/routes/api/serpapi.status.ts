@@ -52,12 +52,15 @@ export const Route = createFileRoute("/api/serpapi/status")({
         const key = pickKey(request, url);
         if (!key) {
           return Response.json(
-            { ok: false, status: 401, reason: "Nenhuma chave SerpApi configurada" },
+            { ok: false, authenticated: false, status: 401, reason: "Nenhuma chave SerpApi configurada" },
             { headers: CORS },
           );
         }
         const result = await probe(key);
-        return Response.json(result, { headers: CORS });
+        return Response.json(
+          { ...result, authenticated: result.ok },
+          { headers: CORS },
+        );
       },
     },
   },
