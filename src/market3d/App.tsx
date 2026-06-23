@@ -15,6 +15,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { PriceConfidence } from '@/components/PriceConfidence';
 import { searchImage } from './lib/searchImage';
+import { loadProductImages, loadQueryImages, persistProductImage, persistQueryImage } from './lib/imageCache';
 
 export function getProductForSelectedPlatform(
   p: SellerReport, 
