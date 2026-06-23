@@ -654,8 +654,8 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
 
       {/* Beautiful, professional, integrated manufacturing progress bar */}
       <div className="bg-[#151917] rounded-xl border border-[#232B27] p-4 space-y-3.5 shadow-md relative overflow-hidden select-none">
-        <div className="flex items-center justify-between text-xs font-bold text-[#F1F4EE]">
-          <span className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans">
+        <div className="flex items-center justify-between">
+          <span className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans normal-case-off" style={{ letterSpacing: '0.14em' }}>
             <span className="w-2 h-2 bg-[#b7ff00] rounded-full animate-pulse shadow-[0_0_8px_#b7ff00]" />
             Acompanhamento de Execução Global
           </span>
