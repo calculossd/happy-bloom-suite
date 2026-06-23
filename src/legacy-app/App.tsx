@@ -1509,10 +1509,10 @@ export default function App() {
             <button
               key={item.id}
               onClick={() => setCurrentTab(item.id)}
-              style={active ? { color: activeColor } : undefined}
+              style={active ? { backgroundColor: activeColor, borderColor: activeColor, color: '#FFFFFF' } : undefined}
               className={`relative inline-flex items-center justify-center gap-1 px-2 rounded-t-lg text-[10.5px] sm:text-[11px] font-bold whitespace-nowrap transition-all border border-b-0 -mb-px -mr-px ${
                 active
-                  ? 'bg-black/40 border-white/15 py-2 z-10 shadow-[0_-4px_14px_rgba(0,0,0,0.5)]'
+                  ? 'py-2 z-10 shadow-[0_-4px_14px_rgba(0,0,0,0.5)]'
                   : `bg-black/20 ${inactiveColor} border-white/5 py-1.5 hover:bg-black/30 hover:text-white`
               }`}
             >
@@ -1521,7 +1521,7 @@ export default function App() {
               {item.badge ? (
                 <span
                   className="ml-1 px-1.5 py-0.5 rounded-full text-[9px] font-black"
-                  style={{ backgroundColor: `${activeColor}33`, color: activeColor }}
+                  style={active ? { backgroundColor: 'rgba(0,0,0,0.35)', color: '#FFFFFF' } : { backgroundColor: `${activeColor}33`, color: activeColor }}
                 >
                   {item.badge}
                 </span>
