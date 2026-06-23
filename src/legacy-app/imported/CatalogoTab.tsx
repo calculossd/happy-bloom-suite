@@ -276,6 +276,12 @@ function CatalogPage() {
           </div>
         )}
 
+        {previewError && (
+          <div className="mb-6 rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200">
+            {previewError}
+          </div>
+        )}
+
         {/* Filters */}
         <div className="mb-6 grid grid-cols-1 gap-3 md:grid-cols-4">
           <div className="relative md:col-span-2">
@@ -371,10 +377,13 @@ function CatalogPage() {
                   </div>
                 </div>
                 <div className="mt-3 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-                  <div className="flex-1 rounded-lg border border-white/10 bg-white/5 py-1.5 text-center text-xs text-white/80 hover:bg-white/10"
+                  <button
+                    onClick={() => previewOne(m)}
+                    className="flex-1 rounded-lg border border-white/10 bg-white/5 py-1.5 text-center text-xs text-white/80 hover:bg-white/10"
+                    title="Visualizar 3D"
                   >
                     <Eye className="mx-auto h-3.5 w-3.5" />
-                  </div>
+                  </button>
                   <button
                     onClick={() => setSendModel(m)}
                     className="flex-1 rounded-lg border border-white/10 bg-white/5 py-1.5 text-xs text-white/80 hover:bg-white/10"
@@ -402,6 +411,28 @@ function CatalogPage() {
       </div>
 
       <SendToPrinterDialog model={sendModel} open={!!sendModel} onClose={() => setSendModel(null)} />
+      {preview && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm">
+          <div className="flex h-[82vh] w-full max-w-6xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#07070c] shadow-2xl">
+            <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
+              <div className="min-w-0">
+                <h2 className="truncate text-base font-semibold text-white">{preview.model.name}</h2>
+                <p className="text-xs uppercase text-white/45">{preview.model.fileType} · {(preview.model.size / 1024 / 1024).toFixed(2)} MB</p>
+              </div>
+              <button
+                onClick={() => setPreview(null)}
+                className="rounded-lg border border-white/10 bg-white/5 p-2 text-white/70 hover:bg-white/10 hover:text-white"
+                title="Fechar"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="min-h-0 flex-1">
+              <Model3DViewer file={preview.file} fileType={preview.model.fileType} />
+            </div>
+          </div>
+        </div>
+      )}
     </AppShell>
   );
 }
