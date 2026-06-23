@@ -1783,6 +1783,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
           </button>
         </div>
       </div>
+      )}
 
       {/* CAPSULE TAB CHANGER MENU — hidden: navigation moved to global sidebar */}
       <div className="hidden grid-cols-3 sm:grid-cols-6 items-center gap-2 p-2 bg-[#0a0d0c] border border-[#26332c] rounded-2xl shadow-xl" id="subtab-capsules">
