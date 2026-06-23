@@ -344,68 +344,70 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
         </div>
       )}
 
-      {/* Intro header with question mark details instead of huge static warning card */}
-      <div className="p-5 bg-[#151917] border border-[#232B27] rounded-2xl flex items-center justify-between gap-4">
-        <div>
-          <h2 className="text-lg font-bold text-[#F1F4EE] flex items-center gap-2 select-none">
-            <Database className="h-5 w-5 text-[#95BBA2]" />
+      {/* Unified header: title + active sales channels in a single card */}
+      <div className="glow-card p-5 rounded-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+        <div className="min-w-0">
+          <h2 className="text-lg font-bold flex items-center gap-2 select-none text-gradient-lime">
+            <Database className="h-5 w-5 text-[#b7ff00]" />
             Integração Automática com E-Commerce
-            <button 
+            <button
               type="button"
               onClick={() => setShowHelp(true)}
-              className="p-1 hover:text-[var(--brand-primary)] text-[#8BA58D] cursor-pointer transition inline-flex items-center justify-center rounded-full hover:bg-gray-800/40"
+              className="p-1 hover:text-[#b7ff00] text-[#8BA58D] cursor-pointer transition inline-flex items-center justify-center rounded-full hover:bg-white/5"
               title="Clique para saber mais sobre as integrações"
             >
               <HelpCircle className="h-5 w-5 text-[#E2B144]" />
             </button>
           </h2>
-          <p className="text-xs text-[#8BA58D]">Conecte seus canais de venda online para sincronizar e faturar ordens em lote.</p>
+          <p className="text-xs text-[#8BA58D] mt-1">Canais de venda ativos — clique no logo para ver detalhes ou ligar/desligar.</p>
+        </div>
+
+        <div className="flex items-center gap-4 lg:gap-5 shrink-0">
+          {connections.map((c, i) => {
+            const isConn = c.isConnected;
+            const logoColor = c.platformName === 'Mercado Livre' ? 'bg-[#FFF159]' :
+                              c.platformName === 'Shopee' ? 'bg-[#EE4D2D]' :
+                              c.platformName === 'Nuvemshop' ? 'bg-[#00ADF0]' :
+                              c.platformName === 'TikTok Shop' ? 'bg-black border border-cyan-400/80 shadow-[0_0_8px_rgba(250,45,90,0.5)]' :
+                              'bg-[#14191E] border border-orange-500/20 shadow-[0_0_6px_rgba(255,153,0,0.25)]';
+            return (
+              <div key={i} className="flex flex-col items-center gap-1.5 select-none">
+                <button
+                  type="button"
+                  onClick={() => handleSelectChannel(c)}
+                  className={`h-11 w-11 rounded-full flex items-center justify-center text-xs font-black shadow-md transition hover:scale-110 cursor-pointer overflow-hidden ${logoColor}`}
+                  title={`Ver configurações de ${c.platformName}`}
+                >
+                  {renderPlatformIcon(c.platformName)}
+                </button>
+                <span className={`h-2 w-2 rounded-full ${isConn ? 'bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]' : 'bg-red-500'}`} />
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      {/* Grid: Connected Stores & Order Streaming */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
-        {/* Compact, grouped sales channel logo row */}
-        <div className="space-y-4" id="integrations-channel-list">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-[#8BA58D]">Canais de Venda Ativos</h3>
-          
+      {/* Streams full-width below */}
+      <div className="grid grid-cols-1 gap-6">
+        {/* legacy logo block removed (merged into header above) */}
+        {false && (
+        <div className="space-y-4 hidden" id="integrations-channel-list">
           <div className="p-4 bg-[#151917] border border-[#232B27] rounded-2xl text-center space-y-3">
-            <p className="text-[11px] text-[#8BA58D]">Clique no logo para ver detalhes ou ligar/desligar</p>
-            
             <div className="flex items-center justify-around py-2 max-w-sm mx-auto">
               {connections.map((c, i) => {
                 const isConn = c.isConnected;
-                const logoColor = c.platformName === 'Mercado Livre' ? 'bg-[#FFF159]' :
-                                  c.platformName === 'Shopee' ? 'bg-[#EE4D2D]' :
-                                  c.platformName === 'Nuvemshop' ? 'bg-[#00ADF0]' :
-                                  c.platformName === 'TikTok Shop' ? 'bg-black border border-cyan-400/80 shadow-[0_0_8px_rgba(250,45,90,0.5)]' :
-                                  'bg-[#14191E] border border-orange-500/20 shadow-[0_0_6px_rgba(255,153,0,0.25)]';
-                
-                return (
-                  <div key={i} className="flex flex-col items-center gap-1.5 select-none">
-                    <button
-                      type="button"
-                      onClick={() => handleSelectChannel(c)}
-                      className={`h-12 w-12 rounded-full flex items-center justify-center text-xs font-black shadow-md transition hover:scale-110 cursor-pointer overflow-hidden ${logoColor}`}
-                      title={`Ver configurações de ${c.platformName}`}
-                    >
-                      {renderPlatformIcon(c.platformName)}
-                    </button>
-                    {/* Connection indicator dot below */}
-                    <span className={`h-2.5 w-2.5 rounded-full ${isConn ? 'bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]' : 'bg-red-500'}`} />
-                  </div>
-                );
+                return <div key={i} />;
               })}
             </div>
           </div>
         </div>
+        )}
 
         {/* Streaming orders backlog */}
-        <div className="lg:col-span-2 space-y-4" id="streams-orders-backlog">
+        <div className="glow-card rounded-2xl p-5 space-y-4" id="streams-orders-backlog">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--brand-primary)] flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-[var(--brand-primary)] animate-pulse inline-block" />
+            <h3 className="text-xs font-bold uppercase tracking-wider text-[#b7ff00] flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-[#b7ff00] animate-pulse inline-block shadow-[0_0_10px_#b7ff00]" />
               Stream de Vendas Pendentes ({visibleOrders.filter(o => !o.isImported && !importedExternalIds.includes(o.id)).length})
             </h3>
             <span className="text-[9px] text-[var(--brand-muted)] font-mono">Última atualização: Tempo real</span>
