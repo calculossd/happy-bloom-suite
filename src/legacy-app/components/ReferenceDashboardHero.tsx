@@ -113,7 +113,13 @@ export const ReferenceDashboardHero: React.FC<any> = (props) => {
   };
 
   // ===== Calendar =====
-  const { totalDays, firstDayIndex, getDaySales } = calendar;
+  const _now = new Date();
+  const _safeCalendar = calendar || {
+    totalDays: new Date(_now.getFullYear(), _now.getMonth() + 1, 0).getDate(),
+    firstDayIndex: new Date(_now.getFullYear(), _now.getMonth(), 1).getDay(),
+    getDaySales: () => 0,
+  };
+  const { totalDays, firstDayIndex, getDaySales } = _safeCalendar;
   const cells: Array<{ day: number | null; sales: number }> = [];
   for (let i = 0; i < firstDayIndex; i++) cells.push({ day: null, sales: 0 });
   for (let d = 1; d <= totalDays; d++) cells.push({ day: d, sales: getDaySales(d) });
