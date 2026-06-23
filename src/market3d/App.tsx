@@ -761,15 +761,27 @@ export default function App() {
         {/* COLUMN 2: ACTIVE PRODUCT FEEDS & SEARCH (SPAN 9) */}
         <section className="col-span-12 lg:col-span-9 space-y-4">
           
-          {/* Main search and count header */}
-          <div className="bg-[#090D16]/95 border border-[#121826] rounded-2xl p-4.5 shadow-md space-y-3 shrink-0">
-            <div className="flex items-center justify-between flex-wrap gap-2">
-              <h2 className="text-xs font-black tracking-widest text-slate-400 uppercase">
-                {currentCategoryName}
-              </h2>
-              <div className="flex items-center gap-2 flex-wrap">
-                {/* Marketplace selector */}
-                <div className="flex items-center gap-1 bg-[#05080E] p-0.5 rounded-lg border border-[#121826]/60 shrink-0">
+          {/* Compact toolbar */}
+          <div className="space-y-2 shrink-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <div className="relative flex-1 min-w-[200px]">
+                <Search className="absolute left-3 top-2.5 text-slate-500 w-4 h-4" />
+                <input 
+                  type="text" 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') handleLiveAnalysis(searchQuery); }}
+                  placeholder="Pesquisar por modelo, fatiador ou tags..."
+                  className="w-full bg-[#05080E] hover:bg-[#080C16] focus:bg-[#05080E] text-slate-200 placeholder-slate-500 pl-9 pr-8 py-2 text-xs rounded-lg border border-[#141B2D] focus:outline-none focus:ring-1 focus:ring-orange-500/40 transition-all font-medium"
+                />
+                {searchQuery && (
+                  <button onClick={() => setSearchQuery('')} className="absolute right-2.5 top-2.5 text-slate-500 hover:text-white">
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+              {/* Marketplace selector */}
+              <div className="flex items-center gap-1 bg-[#05080E] p-0.5 rounded-lg border border-[#121826]/60 shrink-0">
                   {(['shopee', 'mercadolivre', 'amazon'] as const).map((plat) => {
                     const active = selectedPlatform === plat;
                     const titles = { shopee: 'Shopee', mercadolivre: 'M. Livre', amazon: 'Amazon' };
@@ -788,9 +800,9 @@ export default function App() {
                       </button>
                     );
                   })}
-                </div>
-                {/* VIEW MODE TOGGLE */}
-                <div className="flex items-center gap-1 bg-[#05080E] p-0.5 rounded-lg border border-[#121826]/60 shrink-0">
+              </div>
+              {/* VIEW MODE TOGGLE */}
+              <div className="flex items-center gap-1 bg-[#05080E] p-0.5 rounded-lg border border-[#121826]/60 shrink-0">
                 <button
                   type="button"
                   onClick={() => setViewMode('list')}
@@ -815,39 +827,15 @@ export default function App() {
                 >
                   Métricas
                 </button>
-                </div>
               </div>
             </div>
 
-            {/* Search Input Filter */}
-            <div className="relative">
-              <Search className="absolute left-3 top-3 text-slate-500 w-4 h-4" />
-              <input 
-                type="text" 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') handleLiveAnalysis(searchQuery);
-                }}
-                placeholder="Pesquisar por modelo, fatiador ou tags..."
-                className="w-full bg-[#05080E] hover:bg-[#080C16] focus:bg-[#05080E] text-slate-200 placeholder-slate-500 pl-9.5 pr-4 py-2.5 text-xs rounded-xl border border-[#141B2D] focus:outline-none focus:ring-1 focus:ring-orange-500/40 transition-all font-medium"
-              />
-              {searchQuery && (
-                <button 
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-3 text-slate-500 hover:text-white"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              )}
-            </div>
-
             {/* Quick action Scanner Buttons */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+            <div className="grid grid-cols-2 gap-2 text-xs">
               <button
                 onClick={() => handleLiveAnalysis(searchQuery)}
                 disabled={isLoading || !searchQuery.trim()}
-                className="w-full bg-[#121927] hover:bg-[#1C263A] disabled:bg-slate-900 border border-slate-800 disabled:text-slate-600 text-slate-200 font-bold py-2.5 px-4 rounded-xl transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer shadow"
+                className="w-full bg-[#121927] hover:bg-[#1C263A] disabled:bg-slate-900 border border-slate-800 disabled:text-slate-600 text-slate-200 font-bold py-2 px-3 rounded-lg transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Search className="w-3.5 h-3.5" />
                 <span>Análise de Banco Local</span>
@@ -856,7 +844,7 @@ export default function App() {
               <button
                 onClick={() => handleRealtimeTrack(searchQuery)}
                 disabled={isLoading || !searchQuery.trim()}
-                className="w-full bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 disabled:from-slate-850 disabled:to-slate-800 disabled:text-slate-500 text-white font-bold py-2.5 px-4 rounded-xl transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                className="w-full bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 disabled:from-slate-850 disabled:to-slate-800 disabled:text-slate-500 text-white font-bold py-2 px-3 rounded-lg transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer"
                 title="Consulte o mercado real na Shopee, Jina, Tavily e Groq em Tempo Real"
               >
                 <Sparkles className="w-3.5 h-3.5 animate-pulse" />
