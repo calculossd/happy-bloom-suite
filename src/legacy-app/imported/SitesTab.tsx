@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ExternalLink, Plus, Trash2, Search } from "lucide-react";
+import { Plus, Trash2, Search } from "lucide-react";
 
 type Link = { id: string; name: string; url: string; category: string; desc?: string };
 
@@ -103,16 +103,6 @@ function SitesPage() {
           </div>
         </header>
 
-        {/* Add button + collapsible form */}
-        <div className="mb-6 flex justify-end">
-          <button
-            type="button"
-            onClick={() => setShowAdd((v) => !v)}
-            className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#b7ff00] px-4 py-2 text-sm font-bold text-black hover:brightness-110 active:scale-95 shadow-[0_0_18px_-6px_rgba(183,255,0,0.7)]"
-          >
-            <Plus className="h-4 w-4" /> Adicionar
-          </button>
-        </div>
         {showAdd && (
           <form onSubmit={add} className="mb-6 grid grid-cols-1 gap-2 rounded-3xl border border-white/10 bg-white/[0.02] p-4 md:grid-cols-[1fr_1fr_160px_auto] backdrop-blur-xl">
             <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nome do site" className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:border-[#b7ff00]/50 focus:outline-none" />
@@ -190,6 +180,16 @@ function SitesPage() {
         {filtered.length === 0 && (
           <p className="mt-8 text-center text-sm text-white/40">Nenhum site encontrado.</p>
         )}
+
+        <button
+          type="button"
+          onClick={() => setShowAdd((v) => !v)}
+          aria-label="Adicionar site"
+          title="Adicionar site"
+          className="fixed bottom-24 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#b7ff00] text-black shadow-[0_0_34px_-8px_rgba(183,255,0,0.95)] transition hover:brightness-110 active:scale-95"
+        >
+          <Plus className="h-7 w-7 stroke-[3px]" />
+        </button>
       </div>
     </div>
   );
