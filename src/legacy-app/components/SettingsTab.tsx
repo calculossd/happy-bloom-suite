@@ -1444,14 +1444,6 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
 
   return (
     <div className="space-y-6" id="settings_tab_container">
-      <header className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <div className="eyebrow mb-1">Personalização</div>
-          <h1 className="text-glow-amber" style={{ fontSize: 'clamp(1.75rem, 1.2rem + 2vw, 2.75rem)', lineHeight: 1, fontWeight: 800 }}>Ajustes</h1>
-          <p className="text-sm text-[var(--brand-text-muted)] mt-1">Marca, integrações, estufas, impressoras e preferências do ateliê.</p>
-        </div>
-      </header>
-      
       {/* SUCCESS / ERROR ALERTS */}
       {successMsg && (
         <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-xl flex items-center gap-2" id="settings-success-alert">
