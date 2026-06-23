@@ -347,9 +347,9 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
       {/* Unified header: title + active sales channels in a single card */}
       <div className="glow-card p-5 rounded-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-5">
         <div className="min-w-0">
-          <h2 className="text-sm font-bold uppercase tracking-[0.14em] flex items-center gap-2 select-none text-gradient-lime font-sans">
+          <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">
             <Database className="h-4 w-4 text-[#b7ff00]" />
-            Integração Automática com E-Commerce
+            <span>Integração Automática com E-Commerce</span>
             <button
               type="button"
               onClick={() => setShowHelp(true)}
@@ -358,7 +358,7 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
             >
               <HelpCircle className="h-5 w-5 text-[#E2B144]" />
             </button>
-          </h2>
+          </div>
           <p className="text-xs text-[#8BA58D] mt-1">Canais de venda ativos — clique no logo para ver detalhes ou ligar/desligar.</p>
         </div>
 
@@ -406,10 +406,10 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
         {/* Streaming orders backlog */}
         <div className="glow-card rounded-2xl p-5 space-y-4" id="streams-orders-backlog">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold uppercase tracking-[0.14em] flex items-center gap-2 text-gradient-lime font-sans">
+            <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans leading-none">
               <span className="w-2 h-2 rounded-full bg-[#b7ff00] animate-pulse inline-block shadow-[0_0_10px_#b7ff00]" />
-              Stream de Vendas Pendentes ({visibleOrders.filter(o => !o.isImported && !importedExternalIds.includes(o.id)).length})
-            </h3>
+              <span>Stream de Vendas Pendentes ({visibleOrders.filter(o => !o.isImported && !importedExternalIds.includes(o.id)).length})</span>
+            </div>
             <span className="text-[9px] text-[var(--brand-muted)] font-mono">Última atualização: Tempo real</span>
           </div>
 
