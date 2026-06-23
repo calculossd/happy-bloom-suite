@@ -550,6 +550,76 @@ function AgendaPage() {
             </form>
           </div>
         </div>
+
+        {/* Próximos 6 dias em blocos */}
+        {mounted && (
+          <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+            {Array.from({ length: 6 }).map((_, i) => {
+              const d = new Date();
+              d.setHours(0, 0, 0, 0);
+              d.setDate(d.getDate() + i);
+              const key = fmt(d);
+              const derived = derivedByDate.get(key) || [];
+              const evs = events.filter((e) => e.date === key);
+              const sales = derived.filter((x) => x.kind === "sale");
+              const dels = derived.filter((x) => x.kind === "delivery");
+              const exps = derived.filter((x) => x.kind === "expense");
+              const pends = derived.filter((x) => x.kind === "pending");
+              const isToday = i === 0;
+              const empty = derived.length === 0 && evs.length === 0;
+              return (
+                <button
+                  key={key}
+                  onClick={() => setSelected(key)}
+                  className={`text-left rounded-2xl border p-4 transition-all backdrop-blur-xl ${
+                    isToday
+                      ? "border-cyan-400/60 bg-cyan-500/10 shadow-[0_0_30px_-12px_rgba(34,211,238,0.6)]"
+                      : "border-white/10 bg-white/[0.02] hover:border-white/20"
+                  } ${selected === key ? "ring-1 ring-cyan-400/40" : ""}`}
+                >
+                  <div className="mb-3 flex items-baseline justify-between">
+                    <div>
+                      <p className={`text-[10px] uppercase tracking-widest ${isToday ? "text-cyan-300" : "text-white/40"}`}>
+                        {isToday ? "Hoje" : d.toLocaleDateString("pt-BR", { weekday: "short" })}
+                      </p>
+                      <p className="text-2xl font-bold leading-none" style={{ fontFamily: "'Sora', sans-serif" }}>
+                        {d.getDate()}
+                      </p>
+                    </div>
+                    <p className="text-[10px] text-white/40">
+                      {d.toLocaleDateString("pt-BR", { month: "short" })}
+                    </p>
+                  </div>
+
+                  {empty && <p className="text-[11px] text-white/30">Sem registros.</p>}
+
+                  <div className="space-y-2 text-[11px]">
+                    {sales.length > 0 && (
+                      <Block tone="emerald" icon={<DollarSign className="h-3 w-3" />} label="Vendas" items={sales.map((s) => s.title)} />
+                    )}
+                    {dels.length > 0 && (
+                      <Block tone="cyan" icon={<Truck className="h-3 w-3" />} label="Entregas" items={dels.map((s) => s.title)} />
+                    )}
+                    {exps.length > 0 && (
+                      <Block tone="amber" icon={<ShoppingCart className="h-3 w-3" />} label="Compras" items={exps.map((s) => s.title)} />
+                    )}
+                    {pends.length > 0 && (
+                      <Block tone="rose" icon={<CalendarClock className="h-3 w-3" />} label="Pedidos a fazer" items={pends.map((s) => s.title)} />
+                    )}
+                    {evs.length > 0 && (
+                      <Block
+                        tone="violet"
+                        icon={<Package className="h-3 w-3" />}
+                        label="Compromissos"
+                        items={evs.map((e) => (e.time ? `${e.time} · ${e.title}` : e.title))}
+                      />
+                    )}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );
