@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   LayoutDashboard, ShoppingCart, FileText, Users, Package, Printer as PrinterIcon,
   ListOrdered, Radio, Box, Layers, Wrench, Truck, Activity, Wallet, Receipt,
@@ -208,23 +208,40 @@ function BrazilMap() {
 }
 
 /* ---------- Live printers ---------- */
-const PRINTERS = [
-  { name: "Ender 3 S1",     material: "PLA — Preto",   remaining: "2h 15m restantes", pct: 65 },
-  { name: "Bambu P1P",      material: "PETG — Branco", remaining: "1h 20m restantes", pct: 40 },
-  { name: "Prusa MK4",      material: "ABS — Azul",    remaining: "3h 45m restantes", pct: 80 },
-  { name: "Elegoo Neptune 4",material: "TPU — Verde",  remaining: "1h 10m restantes", pct: 25 },
-  { name: "Anycubic Kobra 2",material: "ASA — Laranja",remaining: "2h 30m restantes", pct: 55 },
-  { name: "Ender 5 Pro",    material: "PLA — Cinza",   remaining: "0h 50m restantes", pct: 15 },
-];
-function LivePrinters() {
+const STATUS_LABEL: Record<string, string> = {
+  PRINTING: "Imprimindo",
+  IDLE: "Ociosa",
+  MAINTENANCE: "Manutenção",
+};
+function LivePrinters({ printers = [], orders = [] }: { printers?: any[]; orders?: any[] }) {
+  const rows = (printers.length ? printers : []).slice(0, 6).map((p: any) => {
+    const activeOrder = orders.find(
+      (o: any) => o.assignedPrinterId === p.id && (o.status === "PRINTING" || o.status === "QUEUE"),
+    );
+    const pct = Math.round(((p.printProgress ?? (activeOrder?.printingProgress ?? 0)) || 0) * (p.printProgress > 1 ? 1 : 100));
+    const material = activeOrder
+      ? `${activeOrder.filamentType} — ${activeOrder.filamentColor}`
+      : STATUS_LABEL[p.status] || "—";
+    const remainingH = activeOrder ? activeOrder.printTimeHours * (1 - (activeOrder.printingProgress || 0)) : 0;
+    const remaining = activeOrder
+      ? `${Math.floor(remainingH)}h ${Math.round((remainingH % 1) * 60)}m restantes`
+      : (p.status === "PRINTING" ? "em andamento" : "—");
+    return { name: p.name || p.model, material, remaining, pct: Math.max(0, Math.min(100, pct)) };
+  });
   return (
     <Card>
       <div className="flex items-baseline justify-between mb-1">
         <h3 className="text-[14px] font-semibold text-white">Impressão ao Vivo</h3>
+        <span className="text-[10px] text-white/45 tabular-nums">
+          {printers.filter((p: any) => p.status === "PRINTING").length}/{printers.length} ativas
+        </span>
       </div>
       <p className="text-[11px] text-white/45 mb-4">Acompanhe suas impressões em tempo real</p>
+      {rows.length === 0 && (
+        <div className="text-[12px] text-white/40 py-6 text-center">Nenhuma impressora cadastrada.</div>
+      )}
       <ul className="space-y-3">
-        {PRINTERS.map((p, i) => (
+        {rows.map((p, i) => (
           <li key={i} className="flex items-center gap-3 group">
             <div className="size-10 rounded-lg grid place-items-center bg-white/[0.03] border border-white/[0.05] shrink-0">
               <PrinterIcon className="size-5 text-white/70" />
@@ -250,37 +267,51 @@ function LivePrinters() {
   );
 }
 
-/* ---------- Orders to deliver ---------- */
-const ORDERS = [
-  { id: "#1025", client: "João Silva",     city: "São Paulo - SP",     date: "25/11/2024", status: "Aguardando" },
-  { id: "#1026", client: "Maria Santos",   city: "Rio de Janeiro - RJ",date: "25/11/2024", status: "Aguardando" },
-  { id: "#1027", client: "Carlos Lima",    city: "Belo Horizonte - MG",date: "26/11/2024", status: "Em trânsito" },
-  { id: "#1028", client: "Fernanda Costa", city: "Curitiba - PR",      date: "26/11/2024", status: "Aguardando" },
-  { id: "#1029", client: "Rafael Souza",   city: "Porto Alegre - RS",  date: "27/11/2024", status: "Aguardando" },
-];
 function StatusPill({ s }: { s: string }) {
   const map: Record<string, string> = {
     "Aguardando": "bg-amber-400/10 text-amber-300 border-amber-400/20",
     "Em trânsito": "bg-sky-400/10 text-sky-300 border-sky-400/20",
+    "Pronto": "bg-sky-400/10 text-sky-300 border-sky-400/20",
+    "Imprimindo": "bg-violet-400/10 text-violet-300 border-violet-400/20",
+    "Fila": "bg-white/[0.05] text-white/65 border-white/10",
     "Finalizado": "bg-emerald-400/10 text-emerald-300 border-emerald-400/20",
   };
   return <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${map[s] || ""}`}>{s}</span>;
 }
-function OrdersList() {
+const ORDER_STATUS_LABEL: Record<string, string> = {
+  WAITING: "Aguardando",
+  QUEUE: "Fila",
+  PRINTING: "Imprimindo",
+  POST_PROCESS: "Em trânsito",
+  READY: "Pronto",
+  DELIVERED: "Finalizado",
+};
+function OrdersList({ orders = [], clients = [], onSelectTab }: { orders?: any[]; clients?: any[]; onSelectTab?: (t: number) => void }) {
+  const rows = orders
+    .filter((o: any) => o.status !== "DELIVERED")
+    .slice()
+    .sort((a: any, b: any) => (a.deadline || 0) - (b.deadline || 0))
+    .slice(0, 6);
+  const cityById: Record<number, string> = {};
+  clients.forEach((c: any) => (cityById[c.id] = (c.address || "").split(",").pop()?.trim() || ""));
   return (
     <Card>
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-[14px] font-semibold text-white">Pedidos a Serem Entregues</h3>
-        <button className="text-[11px] text-white/50 hover:text-white">Ver todos</button>
+        <button className="text-[11px] text-white/50 hover:text-white" onClick={() => onSelectTab?.(3)}>Ver todos</button>
       </div>
+      {rows.length === 0 && (
+        <div className="text-[12px] text-white/40 py-6 text-center">Sem pedidos pendentes.</div>
+      )}
       <ul className="divide-y divide-white/[0.04]">
-        {ORDERS.map((o, i) => (
-          <li key={i} className="grid grid-cols-[55px_1fr_auto_auto_auto] items-center gap-3 py-2.5 text-[12px]">
-            <div className="font-mono text-white/55">{o.id}</div>
-            <div className="text-white font-medium truncate">{o.client}</div>
-            <div className="text-white/50 truncate hidden md:block">{o.city}</div>
-            <div className="text-white/40 tabular-nums hidden md:block">{o.date}</div>
-            <StatusPill s={o.status} />
+        {rows.map((o: any) => (
+          <li key={o.id} className="grid grid-cols-[55px_1fr_auto_auto] items-center gap-3 py-2.5 text-[12px]">
+            <div className="font-mono text-white/55">#{o.id}</div>
+            <div className="text-white font-medium truncate">{o.clientName || "—"}</div>
+            <div className="text-white/40 tabular-nums hidden md:block">
+              {o.deadline ? new Date(o.deadline).toLocaleDateString("pt-BR") : "—"}
+            </div>
+            <StatusPill s={ORDER_STATUS_LABEL[o.status] || o.status} />
           </li>
         ))}
       </ul>
@@ -288,28 +319,36 @@ function OrdersList() {
   );
 }
 
-/* ---------- Humidity sensors ---------- */
-const SENSORS = [
-  { name: "Estoque Principal",   ur: 45, t: 24.3 },
-  { name: "Estoque Filamentos",  ur: 48, t: 23.8 },
-  { name: "Estoque Peças",       ur: 42, t: 24.1 },
-  { name: "Estoque Resinas",     ur: 40, t: 23.2 },
-];
-function Sensors() {
+/* ---------- Filament stock health (replaces sensors) ---------- */
+function Sensors({ filaments = [] }: { filaments?: any[] }) {
+  const grouped: Record<string, { total: number; min: number; count: number }> = {};
+  filaments.forEach((f: any) => {
+    const k = f.type || "—";
+    if (!grouped[k]) grouped[k] = { total: 0, min: 0, count: 0 };
+    grouped[k].total += f.stockGrams || 0;
+    grouped[k].min += f.minStockGrams || 0;
+    grouped[k].count += 1;
+  });
+  const rows = Object.entries(grouped).slice(0, 5);
   return (
     <Card>
-      <h3 className="text-[14px] font-semibold text-white">Higrômetros ao Vivo</h3>
-      <p className="text-[11px] text-white/45 mb-4">Umidade dos estoques</p>
+      <h3 className="text-[14px] font-semibold text-white">Saúde do Estoque</h3>
+      <p className="text-[11px] text-white/45 mb-4">Filamentos por tipo</p>
+      {rows.length === 0 && (
+        <div className="text-[12px] text-white/40 py-6 text-center">Sem estoque cadastrado.</div>
+      )}
       <ul className="space-y-3">
-        {SENSORS.map((s, i) => (
+        {rows.map(([type, g], i) => (
           <li key={i} className="flex items-center gap-3 p-2.5 rounded-lg bg-white/[0.02] border border-white/[0.04]">
             <div className="size-9 rounded-lg grid place-items-center" style={{ background: `${LIME}15`, border: `1px solid ${LIME}30` }}>
               <Droplets className="size-4" style={{ color: LIME }} />
             </div>
-            <div className="flex-1 text-[12.5px] font-medium text-white">{s.name}</div>
+            <div className="flex-1 text-[12.5px] font-medium text-white">{type} <span className="text-white/40 text-[10px]">({g.count})</span></div>
             <div className="text-right">
-              <div className="text-[13px] font-bold tabular-nums" style={{ color: LIME }}>{s.ur}% <span className="text-white/40 font-normal text-[10px]">UR</span></div>
-              <div className="text-[10px] text-white/45 tabular-nums">{s.t}°C</div>
+              <div className="text-[13px] font-bold tabular-nums" style={{ color: g.total < g.min ? "#fb7185" : LIME }}>
+                {(g.total / 1000).toFixed(2)}kg
+              </div>
+              <div className="text-[10px] text-white/45 tabular-nums">min {(g.min / 1000).toFixed(1)}kg</div>
             </div>
           </li>
         ))}
@@ -318,23 +357,28 @@ function Sensors() {
   );
 }
 
-/* ---------- STL gallery ---------- */
-const STL = [
-  { name: "Suporte PS5",  date: "23/11/2024", mat: "PETG — Preto" },
-  { name: "Organizador Cabos", date: "22/11/2024", mat: "PLA — Branco" },
-  { name: "Engrenagem",   date: "22/11/2024", mat: "PETG — Azul" },
-  { name: "Miniatura Dragon", date: "20/11/2024", mat: "Resina — Cinza" },
-  { name: "Vaso Decorativo", date: "19/11/2024", mat: "PLA — Verde" },
-];
-function StlGallery() {
+/* ---------- STL gallery (recent orders) ---------- */
+function StlGallery({ orders = [] }: { orders?: any[] }) {
+  const items = orders
+    .slice()
+    .sort((a: any, b: any) => (b.createdAt || 0) - (a.createdAt || 0))
+    .slice(0, 5)
+    .map((o: any) => ({
+      name: o.itemName,
+      date: o.createdAt ? new Date(o.createdAt).toLocaleDateString("pt-BR") : "",
+      mat: `${o.filamentType} — ${o.filamentColor}`,
+    }));
   return (
     <Card>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-[14px] font-semibold text-white">Últimos STL Criados / Impressos</h3>
+        <h3 className="text-[14px] font-semibold text-white">Últimas Peças Impressas</h3>
         <button className="text-[11px] text-white/50 hover:text-white">Ver todos</button>
       </div>
+      {items.length === 0 && (
+        <div className="text-[12px] text-white/40 py-6 text-center">Sem peças recentes.</div>
+      )}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-        {STL.map((s, i) => (
+        {items.map((s, i) => (
           <div key={i} className="group cursor-pointer">
             <div className="aspect-square rounded-xl bg-gradient-to-br from-white/[0.05] to-white/[0.01] border border-white/[0.05] grid place-items-center mb-2 group-hover:border-white/15 transition relative overflow-hidden">
               <Box className="size-10 text-white/30 group-hover:scale-110 transition" />
@@ -351,22 +395,28 @@ function StlGallery() {
 }
 
 /* ---------- Critical stock ---------- */
-const CRIT = [
-  { name: "PLA Preto", qty: "1.2kg", level: "Crítico" },
-  { name: "PETG Branco", qty: "0.8kg", level: "Crítico" },
-  { name: "ABS Azul", qty: "1.5kg", level: "Atenção" },
-  { name: "TPU Flex", qty: "0.6kg", level: "Crítico" },
-  { name: "ASA Laranja", qty: "1.0kg", level: "Atenção" },
-];
-function CriticalStock() {
+function CriticalStock({ filaments = [], onSelectTab }: { filaments?: any[]; onSelectTab?: (t: number) => void }) {
+  const items = filaments
+    .filter((f: any) => f.stockGrams < f.minStockGrams * 1.5)
+    .slice()
+    .sort((a: any, b: any) => a.stockGrams / Math.max(1, a.minStockGrams) - b.stockGrams / Math.max(1, b.minStockGrams))
+    .slice(0, 6)
+    .map((f: any) => ({
+      name: `${f.type} ${f.color}`,
+      qty: `${(f.stockGrams / 1000).toFixed(2)}kg`,
+      level: f.stockGrams < f.minStockGrams ? "Crítico" : "Atenção",
+    }));
   return (
     <Card>
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-[14px] font-semibold text-white">Estoque Crítico</h3>
-        <button className="text-[11px] text-white/50 hover:text-white">Ver todos</button>
+        <button className="text-[11px] text-white/50 hover:text-white" onClick={() => onSelectTab?.(8)}>Ver todos</button>
       </div>
+      {items.length === 0 && (
+        <div className="text-[12px] text-white/40 py-6 text-center">Tudo em ordem.</div>
+      )}
       <ul className="space-y-2">
-        {CRIT.map((c, i) => (
+        {items.map((c, i) => (
           <li key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/[0.03] transition">
             <div className="size-8 rounded bg-white/[0.04] grid place-items-center"><Layers className="size-4 text-white/55" /></div>
             <div className="flex-1">
@@ -381,26 +431,56 @@ function CriticalStock() {
   );
 }
 
-/* ---------- Filament quotes ---------- */
-const QUOTES = [
-  { name: "PLA",  price: "R$ 79,90", change: "+2%", up: true  },
-  { name: "PETG", price: "R$ 99,90", change: "-5%", up: false },
-  { name: "ABS",  price: "R$ 109,90", change: "+1%", up: true  },
-  { name: "TPU",  price: "R$ 139,90", change: "+3%", up: true  },
-  { name: "ASA",  price: "R$ 119,90", change: "0%",  up: true  },
-];
+/* ---------- Filament quotes (SerpAPI cached) ---------- */
+function useSerpQuotes() {
+  const [groups, setGroups] = useState<any[]>([]);
+  const [updatedAt, setUpdatedAt] = useState<string>("");
+  useEffect(() => {
+    const load = () => {
+      try {
+        const raw = localStorage.getItem("bambuzau_cached_quotes");
+        setGroups(raw ? JSON.parse(raw) : []);
+        setUpdatedAt(localStorage.getItem("bambuzau_last_quotes_update") || "");
+      } catch { setGroups([]); }
+    };
+    load();
+    const onUpd = () => load();
+    window.addEventListener("bambuzau_quotes_updated", onUpd);
+    return () => window.removeEventListener("bambuzau_quotes_updated", onUpd);
+  }, []);
+  return { groups, updatedAt };
+}
 function FilamentQuotes() {
+  const { groups, updatedAt } = useSerpQuotes();
+  const rows = (groups || []).slice(0, 6).map((g: any) => {
+    const offers = Array.isArray(g.offers) ? g.offers : [];
+    const prices = offers.map((o: any) => Number(o.price) || 0).filter((n: number) => n > 0);
+    const avg = prices.length ? prices.reduce((a: number, b: number) => a + b, 0) / prices.length : 0;
+    const min = prices.length ? Math.min(...prices) : 0;
+    return { name: g.type || "—", price: avg, min, count: offers.length };
+  });
   return (
     <Card>
-      <h3 className="text-[14px] font-semibold text-white">Cotação de Filamentos</h3>
-      <p className="text-[11px] text-white/45 mb-4">Atualizado hoje às 10:30</p>
+      <div className="flex items-baseline justify-between mb-1">
+        <h3 className="text-[14px] font-semibold text-white">Cotação de Filamentos</h3>
+        <span className="text-[10px] text-white/40">SerpAPI</span>
+      </div>
+      <p className="text-[11px] text-white/45 mb-4">{updatedAt ? `Atualizado em ${updatedAt}` : "Aguardando primeira sincronização…"}</p>
+      {rows.length === 0 && (
+        <div className="text-[12px] text-white/40 py-6 text-center">Sem cotações ainda.</div>
+      )}
       <ul className="space-y-2.5">
-        {QUOTES.map((q, i) => (
+        {rows.map((q, i) => (
           <li key={i} className="flex items-center gap-3 text-[12.5px]">
             <div className="size-7 rounded bg-white/[0.04] grid place-items-center"><Layers className="size-3.5 text-white/60" /></div>
             <div className="flex-1 font-semibold text-white">{q.name}</div>
-            <div className="text-white/70 tabular-nums">{q.price} <span className="text-white/35 text-[10px]">/kg</span></div>
-            <div className={`text-[11px] font-semibold tabular-nums w-10 text-right ${q.up ? "text-emerald-400" : "text-rose-400"}`}>{q.change}</div>
+            <div className="text-white/70 tabular-nums">
+              {q.price ? `R$ ${q.price.toFixed(2)}` : "—"}{" "}
+              <span className="text-white/35 text-[10px]">méd.</span>
+            </div>
+            <div className="text-[11px] font-semibold tabular-nums w-16 text-right text-white/55">
+              {q.min ? `min R$ ${q.min.toFixed(0)}` : `${q.count} of.`}
+            </div>
           </li>
         ))}
       </ul>
@@ -460,18 +540,13 @@ function AiPricing() {
 }
 
 /* ---------- Bar chart: top categories ---------- */
-function CategoriesChart() {
-  const data = [
-    { name: "Peças Técnicas", v: 35 },
-    { name: "Decoração",      v: 25 },
-    { name: "Acessórios",     v: 18 },
-    { name: "Organização",    v: 12 },
-    { name: "Outros",         v: 10 },
-  ];
+function CategoriesChart({ data = [] }: { data?: Array<{ name: string; v: number }> }) {
+  const max = Math.max(1, ...data.map((d) => d.v));
   return (
     <Card>
-      <h3 className="text-[14px] font-semibold text-white">Categorias Mais Vendidas</h3>
-      <p className="text-[11px] text-white/45 mb-4">Com base nos últimos 30 dias</p>
+      <h3 className="text-[14px] font-semibold text-white">Materiais Mais Vendidos</h3>
+      <p className="text-[11px] text-white/45 mb-4">Participação na receita do mês</p>
+      {data.length === 0 && <div className="text-[12px] text-white/40 py-6 text-center">Sem vendas neste mês.</div>}
       <div className="space-y-3">
         {data.map((d, i) => (
           <div key={i}>
@@ -480,7 +555,7 @@ function CategoriesChart() {
               <span className="tabular-nums font-semibold" style={{ color: LIME }}>{d.v}%</span>
             </div>
             <div className="h-1.5 rounded-full bg-white/[0.04] overflow-hidden">
-              <div className="h-full rounded-full" style={{ width: `${(d.v / 35) * 100}%`, background: `linear-gradient(90deg,${LIME_DIM},${LIME})`, boxShadow: `0 0 6px ${LIME}55` }} />
+              <div className="h-full rounded-full" style={{ width: `${(d.v / max) * 100}%`, background: `linear-gradient(90deg,${LIME_DIM},${LIME})`, boxShadow: `0 0 6px ${LIME}55` }} />
             </div>
           </div>
         ))}
@@ -490,18 +565,19 @@ function CategoriesChart() {
 }
 
 /* ---------- Area chart: prints per hour ---------- */
-function HourlyChart() {
-  const data = useMemo(() => Array.from({ length: 24 }, (_, h) => {
-    const peak = Math.exp(-Math.pow((h - 13) / 5, 2)) * 4;
-    return { h: `${String(h).padStart(2, "0")}:00`, v: +(peak + Math.random() * 0.6).toFixed(2) };
-  }), []);
+function HourlyChart({ data }: { data?: Array<{ h: string; v: number }> }) {
+  const fallback = useMemo(
+    () => Array.from({ length: 24 }, (_, h) => ({ h: `${String(h).padStart(2, "0")}:00`, v: 0 })),
+    [],
+  );
+  const chartData = data && data.length ? data : fallback;
   return (
     <Card>
       <h3 className="text-[14px] font-semibold text-white">Impressões por Hora (Hoje)</h3>
       <p className="text-[11px] text-white/45 mb-3">Total de horas de impressão por hora</p>
       <div className="h-[180px] -mx-2">
         <ResponsiveContainer>
-          <AreaChart data={data}>
+          <AreaChart data={chartData}>
             <defs>
               <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor={LIME} stopOpacity={0.45} />
@@ -520,28 +596,34 @@ function HourlyChart() {
 }
 
 /* ---------- Financial summary ---------- */
-function FinanceSummary() {
-  const data = [{ v: 82 }, { v: 18 }];
+function FinanceSummary({
+  revenue = 0,
+  expense = 0,
+  profit = 0,
+  margin = 0,
+  onSelectTab,
+}: { revenue?: number; expense?: number; profit?: number; margin?: number; onSelectTab?: (t: number) => void }) {
+  const m = Math.max(0, Math.min(100, Math.round(margin)));
+  const data = [{ v: m }, { v: 100 - m }];
   return (
     <Card>
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-[14px] font-semibold text-white">Resumo Financeiro</h3>
-        <button className="text-[11px] text-white/50 hover:text-white">Ver todos</button>
+        <button className="text-[11px] text-white/50 hover:text-white" onClick={() => onSelectTab?.(5)}>Ver todos</button>
       </div>
       <div className="grid grid-cols-[1fr_auto] gap-4 items-center">
         <ul className="space-y-3">
           {[
-            { ic: Receipt, l: "Faturamento (mês)", v: "R$ 128.450,00", d: "+28%", c: "text-emerald-400" },
-            { ic: TrendingDown, l: "Gastos (mês)",     v: "R$ 22.780,00",  d: "-8%",  c: "text-rose-400" },
-            { ic: TrendingUp,   l: "Lucro líquido (mês)", v: "R$ 105.670,00", d: "+35%", c: "text-emerald-400" },
+            { ic: Receipt, l: "Faturamento (mês)", v: fmtBRL(revenue), c: "text-emerald-400" },
+            { ic: TrendingDown, l: "Gastos (mês)",     v: fmtBRL(expense),  c: "text-rose-400" },
+            { ic: TrendingUp,   l: "Lucro líquido (mês)", v: fmtBRL(profit), c: profit >= 0 ? "text-emerald-400" : "text-rose-400" },
           ].map((r, i) => {
             const Ic = r.ic;
             return (
               <li key={i} className="flex items-center gap-3 text-[12.5px]">
                 <div className="size-8 rounded bg-white/[0.04] grid place-items-center"><Ic className="size-4 text-white/60" /></div>
                 <div className="flex-1 text-white/70">{r.l}</div>
-                <div className="text-white font-semibold tabular-nums">{r.v}</div>
-                <div className={`w-10 text-right text-[11px] font-semibold tabular-nums ${r.c}`}>{r.d}</div>
+                <div className={`text-white font-semibold tabular-nums ${r.c}`}>{r.v}</div>
               </li>
             );
           })}
@@ -557,7 +639,7 @@ function FinanceSummary() {
           </ResponsiveContainer>
           <div className="absolute inset-0 grid place-items-center">
             <div className="text-center">
-              <div className="text-[20px] font-bold tabular-nums" style={{ color: LIME }}>82%</div>
+              <div className="text-[20px] font-bold tabular-nums" style={{ color: LIME }}>{m}%</div>
               <div className="text-[9px] text-white/45">Margem de<br/>lucro</div>
             </div>
           </div>
@@ -611,6 +693,36 @@ export function Print3DPanel({
   const activePrinters = printers.filter((p: any) => p.status === "PRINTING").length;
   const printersTotal = printers.length;
 
+  // === Month aggregates for finance summary ===
+  const monthStart = new Date(today.getFullYear(), today.getMonth(), 1).getTime();
+  const monthOrders = orders.filter((o: any) => (o.createdAt || 0) >= monthStart && o.status !== "WAITING");
+  const monthRevenue = monthOrders.reduce((s: number, o: any) => s + (o.priceCharged || 0), 0);
+  const monthExpenses = expenses
+    .filter((e: any) => (e.date || 0) >= monthStart)
+    .reduce((s: number, e: any) => s + ((e.amount || 0) * (e.qty || 1)), 0);
+  const monthProfit = monthRevenue - monthExpenses;
+  const monthMargin = monthRevenue > 0 ? (monthProfit / monthRevenue) * 100 : 0;
+
+  // Categories from filament type usage in month
+  const catMap: Record<string, number> = {};
+  monthOrders.forEach((o: any) => {
+    const k = o.filamentType || "Outros";
+    catMap[k] = (catMap[k] || 0) + (o.priceCharged || 0);
+  });
+  const catTotal = Object.values(catMap).reduce((a, b) => a + b, 0) || 1;
+  const categories = Object.entries(catMap)
+    .map(([name, v]) => ({ name, v: Math.round((v / catTotal) * 100) }))
+    .sort((a, b) => b.v - a.v)
+    .slice(0, 5);
+
+  // Hourly distribution today
+  const hourly = Array.from({ length: 24 }, (_, h) => ({ h: `${String(h).padStart(2, "0")}:00`, v: 0 }));
+  orders.forEach((o: any) => {
+    if (!isToday(o.createdAt)) return;
+    const hh = new Date(o.createdAt).getHours();
+    hourly[hh].v += o.printTimeHours || 0;
+  });
+
   return (
     <div className="space-y-5 text-white">
       {/* Page header */}
@@ -638,6 +750,12 @@ export function Print3DPanel({
             </div>
           </div>
 
+          {/* TOP: SerpAPI quotes + Machines (as requested) */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <FilamentQuotes />
+            <LivePrinters printers={printers} orders={orders} />
+          </div>
+
           {/* KPIs */}
           <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
             <Kpi label="Pedidos Hoje"        value={String(ordersToday.length)}              delta={`${activePrinters}/${printersTotal}`} Icon={ShoppingBag} />
@@ -647,30 +765,28 @@ export function Print3DPanel({
             <Kpi label="Gastos Hoje"         value={fmtBRL(expensesToday)}                   delta="hoje" Icon={Wallet} />
           </div>
 
-          {/* Row 2: Map | Live printers | Orders | Sensors */}
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+          {/* Row 2: Map | Orders | Filament health */}
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             <Card>
-              <h3 className="text-[14px] font-semibold text-white">Mapa de Clientes (Balcão)</h3>
-              <p className="text-[11px] text-white/45 mb-2">Clientes atendidos via balcão</p>
+              <h3 className="text-[14px] font-semibold text-white">Mapa de Clientes</h3>
+              <p className="text-[11px] text-white/45 mb-2">{clients.length} clientes cadastrados</p>
               <BrazilMap />
             </Card>
-            <LivePrinters />
-            <OrdersList />
-            <Sensors />
+            <OrdersList orders={orders} clients={clients} onSelectTab={onSelectTab} />
+            <Sensors filaments={filamentStocks} />
           </div>
 
           {/* Row 3 */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-            <div className="md:col-span-2"><StlGallery /></div>
-            <CriticalStock />
-            <FilamentQuotes />
+            <div className="md:col-span-2 xl:col-span-3"><StlGallery orders={orders} /></div>
+            <CriticalStock filaments={filamentStocks} onSelectTab={onSelectTab} />
           </div>
 
           {/* Row 4 */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-            <CategoriesChart />
-            <HourlyChart />
-            <FinanceSummary />
+            <CategoriesChart data={categories} />
+            <HourlyChart data={hourly} />
+            <FinanceSummary revenue={monthRevenue} expense={monthExpenses} profit={monthProfit} margin={monthMargin} onSelectTab={onSelectTab} />
           </div>
 
           <div className="grid grid-cols-1 xl:grid-cols-1 gap-4">
