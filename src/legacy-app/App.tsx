@@ -1562,7 +1562,11 @@ export default function App() {
             {
               section: 'Gestão',
               items: [
-                { id: 4, label: 'Gestão', icon: Layers },
+                { id: 4, label: 'Cálculo', icon: Calculator, onClick: () => openCostsSubtab('CALC') },
+                { id: 4, label: 'Catálogo Inova', icon: BookOpen, onClick: () => openCostsSubtab('CATALOG') },
+                { id: 4, label: 'Estoque', icon: Layers, onClick: () => openCostsSubtab('STOCK') },
+                { id: 4, label: 'Gastos', icon: DollarSign, onClick: () => openCostsSubtab('SHOP') },
+                { id: 4, label: 'Cotação', icon: TrendingUp, onClick: () => openCostsSubtab('QUOTE') },
                 { id: 7, label: 'Preços', icon: Search },
                 { id: 13, label: 'Agenda', icon: Calendar },
               ],
@@ -1571,6 +1575,7 @@ export default function App() {
               section: 'Crescimento',
               items: [
                 { id: 9, label: 'Marketing', icon: Megaphone },
+                { id: 4, label: 'Assistente', icon: Sparkles, onClick: () => openCostsSubtab('AI') },
                 { id: 14, label: 'Sites', icon: Globe },
                 { id: 15, label: 'Ferramentas', icon: Wrench },
               ],
@@ -1579,7 +1584,7 @@ export default function App() {
               section: 'Configurações',
               items: [{ id: 5, label: 'Ajustes', icon: Settings }],
             },
-          ] as Array<{ section: string | null; items: Array<{ id: number; label: string; icon: any; badge?: number }> }>).map((group, gi) => (
+          ] as Array<{ section: string | null; items: Array<{ id: number; label: string; icon: any; badge?: number; onClick?: () => void }> }>).map((group, gi) => (
             <div key={gi} className="flex flex-col gap-0.5">
               {group.section && (
                 <div className="px-3 mb-1 text-[9px] uppercase tracking-[0.22em] text-white/30 font-semibold">
