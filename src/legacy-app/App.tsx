@@ -395,45 +395,17 @@ export default function App() {
     }
   });
 
-  const [clients, setClients] = useState<Client[]>(() => {
-    try {
-      const saved = localStorage.getItem('bambuzau_clients');
-      return saved ? JSON.parse(saved) : initialClients;
-    } catch (e) {
-      console.warn("Failed to parse clients state, returning initial dataset", e);
-      return initialClients;
-    }
-  });
-
-  const [printers, setPrinters] = useState<Printer[]>(() => {
-    try {
-      const saved = localStorage.getItem('bambuzau_printers');
-      return saved ? JSON.parse(saved) : initialPrinters;
-    } catch (e) {
-      console.warn("Failed to parse printers state, returning initial dataset", e);
-      return initialPrinters;
-    }
-  });
-
-  const [orders, setOrders] = useState<PrintOrder[]>(() => {
-    try {
-      const saved = localStorage.getItem('bambuzau_orders');
-      return saved ? JSON.parse(saved) : initialOrders;
-    } catch (e) {
-      console.warn("Failed to parse orders state, returning initial dataset", e);
-      return initialOrders;
-    }
-  });
-
-  const [filamentStocks, setFilamentStocks] = useState<FilamentStock[]>(() => {
-    try {
-      const saved = localStorage.getItem('bambuzau_filament');
-      return saved ? JSON.parse(saved) : initialFilamentStock;
-    } catch (e) {
-      console.warn("Failed to parse filamentStocks state, returning initial dataset", e);
-      return initialFilamentStock;
-    }
-  });
+  const {
+    clients, setClients,
+    printers, setPrinters,
+    orders, setOrders,
+    filamentStocks, setFilamentStocks,
+    expenses, setExpenses,
+    shoppingItems, setShoppingItems,
+    importedExternalIds, setImportedExternalIds,
+    suppliesStocks, setSuppliesStocks,
+    lastAuditDate, setLastAuditDate,
+  } = useAppState();
 
   // Tuya Wi-Fi Devices for Humidifier Telemetry
   const [tuyaDevices, setTuyaDevices] = useState<{
