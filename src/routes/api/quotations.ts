@@ -18,6 +18,27 @@ function getKey(request: Request, url: URL): string {
   return "";
 }
 
+function isBlockedGoogleUrl(value: string | null | undefined): boolean {
+  if (!value) return true;
+  try {
+    const host = new URL(value).hostname.replace(/^www\./, "").toLowerCase();
+    return host === "google.com" || host.endsWith(".google.com") || host === "googleadservices.com" || host.endsWith(".googleadservices.com");
+  } catch {
+    return true;
+  }
+}
+
+function merchantSearchUrl(storeName: string, productName: string): string {
+  const store = String(storeName || "").toLowerCase();
+  const query = encodeURIComponent(productName || "filamento impressora 3d");
+  if (store.includes("amazon")) return `https://www.amazon.com.br/s?k=${query}`;
+  if (store.includes("shopee")) return `https://shopee.com.br/search?keyword=${query}`;
+  if (store.includes("voolt")) return `https://voolt3d.com.br/busca?q=${query}`;
+  if (store.includes("3d fila") || store.includes("3dfila")) return `https://3dfila.com.br/?s=${query}&post_type=product`;
+  if (store.includes("3d lab") || store.includes("3dlab")) return `https://3dlab.com.br/?s=${query}&post_type=product`;
+  return `https://lista.mercadolivre.com.br/${query}`;
+}
+
 async function fetchShopping(query: string, apiKey: string) {
   const url = `https://serpapi.com/search.json?engine=google_shopping&q=${encodeURIComponent(query)}&gl=br&hl=pt&tbs=p_ord:p&api_key=${apiKey}`;
   const controller = new AbortController();
@@ -34,7 +55,7 @@ async function fetchShopping(query: string, apiKey: string) {
         rating: typeof r.rating === "number" ? r.rating : 4.5,
         reviews: typeof r.reviews === "number" ? r.reviews : 0,
         feature: Array.isArray(r.extensions) && r.extensions.length ? String(r.extensions[0]) : (r.delivery || ""),
-        buyUrl: r.link || r.product_link || r.serpapi_product_api || (r.title ? `https://www.google.com/search?tbm=shop&q=${encodeURIComponent(r.title)}` : ""),
+        buyUrl: !isBlockedGoogleUrl(r.link) ? r.link : merchantSearchUrl(r.source || r.store || "", r.title || query),
         thumbnail: r.thumbnail || "",
       }))
       .filter((o: any) => o.price > 0);
