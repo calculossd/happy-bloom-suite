@@ -3142,17 +3142,12 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
 
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-2.5 min-w-0">
-                        <span
-                          className="h-10 w-10 rounded-xl shrink-0 grid place-items-center font-mono text-[10px] font-black tracking-tight"
-                          style={{
-                            background: swatchBg,
-                            color: cStyle.bg === 'transparent' || ['Branco', 'Amarelo', 'White'].includes(fil.color) ? '#0C0E0D' : '#fff',
-                            border: `1px solid ${cStyle.border}`,
-                            boxShadow: `inset 0 0 0 2px rgba(255,255,255,0.06)`,
-                          }}
-                        >
-                          {fil.type.slice(0, 4)}
-                        </span>
+                        <FilamentSpool
+                          color={swatchBg}
+                          size={44}
+                          label={`${fil.type} ${fil.color}`}
+                          className="shrink-0 drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]"
+                        />
                         <div className="min-w-0">
                           <div className="eyebrow mb-0.5">{fil.type}</div>
                           <div className="text-sm font-bold text-white truncate">{fil.color}</div>
