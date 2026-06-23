@@ -707,10 +707,15 @@ export function Print3DPanel({
   const monthProfit = monthRevenue - monthExpenses;
   const monthMargin = monthRevenue > 0 ? (monthProfit / monthRevenue) * 100 : 0;
 
-  // Categories from filament type usage in month
+  // Categories from product category in month
   const catMap: Record<string, number> = {};
   monthOrders.forEach((o: any) => {
-    const k = o.filamentType || "Outros";
+    const k =
+      o.category ||
+      o.productCategory ||
+      o.itemCategory ||
+      o.catalogCategory ||
+      "Outros";
     catMap[k] = (catMap[k] || 0) + (o.priceCharged || 0);
   });
   const catTotal = Object.values(catMap).reduce((a, b) => a + b, 0) || 1;
@@ -719,12 +724,14 @@ export function Print3DPanel({
     .sort((a, b) => b.v - a.v)
     .slice(0, 5);
 
-  // Hourly distribution today
-  const hourly = Array.from({ length: 24 }, (_, h) => ({ h: `${String(h).padStart(2, "0")}:00`, v: 0 }));
-  orders.forEach((o: any) => {
-    if (!isToday(o.createdAt)) return;
-    const hh = new Date(o.createdAt).getHours();
-    hourly[hh].v += o.printTimeHours || 0;
+  // Revenue per weekday in current month
+  const weekdayLabels = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+  const hourly = weekdayLabels.map((h) => ({ h, v: 0 }));
+  monthOrders.forEach((o: any) => {
+    const ts = o.createdAt || o.deliveryDate;
+    if (!ts) return;
+    const dow = new Date(ts).getDay();
+    hourly[dow].v += o.priceCharged || 0;
   });
 
   return (
