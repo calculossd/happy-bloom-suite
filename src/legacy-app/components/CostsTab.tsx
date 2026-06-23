@@ -3150,7 +3150,14 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                         />
                         <div className="min-w-0">
                           <div className="eyebrow mb-0.5">{fil.type}</div>
-                          <div className="text-sm font-bold text-white truncate">{fil.color}</div>
+                          <div className="text-sm font-bold text-white truncate flex items-center gap-1.5">
+                            <span
+                              className="inline-block h-3 w-3 rounded-full shrink-0"
+                              style={{ background: swatchBg, border: `1px solid ${cStyle.border}` }}
+                              aria-hidden
+                            />
+                            <span className="truncate">{fil.color}</span>
+                          </div>
                         </div>
                       </div>
                       {low && (
