@@ -4144,6 +4144,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
               Consultar IA
             </button>
           </form>
+          </div>
         </div>
       )}
 
