@@ -42,17 +42,39 @@ async function fetchShopping(query: string, apiKey: string) {
   }
 }
 
+const DEFAULT_MATERIALS: Array<{ type: string; query: string }> = [
+  { type: "PLA", query: "filamento pla 1.75mm 1kg impressora 3d" },
+  { type: "PETG", query: "filamento petg 1.75mm 1kg impressora 3d" },
+  { type: "TPU", query: "filamento flexivel tpu 1.75mm impressora 3d" },
+];
+
 export const Route = createFileRoute("/api/quotations")({
   server: {
     handlers: {
       GET: async ({ request }) => {
         const url = new URL(request.url);
         const apiKey = getKey(request, url);
-        if (!apiKey) return Response.json([]);
-        const customQ = url.searchParams.get("q") || url.searchParams.get("query") || "";
-        if (!customQ.trim()) return Response.json([]);
-        const offers = await fetchShopping(customQ.trim(), apiKey);
-        return Response.json([{ type: url.searchParams.get("type") || "Produtos", offers, searchQuery: customQ.trim() }]);
+        if (!apiKey) {
+          return Response.json([{ type: "PLA", offers: [], error: "Chave SerpApi ausente ou inválida." }]);
+        }
+        const customQ = (url.searchParams.get("q") || url.searchParams.get("query") || "").trim();
+
+        if (customQ) {
+          const offers = await fetchShopping(customQ, apiKey);
+          return Response.json([
+            { type: url.searchParams.get("type") || "Produtos", offers, searchQuery: customQ },
+          ]);
+        }
+
+        // Default: fetch the three workshop materials in parallel
+        const groups = await Promise.all(
+          DEFAULT_MATERIALS.map(async (m) => ({
+            type: m.type,
+            searchQuery: m.query,
+            offers: await fetchShopping(m.query, apiKey),
+          })),
+        );
+        return Response.json(groups);
       },
     },
   },
