@@ -1512,65 +1512,67 @@ export default function App() {
       `}</style>
 
       <>
-      {/* FOLDER-STYLE TABS (sit on top of the header like file folders) */}
-      <div className="w-full pt-2 px-1 sm:px-2 flex items-end gap-0 flex-wrap bg-transparent">
-        {[
-          { id: 0, label: 'Painel',    icon: Home },
-          { id: 1, label: 'Produção',  icon: Activity },
-          { id: 6, label: 'Histórico', icon: ShoppingBag },
-          { id: 2, label: 'Clientes',  icon: Users },
-          { id: 3, label: 'Pedidos',   icon: GitPullRequest, badge: pendingOrdersCount },
-          { id: 4, label: 'Gestão',    icon: Layers },
-          { id: 7,  label: 'Preços',     icon: Search },
-          { id: 8,  label: 'Catálogo 3D',icon: Box },
-          { id: 9,  label: 'Marketing',  icon: Megaphone },
-          { id: 10, label: 'Kanban',     icon: Columns3 },
-          { id: 11, label: 'Modelos',    icon: FileBox },
-          { id: 12, label: 'Pré-check',  icon: ClipboardCheck },
-          { id: 13, label: 'Agenda',     icon: Calendar },
-          { id: 14, label: 'Sites',      icon: Globe },
-          { id: 15, label: 'Ferramentas',icon: Wrench },
-          { id: 5, label: 'Ajustes',   icon: Settings },
-        ].map(item => {
-          const active = currentTab === item.id;
-          // Grupo de gestão de impressão 3D (dourado escuro) vs grupo de marketing (azul escuro)
-          const isCoreGroup = [0, 1, 6, 2, 3, 4].includes(item.id);
-          // Tons escuros estilo aba de navegador
-          const activeBg   = isCoreGroup ? '#7A5A12' : '#1E3A8A';
-          const inactiveBg = isCoreGroup ? '#3D2E0A' : '#0F1E45';
-          const borderCol  = isCoreGroup ? '#5C460F' : '#16275C';
-          const accentLine = isCoreGroup ? '#D4A017' : '#3B82F6';
-          return (
-            <button
-              key={item.id}
-              onClick={() => setCurrentTab(item.id)}
-              style={{
-                background: active
-                  ? `linear-gradient(180deg, ${activeBg} 0%, ${inactiveBg} 100%)`
-                  : `linear-gradient(180deg, ${inactiveBg} 0%, rgba(0,0,0,0.55) 100%)`,
-                borderColor: borderCol,
-                borderTop: active ? `2px solid ${accentLine}` : `1px solid ${borderCol}`,
-                color: '#FFFFFF',
-              }}
-              className={`folder-tab relative inline-flex items-center justify-center gap-1 px-3 rounded-t-md text-[10.5px] sm:text-[11px] font-semibold whitespace-nowrap transition-all border border-b-0 -mr-px ${
-                active
-                  ? 'py-2 z-10 -mb-px shadow-[0_-3px_10px_rgba(0,0,0,0.55)] text-white'
-                  : 'py-1.5 mb-[2px] text-white/70 hover:text-white hover:brightness-125'
-              }`}
-            >
-              <item.icon className="h-3 w-3 shrink-0" />
-              <span className="truncate">{item.label}</span>
-              {item.badge ? (
-                <span
-                  className="ml-1 px-1.5 py-0.5 rounded-full text-[9px] font-black"
-                  style={{ backgroundColor: 'rgba(0,0,0,0.35)', color: '#FFFFFF' }}
-                >
-                  {item.badge}
-                </span>
-              ) : null}
-            </button>
-          );
-        })}
+      {/* PREMIUM NAV TABS — glassmorphic, scrollable, with animated active pill */}
+      <div className="w-full px-2 sm:px-4 pt-3 pb-1.5 bg-transparent">
+        <nav
+          className="relative flex items-center gap-0.5 overflow-x-auto no-scrollbar rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl px-1.5 py-1.5 shadow-[0_8px_32px_-12px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.04)]"
+          style={{ scrollbarWidth: 'none' }}
+        >
+          {[
+            { id: 0, label: 'Painel',     icon: Home },
+            { id: 1, label: 'Produção',   icon: Activity },
+            { id: 6, label: 'Histórico',  icon: ShoppingBag },
+            { id: 2, label: 'Clientes',   icon: Users },
+            { id: 3, label: 'Pedidos',    icon: GitPullRequest, badge: pendingOrdersCount },
+            { id: 4, label: 'Gestão',     icon: Layers },
+            { id: 7, label: 'Preços',     icon: Search },
+            { id: 8, label: 'Catálogo 3D', icon: Box },
+            { id: 9, label: 'Marketing',  icon: Megaphone },
+            { id: 10, label: 'Kanban',    icon: Columns3 },
+            { id: 11, label: 'Modelos',   icon: FileBox },
+            { id: 12, label: 'Pré-check', icon: ClipboardCheck },
+            { id: 13, label: 'Agenda',    icon: Calendar },
+            { id: 14, label: 'Sites',     icon: Globe },
+            { id: 15, label: 'Ferramentas', icon: Wrench },
+            { id: 5, label: 'Ajustes',    icon: Settings },
+          ].map(item => {
+            const active = currentTab === item.id;
+            const isCoreGroup = [0, 1, 6, 2, 3, 4].includes(item.id);
+            const accent = isCoreGroup ? '#D4A017' : '#3B82F6';
+            return (
+              <button
+                key={item.id}
+                onClick={() => setCurrentTab(item.id)}
+                className={`group relative inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-medium tracking-wide whitespace-nowrap shrink-0 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                  active
+                    ? 'text-white bg-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_4px_16px_-6px_rgba(0,0,0,0.6)]'
+                    : 'text-white/55 hover:text-white hover:bg-white/[0.04]'
+                }`}
+              >
+                {active && (
+                  <span
+                    aria-hidden
+                    className="absolute inset-x-3 -bottom-[1px] h-[2px] rounded-full"
+                    style={{ background: `linear-gradient(90deg, transparent, ${accent}, transparent)`, boxShadow: `0 0 12px ${accent}80` }}
+                  />
+                )}
+                <item.icon
+                  className="h-3.5 w-3.5 shrink-0 transition-transform duration-300 group-hover:scale-110"
+                  style={active ? { color: accent } : undefined}
+                />
+                <span>{item.label}</span>
+                {item.badge ? (
+                  <span
+                    className="ml-0.5 min-w-[16px] h-[16px] px-1 inline-flex items-center justify-center rounded-full text-[9px] font-bold text-white"
+                    style={{ background: accent, boxShadow: `0 0 10px ${accent}66` }}
+                  >
+                    {item.badge}
+                  </span>
+                ) : null}
+              </button>
+            );
+          })}
+        </nav>
       </div>
 
       {/* GLOBAL HEADER (Full-Width Glassmorphism Header) */}
