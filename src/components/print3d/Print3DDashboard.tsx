@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   LayoutDashboard, ShoppingCart, FileText, Users, Package, Printer as PrinterIcon,
   ListOrdered, Radio, Box, Layers, Wrench, Truck, Activity, Wallet, Receipt,
@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import {
   ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, BarChart, Bar,
-  PieChart, Pie, Cell,
+  PieChart, Pie, Cell, LabelList,
 } from "recharts";
 import { FilamentSpool, materialColor } from "@/legacy-app/components/FilamentSpool";
 
@@ -200,34 +200,119 @@ function Kpi({ label, value, delta, Icon }: { label: string; value: string; delt
   );
 }
 
-/* ---------- Brazil map (stylized SVG) ---------- */
-function BrazilMap() {
-  const dots = [
-    [60, 35], [62, 50], [70, 55], [55, 45], [45, 60], [50, 70], [58, 65],
-    [65, 70], [48, 80], [38, 75], [42, 85], [55, 85], [60, 78], [70, 80],
-    [50, 55], [65, 42], [40, 50], [52, 92], [62, 90], [33, 65],
-  ];
-  return (
-    <div className="relative aspect-[4/3] w-full">
-      <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full">
-        {/* Simplified Brazil silhouette */}
-        <path
-          d="M 35,30 Q 45,22 55,25 L 70,28 Q 78,32 75,42 L 78,52 Q 75,60 68,62 L 70,72 Q 65,80 58,82 L 60,92 Q 52,96 45,92 L 38,88 Q 30,82 32,72 L 28,62 Q 25,52 30,45 Z"
-          fill="rgba(163,230,53,0.04)"
-          stroke="rgba(163,230,53,0.18)"
-          strokeWidth="0.4"
-        />
-        {dots.map(([x, y], i) => (
-          <g key={i}>
-            <circle cx={x} cy={y} r="2.4" fill={LIME} opacity="0.18" />
-            <circle cx={x} cy={y} r="1" fill={LIME}>
-              <animate attributeName="opacity" values="0.5;1;0.5" dur={`${2 + (i % 3)}s`} repeatCount="indefinite" />
-            </circle>
-          </g>
-        ))}
-      </svg>
-    </div>
-  );
+/* ---------- Real Leaflet map with client geocoding ---------- */
+const GEOCODE_CACHE_KEY = "print3d_geocode_cache_v1";
+function loadGeocodeCache(): Record<string, { lat: number; lng: number } | null> {
+  try {
+    return JSON.parse(localStorage.getItem(GEOCODE_CACHE_KEY) || "{}");
+  } catch {
+    return {};
+  }
+}
+function saveGeocodeCache(c: Record<string, { lat: number; lng: number } | null>) {
+  try { localStorage.setItem(GEOCODE_CACHE_KEY, JSON.stringify(c)); } catch {}
+}
+function normalizeQuery(addr: string) {
+  // Use last 2 segments (cidade, estado) for better match
+  const parts = addr.split(",").map((s) => s.trim()).filter(Boolean);
+  const tail = parts.slice(-3).join(", ");
+  return (tail || addr).trim();
+}
+async function geocodeOne(q: string): Promise<{ lat: number; lng: number } | null> {
+  const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=br&q=${encodeURIComponent(q)}`;
+  try {
+    const r = await fetch(url, { headers: { Accept: "application/json" } });
+    const j = await r.json();
+    if (Array.isArray(j) && j[0]) return { lat: parseFloat(j[0].lat), lng: parseFloat(j[0].lon) };
+  } catch {}
+  return null;
+}
+
+function ClientsMap({ clients = [] }: { clients?: any[] }) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const mapRef = useRef<any>(null);
+  const layerRef = useRef<any>(null);
+  const [ready, setReady] = useState(false);
+
+  // Init Leaflet once
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const L = (await import("leaflet")).default;
+      // CSS via CDN (Tailwind v4 disallows remote @import)
+      if (!document.getElementById("leaflet-css")) {
+        const link = document.createElement("link");
+        link.id = "leaflet-css";
+        link.rel = "stylesheet";
+        link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+        document.head.appendChild(link);
+      }
+      if (cancelled || !ref.current || mapRef.current) return;
+      const map = L.map(ref.current, {
+        center: [-14.235, -51.9253], zoom: 4, zoomControl: true, attributionControl: false,
+      });
+      L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+        maxZoom: 19,
+      }).addTo(map);
+      mapRef.current = map;
+      layerRef.current = L.layerGroup().addTo(map);
+      setReady(true);
+    })();
+    return () => {
+      cancelled = true;
+      if (mapRef.current) { mapRef.current.remove(); mapRef.current = null; }
+    };
+  }, []);
+
+  // Geocode + render markers
+  useEffect(() => {
+    if (!ready || !mapRef.current) return;
+    let cancelled = false;
+    (async () => {
+      const L = (await import("leaflet")).default;
+      const cache = loadGeocodeCache();
+      const points: Array<{ lat: number; lng: number; name: string }> = [];
+      const queries = Array.from(
+        new Set(
+          clients
+            .map((c: any) => normalizeQuery(c.address || ""))
+            .filter((q) => q && q.length > 2),
+        ),
+      );
+      // Geocode missing ones sequentially (Nominatim rate limit ~1 req/s)
+      for (const q of queries) {
+        if (cancelled) return;
+        if (!(q in cache)) {
+          cache[q] = await geocodeOne(q);
+          saveGeocodeCache(cache);
+          await new Promise((r) => setTimeout(r, 1100));
+        }
+      }
+      clients.forEach((c: any) => {
+        const q = normalizeQuery(c.address || "");
+        const p = cache[q];
+        if (p) points.push({ ...p, name: c.name || "Cliente" });
+      });
+      if (cancelled) return;
+      layerRef.current.clearLayers();
+      const icon = L.divIcon({
+        className: "",
+        html: `<div style="width:14px;height:14px;border-radius:9999px;background:${LIME};box-shadow:0 0 10px ${LIME}aa;border:2px solid #0a0d0c"></div>`,
+        iconSize: [14, 14],
+        iconAnchor: [7, 7],
+      });
+      points.forEach((p) => {
+        L.marker([p.lat, p.lng], { icon }).bindTooltip(p.name).addTo(layerRef.current);
+      });
+      if (points.length) {
+        const bounds = L.latLngBounds(points.map((p) => [p.lat, p.lng] as [number, number]));
+        mapRef.current.fitBounds(bounds.pad(0.3), { maxZoom: 8 });
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [ready, clients]);
+
+  return <div ref={ref} className="aspect-[4/3] w-full rounded-lg overflow-hidden border border-white/[0.05]" />;
 }
 
 /* ---------- Live printers ---------- */
@@ -634,7 +719,20 @@ function HourlyChart({ data }: { data?: Array<{ h: string; v: number }> }) {
               labelStyle={{ color: "#fff" }}
               formatter={(v: any) => [fmtBRL(Number(v) || 0), "Faturamento"]}
             />
-            <Area type="monotone" dataKey="v" stroke={LIME} strokeWidth={2} fill="url(#g1)" />
+            <Area type="monotone" dataKey="v" stroke={LIME} strokeWidth={2} fill="url(#g1)" dot={{ r: 3, fill: LIME, stroke: "#0a0d0c", strokeWidth: 1 }}>
+              <LabelList
+                dataKey="v"
+                position="top"
+                formatter={(v: any) => {
+                  const n = Number(v) || 0;
+                  if (n === 0) return "";
+                  if (n >= 1000) return `R$ ${(n / 1000).toFixed(1)}k`;
+                  return `R$ ${n.toFixed(0)}`;
+                }}
+                fill="#fff"
+                fontSize={10}
+              />
+            </Area>
           </AreaChart>
         </ResponsiveContainer>
       </div>
@@ -831,7 +929,7 @@ export function Print3DPanel({
             <Card>
               <h3 className="text-[14px] font-semibold text-white">Mapa de Clientes</h3>
               <p className="text-[11px] text-white/45 mb-2">{clients.length} clientes cadastrados</p>
-              <BrazilMap />
+              <ClientsMap clients={clients} />
             </Card>
             <LivePrinters printers={printers} orders={orders} />
             <OrdersList orders={orders} clients={clients} onSelectTab={onSelectTab} />
