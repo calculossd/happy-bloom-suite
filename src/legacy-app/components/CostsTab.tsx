@@ -4088,7 +4088,18 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
 
       {/* SUBTAB 5: AI CHAT DIRECTIVE */}
       {activeSubTab === 'AI' && (
-        <div className="bg-[#151917] border border-[#232B27] p-5 rounded-2xl space-y-4 animate-fade-in" id="ai-chat-full-panel">
+        <div className="space-y-4 animate-fade-in" id="ai-chat-full-panel">
+          {/* Standardized subtab header */}
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Assistente</div>
+                <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">IA</span>
+              </div>
+              <p className="text-xs text-[var(--brand-muted)]">Orientação inteligente de engenharia 3D — fatiadores, materiais e custos</p>
+            </div>
+          </div>
+          <div className="bg-[#151917] border border-[#232B27] p-5 rounded-2xl space-y-4">
           <div>
             <h3 className="text-base font-bold text-[#F1F4EE] flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-[#E5B242] animate-pulse" />
