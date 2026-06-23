@@ -285,7 +285,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
 
   const handleOpenAddDialog = () => {
     setEditingOrder(null);
-    setFormClientId(clients.length > 0 ? clients[0].id.toString() : '');
+    setFormClientId(clients.length > 0 ? clients[0].id.toString() : 'CUSTOM');
     setCustomClientName('');
     setFormItemName('');
     setFormQuantity(1);
