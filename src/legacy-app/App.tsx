@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { useState, useEffect, useRef, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { getApiUrl } from './utils/api';
 import { safeStorage } from './utils/storage';
 import { Client, Printer, PrintOrder, FilamentStock, SupplyStock, Expense, ShoppingItem, ExternalPlatformOrder, CatalogItem } from './types';
