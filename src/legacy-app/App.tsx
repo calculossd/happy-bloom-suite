@@ -1642,15 +1642,19 @@ export default function App() {
             { id: 6, label: 'Histórico', icon: ShoppingBag },
             { id: 2, label: 'Clientes', icon: Users },
             { id: 3, label: 'Pedidos', icon: GitPullRequest, badge: pendingOrdersCount },
-            { id: 4, label: 'Gestão', icon: Layers },
+            { id: 4, label: 'Cálculo', icon: Calculator, onClick: () => openCostsSubtab('CALC') },
+            { id: 4, label: 'Catálogo Inova', icon: BookOpen, onClick: () => openCostsSubtab('CATALOG') },
+            { id: 4, label: 'Estoque', icon: Layers, onClick: () => openCostsSubtab('STOCK') },
+            { id: 4, label: 'Gastos', icon: DollarSign, onClick: () => openCostsSubtab('SHOP') },
+            { id: 4, label: 'Cotação', icon: TrendingUp, onClick: () => openCostsSubtab('QUOTE') },
             { id: 7, label: 'Preços', icon: Search },
             { id: 5, label: 'Ajustes', icon: Settings },
-          ].map(item => {
-            const active = currentTab === item.id;
+          ].map((item: any, ii: number) => {
+            const active = currentTab === item.id && !item.onClick;
             return (
               <button
-                key={item.id}
-                onClick={() => setCurrentTab(item.id)}
+                key={`${item.id}-${item.label}-${ii}`}
+                onClick={() => (item.onClick ? item.onClick() : setCurrentTab(item.id))}
                 className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-medium whitespace-nowrap shrink-0 transition-all ${
                   active ? 'text-white bg-white/[0.08]' : 'text-white/55 hover:text-white hover:bg-white/[0.04]'
                 }`}
