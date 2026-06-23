@@ -1617,7 +1617,6 @@ export default function App() {
               items: [
                 { id: 12, label: 'Pré-check', icon: ClipboardCheck },
                 { id: 14, label: 'Sites', icon: Globe },
-                { id: 15, label: 'Ferramentas', icon: Wrench },
               ],
             },
             {
