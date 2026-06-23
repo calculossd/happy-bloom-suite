@@ -1512,10 +1512,13 @@ export default function App() {
       `}</style>
 
       <>
-      {/* PREMIUM NAV TABS — glassmorphic, scrollable, with animated active pill */}
-      <div className="w-full px-2 sm:px-4 pt-3 pb-1.5 bg-transparent">
+      {/* PREMIUM SIDE NAV — vertical, fixed left */}
+      <aside className="hidden md:flex fixed left-0 top-0 bottom-0 z-50 w-[168px] flex-col bg-[#0a0d0c]/95 backdrop-blur-2xl border-r border-white/[0.06] shadow-[8px_0_32px_-12px_rgba(0,0,0,0.8)]">
+        <div className="px-3 py-4 border-b border-white/[0.05]">
+          <div className="text-[10px] uppercase tracking-[0.2em] text-white/40 font-semibold">Navegação</div>
+        </div>
         <nav
-          className="relative flex items-center gap-0.5 overflow-x-auto no-scrollbar rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl px-1.5 py-1.5 shadow-[0_8px_32px_-12px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.04)]"
+          className="flex-1 flex flex-col gap-0.5 overflow-y-auto no-scrollbar px-2 py-3"
           style={{ scrollbarWidth: 'none' }}
         >
           {[
@@ -1543,7 +1546,7 @@ export default function App() {
               <button
                 key={item.id}
                 onClick={() => setCurrentTab(item.id)}
-                className={`group relative inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-medium tracking-wide whitespace-nowrap shrink-0 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                className={`group relative flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[12px] font-medium tracking-wide w-full text-left transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                   active
                     ? 'text-white bg-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_4px_16px_-6px_rgba(0,0,0,0.6)]'
                     : 'text-white/55 hover:text-white hover:bg-white/[0.04]'
@@ -1552,20 +1555,55 @@ export default function App() {
                 {active && (
                   <span
                     aria-hidden
-                    className="absolute inset-x-3 -bottom-[1px] h-[2px] rounded-full"
-                    style={{ background: `linear-gradient(90deg, transparent, ${accent}, transparent)`, boxShadow: `0 0 12px ${accent}80` }}
+                    className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-full"
+                    style={{ background: accent, boxShadow: `0 0 12px ${accent}80` }}
                   />
                 )}
                 <item.icon
-                  className="h-3.5 w-3.5 shrink-0 transition-transform duration-300 group-hover:scale-110"
+                  className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:scale-110"
                   style={active ? { color: accent } : undefined}
                 />
-                <span>{item.label}</span>
+                <span className="flex-1 truncate">{item.label}</span>
                 {item.badge ? (
                   <span
-                    className="ml-0.5 min-w-[16px] h-[16px] px-1 inline-flex items-center justify-center rounded-full text-[9px] font-bold text-white"
+                    className="ml-auto min-w-[18px] h-[18px] px-1.5 inline-flex items-center justify-center rounded-full text-[9px] font-bold text-white"
                     style={{ background: accent, boxShadow: `0 0 10px ${accent}66` }}
                   >
+                    {item.badge}
+                  </span>
+                ) : null}
+              </button>
+            );
+          })}
+        </nav>
+      </aside>
+
+      {/* MOBILE NAV — horizontal scroll (preserved for small screens) */}
+      <div className="md:hidden w-full px-2 pt-3 pb-1.5 bg-transparent">
+        <nav className="relative flex items-center gap-0.5 overflow-x-auto no-scrollbar rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl px-1.5 py-1.5">
+          {[
+            { id: 0, label: 'Painel', icon: Home },
+            { id: 1, label: 'Produção', icon: Activity },
+            { id: 6, label: 'Histórico', icon: ShoppingBag },
+            { id: 2, label: 'Clientes', icon: Users },
+            { id: 3, label: 'Pedidos', icon: GitPullRequest, badge: pendingOrdersCount },
+            { id: 4, label: 'Gestão', icon: Layers },
+            { id: 7, label: 'Preços', icon: Search },
+            { id: 5, label: 'Ajustes', icon: Settings },
+          ].map(item => {
+            const active = currentTab === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => setCurrentTab(item.id)}
+                className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-medium whitespace-nowrap shrink-0 transition-all ${
+                  active ? 'text-white bg-white/[0.08]' : 'text-white/55 hover:text-white hover:bg-white/[0.04]'
+                }`}
+              >
+                <item.icon className="h-3.5 w-3.5" />
+                <span>{item.label}</span>
+                {item.badge ? (
+                  <span className="ml-0.5 min-w-[16px] h-[16px] px-1 inline-flex items-center justify-center rounded-full text-[9px] font-bold text-white bg-amber-500">
                     {item.badge}
                   </span>
                 ) : null}
