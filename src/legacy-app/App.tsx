@@ -1758,51 +1758,7 @@ export default function App() {
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       </header>
 
-      {/* 3D FILAMENT STOCK-MARKET LIVE TICKER TAPE */}
-      <div 
-        onClick={() => setCurrentTab(4)}
-        className="w-full bg-[#080b09]/95 border-b border-[#1c2420]/80 h-7 md:h-8 flex items-center overflow-hidden cursor-pointer select-none group relative z-40 shadow-inner"
-        title="Painel de Commodities de Filamento • Clique para acessar a Tab de Custos e Cotações"
-      >
-        <div className="flex-1 overflow-hidden relative">
-          <div className="animate-ticker flex items-center gap-10 pl-6">
-            {tickerQuotes.map((item, index) => (
-              <span key={index} className="inline-flex items-center gap-2 text-[10px] sm:text-[10.5px] font-mono tracking-wide font-black shrink-0">
-                <span className="text-zinc-400 font-sans">{item.label}</span>
-                <span className="text-zinc-200">{item.price}</span>
-                <span className={`inline-flex items-center gap-0.5 ${
-                  item.up === true 
-                    ? 'text-emerald-400' 
-                    : item.up === false 
-                      ? 'text-red-400' 
-                      : 'text-zinc-500'
-                }`}>
-                  {item.up === true ? '▲' : item.up === false ? '▼' : '◀▶'} {item.change}
-                </span>
-                <span className="text-zinc-700 font-black font-sans ml-4 select-none">•</span>
-              </span>
-            ))}
-            {/* Duplicate set for infinite loop */}
-            {tickerQuotes.map((item, index) => (
-              <span key={`dup-${index}`} className="inline-flex items-center gap-2 text-[10px] sm:text-[10.5px] font-mono tracking-wide font-black shrink-0">
-                <span className="text-zinc-400 font-sans">{item.label}</span>
-                <span className="text-zinc-200">{item.price}</span>
-                <span className={`inline-flex items-center gap-0.5 ${
-                  item.up === true 
-                    ? 'text-emerald-400' 
-                    : item.up === false 
-                      ? 'text-red-400' 
-                      : 'text-zinc-500'
-                }`}>
-                  {item.up === true ? '▲' : item.up === false ? '▼' : '◀▶'} {item.change}
-                </span>
-                <span className="text-zinc-700 font-black font-sans ml-4 select-none">•</span>
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-
+      {/* Filament ticker removido a pedido */}
 
       </>
 
