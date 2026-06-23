@@ -16,8 +16,8 @@ const chip = "inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] 
 const isBlockedGoogleUrl = (value?: string) => {
   if (!value || !value.trim()) return true;
   try {
-    const host = new URL(value).hostname.replace(/^www\./, '').toLowerCase();
-    return host === 'google.com' || host.endsWith('.google.com') || host === 'googleadservices.com' || host.endsWith('.googleadservices.com');
+    new URL(value);
+    return false;
   } catch {
     return true;
   }
