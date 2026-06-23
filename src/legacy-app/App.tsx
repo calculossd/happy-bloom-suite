@@ -1966,19 +1966,6 @@ export default function App() {
                 Produção
               </div>
             </div>
-            <ProductionTab
-              orders={orders}
-              printers={printers}
-              filamentStocks={filamentStocks}
-              clients={clients}
-              onAddOrder={handleAddOrder}
-              onUpdateOrder={handleUpdateOrder}
-              onDeleteOrder={handleDeleteOrder}
-              onSimulateTick={handleSimulateTick}
-              onUpdateFilament={handleUpdateFilamentStock}
-              onUpdatePrinter={handleUpdatePrinter}
-              viewMode="full"
-            />
             <ClientsTab
               clients={clients}
               printers={printers}
@@ -1991,6 +1978,20 @@ export default function App() {
               onDeletePrinter={handleDeletePrinter}
               onAddOrder={handleAddOrder}
               viewMode="printers"
+            />
+            <ProductionTab
+              orders={orders}
+              printers={printers}
+              filamentStocks={filamentStocks}
+              clients={clients}
+              onAddOrder={handleAddOrder}
+              onAddClient={handleAddClient}
+              onUpdateOrder={handleUpdateOrder}
+              onDeleteOrder={handleDeleteOrder}
+              onSimulateTick={handleSimulateTick}
+              onUpdateFilament={handleUpdateFilamentStock}
+              onUpdatePrinter={handleUpdatePrinter}
+              viewMode="full"
             />
           </>
         )}
@@ -2023,6 +2024,7 @@ export default function App() {
               filamentStocks={filamentStocks}
               clients={clients}
               onAddOrder={handleAddOrder}
+              onAddClient={handleAddClient}
               onUpdateOrder={handleUpdateOrder}
               onDeleteOrder={handleDeleteOrder}
               onSimulateTick={handleSimulateTick}
