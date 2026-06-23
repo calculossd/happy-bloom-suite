@@ -29,14 +29,8 @@ function isBlockedGoogleUrl(value: string | null | undefined): boolean {
 }
 
 function merchantSearchUrl(storeName: string, productName: string): string {
-  const store = String(storeName || "").toLowerCase();
   const query = encodeURIComponent(productName || "filamento impressora 3d");
-  if (store.includes("amazon")) return `https://www.amazon.com.br/s?k=${query}`;
-  if (store.includes("shopee")) return `https://shopee.com.br/search?keyword=${query}`;
-  if (store.includes("voolt")) return `https://voolt3d.com.br/busca?q=${query}`;
-  if (store.includes("3d fila") || store.includes("3dfila")) return `https://3dfila.com.br/?s=${query}&post_type=product`;
-  if (store.includes("3d lab") || store.includes("3dlab")) return `https://3dlab.com.br/?s=${query}&post_type=product`;
-  return `https://lista.mercadolivre.com.br/${query}`;
+  return `https://www.google.com/search?tbm=shop&q=${query}`;
 }
 
 async function fetchShopping(query: string, apiKey: string) {

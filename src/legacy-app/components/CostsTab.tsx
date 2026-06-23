@@ -102,14 +102,8 @@ const isBlockedGoogleUrl = (value?: string) => {
 const getSafeOfferUrl = (offer: any, fallbackQuery: string) => {
   if (!isBlockedGoogleUrl(offer?.buyUrl)) return offer.buyUrl;
   const productName = String(offer?.productName || fallbackQuery || 'filamento impressora 3d');
-  const storeName = String(offer?.storeName || '').toLowerCase();
   const query = encodeURIComponent(productName);
-  if (storeName.includes('amazon')) return `https://www.amazon.com.br/s?k=${query}`;
-  if (storeName.includes('shopee')) return `https://shopee.com.br/search?keyword=${query}`;
-  if (storeName.includes('voolt')) return `https://voolt3d.com.br/busca?q=${query}`;
-  if (storeName.includes('3d fila') || storeName.includes('3dfila')) return `https://3dfila.com.br/?s=${query}&post_type=product`;
-  if (storeName.includes('3d lab') || storeName.includes('3dlab')) return `https://3dlab.com.br/?s=${query}&post_type=product`;
-  return `https://lista.mercadolivre.com.br/${query}`;
+  return `https://www.google.com/search?tbm=shop&q=${query}`;
 };
 
 interface CostsTabProps {

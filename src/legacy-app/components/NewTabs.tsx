@@ -26,12 +26,8 @@ const isBlockedGoogleUrl = (value?: string) => {
 const getSafeOfferUrl = (offer: any, fallbackQuery: string) => {
   if (!isBlockedGoogleUrl(offer?.buyUrl)) return offer.buyUrl;
   const productName = String(offer?.productName || fallbackQuery || 'produto');
-  const storeName = String(offer?.storeName || '').toLowerCase();
   const query = encodeURIComponent(productName);
-  if (storeName.includes('amazon')) return `https://www.amazon.com.br/s?k=${query}`;
-  if (storeName.includes('shopee')) return `https://shopee.com.br/search?keyword=${query}`;
-  if (storeName.includes('voolt')) return `https://voolt3d.com.br/busca?q=${query}`;
-  return `https://lista.mercadolivre.com.br/${query}`;
+  return `https://www.google.com/search?tbm=shop&q=${query}`;
 };
 
 /* =================== PESQUISA DE PREÇOS =================== */
