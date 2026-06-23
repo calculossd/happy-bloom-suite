@@ -1503,8 +1503,8 @@ export default function App() {
           const active = currentTab === item.id;
           // "Painel" até "Gestão" (ids 0,1,6,2,3,4) ganham uma cor distinta (cyan)
           const isCoreGroup = [0, 1, 6, 2, 3, 4].includes(item.id);
-          const activeColor = isCoreGroup ? '#22D3EE' : '#A5D84B';
-          const inactiveColor = isCoreGroup ? 'text-cyan-300/70' : 'text-zinc-400';
+          const activeColor = isCoreGroup ? '#F5C842' : '#A5D84B';
+          const inactiveColor = isCoreGroup ? 'text-amber-300/70' : 'text-zinc-400';
           return (
             <button
               key={item.id}
