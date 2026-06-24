@@ -1878,16 +1878,13 @@ export default function App() {
             <div
               className={`relative overflow-hidden flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 p-5 rounded-2xl ${
                 [1,2,3,4,6].includes(currentTab)
-                  ? 'border border-[#b7ff00]/15 bg-gradient-to-br from-[#1a1f0a]/60 via-[#11160c]/70 to-[#0b0f0a]/80 backdrop-blur-xl shadow-[0_24px_60px_-30px_rgba(183,255,0,0.35)]'
+                  ? 'border border-[#b7ff00]/25 bg-gradient-to-br from-[#172014] via-[#11170F] to-[#0B0F0A] shadow-[0_24px_60px_-30px_rgba(183,255,0,0.35)]'
                   : ''
               }`}
               id="view-page-header"
             >
               {[1,2,3,4,6].includes(currentTab) && (
-                <>
-                  <div aria-hidden className="pointer-events-none absolute -top-24 -left-16 h-56 w-56 rounded-full bg-[#b7ff00]/20 blur-3xl opacity-70" />
-                  <div aria-hidden className="pointer-events-none absolute -bottom-24 -right-16 h-56 w-56 rounded-full bg-amber-400/10 blur-3xl opacity-60" />
-                </>
+                <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-[#b7ff00]/10 blur-3xl opacity-70" />
               )}
               <div className="relative z-10 space-y-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
