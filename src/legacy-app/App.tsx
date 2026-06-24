@@ -93,6 +93,7 @@ import {
   BookOpen,
   TrendingUp,
   Radar,
+  Download,
   Printer as PrinterNavIcon
 } from 'lucide-react';
 
