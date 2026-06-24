@@ -1247,15 +1247,10 @@ export function Print3DPanel({
 
           {/* Row 2: Mapa | Impressão ao Vivo | Pedidos | Higrômetros */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-            <Card>
-              <h3 className="text-[14px] font-semibold text-white">Em breve</h3>
-              <p className="text-[11px] text-white/45 mb-2">Espaço reservado para um novo widget</p>
-              <div className="flex items-center justify-center h-[220px] rounded-lg border border-dashed border-white/10 text-white/30 text-[11px]">
-                Reservado
-              </div>
-            </Card>
             <LivePrinters printers={printers} orders={orders} onSelectTab={onSelectTab} />
-            <OrdersList orders={orders} clients={clients} onSelectTab={onSelectTab} />
+            <div className="md:col-span-2 xl:col-span-2">
+              <OrdersList orders={orders} clients={clients} onSelectTab={onSelectTab} />
+            </div>
             <StockOverview filaments={filamentStocks} onSelectTab={onSelectTab} />
           </div>
 
