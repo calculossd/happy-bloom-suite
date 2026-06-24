@@ -584,6 +584,7 @@ export const CostsTab: React.FC<CostsTabProps> = ({
 
   const handleEditCatalogProduct = (item: CatalogItem) => {
     setEditingProduct(item);
+    setActiveSubTab('STOCK');
     setManualProdName(item.name);
     setManualProdCode(item.productCode || '');
     setManualProdMaterial(item.filamentType || 'PLA');
