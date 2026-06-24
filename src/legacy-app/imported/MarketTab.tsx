@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Store, RefreshCw, ExternalLink, Download, Heart, ImageOff, Lightbulb, Check, Search, X } from "lucide-react";
+import { RefreshCw, ExternalLink, Download, Heart, ImageOff, Lightbulb, Check, Search, X } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
 import {
