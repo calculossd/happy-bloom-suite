@@ -729,6 +729,89 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
 
       {/* Orders List matching the state */}
       <div className="space-y-4">
+        {/* Fila de Impressão - Lista Ordenada */}
+        {(() => {
+          const queueList = orders
+            .filter(o => o.status === 'QUEUE' || o.status === 'PRINTING' || o.status === 'WAITING')
+            .sort((a, b) => {
+              // Printing first, then by createdAt ascending (oldest = next)
+              const rank = (s: string) => s === 'PRINTING' ? 0 : s === 'QUEUE' ? 1 : 2;
+              const r = rank(a.status) - rank(b.status);
+              return r !== 0 ? r : a.createdAt - b.createdAt;
+            });
+          if (queueList.length === 0) return null;
+          return (
+            <div className="rounded-xl border border-[#232B27] bg-gradient-to-br from-[#0F1411] via-[#0C0E0D] to-[#0A0C0B] overflow-hidden">
+              <div className="px-4 py-3 border-b border-[#232B27] flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <ClipboardList className="w-4 h-4 text-[#95BBA2]" />
+                  <h3 className="text-sm font-bold text-white tracking-wide">Fila de Impressão</h3>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#1a221e] text-[#8BA58D] font-mono">
+                    {queueList.length} {queueList.length === 1 ? 'item' : 'itens'}
+                  </span>
+                </div>
+                <span className="text-[10px] text-[#6B7A72] uppercase tracking-wider">Ordem de execução</span>
+              </div>
+              <ul className="divide-y divide-[#1a221e]">
+                {queueList.map((order, idx) => {
+                  const delayCat = getDelayCategory(order.createdAt, order.status);
+                  const elapsedMs = Date.now() - order.createdAt;
+                  const elapsedHrs = Math.floor(elapsedMs / 3600000);
+                  const elapsedMin = Math.floor((elapsedMs % 3600000) / 60000);
+                  const elapsedStr = elapsedHrs > 0 ? `${elapsedHrs}h ${elapsedMin}m` : `${elapsedMin}m`;
+                  const deadlineMs = order.deadline ? order.deadline - Date.now() : 0;
+                  const deadlinePassed = order.deadline && deadlineMs < 0;
+                  const deadlineHrs = Math.floor(Math.abs(deadlineMs) / 3600000);
+                  const isPrinting = order.status === 'PRINTING';
+                  return (
+                    <li
+                      key={order.id}
+                      className={`flex items-center gap-3 px-4 py-2.5 hover:bg-white/[0.02] transition-colors ${isPrinting ? 'bg-emerald-500/5' : ''}`}
+                    >
+                      <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold font-mono ${
+                        isPrinting ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-[#1a221e] text-[#8BA58D] border border-[#232B27]'
+                      }`}>
+                        {isPrinting ? '▶' : idx + 1}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-semibold text-white truncate">{order.itemName}</span>
+                          <span className="text-[10px] px-1.5 py-0.5 rounded font-mono" style={{ background: `${getStatusColor(order.status)}22`, color: getStatusColor(order.status) }}>
+                            {getStatusLabel(order.status)}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-3 text-[11px] text-[#8BA58D] mt-0.5">
+                          <span className="truncate">{order.clientName}</span>
+                          <span className="text-[#3a4640]">•</span>
+                          <span>{order.filamentType} {order.filamentColor}</span>
+                          <span className="text-[#3a4640]">•</span>
+                          <span>{order.weightGrams}g</span>
+                          <span className="text-[#3a4640]">•</span>
+                          <span>~{order.printTimeHours}h impressão</span>
+                        </div>
+                      </div>
+                      <div className="hidden sm:flex flex-col items-end gap-0.5 min-w-[120px]">
+                        <div className={`flex items-center gap-1 text-[11px] font-semibold ${delayCat.textClass || 'text-emerald-400'}`}>
+                          <Clock className="w-3 h-3" />
+                          <span>{elapsedStr} na fila</span>
+                        </div>
+                        {order.deadline && (
+                          <span className={`text-[10px] font-mono ${deadlinePassed ? 'text-red-400' : 'text-[#6B7A72]'}`}>
+                            {deadlinePassed ? `Atrasado ${deadlineHrs}h` : `Prazo em ${deadlineHrs}h`}
+                          </span>
+                        )}
+                      </div>
+                      <div className={`flex-shrink-0 px-2 py-1 rounded text-[10px] font-bold border ${delayCat.border} ${delayCat.bg} ${delayCat.textClass || 'text-emerald-400'}`}>
+                        {delayCat.level === 'CRITICAL' ? '🚨' : delayCat.level === 'ORANGE' ? '⚠️' : delayCat.level === 'YELLOW' ? '⏳' : '✓'}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          );
+        })()}
+
         {filteredOrders.length === 0 ? (
           <div className="bg-[#151917] border border-[#232B27] rounded-xl p-12 text-center text-[#8BA58D]">
             <AlertCircle className="w-12 h-12 text-[#8BA58D]/40 mx-auto mb-3" />
