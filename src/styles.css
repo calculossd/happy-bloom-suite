@@ -968,7 +968,9 @@ input, select, textarea {
 
 html[data-costs-subtab="CATALOG"] [data-tab-category="estoque"] #view-page-header,
 html[data-costs-subtab="AI"] [data-tab-category="estoque"] #view-page-header,
-html[data-costs-subtab="SHOP"] [data-tab-category="estoque"] #view-page-header {
+html[data-costs-subtab="SHOP"] [data-tab-category="estoque"] #view-page-header,
+html[data-costs-subtab="QUOTE"] [data-tab-category="estoque"] #view-page-header,
+html[data-costs-subtab="CALC"] [data-tab-category="estoque"] #view-page-header {
   display: none !important;
 }
 

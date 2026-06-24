@@ -1937,7 +1937,10 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       {/* SUBTAB 1: PRODUCT PRICE PRECISION CALCULATOR */}
       {activeSubTab === 'CALC' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-fade-in" id="precificator-active-panel">
-          <div className="lg:col-span-12 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm">
+          <div
+            className="lg:col-span-12 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm"
+            style={{ '--tab-accent': '16, 185, 129' } as React.CSSProperties}
+          >
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Calculadora</div>
@@ -4094,7 +4097,10 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       {activeSubTab === 'QUOTE' && (
         <div className="space-y-3 animate-fade-in" id="quotations-view-container">
           {/* Standardized subtab header */}
-          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm">
+          <div
+            className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm"
+            style={{ '--tab-accent': '16, 185, 129' } as React.CSSProperties}
+          >
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Cotação</div>
