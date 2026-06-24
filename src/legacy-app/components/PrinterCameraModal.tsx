@@ -3,6 +3,22 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Camera, Video, Lightbulb, Zap, AlertTriangle, Eye, RefreshCw, X, Play, Pause, Settings, HelpCircle, Download, Check } from 'lucide-react';
 import { Printer } from '../types';
 
+const getPrinterLogo = (model: string = '', customUrl?: string) => {
+  if (customUrl && customUrl.trim()) return customUrl.trim();
+  const m = model.toLowerCase();
+  if (m.includes('bambu') || m.includes('p1') || m.includes('x1') || m.includes('a1'))
+    return 'https://images.unsplash.com/photo-1701073837941-f76a5bf98505?auto=format&fit=crop&w=200&q=80';
+  if (m.includes('k1') || m.includes('creality') || m.includes('ender') || m.includes('v3') || m.includes('sermoon'))
+    return 'https://images.unsplash.com/photo-1615811361523-6bd03d7748e7?auto=format&fit=crop&w=200&q=80';
+  if (m.includes('prusa') || m.includes('mk3') || m.includes('mk4') || m.includes('mini'))
+    return 'https://images.unsplash.com/photo-1544993130-9df2492f2549?auto=format&fit=crop&w=200&q=80';
+  if (m.includes('resina') || m.includes('resin') || m.includes('sla') || m.includes('elegoo') || m.includes('photon') || m.includes('halot'))
+    return 'https://images.unsplash.com/photo-1614853316476-de00d14cb1fc?auto=format&fit=crop&w=200&q=80';
+  if (m.includes('artillery') || m.includes('genius') || m.includes('sidewinder'))
+    return 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=200&q=80';
+  return 'https://images.unsplash.com/photo-1563206767-5b18f218e8de?auto=format&fit=crop&w=200&q=80';
+};
+
 interface PrinterCameraModalProps {
   printer: Printer;
   onClose: () => void;
