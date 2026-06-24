@@ -1751,6 +1751,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                 const trimmedGemini = (localGeminiKey || '').trim();
                 const trimmedGroq = (localGroqKey || '').trim();
                 const trimmedSerp = (localSerpKey || '').trim();
+                const trimmedSerp2 = (localSerpKey2 || '').trim();
                 const trimmedTavily = (localTavilyKey || '').trim();
                 const trimmedJina = (localJinaKey || '').trim();
                 
@@ -1775,16 +1776,25 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                     return;
                   }
                 }
+                if (trimmedSerp2) {
+                  const check = validateApiKeyFormat(trimmedSerp2);
+                  if (!check.isValid) {
+                    showError("Chave SerpApi (fallback): " + (check.reason || 'inválida!'));
+                    return;
+                  }
+                }
 
                 setLocalGeminiKey(trimmedGemini);
                 setLocalGroqKey(trimmedGroq);
                 setLocalSerpKey(trimmedSerp);
+                setLocalSerpKey2(trimmedSerp2);
                 setLocalTavilyKey(trimmedTavily);
                 setLocalJinaKey(trimmedJina);
                 
                 safeStorage.setItem('bambuzau_custom_gemini_key', trimmedGemini);
                 safeStorage.setItem('bambuzau_custom_groq_key', trimmedGroq);
                 safeStorage.setItem('bambuzau_custom_serp_key', trimmedSerp);
+                safeStorage.setItem('bambuzau_custom_serp_key_2', trimmedSerp2);
                 safeStorage.setItem('bambuzau_custom_tavily_key', trimmedTavily);
                 safeStorage.setItem('bambuzau_custom_jina_key', trimmedJina);
                 
