@@ -561,6 +561,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
     geminiKey: localGeminiKey, setGeminiKey: setLocalGeminiKey,
     groqKey: localGroqKey, setGroqKey: setLocalGroqKey,
     serpKey: localSerpKey, setSerpKey: setLocalSerpKey,
+    serpKey2: localSerpKey2, setSerpKey2: setLocalSerpKey2,
     tavilyKey: localTavilyKey, setTavilyKey: setLocalTavilyKey,
     jinaKey: localJinaKey, setJinaKey: setLocalJinaKey,
   } = useCustomKeys();
