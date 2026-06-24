@@ -3525,6 +3525,27 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                       <div className="text-[10px] text-[#8BA58D] font-mono">
                         Qtd Disponível: <strong className={low ? 'text-red-400 font-bold' : 'text-white'}>{sup.stockCount} un</strong> (Custo Unit.: R$ {sup.unitCost.toFixed(2)})
                       </div>
+                      <div className="text-[10px] text-[#8BA58D] font-mono">
+                        Estoque crítico:{' '}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const input = window.prompt(`Estoque crítico (un) para ${sup.name}:`, String(sup.minStockCount));
+                            if (input === null) return;
+                            const next = parseInt(input, 10);
+                            if (Number.isNaN(next) || next < 0) {
+                              alert('Informe um número válido (>= 0).');
+                              return;
+                            }
+                            setSuppliesStocks(prev => prev.map(s => s.id === sup.id ? { ...s, minStockCount: next } : s));
+                            triggerFeedback('Estoque crítico atualizado!');
+                          }}
+                          className="text-white hover:text-[#b7ff00] underline decoration-dotted cursor-pointer"
+                          title="Clique para editar o estoque crítico"
+                        >
+                          {sup.minStockCount} un
+                        </button>
+                      </div>
                     </div>
 
                     <div className="flex items-center gap-1">
