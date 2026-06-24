@@ -279,16 +279,28 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
       createdAt: o.createdAt || Date.now(),
     }));
 
-  const visibleOrders = [...ordersStream, ...balcaoOrders].filter(order => {
+  const visibleOrders = [...ordersStream].filter(order => {
     const dismissRecord = dismissedOrders.find(d => d.id === order.id);
     if (dismissRecord) {
       const timeSinceDismiss = Date.now() - dismissRecord.dismissedAt;
       const oneHourMs = 60 * 60 * 1000;
       if (timeSinceDismiss < oneHourMs) {
-        return false; // Hidden (dismissed less than an hour ago)
+        return false;
       }
     }
-    return true; // Visible
+    return true;
+  });
+
+  const visibleBalcaoOrders = balcaoOrders.filter(order => {
+    const dismissRecord = dismissedOrders.find(d => d.id === order.id);
+    if (dismissRecord) {
+      const timeSinceDismiss = Date.now() - dismissRecord.dismissedAt;
+      const oneHourMs = 60 * 60 * 1000;
+      if (timeSinceDismiss < oneHourMs) {
+        return false;
+      }
+    }
+    return true;
   });
 
   const toggleConnection = (platformName: string) => {
