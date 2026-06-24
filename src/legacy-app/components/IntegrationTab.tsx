@@ -441,6 +441,7 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
             ) : (
               [...visibleOrders].sort((a, b) => a.createdAt - b.createdAt).map((order) => {
                 const isItemImported = order.isImported || importedExternalIds.includes(order.id);
+                const isBalcao = order.platform === 'BALCAO';
                 
                 // Calculate simulated purchase time and elapsed time
                 const orderTime = order.createdAt || (Date.now() - 3.5 * 3600 * 1000);
@@ -482,7 +483,9 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
                   <div 
                     key={order.id} 
                     className={`p-4 border rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-4 transition ${
-                      isItemImported 
+                      isBalcao
+                        ? 'bg-gradient-to-br from-emerald-950/40 via-[#0F1411] to-[#0C0E0D] border-emerald-500/40 shadow-[0_0_18px_rgba(16,185,129,0.12)] hover:border-emerald-400/60'
+                        : isItemImported 
                         ? 'bg-[var(--brand-bg)] border-[var(--brand-border)]/45 opacity-70 text-[var(--brand-muted)] shadow-inner' 
                         : borderHighlight 
                         ? `bg-[#131715] ${borderHighlight}`
@@ -544,7 +547,12 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
                         </span>
                       </div>
 
-                      {isItemImported ? (
+                      {isBalcao ? (
+                        <span className="text-[10px] text-emerald-300 font-bold flex items-center gap-1 bg-emerald-500/15 border border-emerald-500/40 px-2 py-1 rounded">
+                          <CheckCircle className="h-3.5 w-3.5" />
+                          Balcão
+                        </span>
+                      ) : isItemImported ? (
                         <span className="text-[10px] text-[var(--brand-primary)] font-semibold flex items-center gap-1 bg-[var(--brand-primary)]/5 border border-[var(--brand-primary)]/10 px-2 py-1 rounded">
                           <CheckCircle className="h-3.5 w-3.5" />
                           Importado
