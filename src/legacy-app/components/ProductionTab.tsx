@@ -426,13 +426,15 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
         });
         onUpdatePrinter(defaultPrinter.id, { status: 'PRINTING', printProgress: 5 });
       } else {
-        // No idle printer — still move the order to PRINTING so it shows in "Fila Imprimindo".
-        // User can pick a printer afterwards via the quick allocation modal.
+        // Sem impressora ociosa: a fila de produção manda. Atribui a primeira impressora
+        // existente (se houver) e segue para PRINTING — sem modal de alocação.
+        const fallbackPrinter = printers[0];
         onUpdateOrder(order.id, {
           status: 'PRINTING',
+          assignedPrinterId: fallbackPrinter ? fallbackPrinter.id : null,
+          printerName: fallbackPrinter ? fallbackPrinter.name : '',
           printingProgress: 0.05,
         });
-        setQuickPrintOrder(order);
       }
     } else {
       onUpdateOrder(order.id, {
