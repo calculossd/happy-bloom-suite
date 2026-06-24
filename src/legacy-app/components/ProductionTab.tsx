@@ -347,6 +347,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
     setDeadlineDays(daysLeft);
     setFormPaymentMethod(order.paymentMethod || 'DINHEIRO');
     setFormPaymentStatus(order.paymentStatus || 'PENDENTE');
+    setFormImageUrl((order as any).imageUrl || '');
     
     // Set creation time for input datetime-local
     const tzoffset = (new Date(order.createdAt)).getTimezoneOffset() * 60000;
