@@ -2987,6 +2987,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
             clientId: client.id,
             clientName: client.name,
             itemName: orderItemName.trim(),
+            imageUrl: orderItemImage || undefined,
             quantity: orderQuantity,
             filamentType: orderFilamentType,
             filamentColor: orderFilamentColor,
@@ -3001,6 +3002,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
           });
 
           setOrderItemName('');
+          setOrderItemImage('');
           setOrderQuantity(1);
           alert(`Pedido de "${orderItemName}" registrado e adicionado com sucesso para a fila de produção da Gestão 3D! 🚀✨`);
         };
