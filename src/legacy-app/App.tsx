@@ -1268,8 +1268,8 @@ export default function App() {
         };
       case 4:
         return {
-          title: "",
-          subtitle: "",
+          title: "Estoque & Custos",
+          subtitle: "Gestão de filamentos, auditoria e custos operacionais",
         };
       case 5:
         return {
@@ -1278,8 +1278,8 @@ export default function App() {
         };
       case 6:
         return {
-          title: "",
-          subtitle: "",
+          title: "Histórico",
+          subtitle: "Vendas concluídas, métricas e relatórios de pedidos entregues",
         };
       case 7:  return { title: "Pesquisa de Preços", subtitle: "Compare preços entre marketplaces e fornecedores" };
       case 8:  return { title: "Stls",        subtitle: "Biblioteca de produtos com material, tempo e preço" };
