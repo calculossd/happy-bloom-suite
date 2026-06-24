@@ -356,6 +356,12 @@ export function safeGetLocalStorageItem(key: string, defaultValue: string = ''):
 export default function App() {
   const [currentTab, setCurrentTab] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [costsSubTab, setCostsSubTab] = useState<string>('STOCK');
+  useEffect(() => {
+    const h = (e: any) => { if (typeof e?.detail === 'string') setCostsSubTab(e.detail); };
+    window.addEventListener('costs_subtab_changed', h as EventListener);
+    return () => window.removeEventListener('costs_subtab_changed', h as EventListener);
+  }, []);
   const [showAddPrinterFormTab16, setShowAddPrinterFormTab16] = useState(false);
 
   // Open the Costs tab (id=4) jumping to a specific internal sub-tab.
@@ -1915,7 +1921,7 @@ export default function App() {
                   Exportar Relatório
                 </button>
               )}
-              {currentTab === 4 && (
+              {currentTab === 4 && costsSubTab !== 'CATALOG' && costsSubTab !== 'AI' && (
                 <button
                   onClick={() => window.dispatchEvent(new CustomEvent('open-new-product'))}
                   className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#b7ff00]/30 bg-[#b7ff00]/15 px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#b7ff00] transition hover:bg-[#b7ff00]/25 hover:border-[#b7ff00]/50 shrink-0"
