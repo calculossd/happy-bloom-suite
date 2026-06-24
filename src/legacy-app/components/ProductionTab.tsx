@@ -1048,7 +1048,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                     Fila vazia
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2.5 md:gap-3 [&_.unique-card]:p-2 [&_.unique-card]:md:p-2.5 [&_.unique-card]:space-y-2 [&_.unique-card]:text-[11px] [&_.unique-card]:rounded-xl">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2.5 md:gap-3 [&_.unique-card]:!p-2 [&_.unique-card]:!space-y-1 [&_.unique-card]:text-[11px] [&_.unique-card]:rounded-xl [&_.unique-card]:leading-tight [&_.unique-card_*]:!leading-tight [&_.unique-card_.space-y-1]:!space-y-0.5 [&_.unique-card_.space-y-2]:!space-y-1 [&_.unique-card_.space-y-3]:!space-y-1 [&_.unique-card_.space-y-4]:!space-y-1.5 [&_.unique-card_.py-2]:!py-1 [&_.unique-card_.py-3]:!py-1 [&_.unique-card_.p-3]:!p-1.5 [&_.unique-card_.p-4]:!p-2 [&_.unique-card_.mt-2]:!mt-1 [&_.unique-card_.mt-3]:!mt-1 [&_.unique-card_.gap-2]:!gap-1 [&_.unique-card_.gap-3]:!gap-1.5">
                     {q.list.map(renderOrderCard)}
                   </div>
                 )}
