@@ -1278,8 +1278,8 @@ export default function App() {
         };
       case 6:
         return {
-          title: "Histórico",
-          subtitle: "Vendas concluídas, métricas e relatórios de pedidos entregues",
+          title: "Histórico de Vendas",
+          subtitle: "Ordens de produção entregues e faturadas com sucesso",
         };
       case 7:  return { title: "Pesquisa de Preços", subtitle: "Compare preços entre marketplaces e fornecedores" };
       case 8:  return { title: "Stls",        subtitle: "Biblioteca de produtos com material, tempo e preço" };
