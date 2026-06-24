@@ -309,6 +309,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
     setDeadlineDays(2);
     setFormPaymentMethod('DINHEIRO');
     setFormPaymentStatus('PENDENTE');
+    setFormImageUrl('');
     
     // Set current local time for input datetime-local
     const tzoffset = (new Date()).getTimezoneOffset() * 60000;
