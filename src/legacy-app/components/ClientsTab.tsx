@@ -578,42 +578,66 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
             </form>
           )}
 
-          <div className="grid grid-cols-3 sm:grid-cols-4 gap-2.5" id="printers-checklist-list">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3" id="printers-checklist-list">
             {printers.map((printer) => {
               const isPrinting = printer.status === 'PRINTING' || (printer.isOnline && (printer.printProgress || 0) > 0);
               const imageUrl = getPrinterImage(printer.model, printer.customUrl);
+              const daysSinceWeekly = Math.floor((Date.now() - (printer.lastWeeklyMaintenance || 0)) / (1000 * 3600 * 24));
+              const daysSinceMonthly = Math.floor((Date.now() - (printer.lastMonthlyMaintenance || 0)) / (1000 * 3600 * 24));
+              const wChecks = [0,1,2].filter(i => localStorage.getItem(`bambuzau_p_${printer.id}_chk_w_${i}`) === 'true').length;
+              const mChecks = [0,1,2].filter(i => localStorage.getItem(`bambuzau_p_${printer.id}_chk_m_${i}`) === 'true').length;
+              const weeklyOk = daysSinceWeekly < 7 && wChecks === 3;
+              const monthlyOk = daysSinceMonthly < 30 && mChecks === 3;
+              void checklistTrigger;
 
               return (
-                <div 
-                  key={printer.id} 
+                <div
+                  key={printer.id}
                   onClick={() => {
                     setSelectedPrinterDetails(printer);
                     setPIpAddress(printer.ipAddress || '');
                   }}
-                  className={`group relative aspect-square rounded-xl overflow-hidden cursor-pointer select-none transition-all duration-300 border-2 hover:scale-98 ${
-                    isPrinting 
-                      ? 'border-emerald-500 animate-pulse shadow-[0_0_12px_rgba(16,185,129,0.7)]' 
-                      : 'border-red-600'
+                  className={`group relative flex gap-3 p-2.5 rounded-xl overflow-hidden cursor-pointer select-none transition-all duration-300 border-2 hover:scale-[0.99] bg-[#0A0D0B] ${
+                    isPrinting
+                      ? 'border-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.5)]'
+                      : 'border-red-600/70'
                   }`}
                   id={`printer_grid_card_${printer.id}`}
                 >
-                  <img 
-                    src={imageUrl} 
-                    alt={printer.name} 
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    referrerPolicy="no-referrer"
-                  />
-                  
-                  {/* Glass indicator overlay for monitoring status */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent flex flex-col justify-end p-2 sm:p-2.5">
-                    <span className="text-[9px] sm:text-[11px] font-black text-[#F1F4EE] truncate leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                      {printer.name}
-                    </span>
-                    
-                    <div className="flex items-center gap-1.5 mt-0.5 sm:mt-1">
-                      <span className={`w-1.5 h-1.5 rounded-full ${isPrinting ? 'bg-emerald-400 animate-ping' : 'bg-red-500'}`} />
-                      <span className="text-[7.5px] sm:text-[9.5px] font-mono text-zinc-300 truncate font-semibold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                        {isPrinting ? `${printer.printProgress || 0}% ativo` : 'Inativo'}
+                  <div className="relative w-20 h-20 rounded-lg overflow-hidden shrink-0 bg-black/40">
+                    <img
+                      src={imageUrl}
+                      alt={printer.name}
+                      className="w-full h-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+
+                  <div className="flex-1 min-w-0 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className={`w-1.5 h-1.5 rounded-full ${isPrinting ? 'bg-emerald-400 animate-pulse' : 'bg-red-500'}`} />
+                        <span className="text-xs font-black text-[#F1F4EE] truncate">{printer.name}</span>
+                      </div>
+                      <span className="text-[9px] font-mono text-zinc-400 truncate block mt-0.5">
+                        {isPrinting ? `${printer.printProgress || 0}% ativo` : 'Inativo'} • {printer.model}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-wrap gap-1.5 mt-1.5">
+                      <span className={`text-[8.5px] px-1.5 py-0.5 rounded font-black border ${
+                        weeklyOk
+                          ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/25'
+                          : 'bg-red-500/10 text-red-400 border-red-500/25'
+                      }`}>
+                        SEM {wChecks}/3 • {daysSinceWeekly}d {weeklyOk ? '✓' : '⚠'}
+                      </span>
+                      <span className={`text-[8.5px] px-1.5 py-0.5 rounded font-black border ${
+                        monthlyOk
+                          ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/25'
+                          : 'bg-red-500/10 text-red-400 border-red-500/25'
+                      }`}>
+                        MES {mChecks}/3 • {daysSinceMonthly}d {monthlyOk ? '✓' : '⚠'}
                       </span>
                     </div>
                   </div>
