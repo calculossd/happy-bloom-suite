@@ -51,6 +51,8 @@ interface ClientsTabProps {
   onDeletePrinter: (id: number) => void;
   onAddOrder: (order: Partial<PrintOrder>) => void;
   viewMode?: 'full' | 'clients' | 'printers' | 'prospect';
+  showAddPrinterForm?: boolean;
+  onToggleAddPrinterForm?: () => void;
 }
 
 export const ClientsTab: React.FC<ClientsTabProps> = ({
@@ -64,7 +66,9 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
   onAddPrinter,
   onDeletePrinter,
   onAddOrder,
-  viewMode = 'full'
+  viewMode = 'full',
+  showAddPrinterForm: showAddPrinterFormProp,
+  onToggleAddPrinterForm,
 }) => {
   const [showClientForm, setShowClientForm] = useState(false);
   const [editingClientId, setEditingClientId] = useState<number | null>(null);
@@ -129,7 +133,12 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
   };
 
   // Sincronização Online e Cadastro de Impressora
-  const [showAddPrinterForm, setShowAddPrinterForm] = useState(false);
+  const [showAddPrinterFormInternal, setShowAddPrinterFormInternal] = useState(false);
+  const showAddPrinterForm = showAddPrinterFormProp ?? showAddPrinterFormInternal;
+  const setShowAddPrinterForm = (next: boolean) => {
+    if (onToggleAddPrinterForm) onToggleAddPrinterForm();
+    else setShowAddPrinterFormInternal(next);
+  };
   const [newPrinterName, setNewPrinterName] = useState('');
   const [newPrinterModel, setNewPrinterModel] = useState('');
   const [newPrinterIp, setNewPrinterIp] = useState('');
