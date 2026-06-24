@@ -764,61 +764,24 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
         );
       })()}
 
-      {/* Filter and search row */}
-      <div className="space-y-3">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-          <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans leading-none">
-            <span className="w-2 h-2 rounded-full bg-[#b7ff00] animate-pulse inline-block shadow-[0_0_10px_#b7ff00]" />
-            <span>Filtrar Produção</span>
-          </div>
-          
-          <input
-            type="text"
-            placeholder="Buscar por peça, cliente..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full sm:w-64 px-3 py-1 bg-[#151917] border border-[#232B27] text-xs text-[#F1F4EE] placeholder-[#8BA58D]/60 rounded-lg focus:outline-none focus:border-[#95BBA2] transition-colors"
-          />
+      {/* Search row */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+        <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans leading-none">
+          <span className="w-2 h-2 rounded-full bg-[#b7ff00] animate-pulse inline-block shadow-[0_0_10px_#b7ff00]" />
+          <span>Filas de Produção</span>
         </div>
-
-        <div className="flex flex-wrap items-center gap-2 pb-2">
-          {filterOptions.map((opt) => {
-            const isSelected = selectedFilter === opt.key;
-            const count = opt.key === 'TODOS' ? orders.length : orders.filter(o => o.status === opt.key).length;
-            const color = getStatusColor(opt.key);
-            
-            return (
-              <button
-                key={opt.key}
-                onClick={() => setSelectedFilter(opt.key)}
-                style={{
-                  backgroundColor: isSelected ? `${color}20` : '#151917',
-                  borderColor: isSelected ? color : '#232B27',
-                  color: isSelected ? color : '#8BA58D'
-                }}
-                className="px-3 py-1.5 rounded-full border text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 cursor-pointer"
-              >
-                <span>{opt.label}</span>
-                <span className="px-1 py-0.25 bg-black/25 text-[9px] rounded font-mono">
-                  {count}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+        <input
+          type="text"
+          placeholder="Buscar por peça, cliente..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full sm:w-64 px-3 py-1 bg-[#151917] border border-[#232B27] text-xs text-[#F1F4EE] placeholder-[#8BA58D]/60 rounded-lg focus:outline-none focus:border-[#95BBA2] transition-colors"
+        />
       </div>
 
-      {/* Orders List matching the state */}
-      <div className="space-y-4">
-        {filteredOrders.length === 0 ? (
-          <div className="bg-[#151917] border border-[#232B27] rounded-xl p-12 text-center text-[#8BA58D]">
-            <AlertCircle className="w-12 h-12 text-[#8BA58D]/40 mx-auto mb-3" />
-            <h4 className="text-sm font-bold">Sem pedidos nesta categoria.</h4>
-            <p className="text-xs mt-1 text-[#8BA58D]/80">Cadastre um novo item ou ajuste filtros.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 md:gap-4 mr-0" id="production-orders-grid">
-            {filteredOrders.map((order) => {
+      {/* Sequential production queues: Impressão -> Acabamento -> Embalando -> Pronto */}
+      {(() => {
+        const renderOrderCard = (order: PrintOrder) => {
               const borderC = getStatusColor(order.status);
               const isDeadlinePassed = order.deadline && Date.now() > order.deadline;
               const delayCat = getDelayCategory(order.createdAt, order.status);
@@ -1200,10 +1163,45 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
 
                 </motion.div>
               );
-            })}
+        };
+
+        const queues = [
+          { key: 'PRINT',    title: 'Fila de Impressão',     color: '#95BBA2', subtitle: 'Aguardando arquivo, na fila e imprimindo', list: filteredOrders.filter(o => o.status === 'WAITING' || o.status === 'QUEUE' || o.status === 'PRINTING') },
+          { key: 'FINISH',   title: 'Fila de Acabamento',    color: '#f59e0b', subtitle: 'Pós-processamento e finalização',          list: filteredOrders.filter(o => o.status === 'POST_PROCESS') },
+          { key: 'PACKING',  title: 'Fila de Embalando',     color: '#a855f7', subtitle: 'Embalagem antes da entrega',               list: filteredOrders.filter(o => o.status === 'PACKING') },
+          { key: 'READY',    title: 'Prontos para Entrega',  color: '#3b82f6', subtitle: 'Aguardando retirada / envio',              list: filteredOrders.filter(o => o.status === 'READY') },
+        ];
+
+        return (
+          <div className="space-y-8">
+            {queues.map(q => (
+              <section key={q.key} className="space-y-3">
+                <div className="flex items-end justify-between gap-3 border-b border-[#232B27] pb-2">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-2.5 h-2.5 rounded-full" style={{ background: q.color, boxShadow: `0 0 12px ${q.color}` }} />
+                    <div>
+                      <h3 className="text-sm font-extrabold uppercase tracking-[0.18em]" style={{ color: q.color }}>{q.title}</h3>
+                      <p className="text-[10px] uppercase tracking-wider text-[#8BA58D]/70">{q.subtitle}</p>
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-mono text-[#8BA58D] bg-black/40 border border-[#232B27] px-2 py-0.5 rounded">
+                    {q.list.length} {q.list.length === 1 ? 'item' : 'itens'}
+                  </span>
+                </div>
+                {q.list.length === 0 ? (
+                  <div className="text-center text-xs text-[#8BA58D]/60 py-6 border border-dashed border-[#232B27] rounded-lg">
+                    Fila vazia
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 md:gap-4">
+                    {q.list.map(renderOrderCard)}
+                  </div>
+                )}
+              </section>
+            ))}
           </div>
-        )}
-      </div>
+        );
+      })()}
 
       {/* Manual allocation modal dialogue popup */}
       <AnimatePresence>
