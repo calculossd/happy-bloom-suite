@@ -479,6 +479,23 @@ const STATUS_LABEL: Record<string, string> = {
   IDLE: "Ociosa",
   MAINTENANCE: "Manutenção",
 };
+const getPrinterLogo = (model: string = "", customUrl?: string) => {
+  if (customUrl && customUrl.trim()) return customUrl.trim();
+  const m = model.toLowerCase();
+  if (m.includes("bambu") || m.includes("p1") || m.includes("x1") || m.includes("a1"))
+    return "https://images.unsplash.com/photo-1701073837941-f76a5bf98505?auto=format&fit=crop&w=200&q=80";
+  if (m.includes("kobra") || m.includes("anycubic"))
+    return "https://images.unsplash.com/photo-1631544114022-fe3a917a4dde?auto=format&fit=crop&w=200&q=80";
+  if (m.includes("k1") || m.includes("creality") || m.includes("ender") || m.includes("v3") || m.includes("sermoon"))
+    return "https://images.unsplash.com/photo-1615811361523-6bd03d7748e7?auto=format&fit=crop&w=200&q=80";
+  if (m.includes("prusa") || m.includes("mk3") || m.includes("mk4") || m.includes("mini"))
+    return "https://images.unsplash.com/photo-1544993130-9df2492f2549?auto=format&fit=crop&w=200&q=80";
+  if (m.includes("resina") || m.includes("resin") || m.includes("sla") || m.includes("elegoo") || m.includes("photon") || m.includes("halot"))
+    return "https://images.unsplash.com/photo-1614853316476-de00d14cb1fc?auto=format&fit=crop&w=200&q=80";
+  if (m.includes("artillery") || m.includes("genius") || m.includes("sidewinder"))
+    return "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=200&q=80";
+  return "https://images.unsplash.com/photo-1563206767-5b18f218e8de?auto=format&fit=crop&w=200&q=80";
+};
 function LivePrinters({ printers = [], orders = [] }: { printers?: any[]; orders?: any[] }) {
   const rows = (printers.length ? printers : []).slice(0, 6).map((p: any) => {
     const activeOrder = orders.find(
@@ -492,7 +509,7 @@ function LivePrinters({ printers = [], orders = [] }: { printers?: any[]; orders
     const remaining = activeOrder
       ? `${Math.floor(remainingH)}h ${Math.round((remainingH % 1) * 60)}m restantes`
       : (p.status === "PRINTING" ? "em andamento" : "—");
-    return { name: p.name || p.model, material, remaining, pct: Math.max(0, Math.min(100, pct)) };
+    return { name: p.name || p.model, model: p.model || "", customUrl: p.customUrl, material, remaining, pct: Math.max(0, Math.min(100, pct)) };
   });
   return (
     <Card>
@@ -509,8 +526,14 @@ function LivePrinters({ printers = [], orders = [] }: { printers?: any[]; orders
       <ul className="space-y-3">
         {rows.map((p, i) => (
           <li key={i} className="flex items-center gap-3 group">
-            <div className="size-10 rounded-lg grid place-items-center bg-white/[0.03] border border-white/[0.05] shrink-0">
-              <PrinterIcon className="size-5 text-white/70" />
+            <div className="size-10 rounded-lg overflow-hidden bg-white/[0.03] border border-white/[0.05] shrink-0 relative">
+              <img
+                src={getPrinterLogo(p.model, p.customUrl)}
+                alt={p.name}
+                className="absolute inset-0 w-full h-full object-cover"
+                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+              />
+              <PrinterIcon className="size-5 text-white/70 absolute inset-0 m-auto" />
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-baseline justify-between gap-2">
