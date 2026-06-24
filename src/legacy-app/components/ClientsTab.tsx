@@ -963,79 +963,22 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
     }
   }, [selectedClientForPage]);
 
-  const submitClient = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!cName) return;
+  const editingClient = editingClientId !== null
+    ? clients.find(c => c.id === editingClientId) ?? null
+    : null;
 
-    const parsedDate = cLastContactDate ? new Date(cLastContactDate + 'T12:00:00').getTime() : undefined;
-    const parsedStockCount = parseInt(cStockCount, 10) || 0;
-    const parsedStockValue = parseFloat(cStockValue) || 0;
-
+  const handleClientFormSubmit = (data: ClientFormData) => {
     if (editingClientId !== null) {
-      onUpdateClient(editingClientId, {
-        name: cName,
-        phone: cPhone,
-        email: cEmail,
-        address: cAddress,
-        cep: cCep,
-        city: cCity,
-        state: cState,
-        note: cNote,
-        lastContactDate: parsedDate,
-        stockCount: parsedStockCount,
-        stockValue: parsedStockValue,
-        productsStock: cProductsStock,
-      });
+      onUpdateClient(editingClientId, data);
       setEditingClientId(null);
     } else {
-      onAddClient({
-        name: cName,
-        phone: cPhone,
-        email: cEmail,
-        address: cAddress,
-        cep: cCep,
-        city: cCity,
-        state: cState,
-        note: cNote,
-        lastContactDate: parsedDate,
-        stockCount: parsedStockCount,
-        stockValue: parsedStockValue,
-        productsStock: cProductsStock,
-      });
+      onAddClient(data);
     }
-
-    // Reset fields
-    setCName('');
-    setCPhone('');
-    setCEmail('');
-    setCAddress('');
-    setCCep('');
-    setCCity('');
-    setCState('');
-    setCNote('');
-    setCLastContactDate('');
-    setCStockCount('0');
-    setCStockValue('0');
-    setCProductsStock([]);
-    setCCatalogPick('');
-    setCCatalogQty(1);
     setShowClientForm(false);
   };
 
   const startEditClient = (client: Client) => {
     setEditingClientId(client.id);
-    setCName(client.name);
-    setCPhone(client.phone);
-    setCEmail(client.email);
-    setCAddress(client.address);
-    setCCep(client.cep || '');
-    setCCity(client.city || '');
-    setCState(client.state || '');
-    setCNote(client.note || '');
-    setCLastContactDate(client.lastContactDate ? new Date(client.lastContactDate).toISOString().split('T')[0] : '');
-    setCStockCount(String(client.stockCount || 0));
-    setCStockValue(String(client.stockValue || 0));
-    setCProductsStock(Array.isArray(client.productsStock) ? client.productsStock : []);
     setShowClientForm(true);
   };
 
