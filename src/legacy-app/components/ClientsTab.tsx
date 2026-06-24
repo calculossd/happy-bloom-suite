@@ -1137,7 +1137,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                     <h4 className="text-xs font-bold text-[#F1F4EE]">{client.name}</h4>
                     <div className="text-[10px] text-[#8BA58D] space-y-0.5">
                       <p>💬 <span className="font-mono text-[#F1F4EE]">{client.phone || 'Sem telefone'}</span> • {client.email}</p>
-                      <p className="truncate">📍 {client.address || 'Sem endereço informado'}</p>
+                      <p className="truncate">📍 {[client.address, client.city, client.state].filter(Boolean).join(', ') || 'Sem endereço informado'}{client.cep ? ` • CEP ${client.cep}` : ''}</p>
                       {client.note && <p className="text-[var(--brand-primary)] text-[9px] italic mt-1 font-mono">“ {client.note} ”</p>}
                     </div>
 
@@ -1151,10 +1151,10 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                       Ficha &amp; Produtos do Cliente 📂
                     </button>
 
-                    {client.address && (
+                    {(client.address || client.cep) && (
                       <div className="pt-1">
                         <a
-                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(client.address)}`}
+                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([client.address, client.city, client.state, client.cep].filter(Boolean).join(', '))}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1 text-[9px] font-bold text-[var(--brand-primary)] hover:underline bg-[var(--brand-primary)]/5 p-1 px-2 rounded-md hover:bg-[var(--brand-primary)]/15 border border-[var(--brand-primary)]/15"
