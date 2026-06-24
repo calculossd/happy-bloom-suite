@@ -1620,9 +1620,9 @@ export default function App() {
               items: [
                 { id: 2, label: 'Clientes', icon: Users },
                 { id: 3, label: 'Pedidos', icon: GitPullRequest, badge: pendingOrdersCount },
-                { id: 6, label: 'Histórico', icon: ShoppingBag },
                 { id: 1, label: 'Produção', icon: Activity },
                 { id: 4, label: 'Estoque', icon: Layers, onClick: () => openCostsSubtab('STOCK') },
+                { id: 6, label: 'Histórico', icon: ShoppingBag },
               ],
             },
             {
