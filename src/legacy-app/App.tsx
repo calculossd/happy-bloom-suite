@@ -1404,7 +1404,7 @@ export default function App() {
           letter-spacing: -0.02em !important;
         }
 
-        /* Auto GLASSMORPHISM for cards and grids with glowing hover border effects */
+        /* Auto GLASSMORPHISM for cards and grids without animated glow borders */
         .bg-\\[\\#151917\\],
         .bg-zinc-900,
         .bg-neutral-900,
@@ -1418,11 +1418,10 @@ export default function App() {
           -webkit-backdrop-filter: blur(20px) !important;
           border-radius: 1.25rem !important; /* rounded-2xl */
           box-shadow: 0 20px 40px -15px rgba(0,0,0,0.7) !important;
-          transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
         
         .bg-\\[\\#151917\\]:hover {
-          border-color: rgba(255, 255, 255, 0.09) !important;
+          border-color: var(--brand-border) !important;
         }
 
         /* Global custom rounded class and shadows */
@@ -2034,7 +2033,7 @@ export default function App() {
         )}
 
         {currentTab !== 0 && (
-          <div className="glow-card rounded-2xl p-4 sm:p-6 animate-fade-in transition-all duration-500">
+          <div className="rounded-2xl p-4 sm:p-6 bg-[rgba(18,18,20,0.7)] border border-white/[0.05] shadow-sm">
         {currentTab === 1 && (
           <>
             <div className="flex items-center gap-2 px-1 py-1 mb-2" id="view-page-header-production">
