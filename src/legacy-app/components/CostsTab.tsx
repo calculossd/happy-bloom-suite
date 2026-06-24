@@ -4276,20 +4276,10 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       {/* SUBTAB 5: AI CHAT DIRECTIVE */}
       {activeSubTab === 'AI' && (
         <div className="space-y-4 animate-fade-in" id="ai-chat-full-panel">
-          {/* Standardized subtab header */}
-          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Assistente</div>
-                <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">IA</span>
-              </div>
-              <p className="text-xs text-[var(--brand-muted)]">Orientação inteligente de engenharia 3D — fatiadores, materiais e custos</p>
-            </div>
-          </div>
           <div className="bg-[#151917] border border-[#232B27] p-5 rounded-2xl space-y-4">
           <div>
             <h3 className="text-base font-bold text-[#F1F4EE] flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-[#b7ff00] animate-pulse" />
+              <Sparkles className="h-5 w-5 text-[#c4b5fd] animate-pulse" />
               Orientação Inteligente de Engenharia 3D (Fatiadores & Custos)
             </h3>
             <p className="text-xs text-[#8BA58D]">Fórmula automática, suporte a filamentos bicos de latão e dúvidas sobre warping</p>
@@ -4310,7 +4300,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
             ))}
             {aiLoading && (
               <div className="p-3 bg-[#151917] text-[#8BA58D] border border-[#232B27] rounded-xl max-w-[50%] flex items-center gap-2 animate-pulse">
-                <RefreshCw className="h-3 w-3 animate-spin text-[#b7ff00]" />
+                <RefreshCw className="h-3 w-3 animate-spin text-[#c4b5fd]" />
                 IA processando dados...
               </div>
             )}
@@ -4322,11 +4312,11 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
               placeholder="O que é brim? Como desentupir bico da Creality? Como calcular comissões do Mercado Livre?"
               value={aiInput}
               onChange={(e) => setAiInput(e.target.value)}
-              className="bg-[#0C0E0D] border border-[#232B27] rounded-xl px-4 py-2.5 text-xs text-[#F1F4EE] outline-none flex-1 focus:border-[#b7ff00]"
+              className="bg-[#0C0E0D] border border-[#232B27] rounded-xl px-4 py-2.5 text-xs text-[#F1F4EE] outline-none flex-1 focus:border-[#c4b5fd]"
             />
             <button
               type="submit"
-              className="px-5 py-2.5 bg-[#b7ff00] hover:bg-[#B6D8B4] text-[#0C0E0D] rounded-xl text-xs font-black transition flex items-center gap-1.5"
+              className="px-5 py-2.5 bg-[#c4b5fd] hover:bg-[#a78bfa] text-[#0C0E0D] rounded-xl text-xs font-black transition flex items-center gap-1.5"
             >
               Consultar IA
             </button>
