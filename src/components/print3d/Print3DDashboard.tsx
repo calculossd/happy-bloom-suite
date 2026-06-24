@@ -715,6 +715,11 @@ function StlGallery({ orders = [], clients = [] }: { orders?: any[]; clients?: a
             <div className="text-[11.5px] font-medium text-white truncate">{s.name}</div>
             <div className="text-[10px] text-white/40 tabular-nums">{s.date}</div>
             <div className="text-[10px] text-white/40">{s.mat}</div>
+            {s.source === "Pedido" && s.stockQty != null && (
+              <div className="text-[10px] font-semibold" style={{ color: LIME }}>
+                Estoque · {s.stockQty}un
+              </div>
+            )}
           </div>
         ))}
       </div>
