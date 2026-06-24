@@ -1026,7 +1026,11 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
           const isDeadlinePassed = order.deadline && Date.now() > order.deadline;
           const isLate = (order.status !== 'DELIVERED' && order.status !== 'READY') && (delayCat.level === 'CRITICAL' || isDeadlinePassed);
           const isPrinting = order.status === 'PRINTING';
-          const progressPct = isPrinting ? Math.round((order.printingProgress || 0) * 100) : 0;
+          const assignedPrinter = order.assignedPrinterId ? printers.find(p => p.id === order.assignedPrinterId) : null;
+          const printerPct = assignedPrinter && typeof assignedPrinter.printProgress === 'number' ? assignedPrinter.printProgress : null;
+          const progressPct = isPrinting
+            ? Math.round((printerPct !== null ? printerPct : (order.printingProgress || 0) * 100))
+            : 0;
           const elapsedMs = Date.now() - order.createdAt;
           const elapsedH = Math.floor(elapsedMs / 3600000);
           const elapsedM = Math.floor((elapsedMs % 3600000) / 60000);
@@ -1040,7 +1044,8 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               whileHover={{ y: -1 }}
-              className={`group relative flex items-stretch gap-3 rounded-xl bg-gradient-to-br from-[#13181500] via-[#13181580] to-[#0F1310] border ${isLate ? 'border-red-500/60 shadow-[0_0_14px_rgba(239,68,68,0.18)]' : 'border-[#232B27] hover:border-[#3a4a40]'} px-3 py-2.5 transition-all duration-300 backdrop-blur-sm`}
+              onClick={() => setDetailOrder(order)}
+              className={`group relative flex items-stretch gap-3 rounded-xl bg-gradient-to-br from-[#13181500] via-[#13181580] to-[#0F1310] border ${isLate ? 'border-red-500/60 shadow-[0_0_14px_rgba(239,68,68,0.18)]' : 'border-[#232B27] hover:border-[#3a4a40]'} px-3 py-2.5 transition-all duration-300 backdrop-blur-sm cursor-pointer hover:shadow-[0_4px_20px_rgba(0,0,0,0.4)]`}
             >
               <span aria-hidden className="absolute left-0 top-2 bottom-2 w-[3px] rounded-full" style={{ background: color, boxShadow: `0 0 8px ${color}80` }} />
               <div className="flex-1 min-w-0 pl-1.5">
@@ -1056,6 +1061,12 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                   <span className="truncate">{order.filamentType} {order.filamentColor}</span>
                   <span className="text-[#3a4640]">·</span>
                   <span className="shrink-0">{order.weightGrams}g</span>
+                  {isPrinting && assignedPrinter && (
+                    <>
+                      <span className="text-[#3a4640]">·</span>
+                      <span className="shrink-0 text-emerald-400/80">{assignedPrinter.name}</span>
+                    </>
+                  )}
                 </div>
                 {isPrinting && (
                   <div className="mt-1.5 flex items-center gap-2">
@@ -1079,7 +1090,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                   <span className="text-[12px] font-bold text-[#F1F4EE] tabular-nums">R$ {order.priceCharged.toFixed(0)}</span>
                   {nextStatus && (
                     <button
-                      onClick={() => handleFastStatusAdvance(order, nextStatus)}
+                      onClick={(e) => { e.stopPropagation(); handleFastStatusAdvance(order, nextStatus); }}
                       className="text-[10px] font-bold px-2 py-1 rounded-md border transition-all duration-200 hover:scale-[1.03] active:scale-95"
                       style={{ borderColor: `${color}55`, color, background: `${color}12` }}
                     >
@@ -1093,8 +1104,8 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
         };
 
         const queues = [
-          { key: 'WAITING',  title: 'Fila Aguardando Aceite', color: '#eab308', subtitle: 'Pedidos pendentes de aprovação / arquivo', list: filteredOrders.filter(o => o.status === 'WAITING') },
-          { key: 'PRINT',    title: 'Fila Imprimindo',        color: '#95BBA2', subtitle: 'Na fila e em impressão',                    list: filteredOrders.filter(o => o.status === 'QUEUE' || o.status === 'PRINTING') },
+          { key: 'WAITING',  title: 'Fila Aguardando Aceite', color: '#eab308', subtitle: 'Pendentes de aprovação, arquivo ou pagamento', list: filteredOrders.filter(o => o.status === 'WAITING' || o.status === 'QUEUE') },
+          { key: 'PRINT',    title: 'Fila Imprimindo',        color: '#95BBA2', subtitle: 'Pedidos em impressão (% ao vivo da impressora)', list: filteredOrders.filter(o => o.status === 'PRINTING') },
           { key: 'FINISH',   title: 'Fila de Acabamento',     color: '#f59e0b', subtitle: 'Pós-processamento e finalização',           list: filteredOrders.filter(o => o.status === 'POST_PROCESS') },
           { key: 'PACKING',  title: 'Fila de Embalando',      color: '#a855f7', subtitle: 'Embalagem antes da entrega',                list: filteredOrders.filter(o => o.status === 'PACKING') },
           { key: 'READY',    title: 'Prontos para Entrega',   color: '#3b82f6', subtitle: 'Aguardando retirada / envio',               list: filteredOrders.filter(o => o.status === 'READY') },
