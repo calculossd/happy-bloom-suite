@@ -778,14 +778,12 @@ function StockOverview({ filaments = [], onSelectTab }: { filaments?: any[]; onS
       level: f.stockGrams < f.minStockGrams ? "Crítico" : "Atenção",
     }));
   return (
-    <Card>
+    <Card className="border-rose-500/60">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-[14px] font-semibold text-white">Estoque de Filamentos</h3>
+        <h3 className="text-[14px] font-semibold text-white">Estoque Crítico</h3>
         <button className="text-[11px] text-white/50 hover:text-white" onClick={() => onSelectTab?.(8)}>Ver todos</button>
       </div>
 
-      {/* Críticos */}
-      <div className="text-[10px] uppercase tracking-wider text-rose-400/80 mb-1.5">Estoque Crítico</div>
       {items.length === 0 ? (
         <div className="text-[12px] text-white/40 py-3 text-center">Tudo em ordem.</div>
       ) : (
