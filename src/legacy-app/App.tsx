@@ -2174,10 +2174,22 @@ export default function App() {
             )}
             {currentTab === 16 && (
               <div className="space-y-4">
-                <div className="flex items-center gap-2 px-1 py-1">
-                  <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">
-                    Impressoras
+                <div className="flex items-center justify-between gap-3 px-1 py-1 flex-wrap">
+                  <div className="flex items-center gap-2">
+                    <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">
+                      Impressoras
+                    </div>
+                    <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25">
+                      {printers.length} Cadastradas
+                    </span>
                   </div>
+                  <button
+                    onClick={() => setShowAddPrinterFormTab16(v => !v)}
+                    className="px-3 py-1.5 bg-[#b7ff00]/10 hover:bg-[#b7ff00]/20 text-[#b7ff00] border border-[#b7ff00]/25 font-bold text-xs rounded-xl transition flex items-center gap-1 cursor-pointer"
+                  >
+                    <Plus className="h-3.5 w-3.5 text-[#b7ff00]" />
+                    {showAddPrinterFormTab16 ? 'Cancelar' : 'Cadastrar Impressora'}
+                  </button>
                 </div>
                 <ProductionTab
                   orders={orders}
@@ -2206,6 +2218,8 @@ export default function App() {
                   onDeletePrinter={handleDeletePrinter}
                   onAddOrder={handleAddOrder}
                   viewMode="printers"
+                  showAddPrinterForm={showAddPrinterFormTab16}
+                  onToggleAddPrinterForm={() => setShowAddPrinterFormTab16(v => !v)}
                 />
               </div>
             )}
