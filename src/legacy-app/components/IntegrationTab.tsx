@@ -438,7 +438,7 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans leading-none">
               <span className="w-2 h-2 rounded-full bg-[#b7ff00] animate-pulse inline-block shadow-[0_0_10px_#b7ff00]" />
-              <span>Stream de Vendas Pendentes ({visibleOrders.filter(o => !o.isImported && !importedExternalIds.includes(o.id)).length})</span>
+              <span>Stream de Vendas Online ({visibleOrders.filter(o => !o.isImported && !importedExternalIds.includes(o.id)).length})</span>
             </div>
             <span className="text-[9px] text-[var(--brand-muted)] font-mono">Última atualização: Tempo real</span>
           </div>
