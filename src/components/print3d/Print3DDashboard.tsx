@@ -429,7 +429,7 @@ function ClientsMap({ clients = [] }: { clients?: any[] }) {
     return () => { cancelled = true; };
   }, [ready, clients]);
 
-  return <div ref={ref} className="aspect-[4/3] w-full rounded-lg overflow-hidden border border-white/[0.05]" />;
+  return <div ref={ref} className="h-full w-full min-h-[300px] rounded-lg overflow-hidden border border-white/[0.05]" />;
 }
 
 /* ---------- Live printers ---------- */
