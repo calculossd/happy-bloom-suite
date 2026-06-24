@@ -641,14 +641,24 @@ function Hygrometers({ devices = [] }: { devices?: any[] }) {
 
 /* ---------- STL gallery (recent orders) ---------- */
 function StlGallery({ orders = [], clients = [] }: { orders?: any[]; clients?: any[] }) {
-  const orderItems = orders.map((o: any) => ({
-    name: o.itemName,
-    ts: o.createdAt || 0,
-    date: o.createdAt ? new Date(o.createdAt).toLocaleDateString("pt-BR") : "",
-    mat: `${o.filamentType ?? ""}${o.filamentColor ? ` — ${o.filamentColor}` : ""}`,
-    imageUrl: o.imageUrl,
-    source: "Pedido",
-  }));
+  const stockImageByName: Record<string, string | undefined> = {};
+  clients.forEach((c: any) => {
+    (c?.productsStock || []).forEach((p: any) => {
+      const key = String(p?.name || "").toLowerCase().trim();
+      if (key && p?.imageUrl && !stockImageByName[key]) stockImageByName[key] = p.imageUrl;
+    });
+  });
+  const orderItems = orders.map((o: any) => {
+    const key = String(o?.itemName || "").toLowerCase().trim();
+    return {
+      name: o.itemName,
+      ts: o.createdAt || 0,
+      date: o.createdAt ? new Date(o.createdAt).toLocaleDateString("pt-BR") : "",
+      mat: `${o.filamentType ?? ""}${o.filamentColor ? ` — ${o.filamentColor}` : ""}`,
+      imageUrl: o.imageUrl || stockImageByName[key],
+      source: "Pedido",
+    };
+  });
   const stockItems: any[] = [];
   clients.forEach((c: any) => {
     (c?.productsStock || []).forEach((p: any) => {
