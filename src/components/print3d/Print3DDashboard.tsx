@@ -642,19 +642,35 @@ function Hygrometers({ devices = [] }: { devices?: any[] }) {
 /* ---------- STL gallery (recent orders) ---------- */
 function StlGallery({ orders = [], clients = [] }: { orders?: any[]; clients?: any[] }) {
   const stockImageByName: Record<string, string | undefined> = {};
+  const stockQtyByName: Record<string, number> = {};
   clients.forEach((c: any) => {
     (c?.productsStock || []).forEach((p: any) => {
       const key = String(p?.name || "").toLowerCase().trim();
       if (key && p?.imageUrl && !stockImageByName[key]) stockImageByName[key] = p.imageUrl;
+      if (key) stockQtyByName[key] = (stockQtyByName[key] || 0) + Number(p?.qty || 0);
     });
   });
+  try {
+    const cat = JSON.parse(
+      (typeof localStorage !== "undefined" &&
+        localStorage.getItem("bambuzau_local_catalog_production")) || "[]",
+    );
+    (cat || []).forEach((c: any) => {
+      const key = String(c?.name || "").toLowerCase().trim();
+      if (key && c?.imageUrl && !stockImageByName[key]) stockImageByName[key] = c.imageUrl;
+      if (key && c?.stockCount != null && stockQtyByName[key] == null)
+        stockQtyByName[key] = Number(c.stockCount) || 0;
+    });
+  } catch {}
   const orderItems = orders.map((o: any) => {
     const key = String(o?.itemName || "").toLowerCase().trim();
+    const qty = stockQtyByName[key];
     return {
       name: o.itemName,
       ts: o.createdAt || 0,
       date: o.createdAt ? new Date(o.createdAt).toLocaleDateString("pt-BR") : "",
       mat: `${o.filamentType ?? ""}${o.filamentColor ? ` — ${o.filamentColor}` : ""}`,
+      stockQty: qty,
       imageUrl: o.imageUrl || stockImageByName[key],
       source: "Pedido",
     };
@@ -699,6 +715,11 @@ function StlGallery({ orders = [], clients = [] }: { orders?: any[]; clients?: a
             <div className="text-[11.5px] font-medium text-white truncate">{s.name}</div>
             <div className="text-[10px] text-white/40 tabular-nums">{s.date}</div>
             <div className="text-[10px] text-white/40">{s.mat}</div>
+            {s.source === "Pedido" && s.stockQty != null && (
+              <div className="text-[10px] font-semibold" style={{ color: LIME }}>
+                Estoque · {s.stockQty}un
+              </div>
+            )}
           </div>
         ))}
       </div>
