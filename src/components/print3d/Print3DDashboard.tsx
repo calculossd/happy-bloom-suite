@@ -587,7 +587,8 @@ function OrdersList({ orders = [], clients = [], onSelectTab }: { orders?: any[]
     .filter((o: any) => o.status !== "DELIVERED")
     .slice()
     .sort((a: any, b: any) => (a.deadline || 0) - (b.deadline || 0))
-    .slice(0, 6);
+    .slice(0, 8);
+  const printing = orders.filter((o: any) => o.status === "PRINTING");
   const cityById: Record<number, string> = {};
   clients.forEach((c: any) => (cityById[c.id] = (c.address || "").split(",").pop()?.trim() || ""));
   return (
@@ -596,6 +597,33 @@ function OrdersList({ orders = [], clients = [], onSelectTab }: { orders?: any[]
         <h3 className="text-[14px] font-semibold text-white">Pedidos a Serem Entregues</h3>
         <button className="text-[11px] text-white/50 hover:text-white" onClick={() => onSelectTab?.(3)}>Ver todos</button>
       </div>
+      {printing.length > 0 && (
+        <div className="mb-3 space-y-2">
+          <div className="text-[10px] uppercase tracking-[0.18em] text-white/40 font-semibold">Em impressão agora</div>
+          {printing.slice(0, 2).map((p: any) => {
+            const pct = Math.max(2, Math.round((p.printingProgress || 0) * 100));
+            return (
+              <div key={p.id} className="rounded-lg border border-emerald-500/20 bg-emerald-500/[0.04] p-2.5">
+                <div className="flex items-center justify-between gap-2 mb-1.5">
+                  <div className="min-w-0 flex-1">
+                    <div className="text-[12.5px] font-semibold text-white truncate">{p.itemName || "—"}</div>
+                    <div className="text-[10.5px] text-white/50 truncate">
+                      {p.clientName} • {p.filamentType} {p.filamentColor} • {p.weightGrams}g
+                    </div>
+                  </div>
+                  <div className="text-[13px] font-mono font-bold tabular-nums text-emerald-300">{pct}%</div>
+                </div>
+                <div className="h-1.5 rounded-full bg-white/[0.05] overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-[#b7ff00] transition-all duration-700"
+                    style={{ width: `${pct}%`, boxShadow: "0 0 10px rgba(183,255,0,0.4)" }}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
       {rows.length === 0 && (
         <div className="text-[12px] text-white/40 py-6 text-center">Sem pedidos pendentes.</div>
       )}
