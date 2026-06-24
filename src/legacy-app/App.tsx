@@ -1921,7 +1921,7 @@ export default function App() {
                   Exportar Relatório
                 </button>
               )}
-              {currentTab === 4 && costsSubTab !== 'CATALOG' && costsSubTab !== 'AI' && (
+              {currentTab === 4 && costsSubTab !== 'CATALOG' && costsSubTab !== 'AI' && costsSubTab !== 'SHOP' && (
                 <button
                   onClick={() => window.dispatchEvent(new CustomEvent('open-new-product'))}
                   className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#b7ff00]/30 bg-[#b7ff00]/15 px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#b7ff00] transition hover:bg-[#b7ff00]/25 hover:border-[#b7ff00]/50 shrink-0"
