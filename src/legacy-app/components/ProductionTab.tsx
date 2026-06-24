@@ -746,6 +746,18 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                   
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-1.5 min-w-0 max-w-[65%]">
+                      {order.imageUrl ? (
+                        <img
+                          src={order.imageUrl}
+                          alt={order.itemName}
+                          className="shrink-0 w-9 h-9 rounded-md object-cover border border-[#232B27] bg-black/40"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="shrink-0 w-9 h-9 rounded-md border border-dashed border-[#232B27] bg-black/30 flex items-center justify-center text-[8px] text-[#3a4640] font-bold uppercase">
+                          3D
+                        </div>
+                      )}
                       {order.platformSource === 'MANUAL' ? (
                         <div className="flex items-center gap-1 bg-gradient-to-r from-emerald-950/60 to-emerald-900/40 border border-emerald-500/30 px-2 py-0.5 rounded text-[8.5px] font-black uppercase text-center text-emerald-400 shrink-0 select-none">
                           <span className="text-[10px]">🧑‍💼</span>
