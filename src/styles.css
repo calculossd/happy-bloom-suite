@@ -40,7 +40,6 @@ html {
 .glass-panel {
   background: rgba(14, 14, 18, 0.5) !important;
   backdrop-filter: blur(28px) saturate(190%) !important;
-  -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
   border: 1px solid rgba(255, 255, 255, 0.06) !important;
   box-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.03) !important;
 }
@@ -879,7 +878,6 @@ input, select, textarea {
 .glow-card {
   background: rgba(18, 18, 20, 0.7);
   backdrop-filter: blur(16px) saturate(140%);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
   border: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: var(--p3d-shadow-soft);
   border-radius: 18px;
@@ -937,7 +935,6 @@ input, select, textarea {
   border-radius: 1rem !important;
   box-shadow: 0 20px 50px -20px rgba(56, 189, 248, 0.35) !important;
   backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
   transform: none !important;
 }
 
@@ -955,6 +952,7 @@ input, select, textarea {
 [data-tab-category="operacional"] { --tab-accent: 56, 189, 248;  } /* azul */
 [data-tab-category="marketing"]   { --tab-accent: 167, 139, 250; } /* lilás */
 [data-tab-category="financeiro"]  { --tab-accent: 16, 185, 129;  } /* esmeralda */
+[data-tab-category="estoque"]     { --tab-accent: 234, 179, 8;   } /* mesmo acento dos clientes */
 
 /* Header de cada página: mesmo estilo da notificação (borda + brilho, sem bloco) */
 .legacy-skin #view-page-header,
