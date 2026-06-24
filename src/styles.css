@@ -194,28 +194,7 @@ h1 { letter-spacing: -0.03em; }
   border-radius: 22px !important;
 }
 
-/* ===== GLOBAL LIME GLOW SIGNATURE (applies across whole site) ===== */
-.glass-panel,
-[class*="rounded-2xl"][class*="border"],
-[class*="rounded-xl"][class*="border-white"],
-[class*="rounded-[2"][class*="border"] {
-  box-shadow:
-    0 1px 0 0 rgba(255, 255, 255, 0.05) inset,
-    0 24px 60px -28px rgba(3, 18, 38, 0.9),
-    0 0 0 1px rgba(94, 234, 212, 0.10),
-    0 0 40px -10px rgba(0, 212, 255, 0.18);
-  transition: box-shadow 0.4s ease, border-color 0.35s ease, transform 0.3s ease;
-}
-.glass-panel:hover,
-[class*="rounded-2xl"][class*="border"]:hover,
-[class*="rounded-[2"][class*="border"]:hover {
-  border-color: rgba(94, 234, 212, 0.45) !important;
-  box-shadow:
-    0 1px 0 0 rgba(255, 255, 255, 0.08) inset,
-    0 30px 80px -28px rgba(3, 18, 38, 0.95),
-    0 0 0 1px rgba(94, 234, 212, 0.14),
-    0 0 60px -8px rgba(94, 234, 212, 0.28);
-}
+/* Global animated border/glow removed from rounded panels per user request. */
 
 /* Lime selection + focus everywhere */
 ::selection {
@@ -904,12 +883,10 @@ input, select, textarea {
   border: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: var(--p3d-shadow-soft);
   border-radius: 18px;
-  transition: transform 0.4s var(--p3d-ease), border-color 0.4s var(--p3d-ease), box-shadow 0.4s var(--p3d-ease);
 }
 .glow-card:hover {
-  border-color: rgba(183, 255, 0, 0.25);
-  box-shadow: var(--p3d-shadow-lime);
-  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.05);
+  box-shadow: var(--p3d-shadow-soft);
 }
 .glow-card-active {
   background: linear-gradient(180deg, rgba(183,255,0,0.08) 0%, rgba(183,255,0,0.02) 100%);
