@@ -25,26 +25,7 @@ html {
   height: 5px;
 }
 
-/* ===== GLOBAL LIME/EMERALD GLOW SIGNATURE ===== */
-/* Every primary panel gets a soft lime glow + lime accent border on hover. */
-.legacy-skin > div,
-.glass-panel {
-  box-shadow:
-    0 1px 0 0 rgba(255, 255, 255, 0.04) inset,
-    0 24px 60px -28px rgba(0, 0, 0, 0.9),
-    0 0 0 1px rgba(190, 242, 100, 0.04),
-    0 0 40px -10px rgba(190, 242, 100, 0.08);
-  transition: box-shadow 0.4s ease, border-color 0.4s ease, transform 0.3s ease;
-}
-.legacy-skin > div:hover,
-.glass-panel:hover {
-  border-color: rgba(190, 242, 100, 0.25) !important;
-  box-shadow:
-    0 1px 0 0 rgba(255, 255, 255, 0.06) inset,
-    0 30px 80px -28px rgba(0, 0, 0, 0.95),
-    0 0 0 1px rgba(190, 242, 100, 0.12),
-    0 0 60px -8px rgba(190, 242, 100, 0.25);
-}
+/* Glow signature removed per user request */
 
 /* Lime selection + focus highlight across the whole legacy app */
 ::selection {
