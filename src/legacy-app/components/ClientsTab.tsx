@@ -336,22 +336,6 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
   const [showClientForm, setShowClientForm] = useState(false);
   const [editingClientId, setEditingClientId] = useState<number | null>(null);
 
-  // Client form fields
-  const [cName, setCName] = useState('');
-  const [cPhone, setCPhone] = useState('');
-  const [cEmail, setCEmail] = useState('');
-  const [cAddress, setCAddress] = useState('');
-  const [cCep, setCCep] = useState('');
-  const [cCity, setCCity] = useState('');
-  const [cState, setCState] = useState('');
-  const [cNote, setCNote] = useState('');
-  const [cLastContactDate, setCLastContactDate] = useState('');
-  const [cStockCount, setCStockCount] = useState('0');
-  const [cStockValue, setCStockValue] = useState('0');
-  const [cProductsStock, setCProductsStock] = useState<Array<{ name: string; qty: number; imageUrl?: string }>>([]);
-  const [cCatalogPick, setCCatalogPick] = useState<string>('');
-  const [cCatalogQty, setCCatalogQty] = useState<number>(1);
-
   // Printer configuration dialog/states
   const [editingPrinterId, setEditingPrinterId] = useState<number | null>(null);
   const [pIpAddress, setPIpAddress] = useState('');
