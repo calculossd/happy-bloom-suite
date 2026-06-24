@@ -3,13 +3,6 @@ import { getApiUrl } from '../utils/api';
 import { safeStorage } from '../utils/storage';
 import { dedupeQuotationGroups } from '../utils/offerDedupe';
 
-const MATERIALS = ['PLA', 'PETG', 'TPU'] as const;
-const EXPANDED_TERMS: Record<string, string> = {
-  PLA: 'filamento pla 1.75mm 1kg impressora 3d comprar',
-  PETG: 'filamento petg 1.75mm 1kg impressora 3d resistente',
-  TPU: 'filamento flexivel tpu 1.75mm impressora 3d flex',
-};
-
 const getCurrentQuotationsPeriod = (): string => {
   const now = new Date();
   const hours = now.getHours();
