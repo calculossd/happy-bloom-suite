@@ -611,20 +611,15 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                     </div>
 
                     <div className="flex flex-wrap gap-1.5 mt-1.5">
-                      <span className={`text-[8.5px] px-1.5 py-0.5 rounded font-black border ${
-                        weeklyOk
-                          ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/25'
-                          : 'bg-red-500/10 text-red-400 border-red-500/25'
-                      }`}>
-                        SEM {wChecks}/3 • {daysSinceWeekly}d {weeklyOk ? '✓' : '⚠'}
-                      </span>
-                      <span className={`text-[8.5px] px-1.5 py-0.5 rounded font-black border ${
-                        monthlyOk
-                          ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/25'
-                          : 'bg-red-500/10 text-red-400 border-red-500/25'
-                      }`}>
-                        MES {mChecks}/3 • {daysSinceMonthly}d {monthlyOk ? '✓' : '⚠'}
-                      </span>
+                      {weeklyOk && monthlyOk ? (
+                        <span className="text-[9px] px-2 py-0.5 rounded font-black border bg-emerald-500/10 text-emerald-400 border-emerald-500/25 uppercase tracking-wider">
+                          Manutenção ✓
+                        </span>
+                      ) : (
+                        <span className="text-[9px] px-2 py-0.5 rounded font-black border bg-red-500/15 text-red-400 border-red-500/50 uppercase tracking-wider animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.5)]">
+                          ⚠ Manutenção Pendente
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
