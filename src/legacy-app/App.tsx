@@ -1687,6 +1687,7 @@ export default function App() {
             { id: 1, label: 'Produção', icon: Activity },
             { id: 6, label: 'Histórico', icon: ShoppingBag },
             { id: 2, label: 'Clientes', icon: Users },
+            { id: 15, label: 'Prospecção', icon: Radar },
             { id: 3, label: 'Pedidos', icon: GitPullRequest, badge: pendingOrdersCount },
             { id: 4, label: 'Cálculo', icon: Calculator, onClick: () => openCostsSubtab('CALC') },
             { id: 4, label: 'Catálogo Inova', icon: BookOpen, onClick: () => openCostsSubtab('CATALOG') },
