@@ -520,11 +520,35 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
       const tavilyKey = customTavilyKey.trim();
       const jinaKey = customJinaKey.trim();
 
-      if (!tavilyKey) {
-        throw new Error('Tavily key ausente — configure em Ajustes para mapeamento real.');
+      const region = prospectRegion.trim();
+
+      // 1) Google Places API (New) via connector gateway — fonte principal
+      try {
+        const placesUrl = `/api/places-leads?q=${encodeURIComponent(query)}&region=${encodeURIComponent(region)}`;
+        const pr = await fetch(getApiUrl(placesUrl));
+        if (pr.ok) {
+          const pdata = await pr.json();
+          const placesLeads: ProspectLead[] = Array.isArray(pdata?.leads) ? pdata.leads : [];
+          if (placesLeads.length > 0) {
+            setSearchingLeads(false);
+            setActiveCategoryFilter('Todos');
+            setProspectLeads(placesLeads.map((l: any) => ({
+              ...l,
+              category: l.category || resolvedCategory || 'Geek',
+              pitch: l.pitch || getCategoryPitch(resolvedCategory || 'Geek'),
+            })));
+            alert(`Google Places mapeou ${region}: ${placesLeads.length} estabelecimentos reais com endereço e telefone.`);
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn('Places fallback to Tavily:', e);
       }
 
-      const region = prospectRegion.trim();
+      if (!tavilyKey) {
+        throw new Error('Sem resultados do Google Places e Tavily key ausente — configure em Ajustes.');
+      }
+
       const baseQ = query;
       const tavilyQueries = [
         `${baseQ} em ${region} telefone whatsapp endereço`,
