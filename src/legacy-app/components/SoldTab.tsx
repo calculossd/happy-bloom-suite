@@ -133,6 +133,12 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
     doc.save(`relatorio_vendas_gestao3d.pdf`);
   };
 
+  useEffect(() => {
+    const handler = () => handleExportPDFReport();
+    window.addEventListener('export-sales-report', handler);
+    return () => window.removeEventListener('export-sales-report', handler);
+  });
+
   const handleExportReceipt = (item: PrintOrder) => {
     const doc = new jsPDF();
     
