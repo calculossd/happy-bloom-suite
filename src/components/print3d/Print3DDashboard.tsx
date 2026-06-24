@@ -1109,6 +1109,12 @@ export function Print3DPanel({
   const expensesToday = expenses
     .filter((e: any) => isToday(e.date || e.createdAt))
     .reduce((s: number, e: any) => s + (e.amount || e.value || 0), 0);
+  // Clientes "balcão": clientes cadastrados com estoque consignado
+  const balcaoClientsCount = clients.filter((c: any) => {
+    const stockItems = Array.isArray(c?.productsStock) ? c.productsStock : [];
+    const totalQty = stockItems.reduce((s: number, p: any) => s + (Number(p?.qty) || 0), 0);
+    return totalQty > 0 || Number(c?.stockCount) > 0;
+  }).length;
   const activePrinters = printers.filter((p: any) => p.status === "PRINTING").length;
   const printersTotal = printers.length;
 
@@ -1206,7 +1212,7 @@ export function Print3DPanel({
             <Kpi label="Faturamento Hoje"    value={fmtBRL(revenueToday)}                    delta="hoje" Icon={DollarSign} />
             <Kpi label="Peças Impressas"     value={String(piecesToday)}                     delta="hoje" Icon={Package2} />
             <Kpi label="Horas de Impressão"  value={hoursLabel}                              delta="hoje" Icon={Clock} />
-            <Kpi label="Gastos Hoje"         value={fmtBRL(expensesToday)}                   delta="hoje" Icon={Wallet} />
+            <Kpi label="Clientes c/ Estoque" value={String(balcaoClientsCount)}              delta="balcão" Icon={Users} />
           </div>
 
           {/* Row 2: Mapa | Impressão ao Vivo | Pedidos | Higrômetros */}
