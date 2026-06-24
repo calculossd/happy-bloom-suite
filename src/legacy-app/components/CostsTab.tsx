@@ -1758,7 +1758,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       })()}
 
       {/* THREE D DAYS STOCK AUDIT BANNER */}
-      {false && activeSubTab === 'STOCK' && (
+      {activeSubTab === 'STOCK' && (
       <div
         id="audit_period_safety_banner"
         className={`group relative overflow-hidden rounded-2xl border backdrop-blur-xl transition-all duration-500 ${
