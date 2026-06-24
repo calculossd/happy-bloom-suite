@@ -793,6 +793,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
 
   // States for Order Intake Form inside Customer Sheet
   const [orderItemName, setOrderItemName] = useState('');
+  const [orderItemImage, setOrderItemImage] = useState<string>('');
   const [orderQuantity, setOrderQuantity] = useState(1);
   const [orderFilamentType, setOrderFilamentType] = useState('PLA');
   const [orderFilamentColor, setOrderFilamentColor] = useState('Preto');
@@ -2986,6 +2987,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
             clientId: client.id,
             clientName: client.name,
             itemName: orderItemName.trim(),
+            imageUrl: orderItemImage || undefined,
             quantity: orderQuantity,
             filamentType: orderFilamentType,
             filamentColor: orderFilamentColor,
@@ -3000,6 +3002,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
           });
 
           setOrderItemName('');
+          setOrderItemImage('');
           setOrderQuantity(1);
           alert(`Pedido de "${orderItemName}" registrado e adicionado com sucesso para a fila de produção da Gestão 3D! 🚀✨`);
         };
@@ -3353,6 +3356,37 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                         className="w-full bg-[#151917] border border-[#232B27] rounded-lg py-1.5 px-2.5 text-xs text-white focus:outline-none focus:border-[#95BBA2] select-text"
                         required
                       />
+                    </div>
+
+                    {/* Order item image upload */}
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[10px] text-[#8BA58D] font-black uppercase block">Foto da Peça (opcional):</label>
+                        <label className="text-[10px] font-black uppercase px-2 py-1 rounded-md bg-[#E2B144]/15 text-[#E2B144] border border-[#E2B144]/30 hover:bg-[#E2B144]/25 cursor-pointer transition">
+                          📤 Enviar foto
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              if (file.size > 5 * 1024 * 1024) { alert('Imagem muito grande (máx 5MB).'); return; }
+                              const reader = new FileReader();
+                              reader.onload = () => setOrderItemImage(String(reader.result || ''));
+                              reader.readAsDataURL(file);
+                              e.target.value = '';
+                            }}
+                          />
+                        </label>
+                      </div>
+                      {orderItemImage && (
+                        <div className="flex items-center gap-2 p-1.5 bg-[#151917] border border-[#E2B144]/40 rounded-lg">
+                          <img src={orderItemImage} alt="Upload" className="w-10 h-10 rounded object-cover" />
+                          <span className="text-[10px] text-[#E2B144] font-bold flex-1">Foto da peça selecionada ✓</span>
+                          <button type="button" onClick={() => setOrderItemImage('')} className="text-[10px] text-red-400 hover:text-red-300 font-bold cursor-pointer">remover</button>
+                        </div>
+                      )}
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
