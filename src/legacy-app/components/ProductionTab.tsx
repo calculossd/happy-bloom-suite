@@ -292,6 +292,12 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
 
   const handleOpenAddDialog = () => {
     setEditingOrder(null);
+  useEffect(() => {
+    const handler = () => handleOpenAddDialog();
+    window.addEventListener('open-new-order', handler);
+    return () => window.removeEventListener('open-new-order', handler);
+  }, [clients, filamentStocks]);
+
     setFormClientId(clients.length > 0 ? clients[0].id.toString() : 'CUSTOM');
     setCustomClientName('');
     setFormItemName('');
