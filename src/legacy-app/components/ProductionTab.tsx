@@ -678,24 +678,41 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                 const deadlinePassed = order.deadline && deadlineMs < 0;
                 const deadlineHrs = Math.floor(Math.abs(deadlineMs) / 3600000);
                 const isPrinting = order.status === 'PRINTING';
+                const isCritical = delayCat.level === 'CRITICAL';
+                const isWarn = delayCat.level === 'ORANGE' || delayCat.level === 'YELLOW';
+                const progressPct = isPrinting ? Math.round((order.printingProgress || 0) * 100) : 0;
+                const rowBg = isCritical
+                  ? 'bg-red-500/[0.08] hover:bg-red-500/[0.12] border-l-2 border-l-red-500'
+                  : isWarn
+                  ? 'bg-orange-500/[0.05] hover:bg-orange-500/[0.08] border-l-2 border-l-orange-500'
+                  : isPrinting
+                  ? 'bg-emerald-500/[0.04] hover:bg-emerald-500/[0.08] border-l-2 border-l-emerald-500/60'
+                  : 'hover:bg-white/[0.02] border-l-2 border-l-transparent';
                 return (
                   <li
                     key={order.id}
-                    className={`flex items-center gap-3 px-4 py-2.5 hover:bg-white/[0.02] transition-colors ${isPrinting ? 'bg-emerald-500/5' : ''}`}
+                    className={`flex items-center gap-3 px-4 py-3 transition-colors ${rowBg}`}
                   >
                     <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold font-mono ${
-                      isPrinting ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-[#1a221e] text-[#8BA58D] border border-[#232B27]'
+                      isCritical
+                        ? 'bg-red-500/20 text-red-300 border border-red-500/50'
+                        : isPrinting
+                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                        : 'bg-[#1a221e] text-[#8BA58D] border border-[#232B27]'
                     }`}>
                       {isPrinting ? '▶' : idx + 1}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold text-white truncate">{order.itemName}</span>
+                        <span className={`text-sm font-semibold truncate ${isCritical ? 'text-red-200' : 'text-white'}`}>{order.itemName}</span>
                         <span className="text-[10px] px-1.5 py-0.5 rounded font-mono" style={{ background: `${getStatusColor(order.status)}22`, color: getStatusColor(order.status) }}>
                           {getStatusLabel(order.status)}
                         </span>
+                        {isPrinting && (
+                          <span className="text-[10px] font-mono font-bold text-emerald-300">{progressPct}%</span>
+                        )}
                       </div>
-                      <div className="flex items-center gap-3 text-[11px] text-[#8BA58D] mt-0.5">
+                      <div className={`flex items-center gap-3 text-[11px] mt-0.5 ${isCritical ? 'text-red-300/80' : 'text-[#8BA58D]'}`}>
                         <span className="truncate">{order.clientName}</span>
                         <span className="text-[#3a4640]">•</span>
                         <span>{order.filamentType} {order.filamentColor}</span>
@@ -704,9 +721,17 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                         <span className="text-[#3a4640]">•</span>
                         <span>~{order.printTimeHours}h impressão</span>
                       </div>
+                      {isPrinting && (
+                        <div className="mt-2 w-full h-1.5 rounded-full bg-[#0C0E0D] border border-[#232B27] overflow-hidden">
+                          <div
+                            className="h-full rounded-full bg-gradient-to-r from-emerald-500 via-emerald-400 to-[#b7ff00] shadow-[0_0_10px_rgba(183,255,0,0.45)] transition-all duration-700"
+                            style={{ width: `${Math.max(2, progressPct)}%` }}
+                          />
+                        </div>
+                      )}
                     </div>
                     <div className="hidden sm:flex flex-col items-end gap-0.5 min-w-[120px]">
-                      <div className={`flex items-center gap-1 text-[11px] font-semibold ${delayCat.textClass || 'text-emerald-400'}`}>
+                      <div className={`flex items-center gap-1 text-[11px] font-bold ${isCritical ? 'text-red-400 animate-pulse' : delayCat.textClass || 'text-emerald-400'}`}>
                         <Clock className="w-3 h-3" />
                         <span>{elapsedStr} na fila</span>
                       </div>
@@ -716,7 +741,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                         </span>
                       )}
                     </div>
-                    <div className={`flex-shrink-0 px-2 py-1 rounded text-[10px] font-bold border ${delayCat.border} ${delayCat.bg} ${delayCat.textClass || 'text-emerald-400'}`}>
+                    <div className={`flex-shrink-0 px-2 py-1 rounded text-[10px] font-bold border ${delayCat.border} ${delayCat.bg} ${delayCat.textClass || 'text-emerald-400'} ${isCritical ? 'animate-pulse' : ''}`}>
                       {delayCat.level === 'CRITICAL' ? '🚨' : delayCat.level === 'ORANGE' ? '⚠️' : delayCat.level === 'YELLOW' ? '⏳' : '✓'}
                     </div>
                   </li>
