@@ -261,20 +261,6 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
 
   return (
     <div className="space-y-6" id="clients_tab_container">
-      {/* Header Bento Title — hidden in printers-only / prospect views */}
-      {viewMode !== 'printers' && viewMode !== 'prospect' && (
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm" id="clients-tab-header">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Clientes & Oficina</div>
-            <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">
-              {clients.length} Cadastrados
-            </span>
-          </div>
-          <p className="text-xs text-[var(--brand-muted)]">Contatos cadastrados, faturamento individual e frota de equipamentos</p>
-        </div>
-      </div>
-      )}
       {viewMode !== 'printers' && viewMode !== 'prospect' && (
         <ClientsDashboard clients={clients} orders={orders} />
       )}
