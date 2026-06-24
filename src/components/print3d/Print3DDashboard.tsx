@@ -643,11 +643,13 @@ function Hygrometers({ devices = [] }: { devices?: any[] }) {
 function StlGallery({ orders = [], clients = [] }: { orders?: any[]; clients?: any[] }) {
   const stockImageByName: Record<string, string | undefined> = {};
   const stockQtyByName: Record<string, number> = {};
+  const registeredNames = new Set<string>();
   clients.forEach((c: any) => {
     (c?.productsStock || []).forEach((p: any) => {
       const key = String(p?.name || "").toLowerCase().trim();
       if (key && p?.imageUrl && !stockImageByName[key]) stockImageByName[key] = p.imageUrl;
       if (key) stockQtyByName[key] = (stockQtyByName[key] || 0) + Number(p?.qty || 0);
+      if (key) registeredNames.add(key);
     });
   });
   try {
@@ -660,9 +662,12 @@ function StlGallery({ orders = [], clients = [] }: { orders?: any[]; clients?: a
       if (key && c?.imageUrl && !stockImageByName[key]) stockImageByName[key] = c.imageUrl;
       if (key && c?.stockCount != null && stockQtyByName[key] == null)
         stockQtyByName[key] = Number(c.stockCount) || 0;
+      if (key) registeredNames.add(key);
     });
   } catch {}
-  const orderItems = orders.map((o: any) => {
+  const orderItems = orders
+    .filter((o: any) => registeredNames.has(String(o?.itemName || "").toLowerCase().trim()))
+    .map((o: any) => {
     const key = String(o?.itemName || "").toLowerCase().trim();
     const qty = stockQtyByName[key];
     return {
