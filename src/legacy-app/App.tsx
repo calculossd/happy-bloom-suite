@@ -1601,6 +1601,14 @@ export default function App() {
               ],
             },
             {
+              section: 'Operacional',
+              items: [
+                { id: 16, label: 'Impressoras', icon: PrinterNavIcon },
+                { id: 12, label: 'Pré-check', icon: ClipboardCheck },
+                { id: 14, label: 'Sites', icon: Globe },
+              ],
+            },
+            {
               section: 'Marketing',
               items: [
                 { id: 7, label: 'Preços', icon: Search },
@@ -1611,14 +1619,6 @@ export default function App() {
                 { id: 8, label: 'Stls', icon: Box },
                 { id: 4, label: 'Catálogo', icon: BookOpen, onClick: () => openCostsSubtab('CATALOG') },
                 { id: 10, label: 'Kanban', icon: Columns3 },
-              ],
-            },
-            {
-              section: 'Operacional',
-              items: [
-                { id: 16, label: 'Impressoras', icon: PrinterNavIcon },
-                { id: 12, label: 'Pré-check', icon: ClipboardCheck },
-                { id: 14, label: 'Sites', icon: Globe },
               ],
             },
             {
