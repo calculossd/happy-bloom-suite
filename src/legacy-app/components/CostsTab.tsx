@@ -2500,7 +2500,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
               <div className="flex items-center justify-between border-b border-[#232B27]/40 pb-2">
                 <h4 className="text-sm font-bold text-[#b7ff00] uppercase flex items-center gap-1.5" style={{ color: editingProduct ? '#b7ff00' : '#b7ff00' }}>
                   <Edit3 className="h-4 w-4" />
-                  {editingProduct ? `Editar Produto: ${editingProduct.name}` : 'Cadastrar Novo Produto Manualmente'}
+                  {editingProduct ? `Editar Produto em Estoque: ${editingProduct.name}` : 'Cadastrar Produto no Estoque'}
                 </h4>
                 <button
                   type="button"
@@ -2962,11 +2962,129 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                   type="submit"
                   className="px-6 py-2 bg-[#b7ff00] hover:bg-[#B6D8B4] text-[#0C0E0D] font-black text-xs uppercase tracking-wider rounded-xl transition cursor-pointer"
                 >
-                  {editingProduct ? 'Salvar Edição ✓' : 'Confirmar Cadastro no Catálogo ✓'}
+                  {editingProduct ? 'Salvar Edição ✓' : 'Confirmar Cadastro no Estoque ✓'}
                 </button>
               </div>
             </form>
           )}
+          <div className="relative overflow-hidden bg-gradient-to-br from-[#172014] via-[#11170F] to-[#0B0F0A] border border-[#b7ff00]/25 p-5 rounded-2xl space-y-4 shadow-[0_24px_60px_-30px_rgba(183,255,0,0.35)]" id="product-stock-section">
+            <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-[#b7ff00]/10 blur-3xl opacity-70" />
+            <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-3 border-b border-white/5 pb-4">
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#b7ff00]/10 ring-1 ring-inset ring-[#b7ff00]/25 text-[#b7ff00]">
+                  <Tag className="h-4 w-4" />
+                </div>
+                <div className="min-w-0">
+                  <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-[#b7ff00]/80">Produtos</span>
+                  <h3 className="text-[14px] font-bold tracking-[-0.01em] text-[#F1F4EE] truncate">Estoque de Produtos</h3>
+                  <p className="text-[11px] text-zinc-500 truncate">Cadastro de produtos prontos do portfólio; o catálogo só exibe estes itens</p>
+                </div>
+              </div>
+              <button
+                onClick={() => { setEditingProduct(null); setShowAddProductManualForm(!showAddProductManualForm); }}
+                className="shrink-0 inline-flex items-center gap-1.5 rounded-xl border border-[#b7ff00]/30 bg-[#b7ff00]/15 px-3.5 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-[#b7ff00] transition-all duration-300 hover:border-[#b7ff00]/50 hover:bg-[#b7ff00]/25 active:scale-[0.97]"
+                id="btn-trigger-product-stock-form"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                Novo Produto
+              </button>
+            </div>
+
+            {catalogItems.length === 0 ? (
+              <div className="relative p-8 text-center text-[#8BA58D] border border-dashed border-[#b7ff00]/20 bg-black/20 rounded-2xl">
+                <Tag className="h-10 w-10 text-[#b7ff00]/35 mx-auto mb-3" />
+                <p className="text-xs font-bold text-[#F1F4EE]">Nenhum produto cadastrado no estoque.</p>
+                <p className="text-[11px] mt-1 text-[#8BA58D]/75">Clique em Novo Produto para cadastrar os produtos do portfólio. O catálogo será preenchido automaticamente.</p>
+              </div>
+            ) : (
+              <div className="relative grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3" id="product-stock-listing">
+                {[...catalogItems].sort((a, b) => {
+                  const lowA = Number(a.stockCount || 0) < Number(a.minStockCount || 0);
+                  const lowB = Number(b.stockCount || 0) < Number(b.minStockCount || 0);
+                  if (lowA && !lowB) return -1;
+                  if (!lowA && lowB) return 1;
+                  return String(a.name || '').localeCompare(String(b.name || ''), 'pt-BR');
+                }).map(item => {
+                  const stock = Number(item.stockCount || 0);
+                  const min = Number(item.minStockCount || 0);
+                  const low = stock < min;
+                  const pct = Math.max(0, Math.min(100, (stock / Math.max(1, min * 2 || stock || 1)) * 100));
+                  return (
+                    <div key={item.id} className={`relative overflow-hidden rounded-2xl border p-4 bg-[#0C0E0D]/80 space-y-3 ${low ? 'border-red-500/70 shadow-[0_0_18px_rgba(239,68,68,0.12)]' : 'border-[#b7ff00]/15'}`}>
+                      <div className="flex items-start gap-3">
+                        <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-black/40">
+                          <img
+                            src={item.imageUrl || 'https://images.unsplash.com/photo-1608156639585-b3a032ef9689?w=300&auto=format&fit=crop&q=60'}
+                            alt={item.name}
+                            referrerPolicy="no-referrer"
+                            className="h-full w-full object-cover"
+                          />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-1.5 mb-1">
+                            <span className="text-[8px] font-mono font-black tracking-widest text-[#b7ff00] bg-[#b7ff00]/10 px-1.5 py-0.5 rounded border border-[#b7ff00]/20 truncate max-w-[92px]">
+                              {item.productCode || 'PROD'}
+                            </span>
+                            {low && <span className="text-[7.5px] font-mono uppercase bg-red-400/15 text-red-400 border border-red-500/30 px-1.5 py-0.5 rounded animate-pulse font-black">Baixo</span>}
+                          </div>
+                          <h4 className="text-sm font-black text-[#F1F4EE] truncate">{item.name}</h4>
+                          <p className="text-[10px] text-[#8BA58D] truncate">{item.filamentType} {item.filamentColorsUsed || ''} • R$ {Number(item.defaultPrice || 0).toFixed(2)}</p>
+                        </div>
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <div className="flex items-end justify-between font-mono">
+                          <span className={`text-2xl font-black tabular-nums ${low ? 'text-red-400' : 'text-white'}`}>{stock}<span className="text-xs text-[var(--brand-text-subtle)] ml-1">un</span></span>
+                          <span className="text-[10px] text-[var(--brand-text-subtle)]">mín {min}un</span>
+                        </div>
+                        <div className="h-1.5 rounded-full bg-white/5 overflow-hidden">
+                          <div
+                            className="h-full rounded-full transition-all duration-500"
+                            style={{
+                              width: `${pct}%`,
+                              background: low ? 'var(--cat-red)' : '#b7ff00',
+                              boxShadow: low ? '0 0 8px rgba(239,68,68,0.6)' : '0 0 8px rgba(183,255,0,0.6)',
+                            }}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-1.5 pt-1">
+                        <button
+                          onClick={() => handleUpdateCatalogProductStock(item.id, -1)}
+                          className="px-3 py-1.5 bg-[#151917] border border-[#232B27] hover:border-red-400 text-white rounded-lg font-bold text-[11px] transition"
+                          title="Remover 1 unidade"
+                        >
+                          -
+                        </button>
+                        <button
+                          onClick={() => handleUpdateCatalogProductStock(item.id, 1)}
+                          className="px-3 py-1.5 bg-[#151917] border border-[#232B27] hover:border-[#b7ff00] text-white rounded-lg font-bold text-[11px] transition"
+                          title="Adicionar 1 unidade"
+                        >
+                          +
+                        </button>
+                        <button
+                          onClick={() => handleEditCatalogProduct(item)}
+                          className="flex-1 px-2.5 py-1.5 bg-white/5 hover:bg-white/10 text-white text-[10px] font-black rounded-lg border border-white/10 transition cursor-pointer uppercase tracking-wider"
+                        >
+                          Editar
+                        </button>
+                        <button
+                          onClick={() => handleDeleteCatalogProduct(item.id)}
+                          className="btn-icon"
+                          style={{ color: 'var(--cat-red)' }}
+                          title="Excluir produto"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Filamentos Stocks */}
           <div className="relative overflow-hidden bg-gradient-to-br from-[#161B19] via-[#121613] to-[#0E1210] border border-[#232B27] p-5 rounded-2xl space-y-4 shadow-[0_24px_60px_-30px_rgba(149,187,162,0.25)]">
