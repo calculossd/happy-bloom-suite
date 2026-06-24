@@ -3358,6 +3358,37 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                       />
                     </div>
 
+                    {/* Order item image upload */}
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[10px] text-[#8BA58D] font-black uppercase block">Foto da Peça (opcional):</label>
+                        <label className="text-[10px] font-black uppercase px-2 py-1 rounded-md bg-[#E2B144]/15 text-[#E2B144] border border-[#E2B144]/30 hover:bg-[#E2B144]/25 cursor-pointer transition">
+                          📤 Enviar foto
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              if (file.size > 5 * 1024 * 1024) { alert('Imagem muito grande (máx 5MB).'); return; }
+                              const reader = new FileReader();
+                              reader.onload = () => setOrderItemImage(String(reader.result || ''));
+                              reader.readAsDataURL(file);
+                              e.target.value = '';
+                            }}
+                          />
+                        </label>
+                      </div>
+                      {orderItemImage && (
+                        <div className="flex items-center gap-2 p-1.5 bg-[#151917] border border-[#E2B144]/40 rounded-lg">
+                          <img src={orderItemImage} alt="Upload" className="w-10 h-10 rounded object-cover" />
+                          <span className="text-[10px] text-[#E2B144] font-bold flex-1">Foto da peça selecionada ✓</span>
+                          <button type="button" onClick={() => setOrderItemImage('')} className="text-[10px] text-red-400 hover:text-red-300 font-bold cursor-pointer">remover</button>
+                        </div>
+                      )}
+                    </div>
+
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1">
                         <label className="text-[10px] text-[#8BA58D] font-black uppercase block">Quantidade (un):</label>
