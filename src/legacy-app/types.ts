@@ -13,6 +13,13 @@ export interface Client {
   stockCount?: number;
   stockValue?: number;
   code?: string;
+  productsStock?: ClientProductStock[];
+}
+
+export interface ClientProductStock {
+  name: string;
+  qty: number;
+  imageUrl?: string;
 }
 
 export interface Printer {
