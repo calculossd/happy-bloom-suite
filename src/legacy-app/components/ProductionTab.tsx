@@ -1019,6 +1019,78 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
               );
         };
 
+        const renderCompactRow = (order: PrintOrder) => {
+          const color = getStatusColor(order.status);
+          const delayCat = getDelayCategory(order.createdAt, order.status);
+          const isDeadlinePassed = order.deadline && Date.now() > order.deadline;
+          const isLate = (order.status !== 'DELIVERED' && order.status !== 'READY') && (delayCat.level === 'CRITICAL' || isDeadlinePassed);
+          const isPrinting = order.status === 'PRINTING';
+          const progressPct = isPrinting ? Math.round((order.printingProgress || 0) * 100) : 0;
+          const elapsedMs = Date.now() - order.createdAt;
+          const elapsedH = Math.floor(elapsedMs / 3600000);
+          const elapsedM = Math.floor((elapsedMs % 3600000) / 60000);
+          const elapsedStr = elapsedH > 0 ? `${elapsedH}h${elapsedM}m` : `${elapsedM}m`;
+          const nextStatus = getNextStatusValue(order.status);
+          const nextLabel = getNextStatusActionLabel(order.status);
+          return (
+            <motion.div
+              key={order.id}
+              layoutId={`order_card_${order.id}`}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              whileHover={{ y: -1 }}
+              className={`group relative flex items-stretch gap-3 rounded-xl bg-gradient-to-br from-[#13181500] via-[#13181580] to-[#0F1310] border ${isLate ? 'border-red-500/60 shadow-[0_0_14px_rgba(239,68,68,0.18)]' : 'border-[#232B27] hover:border-[#3a4a40]'} px-3 py-2.5 transition-all duration-300 backdrop-blur-sm`}
+            >
+              <span aria-hidden className="absolute left-0 top-2 bottom-2 w-[3px] rounded-full" style={{ background: color, boxShadow: `0 0 8px ${color}80` }} />
+              <div className="flex-1 min-w-0 pl-1.5">
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="truncate text-[13px] font-semibold text-[#F1F4EE] tracking-tight">{order.itemName}</span>
+                  {order.quantity > 1 && (
+                    <span className="shrink-0 text-[9px] font-mono text-[#8BA58D] bg-black/40 px-1.5 py-0.5 rounded">×{order.quantity}</span>
+                  )}
+                </div>
+                <div className="mt-0.5 flex items-center gap-1.5 text-[10.5px] text-[#8BA58D] min-w-0">
+                  <span className="truncate">{order.clientName}</span>
+                  <span className="text-[#3a4640]">·</span>
+                  <span className="truncate">{order.filamentType} {order.filamentColor}</span>
+                  <span className="text-[#3a4640]">·</span>
+                  <span className="shrink-0">{order.weightGrams}g</span>
+                </div>
+                {isPrinting && (
+                  <div className="mt-1.5 flex items-center gap-2">
+                    <div className="flex-1 h-1 rounded-full bg-white/[0.05] overflow-hidden">
+                      <div className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-[#b7ff00] transition-all duration-700" style={{ width: `${Math.max(2, progressPct)}%` }} />
+                    </div>
+                    <span className="text-[9px] font-mono font-bold tabular-nums text-emerald-300">{progressPct}%</span>
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col items-end justify-between shrink-0 gap-1">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded" style={{ background: `${color}1f`, color }}>
+                    {getStatusLabel(order.status)}
+                  </span>
+                  <span className={`text-[9.5px] font-mono tabular-nums flex items-center gap-1 ${isLate ? 'text-red-400' : 'text-[#8BA58D]'}`}>
+                    <Clock className="w-2.5 h-2.5" />{elapsedStr}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[12px] font-bold text-[#F1F4EE] tabular-nums">R$ {order.priceCharged.toFixed(0)}</span>
+                  {nextStatus && (
+                    <button
+                      onClick={() => handleFastStatusAdvance(order, nextStatus)}
+                      className="text-[10px] font-bold px-2 py-1 rounded-md border transition-all duration-200 hover:scale-[1.03] active:scale-95"
+                      style={{ borderColor: `${color}55`, color, background: `${color}12` }}
+                    >
+                      {nextLabel} →
+                    </button>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          );
+        };
+
         const queues = [
           { key: 'WAITING',  title: 'Fila Aguardando Aceite', color: '#eab308', subtitle: 'Pedidos pendentes de aprovação / arquivo', list: filteredOrders.filter(o => o.status === 'WAITING') },
           { key: 'PRINT',    title: 'Fila Imprimindo',        color: '#95BBA2', subtitle: 'Na fila e em impressão',                    list: filteredOrders.filter(o => o.status === 'QUEUE' || o.status === 'PRINTING') },
@@ -1048,8 +1120,8 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                     Fila vazia
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2.5 md:gap-3 [&_.unique-card]:!p-2 [&_.unique-card]:!space-y-1 [&_.unique-card]:text-[11px] [&_.unique-card]:rounded-xl [&_.unique-card]:leading-tight [&_.unique-card_*]:!leading-tight [&_.unique-card_.space-y-1]:!space-y-0.5 [&_.unique-card_.space-y-2]:!space-y-1 [&_.unique-card_.space-y-3]:!space-y-1 [&_.unique-card_.space-y-4]:!space-y-1.5 [&_.unique-card_.py-2]:!py-1 [&_.unique-card_.py-3]:!py-1 [&_.unique-card_.p-3]:!p-1.5 [&_.unique-card_.p-4]:!p-2 [&_.unique-card_.mt-2]:!mt-1 [&_.unique-card_.mt-3]:!mt-1 [&_.unique-card_.gap-2]:!gap-1 [&_.unique-card_.gap-3]:!gap-1.5">
-                    {q.list.map(renderOrderCard)}
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2">
+                    {q.list.map(renderCompactRow)}
                   </div>
                 )}
               </section>
