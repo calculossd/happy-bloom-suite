@@ -997,4 +997,3 @@ html[data-costs-subtab="SHOP"] [data-tab-category="estoque"] #view-page-header {
   box-shadow: 0 20px 50px -20px rgba(var(--tab-accent), 0.4) !important;
   backdrop-filter: blur(18px) saturate(140%) !important;
 }
-}
