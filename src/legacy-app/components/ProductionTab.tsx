@@ -1020,10 +1020,11 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
         };
 
         const queues = [
-          { key: 'PRINT',    title: 'Fila de Impressão',     color: '#95BBA2', subtitle: 'Aguardando arquivo, na fila e imprimindo', list: filteredOrders.filter(o => o.status === 'WAITING' || o.status === 'QUEUE' || o.status === 'PRINTING') },
-          { key: 'FINISH',   title: 'Fila de Acabamento',    color: '#f59e0b', subtitle: 'Pós-processamento e finalização',          list: filteredOrders.filter(o => o.status === 'POST_PROCESS') },
-          { key: 'PACKING',  title: 'Fila de Embalando',     color: '#a855f7', subtitle: 'Embalagem antes da entrega',               list: filteredOrders.filter(o => o.status === 'PACKING') },
-          { key: 'READY',    title: 'Prontos para Entrega',  color: '#3b82f6', subtitle: 'Aguardando retirada / envio',              list: filteredOrders.filter(o => o.status === 'READY') },
+          { key: 'WAITING',  title: 'Fila Aguardando Aceite', color: '#eab308', subtitle: 'Pedidos pendentes de aprovação / arquivo', list: filteredOrders.filter(o => o.status === 'WAITING') },
+          { key: 'PRINT',    title: 'Fila Imprimindo',        color: '#95BBA2', subtitle: 'Na fila e em impressão',                    list: filteredOrders.filter(o => o.status === 'QUEUE' || o.status === 'PRINTING') },
+          { key: 'FINISH',   title: 'Fila de Acabamento',     color: '#f59e0b', subtitle: 'Pós-processamento e finalização',           list: filteredOrders.filter(o => o.status === 'POST_PROCESS') },
+          { key: 'PACKING',  title: 'Fila de Embalando',      color: '#a855f7', subtitle: 'Embalagem antes da entrega',                list: filteredOrders.filter(o => o.status === 'PACKING') },
+          { key: 'READY',    title: 'Prontos para Entrega',   color: '#3b82f6', subtitle: 'Aguardando retirada / envio',               list: filteredOrders.filter(o => o.status === 'READY') },
         ];
 
         return (
@@ -1047,7 +1048,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                     Fila vazia
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 md:gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2.5 md:gap-3 [&_.unique-card]:p-2 [&_.unique-card]:md:p-2.5 [&_.unique-card]:space-y-2 [&_.unique-card]:text-[11px] [&_.unique-card]:rounded-xl">
                     {q.list.map(renderOrderCard)}
                   </div>
                 )}
