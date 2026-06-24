@@ -563,8 +563,10 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                   key={printer.id} 
                   onClick={() => setSelectedCameraPrinter(printer)}
                   className={`group relative aspect-square rounded-xl overflow-hidden select-none transition-all duration-300 border-2 cursor-pointer ${
-                    expressesActivity 
-                      ? 'border-emerald-500 animate-pulse shadow-[0_0_12px_rgba(16,185,129,0.7)] hover:border-amber-400' 
+                    printer.status === 'MAINTENANCE'
+                      ? 'border-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.6)] hover:border-amber-300'
+                      : expressesActivity
+                      ? 'border-emerald-500 animate-pulse shadow-[0_0_12px_rgba(16,185,129,0.7)] hover:border-amber-400'
                       : 'border-red-600 hover:border-amber-400'
                   }`}
                   id={`production_printer_card_${printer.id}`}
@@ -576,6 +578,28 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     referrerPolicy="no-referrer"
                   />
+
+                  {/* Botão Manutenção — bloqueia/libera a impressora para receber pedidos */}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const goingToMaintenance = printer.status !== 'MAINTENANCE';
+                      onUpdatePrinter(printer.id, {
+                        status: goingToMaintenance ? 'MAINTENANCE' : 'IDLE',
+                        printProgress: 0,
+                      });
+                    }}
+                    title={printer.status === 'MAINTENANCE' ? 'Encerrar manutenção' : 'Marcar em manutenção'}
+                    className={`absolute top-1.5 left-1.5 z-20 flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8.5px] font-black uppercase tracking-wider border backdrop-blur-sm transition-all duration-200 hover:scale-105 ${
+                      printer.status === 'MAINTENANCE'
+                        ? 'bg-amber-500/90 border-amber-300 text-black animate-pulse'
+                        : 'bg-black/70 border-white/10 text-amber-300 hover:bg-amber-500/90 hover:text-black hover:border-amber-300'
+                    }`}
+                  >
+                    <Wrench className="w-2.5 h-2.5" />
+                    {printer.status === 'MAINTENANCE' ? 'EM MANUT.' : 'MANUT.'}
+                  </button>
                   
                   {/* Subtle pulsing camera link hover circle overlay */}
                   <div className="absolute inset-x-0 top-0 pt-2 flex justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
@@ -593,9 +617,9 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                     
                     <div className="flex items-center justify-between gap-1 mt-0.5">
                       <div className="flex items-center gap-1 min-w-0">
-                        <span className={`w-1 h-1 rounded-full ${expressesActivity ? 'bg-emerald-400 animate-ping' : 'bg-red-500'}`} />
+                        <span className={`w-1 h-1 rounded-full ${printer.status === 'MAINTENANCE' ? 'bg-amber-400 animate-pulse' : expressesActivity ? 'bg-emerald-400 animate-ping' : 'bg-red-500'}`} />
                         <span className="text-[7.5px] sm:text-[8.5px] font-mono text-zinc-300 truncate font-semibold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                          {expressesActivity ? activeLabel : 'Inativo'}
+                          {printer.status === 'MAINTENANCE' ? 'Manutenção' : expressesActivity ? activeLabel : 'Inativo'}
                         </span>
                       </div>
                       {expressesActivity && (
