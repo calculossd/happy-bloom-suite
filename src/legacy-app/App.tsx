@@ -18,6 +18,7 @@ import { SoldTab } from './components/SoldTab';
 import { OkLojaAssistant } from './components/OkLojaAssistant';
 import { ShowcaseView } from './components/ShowcaseView';
 import { PrintFlowTab } from './components/PrintFlowTab';
+import { PrinterQueueList } from './components/PrinterQueueList';
 import {
   PriceResearchTab, PreCheckTab, AgendaTab, ToolsTab, ModelsTab
 } from './components/NewTabs';
@@ -91,7 +92,8 @@ import {
   Calculator,
   BookOpen,
   TrendingUp,
-  Radar
+  Radar,
+  Printer as PrinterNavIcon
 } from 'lucide-react';
 
 // STUNNING 3D CUBE & PRINTER EXTENSION GEOMETRIC LOGO
@@ -1287,6 +1289,7 @@ export default function App() {
       case 13: return { title: "Agenda",             subtitle: "Eventos, entregas e manutenções programadas" };
       case 14: return { title: "Sites",              subtitle: "Lojas e sites conectados ao seu ateliê" };
       case 15: return { title: "Prospecção",         subtitle: "Radar B2B Google Maps — captação de lojas e leads" };
+      case 16: return { title: "Impressoras",        subtitle: "Cadastro, manutenção, monitor ao vivo e fila de impressão" };
       default:
         return {
           title: "Ateliê 3D",
@@ -1620,6 +1623,7 @@ export default function App() {
             {
               section: 'Operacional',
               items: [
+                { id: 16, label: 'Impressoras', icon: PrinterNavIcon },
                 { id: 12, label: 'Pré-check', icon: ClipboardCheck },
                 { id: 14, label: 'Sites', icon: Globe },
               ],
@@ -2041,19 +2045,6 @@ export default function App() {
                 Produção
               </div>
             </div>
-            <ClientsTab
-              clients={clients}
-              printers={printers}
-              orders={orders}
-              onAddClient={handleAddClient}
-              onUpdateClient={handleUpdateClient}
-              onDeleteClient={handleDeleteClient}
-              onAddPrinter={handleAddPrinter}
-              onUpdatePrinter={handleUpdatePrinter}
-              onDeletePrinter={handleDeletePrinter}
-              onAddOrder={handleAddOrder}
-              viewMode="printers"
-            />
             <ProductionTab
               orders={orders}
               printers={printers}
@@ -2066,7 +2057,7 @@ export default function App() {
               onSimulateTick={handleSimulateTick}
               onUpdateFilament={handleUpdateFilamentStock}
               onUpdatePrinter={handleUpdatePrinter}
-              viewMode="full"
+              viewMode="orders"
             />
           </>
         )}
@@ -2180,6 +2171,43 @@ export default function App() {
                 onAddOrder={handleAddOrder}
                 viewMode="prospect"
               />
+            )}
+            {currentTab === 16 && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 px-1 py-1">
+                  <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">
+                    Impressoras
+                  </div>
+                </div>
+                <ProductionTab
+                  orders={orders}
+                  printers={printers}
+                  filamentStocks={filamentStocks}
+                  clients={clients}
+                  onAddOrder={handleAddOrder}
+                  onAddClient={handleAddClient}
+                  onUpdateOrder={handleUpdateOrder}
+                  onDeleteOrder={handleDeleteOrder}
+                  onSimulateTick={handleSimulateTick}
+                  onUpdateFilament={handleUpdateFilamentStock}
+                  onUpdatePrinter={handleUpdatePrinter}
+                  viewMode="monitor"
+                />
+                <PrinterQueueList printers={printers} orders={orders} />
+                <ClientsTab
+                  clients={clients}
+                  printers={printers}
+                  orders={orders}
+                  onAddClient={handleAddClient}
+                  onUpdateClient={handleUpdateClient}
+                  onDeleteClient={handleDeleteClient}
+                  onAddPrinter={handleAddPrinter}
+                  onUpdatePrinter={handleUpdatePrinter}
+                  onDeletePrinter={handleDeletePrinter}
+                  onAddOrder={handleAddOrder}
+                  viewMode="printers"
+                />
+              </div>
             )}
           </Suspense>
         )}
