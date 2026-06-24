@@ -411,6 +411,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
       paymentMethod: formPaymentMethod,
       paymentStatus: formPaymentStatus
     };
+    (payload as any).imageUrl = formImageUrl || undefined;
 
     if (editingOrder) {
       onUpdateOrder(editingOrder.id, {
