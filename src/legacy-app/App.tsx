@@ -1589,6 +1589,7 @@ export default function App() {
               section: 'Principal',
               items: [
                 { id: 2, label: 'Clientes', icon: Users },
+                { id: 15, label: 'Prospecção', icon: Radar },
                 { id: 3, label: 'Pedidos', icon: GitPullRequest, badge: pendingOrdersCount },
                 { id: 6, label: 'Histórico', icon: ShoppingBag },
                 { id: 1, label: 'Produção', icon: Activity },
