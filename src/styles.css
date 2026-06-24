@@ -959,3 +959,26 @@ input, select, textarea {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
+
+/* Header achatado (Produção / Pedidos / Histórico): sem bloco, sem borda, sem sombra */
+.legacy-skin #view-page-header.header-flat,
+#view-page-header.header-flat {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Degradê azul nos blocos internos de Produção / Pedidos / Histórico */
+#production-dashboard-container .glow-card,
+#integration_tab_container .glow-card,
+#sold-orders-tab-container .glow-card {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(15, 23, 42, 0.6)) !important;
+  background-color: transparent !important;
+  background-image: linear-gradient(135deg, rgba(56, 189, 248, 0.10), rgba(15, 23, 42, 0.55)) !important;
+  border: 1px solid rgba(56, 189, 248, 0.25) !important;
+  box-shadow: 0 20px 50px -20px rgba(56, 189, 248, 0.35) !important;
+}
