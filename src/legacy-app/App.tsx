@@ -2045,7 +2045,7 @@ export default function App() {
             return (
               <div
                 id="global-price-opportunity-banner"
-                className="relative mb-2 overflow-visible"
+                className="relative mb-2 overflow-visible rounded-2xl bg-sky-600 border border-sky-400/60 shadow-[0_8px_24px_-8px_rgba(56,189,248,0.5)]"
               >
                 <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-5">
                   <div className="flex min-w-0 items-center gap-3">
