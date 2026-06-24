@@ -61,6 +61,7 @@ export interface PrintOrder {
   deadline: number;
   paymentMethod?: 'CONSIGNADO' | 'CARTÃO' | 'DINHEIRO' | 'OUTROS';
   paymentStatus?: 'PAGO' | 'PENDENTE';
+  imageUrl?: string;
 }
 
 export interface CatalogItem {
