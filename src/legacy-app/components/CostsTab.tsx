@@ -2337,8 +2337,8 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Catálogo</div>
-                <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">Portfólio</span>
+                <div className="text-sm font-bold uppercase tracking-[0.14em] text-[#c4b5fd] font-sans select-none leading-none">Catálogo</div>
+                <span className="px-2.5 py-0.5 bg-[#c4b5fd]/10 text-[#c4b5fd] text-xs font-bold font-sans rounded-full border border-[#c4b5fd]/25 shadow-[0_0_18px_-6px_rgba(196,181,253,0.45)]">Portfólio</span>
               </div>
               <p className="text-xs text-[var(--brand-muted)]">Somente vitrine: os itens cadastrados no estoque de produtos aparecem aqui para compartilhar</p>
             </div>
@@ -2347,7 +2347,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
           <div className="p-5 bg-[#151917] border border-[#232B27] rounded-2xl flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <h3 className="text-base font-bold text-[#F1F4EE] flex items-center gap-2">
-                <BookOpen className="h-5 w-5 text-[#b7ff00]" />
+                <BookOpen className="h-5 w-5 text-[#c4b5fd]" />
                 Catálogo de Peças & Produtos Registrados
               </h3>
               <p className="text-xs text-[#8BA58D]">Visualize e compartilhe os produtos vindos do estoque. Cadastro e quantidade ficam na aba Estoque.</p>
