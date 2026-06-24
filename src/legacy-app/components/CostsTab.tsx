@@ -2298,12 +2298,12 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
 
             <div className="flex flex-wrap gap-2 shrink-0">
               <button
-                onClick={() => setShowAddProductManualForm(!showAddProductManualForm)}
+                onClick={() => { setActiveSubTab('STOCK'); setShowAddProductManualForm(true); }}
                 className="px-4 py-2 bg-[#b7ff00]/15 hover:bg-[#b7ff00]/30 text-[#b7ff00] text-xs font-black rounded-xl transition flex items-center gap-1.5 cursor-pointer border border-[#b7ff00]/25"
                 id="btn_open_manual_add_catalog"
               >
                 <Plus className="h-4 w-4" />
-                Novo Produto Manual
+                Cadastrar Produto (Estoque)
               </button>
 
               <button
