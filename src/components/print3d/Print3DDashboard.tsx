@@ -790,7 +790,7 @@ function StockOverview({ filaments = [], onSelectTab }: { filaments?: any[]; onS
       ) : (
         <ul className="space-y-2">
           {items.map((c, i) => (
-            <li key={i} className={`flex items-center gap-3 p-2 rounded-lg border hover:bg-white/[0.03] transition ${c.level === "Crítico" ? "border-rose-500/60 bg-rose-500/[0.04]" : "border-amber-400/40"}`}>
+            <li key={i} className={`flex items-center gap-3 p-2 rounded-lg border hover:bg-white/[0.03] transition ${c.level === "Crítico" ? "border-rose-500/60 bg-rose-500/[0.04]" : "border-white/10"}`}>
               <FilamentSpool type={c.type} color={colorHex(c.color)} size={28} className="shrink-0" label={c.name} />
               <div className="flex-1 min-w-0">
                 <div className="text-[12px] font-medium text-white truncate flex items-center gap-1.5">
