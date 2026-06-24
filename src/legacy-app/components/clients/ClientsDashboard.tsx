@@ -188,42 +188,6 @@ export const ClientsDashboard: React.FC<Props> = ({ clients, orders }) => {
           )}
         </div>
       </div>
-
-      {/* Recent Orders */}
-      <div className="p-3 bg-[#0C0E0D] border border-[#232B27] rounded-xl">
-        <h4 className="text-[10px] uppercase font-bold text-[#8BA58D] mb-2">Pedidos Recentes</h4>
-        {stats.recentOrders.length === 0 ? (
-          <p className="text-[10px] text-[#8BA58D]">Nenhum pedido registrado.</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-[11px]">
-              <thead>
-                <tr className="text-[9px] uppercase text-[#8BA58D] border-b border-[#232B27]">
-                  <th className="text-left py-1">Cliente</th>
-                  <th className="text-left py-1">Item</th>
-                  <th className="text-right py-1">Valor</th>
-                  <th className="text-left py-1 pl-2">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {stats.recentOrders.map(o => {
-                  const s = mapOrderStatus(o);
-                  return (
-                    <tr key={o.id} className="border-b border-[#232B27]/40">
-                      <td className="py-1.5 text-[#F1F4EE]">{o.clientName}</td>
-                      <td className="py-1.5 text-[#F1F4EE]">{o.itemName}</td>
-                      <td className="py-1.5 text-right font-mono text-[#b7ff00]">{fmtBRL(o.priceCharged || 0)}</td>
-                      <td className="py-1.5 pl-2">
-                        <span className={`px-2 py-0.5 rounded-full border text-[9px] font-bold ${s.cls}`}>{s.label}</span>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
     </div>
   );
 };
