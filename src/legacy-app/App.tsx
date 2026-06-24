@@ -1848,7 +1848,7 @@ export default function App() {
       <main className="flex-1 w-full px-3 sm:px-4 md:px-6 py-4 md:py-6 pb-28 space-y-4">
         {/* EXQUISITE NEW HEADER DE CADA PÁGINA (Título grande + Subtítulo curto + Relógio/Data ao vivo mounted) */}
         {(() => {
-          if (currentTab === 0 || currentTab === 1 || currentTab === 2 || currentTab === 3) return null;
+          if (currentTab === 0) return null;
           const headerInfo = getTabHeader(currentTab);
           if (!headerInfo.title) return null;
           const formattedDate = currentTime.toLocaleDateString('pt-BR', { 
@@ -2052,11 +2052,6 @@ export default function App() {
           <div className="rounded-2xl p-4 sm:p-6 bg-[rgba(18,18,20,0.7)] border border-white/[0.05] shadow-sm">
         {currentTab === 1 && (
           <>
-            <div className="flex items-center gap-2 px-1 py-1 mb-2" id="view-page-header-production">
-              <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">
-                Produção
-              </div>
-            </div>
             <ProductionTab
               orders={orders}
               printers={printers}
@@ -2079,20 +2074,6 @@ export default function App() {
             <IntegrationTab
               onImportOrder={handleImportExternalOrder}
               importedExternalIds={importedExternalIds}
-            />
-            <ProductionTab
-              orders={orders}
-              printers={printers}
-              filamentStocks={filamentStocks}
-              clients={clients}
-              onAddOrder={handleAddOrder}
-              onAddClient={handleAddClient}
-              onUpdateOrder={handleUpdateOrder}
-              onDeleteOrder={handleDeleteOrder}
-              onSimulateTick={handleSimulateTick}
-              onUpdateFilament={handleUpdateFilamentStock}
-              onUpdatePrinter={handleUpdatePrinter}
-              viewMode="orders"
             />
           </>
         )}
