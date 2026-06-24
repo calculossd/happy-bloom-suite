@@ -1289,6 +1289,7 @@ export default function App() {
       case 13: return { title: "Agenda",             subtitle: "Eventos, entregas e manutenções programadas" };
       case 14: return { title: "Sites",              subtitle: "Lojas e sites conectados ao seu ateliê" };
       case 15: return { title: "Prospecção",         subtitle: "Radar B2B Google Maps — captação de lojas e leads" };
+      case 16: return { title: "Impressoras",        subtitle: "Cadastro, manutenção, monitor ao vivo e fila de impressão" };
       default:
         return {
           title: "Ateliê 3D",
