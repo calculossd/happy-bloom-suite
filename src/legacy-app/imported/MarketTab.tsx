@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Store, RefreshCw, ExternalLink, Download, Heart, ImageOff, Lightbulb, Check, Search, X } from "lucide-react";
+import { RefreshCw, ExternalLink, Download, Heart, ImageOff, Lightbulb, Check, Search, X } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
 import {
@@ -198,38 +198,6 @@ function MarketPage() {
         </div>
 
         <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1600px] px-6 py-12 md:px-10 md:py-16 space-y-8">
-          {/* Hero */}
-          <header className="flex flex-col gap-6 border-b border-white/10 pb-8 md:flex-row md:items-end md:justify-between">
-            <div className="min-w-0">
-              <p className="mb-3 inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.3em] text-cyan-400">
-                <Store className="h-3 w-3" /> ImpreMetrics 3D · 3D Market
-              </p>
-              <h1
-                className="text-4xl font-extrabold leading-[0.95] tracking-tight md:text-5xl"
-                style={{ fontFamily: "'Sora', 'Plus Jakarta Sans', sans-serif" }}
-              >
-                Tendências{" "}
-                <span className="bg-gradient-to-r from-white via-white/80 to-white/40 bg-clip-text text-transparent">
-                  ao vivo.
-                </span>
-              </h1>
-              <p className="mt-4 max-w-xl text-sm text-white/50 md:text-base">
-                Modelos populares do MakerWorld em tempo real — busque por palavra, link ou ID.
-              </p>
-            </div>
-            <div className="flex items-center gap-3 text-xs text-white/50">
-              {data && <span className="capitalize">Atualizado {formatAgo(data.updated_at)}</span>}
-              <button
-                onClick={() => load(true)}
-                disabled={loading}
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-2 text-white/80 backdrop-blur-xl transition-all hover:bg-white/10 hover:text-white disabled:opacity-50"
-              >
-                <RefreshCw className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} />
-                Atualizar
-              </button>
-            </div>
-          </header>
-
           {/* Search bar */}
           <form onSubmit={submitSearch} className="flex items-center gap-2 rounded-3xl border border-white/10 bg-white/[0.03] px-4 py-3 backdrop-blur-xl transition-colors focus-within:border-cyan-400/40">
             <Search className="h-4 w-4 text-cyan-400/70" />
@@ -251,7 +219,18 @@ function MarketPage() {
 
           {/* Categories */}
           <div>
-            <p className="mb-3 text-[10px] font-medium uppercase tracking-[0.3em] text-white/40">Categorias</p>
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-white/40">Categorias</p>
+              <button
+                onClick={() => load(true)}
+                disabled={loading}
+                title="Atualizar"
+                aria-label="Atualizar"
+                className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 p-1.5 text-white/70 hover:bg-white/10 hover:text-white disabled:opacity-50"
+              >
+                <RefreshCw className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} />
+              </button>
+            </div>
             <div className="flex flex-wrap gap-2">
               {["trending","hobby","art","tools","toy","game","education","fashion","home decor","gadget","miniature","cosplay","sports","vehicle","organizer","articulated","functional print"].map((c) => {
                 const active = !submittedQuery.q && submittedQuery.cat === c;
