@@ -496,7 +496,7 @@ const getPrinterLogo = (model: string = "", customUrl?: string) => {
     return "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=200&q=80";
   return "https://images.unsplash.com/photo-1563206767-5b18f218e8de?auto=format&fit=crop&w=200&q=80";
 };
-function LivePrinters({ printers = [], orders = [] }: { printers?: any[]; orders?: any[] }) {
+function LivePrinters({ printers = [], orders = [], onSelectTab }: { printers?: any[]; orders?: any[]; onSelectTab?: (t: number) => void }) {
   const rows = (printers.length ? printers : []).slice(0, 6).map((p: any) => {
     const activeOrder = orders.find(
       (o: any) => o.assignedPrinterId === p.id && (o.status === "PRINTING" || o.status === "QUEUE"),
@@ -525,7 +525,14 @@ function LivePrinters({ printers = [], orders = [] }: { printers?: any[]; orders
       )}
       <ul className="space-y-3">
         {rows.map((p, i) => (
-          <li key={i} className="flex items-center gap-3 group">
+          <li
+            key={i}
+            role="button"
+            tabIndex={0}
+            onClick={() => onSelectTab?.(1)}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onSelectTab?.(1); } }}
+            className="flex items-center gap-3 group cursor-pointer rounded-lg -mx-1 px-1 py-1 hover:bg-white/[0.03] transition"
+          >
             <div className="size-10 rounded-lg overflow-hidden bg-white/[0.03] border border-white/[0.05] shrink-0 relative">
               <img
                 src={getPrinterLogo(p.model, p.customUrl)}
@@ -1247,7 +1254,7 @@ export function Print3DPanel({
                 Reservado
               </div>
             </Card>
-            <LivePrinters printers={printers} orders={orders} />
+            <LivePrinters printers={printers} orders={orders} onSelectTab={onSelectTab} />
             <OrdersList orders={orders} clients={clients} onSelectTab={onSelectTab} />
             <StockOverview filaments={filamentStocks} onSelectTab={onSelectTab} />
           </div>
