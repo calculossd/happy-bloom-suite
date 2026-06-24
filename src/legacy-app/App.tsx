@@ -1590,7 +1590,6 @@ export default function App() {
               section: 'Principal',
               items: [
                 { id: 2, label: 'Clientes', icon: Users },
-                { id: 15, label: 'Prospecção', icon: Radar },
                 { id: 3, label: 'Pedidos', icon: GitPullRequest, badge: pendingOrdersCount },
                 { id: 6, label: 'Histórico', icon: ShoppingBag },
                 { id: 1, label: 'Produção', icon: Activity },
@@ -1610,6 +1609,7 @@ export default function App() {
               items: [
                 { id: 7, label: 'Preços', icon: Search },
                 { id: 9, label: 'Marketing', icon: Megaphone },
+                { id: 15, label: 'Prospecção', icon: Radar },
                 { id: 4, label: 'Assistente', icon: Sparkles, onClick: () => openCostsSubtab('AI') },
                 { id: 11, label: 'Modelos', icon: FileBox },
                 { id: 8, label: 'Stls', icon: Box },
