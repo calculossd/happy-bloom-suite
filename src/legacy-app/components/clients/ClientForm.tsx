@@ -15,6 +15,8 @@ export interface ClientFormData {
   stockCount: number;
   stockValue: number;
   productsStock: ClientProductStock[];
+  source?: 'PROSPECCAO' | 'INSTAGRAM' | 'FACEBOOK' | 'VISITANDO' | 'INDICACAO' | 'OUTROS';
+  dealType?: 'CONSIGNADO' | 'COMPROU';
 }
 
 interface CatalogItem { id: number | string; name: string; imageUrl?: string }
@@ -43,6 +45,8 @@ export function ClientForm({ initialClient, catalog, onSubmit, onCancel }: Props
   );
   const [cStockCount, setCStockCount] = useState(String(initialClient?.stockCount ?? 0));
   const [cStockValue, setCStockValue] = useState(String(initialClient?.stockValue ?? 0));
+  const [cSource, setCSource] = useState<ClientFormData['source']>(initialClient?.source ?? 'PROSPECCAO');
+  const [cDealType, setCDealType] = useState<ClientFormData['dealType']>(initialClient?.dealType ?? 'COMPROU');
   const [cProductsStock, setCProductsStock] = useState<ClientProductStock[]>(
     Array.isArray(initialClient?.productsStock) ? initialClient!.productsStock! : []
   );
@@ -65,6 +69,8 @@ export function ClientForm({ initialClient, catalog, onSubmit, onCancel }: Props
       stockCount: parseInt(cStockCount, 10) || 0,
       stockValue: parseFloat(cStockValue) || 0,
       productsStock: cProductsStock,
+      source: cSource,
+      dealType: cDealType,
     });
   };
 
@@ -233,6 +239,37 @@ export function ClientForm({ initialClient, catalog, onSubmit, onCancel }: Props
           className="bg-[#151917] border border-[#232B27] px-3 py-1.5 rounded text-xs text-[#F1F4EE] outline-none focus:border-[#95BBA2] max-w-sm"
           id="client_last_contact_form_input"
         />
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="flex flex-col gap-1">
+          <label className="text-[10px] uppercase text-[#8BA58D] font-bold">Como conheceu (Origem)</label>
+          <select
+            value={cSource}
+            onChange={(e) => setCSource(e.target.value as ClientFormData['source'])}
+            className="bg-[#151917] border border-[#232B27] px-3 py-1.5 rounded text-xs text-[#F1F4EE] outline-none focus:border-[#95BBA2]"
+            id="client_source_form_input"
+          >
+            <option value="PROSPECCAO">Prospecção</option>
+            <option value="INSTAGRAM">Instagram</option>
+            <option value="FACEBOOK">Facebook</option>
+            <option value="VISITANDO">Visitando</option>
+            <option value="INDICACAO">Indicação</option>
+            <option value="OUTROS">Outros</option>
+          </select>
+        </div>
+        <div className="flex flex-col gap-1">
+          <label className="text-[10px] uppercase text-[#8BA58D] font-bold">Tipo de Negociação</label>
+          <select
+            value={cDealType}
+            onChange={(e) => setCDealType(e.target.value as ClientFormData['dealType'])}
+            className="bg-[#151917] border border-[#232B27] px-3 py-1.5 rounded text-xs text-[#F1F4EE] outline-none focus:border-[#95BBA2]"
+            id="client_dealtype_form_input"
+          >
+            <option value="COMPROU">Comprou (Venda Direta)</option>
+            <option value="CONSIGNADO">Consignado</option>
+          </select>
+        </div>
       </div>
 
       <div className="flex justify-end gap-2 text-xs pt-1">
