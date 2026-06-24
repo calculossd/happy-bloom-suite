@@ -526,6 +526,75 @@ function AgendaPage() {
               })}
             </ul>
 
+            {(daySales.length > 0 ||
+              dayDeliveries.length > 0 ||
+              dayExpenses.length > 0 ||
+              dayPending.length > 0) && (
+              <div className="mb-4 grid gap-3 md:grid-cols-2">
+                {daySales.length > 0 && (
+                  <SummaryGroup
+                    tone="emerald"
+                    icon={<DollarSign className="h-3 w-3" />}
+                    label={`Vendas · ${brl(totalSales)}`}
+                    items={daySales}
+                  />
+                )}
+                {dayDeliveries.length > 0 && (
+                  <SummaryGroup
+                    tone="cyan"
+                    icon={<Truck className="h-3 w-3" />}
+                    label="Entregas"
+                    items={dayDeliveries}
+                  />
+                )}
+                {dayExpenses.length > 0 && (
+                  <SummaryGroup
+                    tone="amber"
+                    icon={<ShoppingCart className="h-3 w-3" />}
+                    label={`Compras · ${brl(totalSpent)}`}
+                    items={dayExpenses}
+                  />
+                )}
+                {dayPending.length > 0 && (
+                  <SummaryGroup
+                    tone="rose"
+                    icon={<CalendarClock className="h-3 w-3" />}
+                    label={isPast ? "Não entregues" : "Pedidos a fazer"}
+                    items={dayPending}
+                  />
+                )}
+              </div>
+            )}
+
+            {isFuture && (pendingShopping.length > 0 || lowStockCatalog.length > 0) && (
+              <div className="mb-4 grid gap-3 md:grid-cols-2">
+                {pendingShopping.length > 0 && (
+                  <SummaryGroup
+                    tone="amber"
+                    icon={<ShoppingCart className="h-3 w-3" />}
+                    label="A comprar"
+                    items={pendingShopping.map((s: any) => ({
+                      kind: "shopping",
+                      title: s.name || s.description || "Item",
+                      meta: s.category,
+                    }))}
+                  />
+                )}
+                {lowStockCatalog.length > 0 && (
+                  <SummaryGroup
+                    tone="rose"
+                    icon={<Hammer className="h-3 w-3" />}
+                    label="Criações para fazer (estoque baixo)"
+                    items={lowStockCatalog.map((c: any) => ({
+                      kind: "produced",
+                      title: c.name || "Modelo",
+                      meta: `${c.stockCount ?? 0}/${c.minStockCount ?? 0}`,
+                    }))}
+                  />
+                )}
+              </div>
+            )}
+
             <form onSubmit={add} className="space-y-2">
               <input
                 value={title}
