@@ -13,16 +13,18 @@ import {
   LayoutList, 
   Plus, 
   CheckCircle,
-  FileText
+  FileText,
+  Trash2
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 
 interface SoldTabProps {
   orders: PrintOrder[];
   clients: Array<{ id: number; name: string }>;
+  onDeleteOrder?: (id: number) => void;
 }
 
-export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
+export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients, onDeleteOrder }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [platformFilter, setPlatformFilter] = useState<'ALL' | 'MANUAL' | 'SHOPEE' | 'MERCADO_LIVRE' | 'NUVEMSHOP' | 'AMAZON' | 'TIKTOK_SHOP'>('ALL');
   const [methodFilter, setMethodFilter] = useState<'ALL' | 'DINHEIRO' | 'CARTÃO' | 'CONSIGNADO' | 'OUTROS'>('ALL');
@@ -461,6 +463,19 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
                     <FileText className="h-3 w-3" />
                     Recibo
                   </button>
+                  {onDeleteOrder && (
+                    <button
+                      onClick={() => {
+                        if (confirm(`Apagar a venda "${item.itemName}" do histórico?`)) {
+                          onDeleteOrder(item.id);
+                        }
+                      }}
+                      title="Excluir venda do histórico"
+                      className="px-2 py-1.2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 rounded-lg transition text-[9.5px] font-bold flex items-center gap-1 cursor-pointer"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </button>
+                  )}
                 </div>
               </div>
             ))}

@@ -1156,6 +1156,18 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                       {nextLabel} →
                     </button>
                   )}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (confirm(`Apagar o pedido "${order.itemName}"?`)) {
+                        onDeleteOrder(order.id);
+                      }
+                    }}
+                    title="Excluir pedido"
+                    className="text-[10px] font-bold p-1 rounded-md border border-red-500/30 text-red-400 bg-red-500/10 hover:bg-red-500/20 transition-all duration-200 hover:scale-[1.05] active:scale-95"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                  </button>
                 </div>
               </div>
             </motion.div>
