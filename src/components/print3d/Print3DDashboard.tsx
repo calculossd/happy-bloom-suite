@@ -866,6 +866,7 @@ interface Print3DPanelProps {
   expenses?: any[];
   clients?: any[];
   shoppingItems?: any[];
+  tuyaDevices?: any[];
   onSelectTab?: (tab: number) => void;
 }
 
@@ -875,6 +876,7 @@ export function Print3DPanel({
   filamentStocks = [],
   expenses = [],
   clients = [],
+  tuyaDevices = [],
   onSelectTab,
 }: Print3DPanelProps = {}) {
   // === Real KPIs (today) ===
