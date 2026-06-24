@@ -1535,6 +1535,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                         <option value="QUEUE">NaFila / Pagar</option>
                         <option value="PRINTING">Imprimindo</option>
                         <option value="POST_PROCESS">Pós-Processo / Acabamento</option>
+                        <option value="PACKING">Embalando</option>
                         <option value="READY">Pronto p/ Entrega</option>
                         <option value="DELIVERED">Entregue / Concluído</option>
                       </select>
