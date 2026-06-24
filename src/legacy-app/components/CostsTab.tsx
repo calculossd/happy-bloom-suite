@@ -1438,8 +1438,8 @@ export const CostsTab: React.FC<CostsTabProps> = ({
     setCatalogItems(prev => [newCatalogP, ...prev]);
     setCalcProdName('');
     setCalcProdCode('');
-    setActiveSubTab('CATALOG');
-    triggerFeedback(`Produto comercial "${newCatalogP.name}" registrado e indexado ao Catálogo de Vendas!`);
+    setActiveSubTab('STOCK');
+    triggerFeedback(`Produto comercial "${newCatalogP.name}" registrado no estoque de produtos! Ele aparecerá no catálogo automaticamente.`);
   };
 
   // --- CATALOG EXPORT TO PDF VIA JSPDF ---
@@ -1634,9 +1634,9 @@ export const CostsTab: React.FC<CostsTabProps> = ({
   };
 
   const handleDeleteCatalogProduct = (id: number) => {
-    if (confirm('Deseja realmente deletar este produto do seu catálogo?')) {
+    if (confirm('Deseja realmente deletar este produto do estoque de produtos? Ele também deixará de aparecer no catálogo.')) {
       setCatalogItems(prev => prev.filter(c => c.id !== id));
-      triggerFeedback('Produto deletado do catálogo.', 'info');
+      triggerFeedback('Produto removido do estoque de produtos e do catálogo.', 'info');
     }
   };
 
