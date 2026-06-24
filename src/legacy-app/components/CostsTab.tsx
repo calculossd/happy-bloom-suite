@@ -2291,7 +2291,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                 <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Catálogo</div>
                 <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">Portfólio</span>
               </div>
-              <p className="text-xs text-[var(--brand-muted)]">Portfólio de modelos para download, compartilhamento e integração com seu site</p>
+              <p className="text-xs text-[var(--brand-muted)]">Somente vitrine: os itens cadastrados no estoque de produtos aparecem aqui para compartilhar</p>
             </div>
           </div>
 
@@ -2301,19 +2301,10 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                 <BookOpen className="h-5 w-5 text-[#b7ff00]" />
                 Catálogo de Peças & Produtos Registrados
               </h3>
-              <p className="text-xs text-[#8BA58D]">Visualize e compartilhe sua tabela comercial indexável de serviços 3D</p>
+              <p className="text-xs text-[#8BA58D]">Visualize e compartilhe os produtos vindos do estoque. Cadastro e quantidade ficam na aba Estoque.</p>
             </div>
 
             <div className="flex flex-wrap gap-2 shrink-0">
-              <button
-                onClick={() => { setActiveSubTab('STOCK'); setShowAddProductManualForm(true); }}
-                className="px-4 py-2 bg-[#b7ff00]/15 hover:bg-[#b7ff00]/30 text-[#b7ff00] text-xs font-black rounded-xl transition flex items-center gap-1.5 cursor-pointer border border-[#b7ff00]/25"
-                id="btn_open_manual_add_catalog"
-              >
-                <Plus className="h-4 w-4" />
-                Cadastrar Produto (Estoque)
-              </button>
-
               <button
                 onClick={handleExportCatalogPDF}
                 className="px-4 py-2 bg-[#637E55] hover:bg-[#536B47] text-white text-xs font-bold rounded-xl transition flex items-center gap-2 cursor-pointer"
@@ -2339,8 +2330,8 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
             {catalogItems.length === 0 ? (
               <div className="p-12 text-center text-[#8BA58D] col-span-full border border-dashed border-[#232B27] bg-[#151917]/20 rounded-2xl">
                 <BookOpen className="h-12 w-12 text-[#8BA58D]/30 mx-auto mb-3" />
-                <p className="text-xs font-bold">Nenhum produto cadastrado no catálogo.</p>
-                <p className="text-[11px] mt-1 text-[#8BA58D]/70">Utilize a Calculadora de Preço de Produtos ao lado para fatiar, precificar e salvar itens aqui!</p>
+                <p className="text-xs font-bold">Nenhum produto no estoque de produtos.</p>
+                <p className="text-[11px] mt-1 text-[#8BA58D]/70">Cadastre produtos na aba Estoque para eles aparecerem aqui como catálogo.</p>
               </div>
             ) : (
               catalogItems.map((item) => (
@@ -2383,29 +2374,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                       </div>
                       <div className="flex flex-col items-center justify-center">
                         <span className="text-[8px] text-[#8BA58D] uppercase font-bold block">Pronta Entr.</span>
-                        <div className="flex items-center gap-1 mt-0.5 justify-center">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setCatalogItems(prev => prev.map(c => c.id === item.id ? { ...c, stockCount: Math.max(0, c.stockCount - 1) } : c))
-                            }}
-                            className="w-4 h-4 bg-[#0C0E0D] border border-[#232B27] rounded text-[#8BA58D] flex items-center justify-center text-[10px] font-bold hover:border-red-400/50 hover:text-red-400 transition cursor-pointer"
-                            title="Remover 1 unidade"
-                          >
-                            -
-                          </button>
-                          <span className="font-mono text-white font-bold px-0.5">{item.stockCount}</span>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setCatalogItems(prev => prev.map(c => c.id === item.id ? { ...c, stockCount: c.stockCount + 1 } : c))
-                            }}
-                            className="w-4 h-4 bg-[#0C0E0D] border border-[#232B27] rounded text-[#8BA58D] flex items-center justify-center text-[10px] font-bold hover:border-[#b7ff00]/50 hover:text-[#b7ff00] transition cursor-pointer"
-                            title="Adicionar 1 unidade"
-                          >
-                            +
-                          </button>
-                        </div>
+                        <span className="font-mono text-white font-bold px-0.5 mt-0.5">{item.stockCount}</span>
                       </div>
                     </div>
 
@@ -2483,7 +2452,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                       <button
                         onClick={() => handleEditCatalogProduct(item)}
                         className="text-amber-400 hover:text-amber-500 hover:bg-amber-500/10 p-1.5 rounded-lg transition"
-                        title="Editar Produto"
+                        title="Editar Produto no Estoque"
                       >
                         <Edit3 className="h-4 w-4" />
                       </button>
@@ -2491,7 +2460,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                       <button
                         onClick={() => handleDeleteCatalogProduct(item.id)}
                         className="text-red-400 hover:text-red-500 hover:bg-red-500/10 p-1.5 rounded-lg transition"
-                        title="Deletar Produto do Catálogo"
+                        title="Deletar Produto do Estoque"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
