@@ -2074,22 +2074,6 @@ export default function App() {
           </>
         )}
 
-        {currentTab === 2 && (
-          <ClientsTab
-            clients={clients}
-            printers={printers}
-            orders={orders}
-            onAddClient={handleAddClient}
-            onUpdateClient={handleUpdateClient}
-            onDeleteClient={handleDeleteClient}
-            onAddPrinter={handleAddPrinter}
-            onUpdatePrinter={handleUpdatePrinter}
-            onDeletePrinter={handleDeletePrinter}
-            onAddOrder={handleAddOrder}
-            viewMode="clients"
-          />
-        )}
-
         {currentTab === 3 && (
           <>
             <IntegrationTab
