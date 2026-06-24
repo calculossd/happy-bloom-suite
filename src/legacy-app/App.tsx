@@ -765,6 +765,7 @@ export default function App() {
   const handleAddOrder = (orderData: Partial<PrintOrder>) => {
     const newOrder: PrintOrder = {
       id: orders.length > 0 ? Math.max(...orders.map(o => o.id)) + 1 : 1,
+      clientId: orderData.clientId || null,
       clientName: orderData.clientName || 'Novo Cliente',
       itemName: orderData.itemName || 'Peça Personalizada',
       quantity: orderData.quantity || 1,
@@ -774,6 +775,7 @@ export default function App() {
       printTimeHours: orderData.printTimeHours || 2.0,
       priceCharged: orderData.priceCharged || 40.0,
       platformSource: orderData.platformSource || 'MANUAL',
+      platformOrderId: orderData.platformOrderId || undefined,
       status: orderData.status || 'QUEUE',
       printingProgress: orderData.printingProgress || 0.0,
       assignedPrinterId: orderData.assignedPrinterId || null,
