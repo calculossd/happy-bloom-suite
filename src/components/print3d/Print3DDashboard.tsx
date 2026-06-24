@@ -1285,7 +1285,7 @@ export function Print3DPanel({
           </div>
 
           {/* Row 2: Mapa | Impressão ao Vivo | Pedidos | Higrômetros */}
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 [&>*]:min-h-[520px] [&>*>*]:h-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 [&>*]:min-h-[520px]">
             <LivePrinters printers={printers} orders={orders} onSelectTab={onSelectTab} />
             <div className="md:col-span-2 xl:col-span-2">
               <OrdersList orders={orders} clients={clients} onSelectTab={onSelectTab} />
