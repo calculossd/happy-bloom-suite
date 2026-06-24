@@ -529,8 +529,8 @@ function LivePrinters({ printers = [], orders = [], onSelectTab }: { printers?: 
             key={i}
             role="button"
             tabIndex={0}
-            onClick={() => onSelectTab?.(1)}
-            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onSelectTab?.(1); } }}
+            onClick={() => onSelectTab?.(16)}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onSelectTab?.(16); } }}
             className="flex items-center gap-3 group cursor-pointer rounded-lg -mx-1 px-1 py-1 hover:bg-white/[0.03] transition"
           >
             <div className="size-10 rounded-lg overflow-hidden bg-white/[0.03] border border-white/[0.05] shrink-0 relative">
