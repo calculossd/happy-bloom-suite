@@ -765,16 +765,6 @@ function StlGallery({ orders = [], clients = [] }: { orders?: any[]; clients?: a
 
 /* ---------- Stock overview (Saúde + Crítico combinados) ---------- */
 function StockOverview({ filaments = [], onSelectTab }: { filaments?: any[]; onSelectTab?: (t: number) => void }) {
-  const grouped: Record<string, { total: number; min: number; count: number }> = {};
-  filaments.forEach((f: any) => {
-    const k = f.type || "—";
-    if (!grouped[k]) grouped[k] = { total: 0, min: 0, count: 0 };
-    grouped[k].total += f.stockGrams || 0;
-    grouped[k].min += f.minStockGrams || 0;
-    grouped[k].count += 1;
-  });
-  const groups = Object.entries(grouped).slice(0, 4);
-
   const items = filaments
     .filter((f: any) => f.stockGrams < f.minStockGrams * 1.5)
     .slice()
@@ -793,25 +783,6 @@ function StockOverview({ filaments = [], onSelectTab }: { filaments?: any[]; onS
         <h3 className="text-[14px] font-semibold text-white">Estoque de Filamentos</h3>
         <button className="text-[11px] text-white/50 hover:text-white" onClick={() => onSelectTab?.(8)}>Ver todos</button>
       </div>
-
-      {/* Saúde por tipo */}
-      {groups.length > 0 && (
-        <ul className="grid grid-cols-2 gap-2 mb-3">
-          {groups.map(([type, g], i) => {
-            const low = g.total < g.min;
-            return (
-              <li key={i} className={`flex items-center gap-2 p-2 rounded-lg bg-white/[0.02] border ${low ? "border-rose-500/60" : "border-white/[0.04]"}`}>
-                <div className="flex-1 min-w-0">
-                  <div className="text-[11.5px] font-semibold text-white truncate">({g.count})</div>
-                  <div className="text-[10px] tabular-nums" style={{ color: low ? "#fb7185" : "rgba(255,255,255,0.55)" }}>
-                    {(g.total / 1000).toFixed(2)}kg<span className="text-white/35"> / min {(g.min / 1000).toFixed(1)}kg</span>
-                  </div>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      )}
 
       {/* Críticos */}
       <div className="text-[10px] uppercase tracking-wider text-rose-400/80 mb-1.5">Estoque Crítico</div>
