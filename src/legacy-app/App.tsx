@@ -1863,7 +1863,7 @@ export default function App() {
           const headerBadge = currentTab === 6
             ? `${deliveredCount} Concluídas`
             : null;
-          const flatHeader = currentTab === 1 || currentTab === 3 || currentTab === 6;
+          const flatHeader = currentTab === 1 || currentTab === 2 || currentTab === 3 || currentTab === 6;
 
           return (
             <div
