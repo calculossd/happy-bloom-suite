@@ -264,7 +264,7 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
 
   // Filter out orders that were deleted less than 1 hour ago
   const balcaoOrders: ExternalPlatformOrder[] = (orders || [])
-    .filter((o: any) => (o.platformSource === 'MANUAL') && o.status !== 'DELIVERED')
+    .filter((o: any) => (o.platformSource === 'MANUAL') && o.status === 'WAITING')
     .map((o: any) => ({
       id: `BALCAO-${o.id}`,
       platform: 'BALCAO' as const,
