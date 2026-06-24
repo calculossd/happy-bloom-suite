@@ -453,7 +453,11 @@ function ClientsMap({ clients = [] }: { clients?: any[] }) {
 
   return (
     <div className="relative h-full w-full min-h-[420px]">
-      <div ref={ref} className="relative z-10 h-full w-full min-h-[420px] overflow-hidden" />
+      <div
+        ref={ref}
+        className="relative z-10 h-full w-full min-h-[420px] overflow-hidden"
+        style={{ filter: "saturate(0.55) brightness(0.82) contrast(0.92) hue-rotate(-10deg)" }}
+      />
       <button
         type="button"
         onClick={() => setInteractive((v) => !v)}
