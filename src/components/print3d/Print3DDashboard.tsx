@@ -765,12 +765,42 @@ function StockOverview({ filaments = [], onSelectTab }: { filaments?: any[]; onS
     .sort((a: any, b: any) => a.stockGrams / Math.max(1, a.minStockGrams) - b.stockGrams / Math.max(1, b.minStockGrams))
     .slice(0, 5)
     .map((f: any) => ({
+      kind: "filament" as const,
       name: `${f.type} ${f.color}`,
       type: f.type,
       color: f.color,
       qty: `${(f.stockGrams / 1000).toFixed(2)}kg`,
       level: f.stockGrams < f.minStockGrams ? "Crítico" : "Atenção",
     }));
+
+  // Catalog product low stock
+  const productItems: any[] = [];
+  try {
+    const raw = localStorage.getItem("bambuzau_local_catalog_production");
+    const cat: any[] = raw ? JSON.parse(raw) : [];
+    cat.forEach((p) => {
+      const stock = Number(p.stockCount ?? 0);
+      const min = Number(p.minStockCount ?? 0);
+      if (min > 0 && stock < min * 1.5) {
+        productItems.push({
+          kind: "product",
+          name: p.name || "Produto",
+          imageUrl: p.imageUrl,
+          qty: `${stock}un`,
+          level: stock < min ? "Crítico" : "Atenção",
+        });
+      } else if (min === 0 && stock <= 1) {
+        productItems.push({
+          kind: "product",
+          name: p.name || "Produto",
+          imageUrl: p.imageUrl,
+          qty: `${stock}un`,
+          level: "Crítico",
+        });
+      }
+    });
+  } catch {}
+  const allItems = [...items, ...productItems].slice(0, 8);
   return (
     <Card>
       <div className="flex items-center justify-between mb-3">
@@ -802,14 +832,27 @@ function StockOverview({ filaments = [], onSelectTab }: { filaments?: any[]; onS
 
       {/* Críticos */}
       <div className="text-[10px] uppercase tracking-wider text-white/40 mb-1.5">Atenção / Crítico</div>
-      {items.length === 0 ? (
+      {allItems.length === 0 ? (
         <div className="text-[12px] text-white/40 py-3 text-center">Tudo em ordem.</div>
       ) : (
         <ul className="space-y-2">
-          {items.map((c, i) => (
+          {allItems.map((c: any, i) => (
             <li key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/[0.03] transition">
-              <FilamentSpool type={c.type} color={colorHex(c.color)} size={28} className="shrink-0" label={c.name} />
+              {c.kind === "product" ? (
+                c.imageUrl ? (
+                  <img src={c.imageUrl} alt={c.name} className="size-7 rounded-md object-cover shrink-0 border border-white/10" />
+                ) : (
+                  <div className="size-7 rounded-md shrink-0 grid place-items-center bg-white/5 border border-white/10">
+                    <Box className="size-3.5 text-white/40" />
+                  </div>
+                )
+              ) : (
+                <FilamentSpool type={c.type} color={colorHex(c.color)} size={28} className="shrink-0" label={c.name} />
+              )}
               <div className="flex-1 min-w-0">
+                {c.kind === "product" ? (
+                  <div className="text-[12px] font-medium text-white truncate">{c.name}</div>
+                ) : (
                 <div className="text-[12px] font-medium text-white truncate flex items-center gap-1.5">
                   <span>{c.type}</span>
                   <span
@@ -819,6 +862,7 @@ function StockOverview({ filaments = [], onSelectTab }: { filaments?: any[]; onS
                   />
                   <span className="text-white/70 truncate">{c.color}</span>
                 </div>
+                )}
                 <div className="text-[10px] text-white/40 tabular-nums">{c.qty}</div>
               </div>
               <span className={`text-[10px] font-semibold ${c.level === "Crítico" ? "text-rose-400" : "text-amber-300"}`}>{c.level}</span>
