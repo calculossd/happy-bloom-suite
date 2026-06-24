@@ -345,7 +345,7 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
       )}
 
       {/* Unified header: title + active sales channels in a single card */}
-      <div className="glow-card p-5 rounded-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+      <div className="bg-[#0C0E0D] border border-[#232B27] p-5 rounded-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-5">
         <div className="min-w-0">
           <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">
             <Database className="h-4 w-4 text-[#b7ff00]" />
@@ -404,7 +404,7 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
         )}
 
         {/* Streaming orders backlog */}
-        <div className="glow-card rounded-2xl p-5 space-y-4" id="streams-orders-backlog">
+        <div className="bg-[#0C0E0D] border border-[#232B27] rounded-2xl p-5 space-y-4" id="streams-orders-backlog">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans leading-none">
               <span className="w-2 h-2 rounded-full bg-[#b7ff00] animate-pulse inline-block shadow-[0_0_10px_#b7ff00]" />
