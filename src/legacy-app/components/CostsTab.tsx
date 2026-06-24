@@ -3635,8 +3635,8 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Gastos</div>
-                <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">
+                <div className="text-sm font-bold uppercase tracking-[0.14em] text-emerald-400 font-sans select-none leading-none">Gastos</div>
+                <span className="px-2.5 py-0.5 bg-emerald-400/10 text-emerald-300 text-xs font-bold font-sans rounded-full border border-emerald-400/25 shadow-[0_0_18px_-6px_rgba(52,211,153,0.45)]">
                   R$ {(expenses.reduce((sum, e) => sum + (e.amount * e.qty), 0) + shoppingItems.reduce((sum, s) => sum + s.price, 0)).toFixed(2)}
                 </span>
               </div>
