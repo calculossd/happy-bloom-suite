@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Client, Printer, PrintOrder } from '../types';
 import { ClientProductsCatalogPicker } from './clients/ClientProductsCatalogPicker';
+import { ClientForm, type ClientFormData } from './clients/ClientForm';
 import { 
   User, ShieldAlert, Cpu, CheckSquare, Plus, PenTool, Trash2, Edit3, Settings2, 
   Globe, Clock, Eye, X, Package, Camera, CheckCircle, MapPin, Search, Filter, 
