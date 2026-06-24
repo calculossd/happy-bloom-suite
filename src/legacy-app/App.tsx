@@ -1972,22 +1972,8 @@ export default function App() {
             return (
               <div
                 id="global-price-opportunity-banner"
-                className="group relative mb-2 overflow-hidden rounded-2xl border border-sky-400/15 bg-gradient-to-r from-sky-950/50 via-zinc-950/70 to-zinc-950/50 backdrop-blur-xl shadow-[0_20px_50px_-20px_rgba(56,189,248,0.35)] transition-all duration-500 hover:border-sky-400/30 hover:shadow-[0_24px_60px_-18px_rgba(56,189,248,0.5)]"
-                style={{ animation: "ttToastIn 480ms cubic-bezier(0.22, 1, 0.36, 1) both" }}
+                className="relative mb-2 overflow-hidden rounded-2xl border border-sky-400/15 bg-gradient-to-r from-sky-950/50 via-zinc-950/70 to-zinc-950/50 backdrop-blur-xl shadow-[0_20px_50px_-20px_rgba(56,189,248,0.35)]"
               >
-                {/* ambient glow */}
-                <div aria-hidden className="pointer-events-none absolute -top-20 -left-16 h-56 w-56 rounded-full bg-sky-500/25 blur-3xl opacity-60" />
-                <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-[2px] bg-gradient-to-b from-transparent via-sky-400/80 to-transparent" />
-                {/* shimmer */}
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-                  style={{
-                    background:
-                      "linear-gradient(110deg, transparent 30%, rgba(56,189,248,0.12) 50%, transparent 70%)",
-                  }}
-                />
-
                 <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-5">
                   <div className="flex min-w-0 items-center gap-3">
                     <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-sky-500/10 ring-1 ring-inset ring-sky-400/25 text-sky-300">
