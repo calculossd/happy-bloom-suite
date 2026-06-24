@@ -424,29 +424,6 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
         {/* RIGHT COLUMN: 3D PRINTERS & HARDWARE CHECKLISTS */}
         {viewMode !== 'clients' && viewMode !== 'prospect' && (
         <div className="glow-card border border-[#b7ff00]/15 p-6 rounded-2xl space-y-5 animate-in fade-in duration-300" id="printers-catalog">
-          <div className="flex items-center justify-between flex-wrap gap-2 pb-3 border-b border-[#b7ff00]/10">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none flex items-center gap-2">
-                  <Cpu className="h-4 w-4 text-[#b7ff00]" />
-                  Cadastro de Impressoras
-                </div>
-                <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">
-                  {printers.length} Cadastradas
-                </span>
-              </div>
-              <p className="text-xs text-[var(--brand-muted)]">Registre suas máquinas 3D e configure telemetria via Klipper / Octoprint</p>
-            </div>
-
-            <button
-              onClick={() => setShowAddPrinterForm(!showAddPrinterForm)}
-              className="px-3 py-1.5 bg-[#b7ff00]/10 hover:bg-[#b7ff00]/20 text-[#b7ff00] border border-[#b7ff00]/25 font-bold text-xs rounded-xl transition flex items-center gap-1 cursor-pointer"
-            >
-              <Plus className="h-3.5 w-3.5 text-[#b7ff00]" />
-              {showAddPrinterForm ? 'Cancelar' : 'Cadastrar Impressora'}
-            </button>
-          </div>
-
           {/* Form to Register New Physical Printer */}
           {showAddPrinterForm && (
             <form onSubmit={handleCreatePrinter} className="p-4 bg-[#0C0E0D] border border-[#b7ff00]/25 rounded-xl space-y-3.5 animate-in slide-in-from-top-2 duration-200 shadow-[0_0_24px_-12px_rgba(183,255,0,0.35)]">
