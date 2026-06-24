@@ -18,6 +18,16 @@ function getKey(request: Request, url: URL): string {
   return "";
 }
 
+function getFallbackKey(request: Request, url: URL): string {
+  const q = url.searchParams.get("api_key_2");
+  const h = request.headers.get("x-custom-serpapi-key-2");
+  if (isValidKey(q)) return q!.trim();
+  if (isValidKey(h)) return h!.trim();
+  const env = process.env.SERPAPI_KEY_2;
+  if (isValidKey(env)) return env!.trim();
+  return "";
+}
+
 function isBlockedGoogleUrl(value: string | null | undefined): boolean {
   if (!value) return true;
   try {
@@ -79,7 +89,7 @@ const DEFAULT_MATERIALS: Array<{ type: string; query: string }> = [
   { type: "SILK", query: "filamento silk pla 1.75mm 1kg impressora 3d" },
 ];
 
-const TOP_N = 15;
+const TOP_N = 10;
 const topByPrice = <T extends { price: number }>(offers: T[]): T[] =>
   [...offers].sort((a, b) => a.price - b.price).slice(0, TOP_N);
 
@@ -135,13 +145,22 @@ export const Route = createFileRoute("/api/quotations")({
       GET: async ({ request }) => {
         const url = new URL(request.url);
         const apiKey = getKey(request, url);
-        if (!apiKey) {
+        const fallbackKey = getFallbackKey(request, url);
+        if (!apiKey && !fallbackKey) {
           return Response.json([{ type: "PLA", offers: [], error: "Chave SerpApi ausente ou inválida." }]);
         }
+        const fetchWithFallback = async (q: string) => {
+          let offers: any[] = [];
+          if (apiKey) offers = await fetchShopping(q, apiKey);
+          if ((!offers || offers.length === 0) && fallbackKey) {
+            offers = await fetchShopping(q, fallbackKey);
+          }
+          return offers;
+        };
         const customQ = sanitizeQuery(url.searchParams.get("q") || url.searchParams.get("query"));
 
         if (customQ) {
-          const offers = await fetchShopping(customQ, apiKey);
+          const offers = await fetchWithFallback(customQ);
           const safeType = sanitizeType(url.searchParams.get("type")) || "Produtos";
           return Response.json([
             { type: safeType, offers: topByPrice(dedupeOffers(offers)), searchQuery: customQ },
@@ -153,7 +172,7 @@ export const Route = createFileRoute("/api/quotations")({
           DEFAULT_MATERIALS.map(async (m) => ({
             type: m.type,
             searchQuery: m.query,
-            offers: topByPrice(dedupeOffers(await fetchShopping(m.query, apiKey))),
+            offers: topByPrice(dedupeOffers(await fetchWithFallback(m.query))),
           })),
         );
         return Response.json(groups);
