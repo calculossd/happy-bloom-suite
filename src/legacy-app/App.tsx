@@ -1269,8 +1269,8 @@ export default function App() {
         };
       case 4:
         return {
-          title: "Estoque & Custos",
-          subtitle: "Gestão de filamentos, auditoria e custos operacionais",
+          title: "Estoque",
+          subtitle: "Gestão de filamentos e auditoria de insumos",
         };
       case 5:
         return {
