@@ -3244,7 +3244,35 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
 
                       {/* Photo Preset Selector */}
                       <div className="space-y-1.5">
-                        <label className="text-[10px] text-[#8BA58D] font-black uppercase block">Imagens Ilustrativas para WhatsApp:</label>
+                        <div className="flex items-center justify-between">
+                          <label className="text-[10px] text-[#8BA58D] font-black uppercase block">Imagens Ilustrativas para WhatsApp:</label>
+                          <label className="text-[10px] font-black uppercase px-2 py-1 rounded-md bg-[#95BBA2]/15 text-[#95BBA2] border border-[#95BBA2]/30 hover:bg-[#95BBA2]/25 cursor-pointer transition">
+                            📤 Enviar foto
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (!file) return;
+                                if (file.size > 5 * 1024 * 1024) {
+                                  alert('Imagem muito grande (máx 5MB).');
+                                  return;
+                                }
+                                const reader = new FileReader();
+                                reader.onload = () => setNewStockImage(String(reader.result || ''));
+                                reader.readAsDataURL(file);
+                                e.target.value = '';
+                              }}
+                            />
+                          </label>
+                        </div>
+                        {newStockImage && newStockImage.startsWith('data:') && (
+                          <div className="flex items-center gap-2 p-1.5 bg-[#151917] border border-[#95BBA2]/40 rounded-lg">
+                            <img src={newStockImage} alt="Upload" className="w-10 h-10 rounded object-cover" />
+                            <span className="text-[10px] text-[#95BBA2] font-bold">Imagem personalizada selecionada ✓</span>
+                          </div>
+                        )}
                         <div className="grid grid-cols-4 gap-2">
                           {[
                             { name: 'Vaso', url: 'https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=300&q=80' },
