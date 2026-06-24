@@ -2151,6 +2151,7 @@ export default function App() {
               onImportOrder={handleImportExternalOrder}
               importedExternalIds={importedExternalIds}
               orders={orders}
+              onUpdateOrder={handleUpdateOrder}
             />
           </>
         )}
