@@ -587,57 +587,52 @@ function OrdersList({ orders = [], clients = [], onSelectTab }: { orders?: any[]
     .filter((o: any) => o.status !== "DELIVERED")
     .slice()
     .sort((a: any, b: any) => (a.deadline || 0) - (b.deadline || 0))
-    .slice(0, 8);
-  const printing = orders.filter((o: any) => o.status === "PRINTING");
+    .slice(0, 14);
   const cityById: Record<number, string> = {};
   clients.forEach((c: any) => (cityById[c.id] = (c.address || "").split(",").pop()?.trim() || ""));
   return (
     <Card>
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-2">
         <h3 className="text-[14px] font-semibold text-white">Pedidos a Serem Entregues</h3>
         <button className="text-[11px] text-white/50 hover:text-white" onClick={() => onSelectTab?.(3)}>Ver todos</button>
       </div>
-      {printing.length > 0 && (
-        <div className="mb-3 space-y-2">
-          <div className="text-[10px] uppercase tracking-[0.18em] text-white/40 font-semibold">Em impressão agora</div>
-          {printing.slice(0, 2).map((p: any) => {
-            const pct = Math.max(2, Math.round((p.printingProgress || 0) * 100));
-            return (
-              <div key={p.id} className="rounded-lg border border-emerald-500/20 bg-emerald-500/[0.04] p-2.5">
-                <div className="flex items-center justify-between gap-2 mb-1.5">
-                  <div className="min-w-0 flex-1">
-                    <div className="text-[12.5px] font-semibold text-white truncate">{p.itemName || "—"}</div>
-                    <div className="text-[10.5px] text-white/50 truncate">
-                      {p.clientName} • {p.filamentType} {p.filamentColor} • {p.weightGrams}g
-                    </div>
-                  </div>
-                  <div className="text-[13px] font-mono font-bold tabular-nums text-emerald-300">{pct}%</div>
-                </div>
-                <div className="h-1.5 rounded-full bg-white/[0.05] overflow-hidden">
-                  <div
-                    className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-[#b7ff00] transition-all duration-700"
-                    style={{ width: `${pct}%`, boxShadow: "0 0 10px rgba(183,255,0,0.4)" }}
-                  />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
       {rows.length === 0 && (
         <div className="text-[12px] text-white/40 py-6 text-center">Sem pedidos pendentes.</div>
       )}
       <ul className="divide-y divide-white/[0.04]">
-        {rows.map((o: any) => (
-          <li key={o.id} className="grid grid-cols-[55px_1fr_auto_auto] items-center gap-3 py-2.5 text-[12px]">
-            <div className="font-mono text-white/55">#{o.id}</div>
-            <div className="text-white font-medium truncate">{o.clientName || "—"}</div>
-            <div className="text-white/40 tabular-nums hidden md:block">
-              {o.deadline ? new Date(o.deadline).toLocaleDateString("pt-BR") : "—"}
-            </div>
-            <StatusPill s={ORDER_STATUS_LABEL[o.status] || o.status} />
-          </li>
-        ))}
+        {rows.map((o: any) => {
+          const isPrinting = o.status === "PRINTING";
+          const pct = isPrinting ? Math.max(2, Math.round((o.printingProgress || 0) * 100)) : 0;
+          return (
+            <li key={o.id} className="flex items-center gap-2 py-1.5 text-[11.5px]">
+              <span className="font-mono text-white/40 text-[10px] w-7 shrink-0">#{o.id}</span>
+              <div className="min-w-0 flex-1 flex items-center gap-1.5">
+                <span className="text-white font-medium truncate">{o.itemName || "—"}</span>
+                {o.clientName && (
+                  <span className="text-white/40 truncate hidden sm:inline">· {o.clientName}</span>
+                )}
+              </div>
+              {isPrinting ? (
+                <div className="flex items-center gap-1.5 shrink-0 w-[110px]">
+                  <div className="flex-1 h-1 rounded-full bg-white/[0.05] overflow-hidden">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-[#b7ff00] transition-all duration-700"
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
+                  <span className="text-[10px] font-mono font-bold tabular-nums text-emerald-300 w-7 text-right">{pct}%</span>
+                </div>
+              ) : (
+                <>
+                  <span className="text-white/40 tabular-nums hidden md:inline text-[10px] shrink-0">
+                    {o.deadline ? new Date(o.deadline).toLocaleDateString("pt-BR") : "—"}
+                  </span>
+                  <StatusPill s={ORDER_STATUS_LABEL[o.status] || o.status} />
+                </>
+              )}
+            </li>
+          );
+        })}
       </ul>
     </Card>
   );
