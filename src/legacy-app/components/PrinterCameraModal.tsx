@@ -294,8 +294,13 @@ export const PrinterCameraModal: React.FC<PrinterCameraModalProps> = ({
         {/* Header */}
         <div className="p-5 border-b border-white/5 flex justify-between items-center">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="h-10 w-10 rounded-xl grid place-items-center bg-[var(--cat-lime)] text-black shrink-0">
-              <Camera className="h-5 w-5" />
+            <div className="h-10 w-10 rounded-xl overflow-hidden bg-[#0E1210] border border-white/10 shrink-0">
+              <img
+                src={getPrinterLogo(printer.model, printer.customUrl)}
+                alt={printer.name}
+                className="h-full w-full object-cover"
+                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+              />
             </div>
             <div className="min-w-0">
               <div className="eyebrow mb-0.5">Monitoramento</div>
