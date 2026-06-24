@@ -644,12 +644,22 @@ function StlGallery({ orders = [], clients = [] }: { orders?: any[]; clients?: a
   const stockImageByName: Record<string, string | undefined> = {};
   const stockQtyByName: Record<string, number> = {};
   const registeredNames = new Set<string>();
+  // Registered = present in the local catalog (cadastro de produtos)
+  try {
+    const cat = JSON.parse(
+      (typeof localStorage !== "undefined" &&
+        localStorage.getItem("bambuzau_local_catalog_production")) || "[]",
+    );
+    (cat || []).forEach((c: any) => {
+      const key = String(c?.name || "").toLowerCase().trim();
+      if (key) registeredNames.add(key);
+    });
+  } catch {}
   clients.forEach((c: any) => {
     (c?.productsStock || []).forEach((p: any) => {
       const key = String(p?.name || "").toLowerCase().trim();
       if (key && p?.imageUrl && !stockImageByName[key]) stockImageByName[key] = p.imageUrl;
       if (key) stockQtyByName[key] = (stockQtyByName[key] || 0) + Number(p?.qty || 0);
-      if (key) registeredNames.add(key);
     });
   });
   try {
@@ -662,7 +672,6 @@ function StlGallery({ orders = [], clients = [] }: { orders?: any[]; clients?: a
       if (key && c?.imageUrl && !stockImageByName[key]) stockImageByName[key] = c.imageUrl;
       if (key && c?.stockCount != null && stockQtyByName[key] == null)
         stockQtyByName[key] = Number(c.stockCount) || 0;
-      if (key) registeredNames.add(key);
     });
   } catch {}
   const orderItems = orders
@@ -683,6 +692,8 @@ function StlGallery({ orders = [], clients = [] }: { orders?: any[]; clients?: a
   const stockItems: any[] = [];
   clients.forEach((c: any) => {
     (c?.productsStock || []).forEach((p: any) => {
+      const key = String(p?.name || "").toLowerCase().trim();
+      if (!registeredNames.has(key)) return;
       stockItems.push({
         name: p.name,
         ts: p.addedAt || p.createdAt || 0,
