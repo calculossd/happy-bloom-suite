@@ -643,6 +643,18 @@ function Hygrometers({ devices = [] }: { devices?: any[] }) {
 function StlGallery({ orders = [], clients = [] }: { orders?: any[]; clients?: any[] }) {
   const stockImageByName: Record<string, string | undefined> = {};
   const stockQtyByName: Record<string, number> = {};
+  const registeredNames = new Set<string>();
+  // Registered = present in the local catalog (cadastro de produtos)
+  try {
+    const cat = JSON.parse(
+      (typeof localStorage !== "undefined" &&
+        localStorage.getItem("bambuzau_local_catalog_production")) || "[]",
+    );
+    (cat || []).forEach((c: any) => {
+      const key = String(c?.name || "").toLowerCase().trim();
+      if (key) registeredNames.add(key);
+    });
+  } catch {}
   clients.forEach((c: any) => {
     (c?.productsStock || []).forEach((p: any) => {
       const key = String(p?.name || "").toLowerCase().trim();
@@ -662,7 +674,9 @@ function StlGallery({ orders = [], clients = [] }: { orders?: any[]; clients?: a
         stockQtyByName[key] = Number(c.stockCount) || 0;
     });
   } catch {}
-  const orderItems = orders.map((o: any) => {
+  const orderItems = orders
+    .filter((o: any) => registeredNames.has(String(o?.itemName || "").toLowerCase().trim()))
+    .map((o: any) => {
     const key = String(o?.itemName || "").toLowerCase().trim();
     const qty = stockQtyByName[key];
     return {
@@ -678,6 +692,8 @@ function StlGallery({ orders = [], clients = [] }: { orders?: any[]; clients?: a
   const stockItems: any[] = [];
   clients.forEach((c: any) => {
     (c?.productsStock || []).forEach((p: any) => {
+      const key = String(p?.name || "").toLowerCase().trim();
+      if (!registeredNames.has(key)) return;
       stockItems.push({
         name: p.name,
         ts: p.addedAt || p.createdAt || 0,
@@ -811,7 +827,6 @@ function StockOverview({ filaments = [], onSelectTab }: { filaments?: any[]; onS
               <FilamentSpool type={c.type} color={colorHex(c.color)} size={28} className="shrink-0" label={c.name} />
               <div className="flex-1 min-w-0">
                 <div className="text-[12px] font-medium text-white truncate flex items-center gap-1.5">
-                  <span>{c.type}</span>
                   <span
                     className="inline-block size-2 rounded-full shrink-0 ring-1 ring-white/15"
                     style={{ background: colorHex(c.color) }}
