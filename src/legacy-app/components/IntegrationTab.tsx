@@ -480,12 +480,50 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
                 }
 
                 return (
+                  isBalcao ? (
+                  <div
+                    key={order.id}
+                    className="group relative overflow-hidden rounded-xl border border-emerald-500/25 bg-gradient-to-r from-emerald-950/30 via-[#0B0F0D] to-[#0A0C0B] hover:border-emerald-400/50 hover:shadow-[0_8px_24px_-12px_rgba(16,185,129,0.4)] transition-all duration-300"
+                  >
+                    <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-emerald-400 via-emerald-500 to-emerald-600 shadow-[0_0_10px_rgba(16,185,129,0.6)]" />
+                    <div className="flex items-center gap-3 px-4 py-2.5 pl-5">
+                      {/* Left: badge + title block */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <span className="text-[8.5px] font-black px-1.5 py-[1px] rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 tracking-wider">
+                            BALCÃO
+                          </span>
+                          <span className="text-[8.5px] font-mono text-emerald-400/50">#{order.id}</span>
+                          <span className="text-[8.5px] font-mono text-zinc-500">· {formatDate} {formatTime}</span>
+                          <span className="text-[8.5px] font-mono text-zinc-500 hidden sm:inline">· {elapsedStr}</span>
+                        </div>
+                        <div className="flex items-baseline gap-2 flex-wrap">
+                          <h4 className="text-[13px] font-bold text-white tracking-tight truncate">{order.itemName}</h4>
+                          <span className="text-[10px] text-zinc-400 truncate">
+                            <span className="text-zinc-500">·</span> {order.clientName}
+                            <span className="text-zinc-600 mx-1">·</span> {order.weightGrams}g
+                            <span className="text-zinc-600 mx-1">·</span> {order.printTimeHours}h
+                          </span>
+                        </div>
+                      </div>
+                      {/* Right: price + tag */}
+                      <div className="flex items-center gap-3 shrink-0">
+                        <div className="text-right leading-tight">
+                          <div className="text-[8px] uppercase tracking-widest text-emerald-400/60 font-bold">Total</div>
+                          <div className="text-[15px] font-black text-emerald-300 font-mono tabular-nums">R$ {order.priceCharged.toFixed(2)}</div>
+                        </div>
+                        <span className="flex items-center gap-1 text-[9.5px] text-emerald-300 font-bold bg-emerald-500/15 border border-emerald-500/40 px-2 py-1 rounded-md">
+                          <CheckCircle className="h-3 w-3" />
+                          Pago
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  ) : (
                   <div 
                     key={order.id} 
                     className={`p-4 border rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-4 transition ${
-                      isBalcao
-                        ? 'bg-gradient-to-br from-emerald-950/40 via-[#0F1411] to-[#0C0E0D] border-emerald-500/40 shadow-[0_0_18px_rgba(16,185,129,0.12)] hover:border-emerald-400/60'
-                        : isItemImported 
+                      isItemImported 
                         ? 'bg-[var(--brand-bg)] border-[var(--brand-border)]/45 opacity-70 text-[var(--brand-muted)] shadow-inner' 
                         : borderHighlight 
                         ? `bg-[#131715] ${borderHighlight}`
@@ -577,6 +615,7 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
                       )}
                     </div>
                   </div>
+                  )
                 );
               })
             )}
