@@ -998,7 +998,8 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
         note: cNote,
         lastContactDate: parsedDate,
         stockCount: parsedStockCount,
-        stockValue: parsedStockValue
+        stockValue: parsedStockValue,
+        productsStock: cProductsStock,
       });
       setEditingClientId(null);
     } else {
@@ -1013,7 +1014,8 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
         note: cNote,
         lastContactDate: parsedDate,
         stockCount: parsedStockCount,
-        stockValue: parsedStockValue
+        stockValue: parsedStockValue,
+        productsStock: cProductsStock,
       });
     }
 
@@ -1029,6 +1031,9 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
     setCLastContactDate('');
     setCStockCount('0');
     setCStockValue('0');
+    setCProductsStock([]);
+    setCCatalogPick('');
+    setCCatalogQty(1);
     setShowClientForm(false);
   };
 
@@ -1045,6 +1050,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
     setCLastContactDate(client.lastContactDate ? new Date(client.lastContactDate).toISOString().split('T')[0] : '');
     setCStockCount(String(client.stockCount || 0));
     setCStockValue(String(client.stockValue || 0));
+    setCProductsStock(Array.isArray((client as any).productsStock) ? (client as any).productsStock : []);
     setShowClientForm(true);
   };
 
