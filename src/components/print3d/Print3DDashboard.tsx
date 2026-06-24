@@ -688,6 +688,24 @@ function StlGallery({ orders = [], clients = [] }: { orders?: any[]; clients?: a
       });
     });
   });
+  try {
+    const cat = JSON.parse(
+      (typeof localStorage !== "undefined" &&
+        localStorage.getItem("bambuzau_local_catalog_production")) || "[]",
+    );
+    (cat || []).forEach((c: any) => {
+      if (!c?.name) return;
+      const qty = Number(c.stockCount ?? 0);
+      stockItems.push({
+        name: c.name,
+        ts: c.updatedAt || c.createdAt || 0,
+        date: "",
+        mat: `Estoque · ${qty}un`,
+        imageUrl: c.imageUrl,
+        source: "Estoque",
+      });
+    });
+  } catch {}
   const items = [...orderItems, ...stockItems]
     .sort((a, b) => (b.ts || 0) - (a.ts || 0))
     .slice(0, 10);
