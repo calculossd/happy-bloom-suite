@@ -746,6 +746,18 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                   
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-1.5 min-w-0 max-w-[65%]">
+                      {order.imageUrl ? (
+                        <img
+                          src={order.imageUrl}
+                          alt={order.itemName}
+                          className="shrink-0 w-9 h-9 rounded-md object-cover border border-[#232B27] bg-black/40"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="shrink-0 w-9 h-9 rounded-md border border-dashed border-[#232B27] bg-black/30 flex items-center justify-center text-[8px] text-[#3a4640] font-bold uppercase">
+                          3D
+                        </div>
+                      )}
                       {order.platformSource === 'MANUAL' ? (
                         <div className="flex items-center gap-1 bg-gradient-to-r from-emerald-950/60 to-emerald-900/40 border border-emerald-500/30 px-2 py-0.5 rounded text-[8.5px] font-black uppercase text-center text-emerald-400 shrink-0 select-none">
                           <span className="text-[10px]">🧑‍💼</span>
@@ -1083,6 +1095,18 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
               className={`group relative flex items-stretch gap-3 rounded-xl bg-gradient-to-br from-[#13181500] via-[#13181580] to-[#0F1310] border ${isLate ? 'border-red-500/60 shadow-[0_0_14px_rgba(239,68,68,0.18)]' : 'border-[#232B27] hover:border-[#3a4a40]'} px-3 py-2.5 transition-all duration-300 backdrop-blur-sm cursor-pointer hover:shadow-[0_4px_20px_rgba(0,0,0,0.4)]`}
             >
               <span aria-hidden className="absolute left-0 top-2 bottom-2 w-[3px] rounded-full" style={{ background: color, boxShadow: `0 0 8px ${color}80` }} />
+              {order.imageUrl ? (
+                <img
+                  src={order.imageUrl}
+                  alt={order.itemName}
+                  className="shrink-0 w-12 h-12 rounded-lg object-cover border border-[#232B27] bg-black/40"
+                  loading="lazy"
+                />
+              ) : (
+                <div className="shrink-0 w-12 h-12 rounded-lg border border-dashed border-[#232B27] bg-black/30 flex items-center justify-center text-[9px] text-[#3a4640] font-bold uppercase tracking-wider">
+                  3D
+                </div>
+              )}
               <div className="flex-1 min-w-0 pl-1.5">
                 <div className="flex items-center gap-2 min-w-0">
                   <span className="truncate text-[13px] font-semibold text-[#F1F4EE] tracking-tight">{order.itemName}</span>
@@ -1282,7 +1306,19 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
               >
                 <div className="absolute inset-x-0 top-0 h-1" style={{ background: `linear-gradient(90deg, ${color}, transparent)` }} />
                 <div className="flex items-start justify-between gap-4 p-6 border-b border-[#1a221e]">
-                  <div className="min-w-0">
+                  <div className="flex items-start gap-4 min-w-0 flex-1">
+                    {o.imageUrl ? (
+                      <img
+                        src={o.imageUrl}
+                        alt={o.itemName}
+                        className="shrink-0 w-20 h-20 rounded-xl object-cover border border-[#232B27] bg-black/40 shadow-lg"
+                      />
+                    ) : (
+                      <div className="shrink-0 w-20 h-20 rounded-xl border border-dashed border-[#232B27] bg-black/30 flex items-center justify-center text-[11px] text-[#3a4640] font-black uppercase tracking-wider">
+                        3D
+                      </div>
+                    )}
+                    <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       <span className="w-2 h-2 rounded-full" style={{ background: color, boxShadow: `0 0 10px ${color}` }} />
                       <span className="text-[10px] uppercase tracking-[0.2em] font-bold" style={{ color }}>{getStatusLabel(o.status)}</span>
@@ -1290,6 +1326,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                     </div>
                     <h2 className="text-2xl font-black text-[#F1F4EE] tracking-tight truncate">{o.itemName}</h2>
                     <p className="text-sm text-[#8BA58D] mt-1">Cliente: <span className="text-[#F1F4EE] font-semibold">{o.clientName}</span></p>
+                    </div>
                   </div>
                   <button onClick={() => setDetailOrder(null)} className="shrink-0 text-[#8BA58D] hover:text-white p-2 rounded-lg hover:bg-white/5 transition-colors">
                     <X className="w-5 h-5" />
