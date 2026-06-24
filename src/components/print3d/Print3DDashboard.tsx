@@ -800,12 +800,12 @@ function StockOverview({ filaments = [], onSelectTab }: { filaments?: any[]; onS
           {groups.map(([type, g], i) => {
             const low = g.total < g.min;
             return (
-              <li key={i} className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
-                <div className="size-7 rounded-md grid place-items-center" style={{ background: `${LIME}15`, border: `1px solid ${LIME}30` }}>
-                  <Droplets className="size-3.5" style={{ color: LIME }} />
+              <li key={i} className={`flex items-center gap-2 p-2 rounded-lg bg-white/[0.02] border ${low ? "border-rose-500/60" : "border-white/[0.04]"}`}>
+                <div className="size-7 rounded-md grid place-items-center" style={{ background: low ? "rgba(251,113,133,0.15)" : `${LIME}15`, border: `1px solid ${low ? "rgba(251,113,133,0.4)" : LIME + "30"}` }}>
+                  <Droplets className="size-3.5" style={{ color: low ? "#fb7185" : LIME }} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-[11.5px] font-semibold text-white truncate">{type} <span className="text-white/40 text-[9px]">({g.count})</span></div>
+                  <div className="text-[11.5px] font-semibold text-white truncate">({g.count})</div>
                   <div className="text-[10px] tabular-nums" style={{ color: low ? "#fb7185" : "rgba(255,255,255,0.55)" }}>
                     {(g.total / 1000).toFixed(2)}kg<span className="text-white/35"> / min {(g.min / 1000).toFixed(1)}kg</span>
                   </div>
@@ -817,13 +817,13 @@ function StockOverview({ filaments = [], onSelectTab }: { filaments?: any[]; onS
       )}
 
       {/* Críticos */}
-      <div className="text-[10px] uppercase tracking-wider text-white/40 mb-1.5">Atenção / Crítico</div>
+      <div className="text-[10px] uppercase tracking-wider text-rose-400/80 mb-1.5">Estoque Crítico</div>
       {items.length === 0 ? (
         <div className="text-[12px] text-white/40 py-3 text-center">Tudo em ordem.</div>
       ) : (
         <ul className="space-y-2">
           {items.map((c, i) => (
-            <li key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/[0.03] transition">
+            <li key={i} className={`flex items-center gap-3 p-2 rounded-lg border hover:bg-white/[0.03] transition ${c.level === "Crítico" ? "border-rose-500/60 bg-rose-500/[0.04]" : "border-amber-400/40"}`}>
               <FilamentSpool type={c.type} color={colorHex(c.color)} size={28} className="shrink-0" label={c.name} />
               <div className="flex-1 min-w-0">
                 <div className="text-[12px] font-medium text-white truncate flex items-center gap-1.5">
