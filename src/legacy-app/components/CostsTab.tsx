@@ -3031,6 +3031,53 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
               </div>
             </form>
           )}
+          {(() => {
+            const lowFilaments = (filamentStocks || []).filter(f => f.stockGrams < f.minStockGrams);
+            const lowCats = catalogItems.filter((c: any) => (c.stockCount || 0) < (c.minStockCount || 0));
+            if (lowFilaments.length === 0 && lowCats.length === 0) return null;
+            return (
+              <div className="bg-[#2E1719] rounded-xl border border-[#EF5350]/30 p-4 space-y-3 shadow-xl">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#FF1744] inline-block animate-ping" />
+                  <span className="text-xs font-black text-[#FF8A80] uppercase tracking-wider">
+                    Compras recomendadas (estoque crítico)
+                  </span>
+                </div>
+                {lowFilaments.length > 0 && (
+                  <div className="space-y-2">
+                    <h4 className="text-xs font-semibold text-white/90">Filamentos abaixo do mínimo de segurança:</h4>
+                    <div className="space-y-1.5 pl-2 border-l border-[#FF1744]/25">
+                      {lowFilaments.map(fil => (
+                        <div key={fil.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 py-0.5">
+                          <span className="text-xs text-[#F1F4EE]">
+                            • <strong className="text-[#E5B242]">{fil.type}</strong> {fil.color} ({Math.round(fil.stockGrams)}g / min. {Math.round(fil.minStockGrams)}g)
+                          </span>
+                          <button
+                            onClick={() => onUpdateFilament(fil.id, { stockGrams: fil.stockGrams + 1000 })}
+                            className="px-2 py-0.5 bg-[#5E8B61]/15 hover:bg-[#5E8B61]/35 text-[#95BBA2] text-[10px] font-extrabold rounded border border-[#5E8B61]/30 transition cursor-pointer self-end sm:self-auto"
+                          >
+                            +1 Rolo (1kg)
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {lowCats.length > 0 && (
+                  <div className="space-y-2 pt-1">
+                    <h4 className="text-xs font-semibold text-white/90">Peças do catálogo com falta de reposição:</h4>
+                    <div className="space-y-1.5 pl-2 border-l border-[#EF5350]/25">
+                      {lowCats.map((cat: any) => (
+                        <div key={cat.id} className="text-xs text-[#F1F4EE] py-0.5">
+                          • {cat.name} ({cat.stockCount} de {cat.minStockCount} itens)
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })()}
           <div className="relative overflow-hidden bg-gradient-to-br from-[#0d0d0d] via-[#0a0a0a] to-[#050505] border border-[#232B27] p-5 rounded-2xl space-y-4 shadow-[0_24px_60px_-30px_rgba(149,187,162,0.25)]" id="product-stock-section">
             <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-[#b7ff00]/10 blur-3xl opacity-100" />
             <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-3 border-b border-white/5 pb-4">
