@@ -708,9 +708,6 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                         <span className="text-[10px] px-1.5 py-0.5 rounded font-mono" style={{ background: `${getStatusColor(order.status)}22`, color: getStatusColor(order.status) }}>
                           {getStatusLabel(order.status)}
                         </span>
-                        {isPrinting && (
-                          <span className="text-[10px] font-mono font-bold text-emerald-300">{progressPct}%</span>
-                        )}
                       </div>
                       <div className={`flex items-center gap-3 text-[11px] mt-0.5 ${isCritical ? 'text-red-300/80' : 'text-[#8BA58D]'}`}>
                         <span className="truncate">{order.clientName}</span>
@@ -722,11 +719,20 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                         <span>~{order.printTimeHours}h impressão</span>
                       </div>
                       {isPrinting && (
-                        <div className="mt-2 w-full h-1.5 rounded-full bg-[#0C0E0D] border border-[#232B27] overflow-hidden">
-                          <div
-                            className="h-full rounded-full bg-gradient-to-r from-emerald-500 via-emerald-400 to-[#b7ff00] shadow-[0_0_10px_rgba(183,255,0,0.45)] transition-all duration-700"
-                            style={{ width: `${Math.max(2, progressPct)}%` }}
-                          />
+                        <div className="mt-2 flex items-center gap-2 max-w-[420px]">
+                          <div className="flex-1 h-1 rounded-full bg-white/[0.04] overflow-hidden">
+                            <div
+                              className={`h-full rounded-full transition-all duration-700 ${
+                                isCritical
+                                  ? 'bg-gradient-to-r from-red-500 to-red-300'
+                                  : 'bg-gradient-to-r from-emerald-500 to-[#b7ff00]'
+                              }`}
+                              style={{ width: `${Math.max(2, progressPct)}%` }}
+                            />
+                          </div>
+                          <span className={`text-[10px] font-mono font-bold tabular-nums ${isCritical ? 'text-red-300' : 'text-emerald-300'}`}>
+                            {progressPct}%
+                          </span>
                         </div>
                       )}
                     </div>
