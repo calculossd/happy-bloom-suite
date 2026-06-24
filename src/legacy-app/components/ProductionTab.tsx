@@ -259,6 +259,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingOrder, setEditingOrder] = useState<PrintOrder | null>(null);
   const [quickPrintOrder, setQuickPrintOrder] = useState<PrintOrder | null>(null);
+  const [detailOrder, setDetailOrder] = useState<PrintOrder | null>(null);
 
   // Form Fields State
   const [formClientId, setFormClientId] = useState<string>('');
