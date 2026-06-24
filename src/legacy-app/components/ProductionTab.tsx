@@ -1306,7 +1306,19 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
               >
                 <div className="absolute inset-x-0 top-0 h-1" style={{ background: `linear-gradient(90deg, ${color}, transparent)` }} />
                 <div className="flex items-start justify-between gap-4 p-6 border-b border-[#1a221e]">
-                  <div className="min-w-0">
+                  <div className="flex items-start gap-4 min-w-0 flex-1">
+                    {o.imageUrl ? (
+                      <img
+                        src={o.imageUrl}
+                        alt={o.itemName}
+                        className="shrink-0 w-20 h-20 rounded-xl object-cover border border-[#232B27] bg-black/40 shadow-lg"
+                      />
+                    ) : (
+                      <div className="shrink-0 w-20 h-20 rounded-xl border border-dashed border-[#232B27] bg-black/30 flex items-center justify-center text-[11px] text-[#3a4640] font-black uppercase tracking-wider">
+                        3D
+                      </div>
+                    )}
+                    <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       <span className="w-2 h-2 rounded-full" style={{ background: color, boxShadow: `0 0 10px ${color}` }} />
                       <span className="text-[10px] uppercase tracking-[0.2em] font-bold" style={{ color }}>{getStatusLabel(o.status)}</span>
@@ -1314,6 +1326,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                     </div>
                     <h2 className="text-2xl font-black text-[#F1F4EE] tracking-tight truncate">{o.itemName}</h2>
                     <p className="text-sm text-[#8BA58D] mt-1">Cliente: <span className="text-[#F1F4EE] font-semibold">{o.clientName}</span></p>
+                    </div>
                   </div>
                   <button onClick={() => setDetailOrder(null)} className="shrink-0 text-[#8BA58D] hover:text-white p-2 rounded-lg hover:bg-white/5 transition-colors">
                     <X className="w-5 h-5" />
