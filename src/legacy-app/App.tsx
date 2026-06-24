@@ -1314,7 +1314,16 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col font-sans transition-colors duration-300 tt-shell md:pl-[168px]">
+    <div
+      className="min-h-screen flex flex-col font-sans transition-colors duration-300 tt-shell md:pl-[168px]"
+      data-tab-category={
+        [1, 2, 3, 4, 6].includes(currentTab) ? 'principal'
+        : [12, 14, 16].includes(currentTab) ? 'operacional'
+        : [7, 8, 9, 10, 11, 15].includes(currentTab) ? 'marketing'
+        : currentTab === 4 ? 'financeiro'
+        : 'default'
+      }
+    >
       
       {/* GLOBAL SAFE TOAST NOTIFICATION CARD */}
       {globalToast && (
