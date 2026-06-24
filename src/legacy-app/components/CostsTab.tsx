@@ -2525,15 +2525,8 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       {/* SUBTAB 3: DOUBLE SECTORS - RAW FILAMENTS AND CONSUMABLE SUPPLIES */}
       {activeSubTab === 'STOCK' && (
         <div className="space-y-6 animate-fade-in" id="stocks-physical-layout">
-          {/* Standardized subtab header */}
-          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Estoque</div>
-                <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">Físico</span>
-              </div>
-              <p className="text-xs text-[var(--brand-muted)]">Produtos prontos, carretéis de filamento, insumos e hardware sincronizados em tempo real</p>
-            </div>
+          {/* Action: novo produto */}
+          <div className="flex justify-end">
             <button
               onClick={() => { setEditingProduct(null); setShowAddProductManualForm(true); }}
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#b7ff00]/30 bg-[#b7ff00]/15 px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#b7ff00] transition hover:bg-[#b7ff00]/25 hover:border-[#b7ff00]/50"
