@@ -640,16 +640,31 @@ function Hygrometers({ devices = [] }: { devices?: any[] }) {
 }
 
 /* ---------- STL gallery (recent orders) ---------- */
-function StlGallery({ orders = [] }: { orders?: any[] }) {
-  const items = orders
-    .slice()
-    .sort((a: any, b: any) => (b.createdAt || 0) - (a.createdAt || 0))
-    .slice(0, 5)
-    .map((o: any) => ({
-      name: o.itemName,
-      date: o.createdAt ? new Date(o.createdAt).toLocaleDateString("pt-BR") : "",
-      mat: `${o.filamentType} — ${o.filamentColor}`,
-    }));
+function StlGallery({ orders = [], clients = [] }: { orders?: any[]; clients?: any[] }) {
+  const orderItems = orders.map((o: any) => ({
+    name: o.itemName,
+    ts: o.createdAt || 0,
+    date: o.createdAt ? new Date(o.createdAt).toLocaleDateString("pt-BR") : "",
+    mat: `${o.filamentType ?? ""}${o.filamentColor ? ` — ${o.filamentColor}` : ""}`,
+    imageUrl: o.imageUrl,
+    source: "Pedido",
+  }));
+  const stockItems: any[] = [];
+  clients.forEach((c: any) => {
+    (c?.productsStock || []).forEach((p: any) => {
+      stockItems.push({
+        name: p.name,
+        ts: p.addedAt || p.createdAt || 0,
+        date: "",
+        mat: `Estoque · ${p.qty ?? 0}un`,
+        imageUrl: p.imageUrl,
+        source: "Estoque",
+      });
+    });
+  });
+  const items = [...orderItems, ...stockItems]
+    .sort((a, b) => (b.ts || 0) - (a.ts || 0))
+    .slice(0, 10);
   return (
     <Card>
       <div className="flex items-center justify-between mb-4">
@@ -663,7 +678,12 @@ function StlGallery({ orders = [] }: { orders?: any[] }) {
         {items.map((s, i) => (
           <div key={i} className="group cursor-pointer">
             <div className="aspect-square rounded-xl bg-gradient-to-br from-white/[0.05] to-white/[0.01] border border-white/[0.05] grid place-items-center mb-2 group-hover:border-white/15 transition relative overflow-hidden">
-              <Box className="size-10 text-white/30 group-hover:scale-110 transition" />
+              {s.imageUrl ? (
+                <img src={s.imageUrl} alt={s.name} className="absolute inset-0 w-full h-full object-cover" />
+              ) : (
+                <Box className="size-10 text-white/30 group-hover:scale-110 transition" />
+              )}
+              <div className="absolute top-1 left-1 px-1.5 py-0.5 rounded text-[8.5px] font-semibold uppercase tracking-wider" style={{ background: s.source === "Estoque" ? `${LIME}25` : "rgba(0,0,0,0.55)", color: s.source === "Estoque" ? LIME : "#fff", border: `1px solid ${s.source === "Estoque" ? LIME + "55" : "rgba(255,255,255,0.1)"}` }}>{s.source}</div>
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition" style={{ background: `radial-gradient(circle at center, ${LIME}15, transparent 70%)` }} />
             </div>
             <div className="text-[11.5px] font-medium text-white truncate">{s.name}</div>
