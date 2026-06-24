@@ -356,6 +356,12 @@ export function safeGetLocalStorageItem(key: string, defaultValue: string = ''):
 export default function App() {
   const [currentTab, setCurrentTab] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [costsSubTab, setCostsSubTab] = useState<string>('STOCK');
+  useEffect(() => {
+    const h = (e: any) => { if (typeof e?.detail === 'string') setCostsSubTab(e.detail); };
+    window.addEventListener('costs_subtab_changed', h as EventListener);
+    return () => window.removeEventListener('costs_subtab_changed', h as EventListener);
+  }, []);
   const [showAddPrinterFormTab16, setShowAddPrinterFormTab16] = useState(false);
 
   // Open the Costs tab (id=4) jumping to a specific internal sub-tab.
