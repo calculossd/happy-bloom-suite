@@ -801,9 +801,6 @@ function StockOverview({ filaments = [], onSelectTab }: { filaments?: any[]; onS
             const low = g.total < g.min;
             return (
               <li key={i} className={`flex items-center gap-2 p-2 rounded-lg bg-white/[0.02] border ${low ? "border-rose-500/60" : "border-white/[0.04]"}`}>
-                <div className="size-7 rounded-md grid place-items-center" style={{ background: low ? "rgba(251,113,133,0.15)" : `${LIME}15`, border: `1px solid ${low ? "rgba(251,113,133,0.4)" : LIME + "30"}` }}>
-                  <Droplets className="size-3.5" style={{ color: low ? "#fb7185" : LIME }} />
-                </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-[11.5px] font-semibold text-white truncate">({g.count})</div>
                   <div className="text-[10px] tabular-nums" style={{ color: low ? "#fb7185" : "rgba(255,255,255,0.55)" }}>
