@@ -648,6 +648,16 @@ function StlGallery({ orders = [], clients = [] }: { orders?: any[]; clients?: a
       if (key && p?.imageUrl && !stockImageByName[key]) stockImageByName[key] = p.imageUrl;
     });
   });
+  try {
+    const cat = JSON.parse(
+      (typeof localStorage !== "undefined" &&
+        localStorage.getItem("bambuzau_local_catalog_production")) || "[]",
+    );
+    (cat || []).forEach((c: any) => {
+      const key = String(c?.name || "").toLowerCase().trim();
+      if (key && c?.imageUrl && !stockImageByName[key]) stockImageByName[key] = c.imageUrl;
+    });
+  } catch {}
   const orderItems = orders.map((o: any) => {
     const key = String(o?.itemName || "").toLowerCase().trim();
     return {
