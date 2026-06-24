@@ -340,6 +340,9 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
   const [cPhone, setCPhone] = useState('');
   const [cEmail, setCEmail] = useState('');
   const [cAddress, setCAddress] = useState('');
+  const [cCep, setCCep] = useState('');
+  const [cCity, setCCity] = useState('');
+  const [cState, setCState] = useState('');
   const [cNote, setCNote] = useState('');
   const [cLastContactDate, setCLastContactDate] = useState('');
   const [cStockCount, setCStockCount] = useState('0');
@@ -830,6 +833,9 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
         phone: cPhone,
         email: cEmail,
         address: cAddress,
+        cep: cCep,
+        city: cCity,
+        state: cState,
         note: cNote,
         lastContactDate: parsedDate,
         stockCount: parsedStockCount,
@@ -842,6 +848,9 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
         phone: cPhone,
         email: cEmail,
         address: cAddress,
+        cep: cCep,
+        city: cCity,
+        state: cState,
         note: cNote,
         lastContactDate: parsedDate,
         stockCount: parsedStockCount,
@@ -854,6 +863,9 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
     setCPhone('');
     setCEmail('');
     setCAddress('');
+    setCCep('');
+    setCCity('');
+    setCState('');
     setCNote('');
     setCLastContactDate('');
     setCStockCount('0');
@@ -867,6 +879,9 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
     setCPhone(client.phone);
     setCEmail(client.email);
     setCAddress(client.address);
+    setCCep(client.cep || '');
+    setCCity(client.city || '');
+    setCState(client.state || '');
     setCNote(client.note || '');
     setCLastContactDate(client.lastContactDate ? new Date(client.lastContactDate).toISOString().split('T')[0] : '');
     setCStockCount(String(client.stockCount || 0));
@@ -923,6 +938,9 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                 setCPhone('');
                 setCEmail('');
                 setCAddress('');
+                setCCep('');
+                setCCity('');
+                setCState('');
                 setCNote('');
                 setCStockCount('0');
                 setCStockValue('0');
@@ -985,9 +1003,59 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                     type="text"
                     value={cAddress}
                     onChange={(e) => setCAddress(e.target.value)}
-                    placeholder="Rua, Número, Bairro, CEP"
+                    placeholder="Rua, Número, Bairro"
                     className="bg-[#151917] border border-[#232B27] px-3 py-1.5 rounded text-xs text-[#F1F4EE] outline-none focus:border-[#95BBA2]"
                     id="client_address_form_input"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] uppercase text-[#8BA58D] font-bold">CEP</label>
+                  <input
+                    type="text"
+                    value={cCep}
+                    onChange={(e) => setCCep(e.target.value)}
+                    onBlur={async (e) => {
+                      const cep = e.target.value.replace(/\D/g, '');
+                      if (cep.length !== 8) return;
+                      try {
+                        const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                        const d = await r.json();
+                        if (d && !d.erro) {
+                          if (!cCity) setCCity(d.localidade || '');
+                          if (!cState) setCState(d.uf || '');
+                          if (!cAddress) setCAddress(`${d.logradouro || ''}${d.bairro ? ', ' + d.bairro : ''}`.trim());
+                        }
+                      } catch {}
+                    }}
+                    placeholder="00000-000"
+                    className="bg-[#151917] border border-[#232B27] px-3 py-1.5 rounded text-xs text-[#F1F4EE] outline-none focus:border-[#95BBA2]"
+                    id="client_cep_form_input"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] uppercase text-[#8BA58D] font-bold">Cidade</label>
+                  <input
+                    type="text"
+                    value={cCity}
+                    onChange={(e) => setCCity(e.target.value)}
+                    placeholder="Ex: São Paulo"
+                    className="bg-[#151917] border border-[#232B27] px-3 py-1.5 rounded text-xs text-[#F1F4EE] outline-none focus:border-[#95BBA2]"
+                    id="client_city_form_input"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] uppercase text-[#8BA58D] font-bold">Estado (UF)</label>
+                  <input
+                    type="text"
+                    maxLength={2}
+                    value={cState}
+                    onChange={(e) => setCState(e.target.value.toUpperCase())}
+                    placeholder="SP"
+                    className="bg-[#151917] border border-[#232B27] px-3 py-1.5 rounded text-xs text-[#F1F4EE] outline-none focus:border-[#95BBA2]"
+                    id="client_state_form_input"
                   />
                 </div>
               </div>
@@ -1069,7 +1137,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                     <h4 className="text-xs font-bold text-[#F1F4EE]">{client.name}</h4>
                     <div className="text-[10px] text-[#8BA58D] space-y-0.5">
                       <p>💬 <span className="font-mono text-[#F1F4EE]">{client.phone || 'Sem telefone'}</span> • {client.email}</p>
-                      <p className="truncate">📍 {client.address || 'Sem endereço informado'}</p>
+                      <p className="truncate">📍 {[client.address, client.city, client.state].filter(Boolean).join(', ') || 'Sem endereço informado'}{client.cep ? ` • CEP ${client.cep}` : ''}</p>
                       {client.note && <p className="text-[var(--brand-primary)] text-[9px] italic mt-1 font-mono">“ {client.note} ”</p>}
                     </div>
 
@@ -1083,10 +1151,10 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                       Ficha &amp; Produtos do Cliente 📂
                     </button>
 
-                    {client.address && (
+                    {(client.address || client.cep) && (
                       <div className="pt-1">
                         <a
-                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(client.address)}`}
+                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([client.address, client.city, client.state, client.cep].filter(Boolean).join(', '))}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1 text-[9px] font-bold text-[var(--brand-primary)] hover:underline bg-[var(--brand-primary)]/5 p-1 px-2 rounded-md hover:bg-[var(--brand-primary)]/15 border border-[var(--brand-primary)]/15"

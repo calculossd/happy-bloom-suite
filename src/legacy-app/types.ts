@@ -5,6 +5,9 @@ export interface Client {
   phone: string;
   email: string;
   address: string;
+  cep?: string;
+  city?: string;
+  state?: string;
   note?: string;
   lastContactDate?: number;
   stockCount?: number;
