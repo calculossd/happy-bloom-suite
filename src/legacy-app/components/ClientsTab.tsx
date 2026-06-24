@@ -1038,14 +1038,12 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
           </div>
 
           {showClientForm && (
-          {showClientForm && (
             <ClientForm
               initialClient={editingClient}
               catalog={catalogList}
               onSubmit={handleClientFormSubmit}
               onCancel={() => { setShowClientForm(false); setEditingClientId(null); }}
             />
-          )}
           )}
 
           <div className="space-y-3 max-h-[450px] overflow-y-auto pr-1" id="clients-list">
