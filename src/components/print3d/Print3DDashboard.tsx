@@ -492,7 +492,7 @@ function LivePrinters({ printers = [], orders = [] }: { printers?: any[]; orders
     const remaining = activeOrder
       ? `${Math.floor(remainingH)}h ${Math.round((remainingH % 1) * 60)}m restantes`
       : (p.status === "PRINTING" ? "em andamento" : "—");
-    return { name: p.name || p.model, material, remaining, pct: Math.max(0, Math.min(100, pct)) };
+    return { name: p.name || p.model, model: p.model || "", customUrl: p.customUrl, material, remaining, pct: Math.max(0, Math.min(100, pct)) };
   });
   return (
     <Card>
@@ -509,8 +509,14 @@ function LivePrinters({ printers = [], orders = [] }: { printers?: any[]; orders
       <ul className="space-y-3">
         {rows.map((p, i) => (
           <li key={i} className="flex items-center gap-3 group">
-            <div className="size-10 rounded-lg grid place-items-center bg-white/[0.03] border border-white/[0.05] shrink-0">
-              <PrinterIcon className="size-5 text-white/70" />
+            <div className="size-10 rounded-lg overflow-hidden bg-white/[0.03] border border-white/[0.05] shrink-0 relative">
+              <img
+                src={getPrinterLogo(p.model, p.customUrl)}
+                alt={p.name}
+                className="absolute inset-0 w-full h-full object-cover"
+                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+              />
+              <PrinterIcon className="size-5 text-white/70 absolute inset-0 m-auto" />
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-baseline justify-between gap-2">
