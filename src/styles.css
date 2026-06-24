@@ -976,6 +976,10 @@ input, select, textarea {
 #production-dashboard-container .glow-card,
 #integration_tab_container .glow-card,
 #clients_tab_container .glow-card,
+#clients_tab_container > div[class*="bg-[#151917]"],
+#clients_tab_container [id="clients-catalog"],
+#clients_tab_container [id="printers-catalog"],
+#clients_tab_container [id="crm-b2b-leads-section"],
 #sold-orders-tab-container .glow-card {
   background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(15, 23, 42, 0.6)) !important;
   background-color: transparent !important;
