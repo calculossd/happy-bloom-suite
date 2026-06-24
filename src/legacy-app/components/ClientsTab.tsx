@@ -1003,9 +1003,59 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                     type="text"
                     value={cAddress}
                     onChange={(e) => setCAddress(e.target.value)}
-                    placeholder="Rua, Número, Bairro, CEP"
+                    placeholder="Rua, Número, Bairro"
                     className="bg-[#151917] border border-[#232B27] px-3 py-1.5 rounded text-xs text-[#F1F4EE] outline-none focus:border-[#95BBA2]"
                     id="client_address_form_input"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] uppercase text-[#8BA58D] font-bold">CEP</label>
+                  <input
+                    type="text"
+                    value={cCep}
+                    onChange={(e) => setCCep(e.target.value)}
+                    onBlur={async (e) => {
+                      const cep = e.target.value.replace(/\D/g, '');
+                      if (cep.length !== 8) return;
+                      try {
+                        const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                        const d = await r.json();
+                        if (d && !d.erro) {
+                          if (!cCity) setCCity(d.localidade || '');
+                          if (!cState) setCState(d.uf || '');
+                          if (!cAddress) setCAddress(`${d.logradouro || ''}${d.bairro ? ', ' + d.bairro : ''}`.trim());
+                        }
+                      } catch {}
+                    }}
+                    placeholder="00000-000"
+                    className="bg-[#151917] border border-[#232B27] px-3 py-1.5 rounded text-xs text-[#F1F4EE] outline-none focus:border-[#95BBA2]"
+                    id="client_cep_form_input"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] uppercase text-[#8BA58D] font-bold">Cidade</label>
+                  <input
+                    type="text"
+                    value={cCity}
+                    onChange={(e) => setCCity(e.target.value)}
+                    placeholder="Ex: São Paulo"
+                    className="bg-[#151917] border border-[#232B27] px-3 py-1.5 rounded text-xs text-[#F1F4EE] outline-none focus:border-[#95BBA2]"
+                    id="client_city_form_input"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] uppercase text-[#8BA58D] font-bold">Estado (UF)</label>
+                  <input
+                    type="text"
+                    maxLength={2}
+                    value={cState}
+                    onChange={(e) => setCState(e.target.value.toUpperCase())}
+                    placeholder="SP"
+                    className="bg-[#151917] border border-[#232B27] px-3 py-1.5 rounded text-xs text-[#F1F4EE] outline-none focus:border-[#95BBA2]"
+                    id="client_state_form_input"
                   />
                 </div>
               </div>
