@@ -2018,6 +2018,7 @@ export default function App() {
             expenses={expenses}
             shoppingItems={shoppingItems}
             clients={clients}
+            tuyaDevices={tuyaDevices}
             onSelectTab={setCurrentTab}
             onUpdatePrinter={handleUpdatePrinter}
             onUpdateOrder={handleUpdateOrder}

@@ -29,6 +29,7 @@ interface DashboardTabProps {
   expenses: Expense[];
   shoppingItems?: ShoppingItem[];
   clients?: Client[];
+  tuyaDevices?: any[];
   onSelectTab: (tab: number) => void;
   onUpdatePrinter: (id: number, updated: Partial<Printer>) => void;
   onUpdateOrder?: (id: number, updated: Partial<PrintOrder>) => void;
@@ -41,6 +42,7 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
   expenses,
   shoppingItems = [],
   clients = [],
+  tuyaDevices = [],
   onSelectTab,
   onUpdatePrinter,
   onUpdateOrder
@@ -164,6 +166,7 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
         expenses={expenses}
         clients={clients}
         shoppingItems={shoppingItems}
+        tuyaDevices={tuyaDevices}
         onSelectTab={onSelectTab}
       />
 

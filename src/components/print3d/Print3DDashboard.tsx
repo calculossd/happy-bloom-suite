@@ -427,39 +427,55 @@ function OrdersList({ orders = [], clients = [], onSelectTab }: { orders?: any[]
   );
 }
 
-/* ---------- Filament stock health (replaces sensors) ---------- */
-function Sensors({ filaments = [] }: { filaments?: any[] }) {
-  const grouped: Record<string, { total: number; min: number; count: number }> = {};
-  filaments.forEach((f: any) => {
-    const k = f.type || "—";
-    if (!grouped[k]) grouped[k] = { total: 0, min: 0, count: 0 };
-    grouped[k].total += f.stockGrams || 0;
-    grouped[k].min += f.minStockGrams || 0;
-    grouped[k].count += 1;
-  });
-  const rows = Object.entries(grouped).slice(0, 5);
+/* ---------- Hygrometers (replaces Sensors slot) ---------- */
+function Hygrometers({ devices = [] }: { devices?: any[] }) {
+  const tone = (h: number) => {
+    if (h < 30) return { color: "#38bdf8", label: "Ideal", bg: "rgba(56,189,248,0.12)", border: "rgba(56,189,248,0.32)" };
+    if (h <= 45) return { color: "#fbbf24", label: "Atenção", bg: "rgba(251,191,36,0.12)", border: "rgba(251,191,36,0.32)" };
+    return { color: "#fb7185", label: "Crítico", bg: "rgba(251,113,133,0.12)", border: "rgba(251,113,133,0.32)" };
+  };
   return (
     <Card>
-      <h3 className="text-[14px] font-semibold text-white">Saúde do Estoque</h3>
-      <p className="text-[11px] text-white/45 mb-4">Filamentos por tipo</p>
-      {rows.length === 0 && (
-        <div className="text-[12px] text-white/40 py-6 text-center">Sem estoque cadastrado.</div>
+      <div className="flex items-center justify-between mb-1">
+        <h3 className="text-[14px] font-semibold text-white">Higrômetros</h3>
+        <span className="text-[10px] text-white/40 tabular-nums">{devices.length}</span>
+      </div>
+      <p className="text-[11px] text-white/45 mb-4">Umidade das estufas</p>
+      {devices.length === 0 && (
+        <div className="text-[12px] text-white/40 py-6 text-center">Nenhum higrômetro configurado.</div>
       )}
       <ul className="space-y-3">
-        {rows.map(([type, g], i) => (
-          <li key={i} className="flex items-center gap-3 p-2.5 rounded-lg bg-white/[0.02] border border-white/[0.04]">
-            <div className="size-9 rounded-lg grid place-items-center" style={{ background: `${LIME}15`, border: `1px solid ${LIME}30` }}>
-              <Droplets className="size-4" style={{ color: LIME }} />
-            </div>
-            <div className="flex-1 text-[12.5px] font-medium text-white">{type} <span className="text-white/40 text-[10px]">({g.count})</span></div>
-            <div className="text-right">
-              <div className="text-[13px] font-bold tabular-nums" style={{ color: g.total < g.min ? "#fb7185" : LIME }}>
-                {(g.total / 1000).toFixed(2)}kg
+        {devices.map((dev: any) => {
+          const h = Number(dev.currentHumidity ?? 0);
+          const t = tone(h);
+          const pct = Math.max(2, Math.min(100, h));
+          return (
+            <li
+              key={dev.id}
+              className="p-2.5 rounded-lg border"
+              style={{ background: t.bg, borderColor: t.border }}
+            >
+              <div className="flex items-center gap-2.5 mb-1.5">
+                <div className="size-8 rounded-lg grid place-items-center shrink-0" style={{ background: `${t.color}22`, border: `1px solid ${t.color}55` }}>
+                  <Droplets className="size-4" style={{ color: t.color }} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-[12.5px] font-semibold text-white truncate">{dev.name}</div>
+                  {dev.temperature != null && (
+                    <div className="text-[10px] text-white/45 tabular-nums">{Number(dev.temperature).toFixed(1)}°C</div>
+                  )}
+                </div>
+                <div className="text-right">
+                  <div className="text-[16px] font-bold tabular-nums leading-none" style={{ color: t.color }}>{h.toFixed(1)}%</div>
+                  <div className="text-[9px] uppercase tracking-wider mt-0.5" style={{ color: t.color }}>{t.label}</div>
+                </div>
               </div>
-              <div className="text-[10px] text-white/45 tabular-nums">min {(g.min / 1000).toFixed(1)}kg</div>
-            </div>
-          </li>
-        ))}
+              <div className="h-1.5 rounded-full bg-white/5 overflow-hidden">
+                <div className="h-full rounded-full" style={{ width: `${pct}%`, background: t.color, boxShadow: `0 0 10px ${t.color}88` }} />
+              </div>
+            </li>
+          );
+        })}
       </ul>
     </Card>
   );
@@ -502,13 +518,23 @@ function StlGallery({ orders = [] }: { orders?: any[] }) {
   );
 }
 
-/* ---------- Critical stock ---------- */
-function CriticalStock({ filaments = [], onSelectTab }: { filaments?: any[]; onSelectTab?: (t: number) => void }) {
+/* ---------- Stock overview (Saúde + Crítico combinados) ---------- */
+function StockOverview({ filaments = [], onSelectTab }: { filaments?: any[]; onSelectTab?: (t: number) => void }) {
+  const grouped: Record<string, { total: number; min: number; count: number }> = {};
+  filaments.forEach((f: any) => {
+    const k = f.type || "—";
+    if (!grouped[k]) grouped[k] = { total: 0, min: 0, count: 0 };
+    grouped[k].total += f.stockGrams || 0;
+    grouped[k].min += f.minStockGrams || 0;
+    grouped[k].count += 1;
+  });
+  const groups = Object.entries(grouped).slice(0, 4);
+
   const items = filaments
     .filter((f: any) => f.stockGrams < f.minStockGrams * 1.5)
     .slice()
     .sort((a: any, b: any) => a.stockGrams / Math.max(1, a.minStockGrams) - b.stockGrams / Math.max(1, b.minStockGrams))
-    .slice(0, 6)
+    .slice(0, 5)
     .map((f: any) => ({
       name: `${f.type} ${f.color}`,
       type: f.type,
@@ -519,32 +545,58 @@ function CriticalStock({ filaments = [], onSelectTab }: { filaments?: any[]; onS
   return (
     <Card>
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-[14px] font-semibold text-white">Estoque Crítico</h3>
+        <h3 className="text-[14px] font-semibold text-white">Estoque</h3>
         <button className="text-[11px] text-white/50 hover:text-white" onClick={() => onSelectTab?.(8)}>Ver todos</button>
       </div>
-      {items.length === 0 && (
-        <div className="text-[12px] text-white/40 py-6 text-center">Tudo em ordem.</div>
+
+      {/* Saúde por tipo */}
+      {groups.length > 0 && (
+        <ul className="grid grid-cols-2 gap-2 mb-3">
+          {groups.map(([type, g], i) => {
+            const low = g.total < g.min;
+            return (
+              <li key={i} className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
+                <div className="size-7 rounded-md grid place-items-center" style={{ background: `${LIME}15`, border: `1px solid ${LIME}30` }}>
+                  <Droplets className="size-3.5" style={{ color: LIME }} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-[11.5px] font-semibold text-white truncate">{type} <span className="text-white/40 text-[9px]">({g.count})</span></div>
+                  <div className="text-[10px] tabular-nums" style={{ color: low ? "#fb7185" : "rgba(255,255,255,0.55)" }}>
+                    {(g.total / 1000).toFixed(2)}kg<span className="text-white/35"> / min {(g.min / 1000).toFixed(1)}kg</span>
+                  </div>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
       )}
-      <ul className="space-y-2">
-        {items.map((c, i) => (
-          <li key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/[0.03] transition">
-            <FilamentSpool type={c.type} color={colorHex(c.color)} size={32} className="shrink-0" label={c.name} />
-            <div className="flex-1 min-w-0">
-              <div className="text-[12px] font-medium text-white truncate flex items-center gap-1.5">
-                <span>{c.type}</span>
-                <span
-                  className="inline-block size-2 rounded-full shrink-0 ring-1 ring-white/15"
-                  style={{ background: colorHex(c.color) }}
-                  aria-hidden
-                />
-                <span className="text-white/70 truncate">{c.color}</span>
+
+      {/* Críticos */}
+      <div className="text-[10px] uppercase tracking-wider text-white/40 mb-1.5">Atenção / Crítico</div>
+      {items.length === 0 ? (
+        <div className="text-[12px] text-white/40 py-3 text-center">Tudo em ordem.</div>
+      ) : (
+        <ul className="space-y-2">
+          {items.map((c, i) => (
+            <li key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/[0.03] transition">
+              <FilamentSpool type={c.type} color={colorHex(c.color)} size={28} className="shrink-0" label={c.name} />
+              <div className="flex-1 min-w-0">
+                <div className="text-[12px] font-medium text-white truncate flex items-center gap-1.5">
+                  <span>{c.type}</span>
+                  <span
+                    className="inline-block size-2 rounded-full shrink-0 ring-1 ring-white/15"
+                    style={{ background: colorHex(c.color) }}
+                    aria-hidden
+                  />
+                  <span className="text-white/70 truncate">{c.color}</span>
+                </div>
+                <div className="text-[10px] text-white/40 tabular-nums">{c.qty}</div>
               </div>
-              <div className="text-[10px] text-white/40 tabular-nums">{c.qty}</div>
-            </div>
-            <span className={`text-[10px] font-semibold ${c.level === "Crítico" ? "text-rose-400" : "text-amber-300"}`}>{c.level}</span>
-          </li>
-        ))}
-      </ul>
+              <span className={`text-[10px] font-semibold ${c.level === "Crítico" ? "text-rose-400" : "text-amber-300"}`}>{c.level}</span>
+            </li>
+          ))}
+        </ul>
+      )}
     </Card>
   );
 }
@@ -814,6 +866,7 @@ interface Print3DPanelProps {
   expenses?: any[];
   clients?: any[];
   shoppingItems?: any[];
+  tuyaDevices?: any[];
   onSelectTab?: (tab: number) => void;
 }
 
@@ -823,6 +876,7 @@ export function Print3DPanel({
   filamentStocks = [],
   expenses = [],
   clients = [],
+  tuyaDevices = [],
   onSelectTab,
 }: Print3DPanelProps = {}) {
   // === Real KPIs (today) ===
@@ -953,13 +1007,13 @@ export function Print3DPanel({
             </Card>
             <LivePrinters printers={printers} orders={orders} />
             <OrdersList orders={orders} clients={clients} onSelectTab={onSelectTab} />
-            <Sensors filaments={filamentStocks} />
+            <StockOverview filaments={filamentStocks} onSelectTab={onSelectTab} />
           </div>
 
           {/* Row 3: STL | Estoque Crítico | Cotação | IA Precificação */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
             <div className="md:col-span-2 xl:col-span-1"><StlGallery orders={orders} /></div>
-            <CriticalStock filaments={filamentStocks} onSelectTab={onSelectTab} />
+            <Hygrometers devices={tuyaDevices} />
             <FilamentQuotes />
             <AiPricing />
           </div>
