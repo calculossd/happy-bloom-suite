@@ -908,7 +908,7 @@ input, select, textarea {
 #clients_tab_container [class*="rounded-2xl"][class*="border"],
 #clients_tab_container [class*="rounded-xl"][class*="border"] {
   transition: none !important;
-  background-image: linear-gradient(135deg, #1f1f22 0%, #050505 100%) !important;
+  background-image: linear-gradient(135deg, #0e0e10 0%, #000000 100%) !important;
 }
 #clients_tab_container .glow-card:hover,
 #clients_tab_container [class*="rounded-2xl"][class*="border"]:hover,
@@ -916,5 +916,5 @@ input, select, textarea {
   border-color: rgba(255, 255, 255, 0.05) !important;
   box-shadow: 0 20px 40px -15px rgba(0,0,0,0.7) !important;
   transform: none !important;
-  background-image: linear-gradient(135deg, #26262a 0%, #070707 100%) !important;
+  background-image: linear-gradient(135deg, #131316 0%, #000000 100%) !important;
 }
