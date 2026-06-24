@@ -1153,8 +1153,15 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
 
                     {(client.address || client.cep) && (
                       <div className="pt-1">
+                        {(() => {
+                          const cep = (client.cep || '').replace(/\D/g, '');
+                          const cepFmt = cep.length === 8 ? `${cep.slice(0,5)}-${cep.slice(5)}` : client.cep;
+                          const cityUf = [client.city, client.state].filter(Boolean).join(' - ');
+                          const q = [client.address, cityUf, cepFmt, 'Brasil'].filter(Boolean).join(', ');
+                          const href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+                          return (
                         <a
-                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([client.address, client.city, client.state, client.cep].filter(Boolean).join(', '))}`}
+                          href={href}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1 text-[9px] font-bold text-[var(--brand-primary)] hover:underline bg-[var(--brand-primary)]/5 p-1 px-2 rounded-md hover:bg-[var(--brand-primary)]/15 border border-[var(--brand-primary)]/15"
@@ -1164,6 +1171,8 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                           <Globe className="h-2.5 w-2.5" />
                           Ver no Google Maps 🗺️
                         </a>
+                          );
+                        })()}
                       </div>
                     )}
                   </div>
