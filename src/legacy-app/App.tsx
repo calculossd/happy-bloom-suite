@@ -1270,7 +1270,7 @@ export default function App() {
       case 4:
         return {
           title: "Estoque",
-          subtitle: "Gestão de filamentos e auditoria de insumos",
+          subtitle: "Gestão de filamentos, produtos e insumos",
         };
       case 5:
         return {
@@ -1904,16 +1904,6 @@ export default function App() {
                 >
                   <Download className="h-4 w-4" />
                   Exportar Relatório
-                </button>
-              )}
-              {currentTab === 4 && (
-                <button
-                  onClick={() => window.dispatchEvent(new CustomEvent('open-new-product'))}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#b7ff00]/30 bg-[#b7ff00]/15 px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#b7ff00] transition hover:bg-[#b7ff00]/25 hover:border-[#b7ff00]/50 shrink-0"
-                  id="btn_open_product_stock_form_header"
-                >
-                  <Plus className="h-4 w-4" />
-                  Novo Produto
                 </button>
               )}
             </div>
