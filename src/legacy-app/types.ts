@@ -14,6 +14,8 @@ export interface Client {
   stockValue?: number;
   code?: string;
   productsStock?: ClientProductStock[];
+  source?: 'PROSPECCAO' | 'INSTAGRAM' | 'FACEBOOK' | 'VISITANDO' | 'INDICACAO' | 'OUTROS';
+  dealType?: 'CONSIGNADO' | 'COMPROU';
 }
 
 export interface ClientProductStock {
