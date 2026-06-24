@@ -1925,6 +1925,16 @@ export default function App() {
                   Novo Produto
                 </button>
               )}
+              {currentTab === 3 && (
+                <button
+                  onClick={() => setCurrentTab(1)}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#b7ff00]/30 bg-[#b7ff00]/15 px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#b7ff00] transition hover:bg-[#b7ff00]/25 hover:border-[#b7ff00]/50 shrink-0"
+                  id="btn_cadastrar_pedido_header"
+                >
+                  <Plus className="h-4 w-4" />
+                  Cadastrar Pedido
+                </button>
+              )}
             </div>
           );
         })()}
