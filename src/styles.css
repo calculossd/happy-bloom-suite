@@ -902,3 +902,17 @@ input, select, textarea {
   color: transparent;
 }
 .bg-gradient-lime { background: var(--p3d-gradient-lime); }
+
+/* Clientes: sem animação/linha brilhante nos blocos */
+#clients_tab_container .glow-card,
+#clients_tab_container [class*="rounded-2xl"][class*="border"],
+#clients_tab_container [class*="rounded-xl"][class*="border"] {
+  transition: none !important;
+}
+#clients_tab_container .glow-card:hover,
+#clients_tab_container [class*="rounded-2xl"][class*="border"]:hover,
+#clients_tab_container [class*="rounded-xl"][class*="border"]:hover {
+  border-color: rgba(255, 255, 255, 0.05) !important;
+  box-shadow: 0 20px 40px -15px rgba(0,0,0,0.7) !important;
+  transform: none !important;
+}
