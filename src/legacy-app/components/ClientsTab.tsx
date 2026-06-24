@@ -347,6 +347,9 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
   const [cLastContactDate, setCLastContactDate] = useState('');
   const [cStockCount, setCStockCount] = useState('0');
   const [cStockValue, setCStockValue] = useState('0');
+  const [cProductsStock, setCProductsStock] = useState<Array<{ name: string; qty: number; imageUrl?: string }>>([]);
+  const [cCatalogPick, setCCatalogPick] = useState<string>('');
+  const [cCatalogQty, setCCatalogQty] = useState<number>(1);
 
   // Printer configuration dialog/states
   const [editingPrinterId, setEditingPrinterId] = useState<number | null>(null);
@@ -995,7 +998,8 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
         note: cNote,
         lastContactDate: parsedDate,
         stockCount: parsedStockCount,
-        stockValue: parsedStockValue
+        stockValue: parsedStockValue,
+        productsStock: cProductsStock,
       });
       setEditingClientId(null);
     } else {
@@ -1010,7 +1014,8 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
         note: cNote,
         lastContactDate: parsedDate,
         stockCount: parsedStockCount,
-        stockValue: parsedStockValue
+        stockValue: parsedStockValue,
+        productsStock: cProductsStock,
       });
     }
 
@@ -1026,6 +1031,9 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
     setCLastContactDate('');
     setCStockCount('0');
     setCStockValue('0');
+    setCProductsStock([]);
+    setCCatalogPick('');
+    setCCatalogQty(1);
     setShowClientForm(false);
   };
 
@@ -1042,6 +1050,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
     setCLastContactDate(client.lastContactDate ? new Date(client.lastContactDate).toISOString().split('T')[0] : '');
     setCStockCount(String(client.stockCount || 0));
     setCStockValue(String(client.stockValue || 0));
+    setCProductsStock(Array.isArray((client as any).productsStock) ? (client as any).productsStock : []);
     setShowClientForm(true);
   };
 
@@ -1226,6 +1235,101 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                   className="bg-[#151917] border border-[#232B27] px-3 py-1.5 rounded text-xs text-[#F1F4EE] outline-none focus:border-[#95BBA2] resize-none"
                   id="client_note_form_input"
                 />
+              </div>
+
+              {/* Cataloged products picker — add products this client owns */}
+              <div className="flex flex-col gap-2 bg-[#0C0E0D] border border-[#232B27] rounded-xl p-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-[10px] uppercase text-[var(--brand-primary)] font-bold font-mono">
+                    Produtos do Cliente (Catálogo)
+                  </label>
+                  <span className="text-[10px] font-mono text-[#8BA58D]">
+                    {cProductsStock.length} item(s)
+                  </span>
+                </div>
+
+                {cProductsStock.length > 0 && (
+                  <div className="space-y-1.5 max-h-[160px] overflow-y-auto pr-1">
+                    {cProductsStock.map((p, idx) => (
+                      <div key={`${p.name}-${idx}`} className="flex items-center gap-2 bg-[#151917] border border-[#232B27] rounded-lg p-1.5">
+                        {p.imageUrl ? (
+                          <img src={p.imageUrl} alt={p.name} referrerPolicy="no-referrer" className="w-8 h-8 rounded object-cover border border-[#232B27]" />
+                        ) : (
+                          <div className="w-8 h-8 rounded bg-[#232B27] flex items-center justify-center text-xs">📦</div>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs text-[#F1F4EE] font-semibold truncate">{p.name}</p>
+                        </div>
+                        <input
+                          type="number"
+                          min={1}
+                          value={p.qty}
+                          onChange={(e) => {
+                            const q = Math.max(1, parseInt(e.target.value) || 1);
+                            setCProductsStock(prev => prev.map((it, i) => i === idx ? { ...it, qty: q } : it));
+                          }}
+                          className="w-14 bg-[#0C0E0D] border border-[#232B27] rounded px-1.5 py-1 text-xs text-white text-center focus:outline-none focus:border-[#95BBA2]"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setCProductsStock(prev => prev.filter((_, i) => i !== idx))}
+                          className="w-7 h-7 rounded bg-black/40 hover:bg-red-500/10 text-[#8BA58D] hover:text-red-400 border border-[#232B27] hover:border-red-500/30 flex items-center justify-center"
+                          title="Remover"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {catalogList.length > 0 ? (
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <select
+                      value={cCatalogPick}
+                      onChange={(e) => setCCatalogPick(e.target.value)}
+                      className="flex-1 bg-[#151917] border border-[#232B27] rounded-lg px-2 py-1.5 text-xs text-[#F1F4EE] focus:outline-none focus:border-[#95BBA2] font-mono"
+                    >
+                      <option value="">— Selecione um produto do catálogo —</option>
+                      {catalogList.map((item: any) => (
+                        <option key={item.id} value={item.id.toString()}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10px] text-[#8BA58D]">Qtd:</span>
+                      <input
+                        type="number"
+                        min={1}
+                        value={cCatalogQty}
+                        onChange={(e) => setCCatalogQty(Math.max(1, parseInt(e.target.value) || 1))}
+                        className="w-14 bg-[#151917] border border-[#232B27] rounded px-2 py-1.5 text-xs text-white text-center focus:outline-none focus:border-[#95BBA2]"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const found = catalogList.find((c: any) => c.id.toString() === cCatalogPick);
+                        if (!found) { alert('Selecione um produto do catálogo.'); return; }
+                        if (cProductsStock.some(p => p.name.toLowerCase() === found.name.toLowerCase())) {
+                          setCProductsStock(prev => prev.map(p => p.name.toLowerCase() === found.name.toLowerCase() ? { ...p, qty: p.qty + cCatalogQty } : p));
+                        } else {
+                          setCProductsStock(prev => [...prev, { name: found.name, qty: cCatalogQty, imageUrl: found.imageUrl }]);
+                        }
+                        setCCatalogPick('');
+                        setCCatalogQty(1);
+                      }}
+                      className="px-3 py-1.5 bg-[var(--brand-primary)] text-[#0C0E0D] text-xs font-black rounded-lg hover:opacity-90 transition flex items-center gap-1"
+                    >
+                      <Plus className="h-3.5 w-3.5" /> Adicionar
+                    </button>
+                  </div>
+                ) : (
+                  <p className="text-[10px] text-[#8BA58D] italic">
+                    Nenhum produto no catálogo. Cadastre produtos em Catálogo Inova para vinculá-los aqui.
+                  </p>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-3">
