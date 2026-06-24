@@ -2973,6 +2973,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
             setOrderPrintTime(found.printTimeHours || 4);
             setOrderPrice(found.defaultPrice || found.recommendedPrice || 35);
             setOrderFilamentType(found.filamentType || 'PLA');
+            setOrderItemImage(found.imageUrl || '');
           }
         };
 

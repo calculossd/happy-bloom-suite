@@ -781,7 +781,8 @@ export default function App() {
       createdAt: orderData.createdAt || Date.now(),
       deadline: orderData.deadline || (Date.now() + 24 * 3600 * 1000),
       paymentMethod: orderData.paymentMethod || 'DINHEIRO',
-      paymentStatus: orderData.paymentStatus || 'PENDENTE'
+      paymentStatus: orderData.paymentStatus || 'PENDENTE',
+      imageUrl: orderData.imageUrl || undefined
     };
 
     setOrders(prev => [...prev, newOrder]);
