@@ -14,7 +14,9 @@ import {
   X, 
   ChevronRight,
   ClipboardList,
-  PlayCircle
+  PlayCircle,
+  ShoppingCart,
+  AlertTriangle
 } from 'lucide-react';
 import { initialCatalogItems } from '../utils/initialData';
 
@@ -384,63 +386,97 @@ export const PrintFlowTab: React.FC<PrintFlowTabProps> = ({
         </div>
       </div>
 
-      {/* Alerts for critical stocks */}
+      {/* Alerts for critical stocks — premium card matching "Auditoria em dia" */}
       {(lowFilaments.length > 0 || lowCatalogItems.length > 0) && (
-        <div className="bg-[#2E1719] rounded-xl border border-[#EF5350]/30 p-4 space-y-3 shadow-xl transition-all">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#FF1744] inline-block animate-ping" />
-            <span className="text-xs font-black text-[#FF8A80] uppercase tracking-wider">
-              COMPRAS RECOMENDADAS (ESTOQUE CRÍTICO)
-            </span>
-          </div>
+        <div className="group relative overflow-hidden rounded-2xl border border-rose-500/20 bg-gradient-to-br from-rose-950/40 via-zinc-950/60 to-zinc-950/40 backdrop-blur-xl transition-all duration-500 shadow-[0_24px_60px_-30px_rgba(244,63,94,0.45)]">
+          {/* ambient glow */}
+          <div aria-hidden className="pointer-events-none absolute -top-24 -left-24 h-64 w-64 rounded-full blur-3xl opacity-40 bg-rose-500/20" />
+          {/* accent rail */}
+          <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-[2px] bg-gradient-to-b from-transparent via-rose-400/70 to-transparent" />
 
-          {lowFilaments.length > 0 && (
-            <div className="space-y-2">
-              <h4 className="text-xs font-semibold text-white/90">
-                Filamentos abaixo do mínimo de segurança:
-              </h4>
-              <div className="space-y-1.5 pl-2 border-l border-[#FF1744]/25">
-                {lowFilaments.map(fil => (
-                  <div key={fil.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 py-0.5">
-                    <span className="text-xs text-[#F1F4EE]">
-                      • <strong className="text-[#E5B242]">{fil.type}</strong> {fil.color} ({Math.round(fil.stockGrams)}g / min. {Math.round(fil.minStockGrams)}g)
-                    </span>
-                    <div className="flex items-center gap-2 self-end sm:self-auto">
+          <div className="relative px-5 py-4 sm:px-6 sm:py-5 space-y-5">
+            {/* Header */}
+            <div className="flex items-start gap-3.5">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl ring-1 ring-inset bg-rose-500/10 text-rose-300 ring-rose-400/20">
+                <ShoppingCart className="h-4 w-4" />
+              </div>
+              <div className="min-w-0 space-y-1">
+                <div className="flex items-center gap-2">
+                  <span
+                    className="inline-block h-1.5 w-1.5 rounded-full bg-rose-400 animate-pulse"
+                    style={{ boxShadow: '0 0 10px rgba(244,63,94,0.8)' }}
+                  />
+                  <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-rose-300/90">
+                    Ação Necessária
+                  </span>
+                </div>
+                <h3 className="text-[14px] font-bold tracking-[-0.01em] text-zinc-50">
+                  Compras recomendadas — estoque crítico
+                </h3>
+                <p className="text-[12px] leading-relaxed text-zinc-400 max-w-2xl">
+                  Itens abaixo do mínimo de segurança. Reponha para evitar paradas na produção.
+                </p>
+              </div>
+            </div>
+
+            {/* Filaments */}
+            {lowFilaments.length > 0 && (
+              <div className="space-y-2">
+                <h4 className="text-[10px] uppercase tracking-[0.16em] font-bold text-rose-200/80 flex items-center gap-1.5">
+                  <AlertTriangle className="h-3 w-3" />
+                  Filamentos abaixo do mínimo
+                </h4>
+                <ul className="rounded-xl border border-rose-400/10 bg-black/20 divide-y divide-rose-400/10 overflow-hidden">
+                  {lowFilaments.map(fil => (
+                    <li key={fil.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-2.5 transition-colors hover:bg-rose-500/[0.04]">
+                      <div className="min-w-0">
+                        <span className="text-[12px] text-zinc-100 truncate">
+                          <strong className="text-[#E5B242] font-bold">{fil.type}</strong> · {fil.color}
+                        </span>
+                        <div className="text-[10.5px] font-mono tabular-nums text-zinc-500 mt-0.5">
+                          {Math.round(fil.stockGrams)}g <span className="text-zinc-600">/ min.</span> {Math.round(fil.minStockGrams)}g
+                        </div>
+                      </div>
                       <button
                         onClick={() => handleIncreaseFilament(fil.id, fil.stockGrams)}
-                        className="px-2 py-0.5 bg-[#5E8B61]/15 hover:bg-[#5E8B61]/35 text-[#95BBA2] text-[10px] font-extrabold rounded border border-[#5E8B61]/30 transition flex items-center justify-center cursor-pointer"
+                        className="shrink-0 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] bg-emerald-500/10 text-emerald-100 border border-emerald-400/25 hover:bg-emerald-500/20 hover:border-emerald-400/40 hover:shadow-[0_8px_24px_-10px_rgba(52,211,153,0.45)] transition-all duration-300 active:scale-[0.97]"
                       >
                         +1 Rolo (1kg)
                       </button>
-                    </div>
-                  </div>
-                ))}
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
-          )}
+            )}
 
-          {lowCatalogItems.length > 0 && (
-            <div className="space-y-2 pt-1">
-              <h4 className="text-xs font-semibold text-white/90">
-                Peças acabadas do catálogo com falta de reposição:
-              </h4>
-              <div className="space-y-1.5 pl-2 border-l border-[#EF5350]/25">
-                {lowCatalogItems.map((cat: any) => (
-                  <div key={cat.id} className="flex items-center justify-between gap-4 py-0.5">
-                    <span className="text-xs text-[#F1F4EE]">
-                      • {cat.name} ({cat.stockCount} de {cat.minStockCount} itens)
-                    </span>
-                    <button
-                      onClick={() => handleProduceDeficitItem(cat)}
-                      className="px-2.5 py-1 bg-[#E5B242]/15 hover:bg-[#E5B242]/30 text-[#E5B242] text-[9px] font-extrabold rounded border border-[#E5B242]/30 transition flex items-center gap-1 shrink-0 cursor-pointer"
-                    >
-                      +1 Produzir 🛠️
-                    </button>
-                  </div>
-                ))}
+            {/* Catalog items */}
+            {lowCatalogItems.length > 0 && (
+              <div className="space-y-2">
+                <h4 className="text-[10px] uppercase tracking-[0.16em] font-bold text-rose-200/80 flex items-center gap-1.5">
+                  <AlertTriangle className="h-3 w-3" />
+                  Peças do catálogo em falta
+                </h4>
+                <ul className="rounded-xl border border-rose-400/10 bg-black/20 divide-y divide-rose-400/10 overflow-hidden">
+                  {lowCatalogItems.map((cat: any) => (
+                    <li key={cat.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-2.5 transition-colors hover:bg-rose-500/[0.04]">
+                      <div className="min-w-0">
+                        <span className="text-[12px] text-zinc-100 truncate">{cat.name}</span>
+                        <div className="text-[10.5px] font-mono tabular-nums text-zinc-500 mt-0.5">
+                          {cat.stockCount} <span className="text-zinc-600">de</span> {cat.minStockCount} itens
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => handleProduceDeficitItem(cat)}
+                        className="shrink-0 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] bg-amber-500/10 text-amber-100 border border-amber-400/25 hover:bg-amber-500/20 hover:border-amber-400/40 hover:shadow-[0_8px_24px_-10px_rgba(245,158,11,0.45)] transition-all duration-300 active:scale-[0.97]"
+                      >
+                        +1 Produzir
+                      </button>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       )}
 
