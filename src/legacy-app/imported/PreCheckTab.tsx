@@ -138,8 +138,29 @@ function CalibrationPage() {
 
   useEffect(() => {
     const ps = listPrinters();
-    setPrinters(ps);
-    if (ps[0]) setPrinterId(ps[0].id);
+    // Also include printers cadastradas no app principal (aba Impressoras)
+    let appPrinters: Printer[] = [];
+    try {
+      const raw = localStorage.getItem('bambuzau_printers');
+      if (raw) {
+        const arr = JSON.parse(raw) as Array<any>;
+        appPrinters = arr.map((p) => ({
+          id: String(p.id),
+          name: p.name ?? `Impressora ${p.id}`,
+          type: (p.apiType === 'OCTOPRINT' ? 'octoprint' : 'moonraker') as Printer['type'],
+          url: p.customUrl || (p.ipAddress ? `http://${p.ipAddress}${p.port ? ':' + p.port : ''}` : ''),
+          apiKey: p.apiKey ?? '',
+          createdAt: Date.now(),
+        }));
+      }
+    } catch {}
+    // Mescla evitando duplicatas por id
+    const merged = [...ps];
+    for (const ap of appPrinters) {
+      if (!merged.find((x) => x.id === ap.id)) merged.push(ap);
+    }
+    setPrinters(merged);
+    if (merged[0]) setPrinterId(merged[0].id);
   }, []);
 
   useEffect(() => {
