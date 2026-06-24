@@ -2044,19 +2044,6 @@ export default function App() {
                 Produção
               </div>
             </div>
-            <ClientsTab
-              clients={clients}
-              printers={printers}
-              orders={orders}
-              onAddClient={handleAddClient}
-              onUpdateClient={handleUpdateClient}
-              onDeleteClient={handleDeleteClient}
-              onAddPrinter={handleAddPrinter}
-              onUpdatePrinter={handleUpdatePrinter}
-              onDeletePrinter={handleDeletePrinter}
-              onAddOrder={handleAddOrder}
-              viewMode="printers"
-            />
             <ProductionTab
               orders={orders}
               printers={printers}
@@ -2069,7 +2056,7 @@ export default function App() {
               onSimulateTick={handleSimulateTick}
               onUpdateFilament={handleUpdateFilamentStock}
               onUpdatePrinter={handleUpdatePrinter}
-              viewMode="full"
+              viewMode="orders"
             />
           </>
         )}
