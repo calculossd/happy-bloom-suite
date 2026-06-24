@@ -1949,7 +1949,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
       {/* ========================================================================= */}
       {/* 📡 CRM RADAR GOOGLE MAPS - PROSPECÇÃO B2B & NOVO FILTRO DE CLIENTES LEADS */}
       {/* ========================================================================= */}
-      {viewMode !== 'printers' && (
+      {(viewMode === 'prospect' || viewMode === 'full') && (
       <div className="bg-[#151917] border border-[#232B27] p-6 rounded-2xl space-y-6 mt-6 relative" id="crm-b2b-leads-section" style={{ borderColor: 'var(--brand-border)' }}>
         
         {/* Glow Header */}
