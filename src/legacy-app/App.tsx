@@ -2166,6 +2166,21 @@ export default function App() {
             {currentTab === 12 && <PreCheckTabNew />}
             {currentTab === 13 && <AgendaTabNew />}
             {currentTab === 14 && <SitesTab />}
+            {currentTab === 15 && (
+              <ClientsTab
+                clients={clients}
+                printers={printers}
+                orders={orders}
+                onAddClient={handleAddClient}
+                onUpdateClient={handleUpdateClient}
+                onDeleteClient={handleDeleteClient}
+                onAddPrinter={handleAddPrinter}
+                onUpdatePrinter={handleUpdatePrinter}
+                onDeletePrinter={handleDeletePrinter}
+                onAddOrder={handleAddOrder}
+                viewMode="prospect"
+              />
+            )}
           </Suspense>
         )}
           </div>
