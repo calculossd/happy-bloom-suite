@@ -155,8 +155,7 @@ export const getCityStreets = (city: string): string[] => {
   ];
 };
 
-export const generateStoreName = (category: string, index: number): string => {
-  const prefixes: Record<string, string[]> = {
+const STORE_NAME_PREFIXES: Record<string, string[]> = {
     'Jornaleiros': [
       'Banca e Revistaria', 'Banca da Praça', 'Kiosk de Jornais', 'Ponto da Leitura', 'Espaço Cultural',
       'Revistaria Real', 'Banca do Globo', 'Ponto da Revista', 'Banca e Papelaria Imperial', 'Bancão de Descontos',
@@ -222,21 +221,22 @@ export const generateStoreName = (category: string, index: number): string => {
       'Dentes Perfeitos', 'Dr. Sorriso', 'Odonto Excellence', 'Clínica Sorrir', 'Arte da Boca',
       'Odonto Kid', 'Sorriso de Ouro', 'Orto Sorocaba', 'Odonto Clin', 'Consultório BellaBoca'
     ]
-  };
+};
 
-  const suffixes = [
+const STORE_NAME_SUFFIXES = [
     'Central', 'do Bairro', 'Imperial', 'Premium', 'Prime', 'Popular', 'Express', '& Variedades',
     'Fino', '24h', 'União', 'Real', 'Concept', 'Outlet', 'Atacado', 'Co.', 'Select', 'Studio',
     'Estilo', 'Ateliê', 'Boulevard', 'Shopping', 'Nacional', 'VIP', 'Master', 'Top', 'Líder', 'Mais'
-  ];
+];
 
-  const owners = [
+const STORE_NAME_OWNERS = [
     'do Carlos', 'da Helena', 'do Bruno', 'da Patrícia', 'do Renato', 'da Sandra', 'do Tiago',
     'da Valéria', 'do Lucas', 'da Júlia', 'do Felipe', 'da Amanda', 'do Roberto', 'da Mariana',
     'do Gabriel', 'da Fernanda', 'do Marcelo', 'da Camila', 'do Ricardo', 'da Letícia'
-  ];
+];
 
-  const prefList = prefixes[category] || ['Comércio Geral', 'Super Bazar', 'Lojas Unidas'];
+export const generateStoreName = (category: string, index: number): string => {
+  const prefList = STORE_NAME_PREFIXES[category] || ['Comércio Geral', 'Super Bazar', 'Lojas Unidas'];
   
   // Seed offsets using Math.random() combined with index for endless variety on clicks!
   const randomOffset1 = Math.floor(Math.random() * 500);
@@ -244,12 +244,12 @@ export const generateStoreName = (category: string, index: number): string => {
   const randomOffset3 = Math.floor(Math.random() * 500);
 
   const prefIdx = (index + randomOffset1) % prefList.length;
-  const suffIdx = (index * 3 + randomOffset2) % suffixes.length;
-  const ownIdx = (index * 7 + randomOffset3) % owners.length;
+  const suffIdx = (index * 3 + randomOffset2) % STORE_NAME_SUFFIXES.length;
+  const ownIdx = (index * 7 + randomOffset3) % STORE_NAME_OWNERS.length;
 
   const pref = prefList[prefIdx];
-  const suff = suffixes[suffIdx];
-  const owner = owners[ownIdx];
+  const suff = STORE_NAME_SUFFIXES[suffIdx];
+  const owner = STORE_NAME_OWNERS[ownIdx];
 
   const formatDecision = (index + randomOffset1) % 4;
   if (formatDecision === 0) {
