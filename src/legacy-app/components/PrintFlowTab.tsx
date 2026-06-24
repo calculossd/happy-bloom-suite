@@ -384,11 +384,55 @@ export const PrintFlowTab: React.FC<PrintFlowTabProps> = ({
         </div>
       </div>
 
-      {/* Recent Orders */}
+      {/* Pending Orders Awaiting Acceptance (Stream + Balcão) */}
+      {(() => {
+        const pending = orders.filter((o: any) => o.status === 'WAITING');
+        return (
+          <div className="p-3 bg-[#0C0E0D] border border-amber-500/30 rounded-xl shadow-[0_0_24px_-12px_rgba(245,158,11,0.4)]">
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="text-[10px] uppercase font-bold text-amber-300 tracking-wider">
+                Pedidos Aguardando Aceite
+              </h4>
+              <span className="text-[9px] font-mono text-amber-300/70">{pending.length} pendentes</span>
+            </div>
+            {pending.length === 0 ? (
+              <p className="text-[10px] text-[#8BA58D]">Nenhum pedido aguardando aceite.</p>
+            ) : (
+              <div className="space-y-1.5">
+                {pending.map((o: any) => {
+                  const isStream = o.platformSource && o.platformSource !== 'MANUAL';
+                  const originLabel = isStream ? `Stream · ${o.platformSource}` : 'Balcão';
+                  const originCls = isStream
+                    ? 'bg-violet-500/15 text-violet-300 border-violet-500/30'
+                    : 'bg-sky-500/15 text-sky-300 border-sky-500/30';
+                  return (
+                    <div key={o.id} className="flex items-center justify-between gap-2 px-2 py-1.5 bg-[#151917] border border-[#232B27] rounded-lg">
+                      <div className="flex items-center gap-2 min-w-0 flex-1">
+                        <span className={`px-1.5 py-0.5 rounded border text-[8px] font-bold uppercase shrink-0 ${originCls}`}>{originLabel}</span>
+                        <span className="text-[11px] text-[#F1F4EE] truncate">{o.clientName}</span>
+                        <span className="text-[11px] text-[#8BA58D] truncate">· {o.itemName}</span>
+                      </div>
+                      <span className="text-[11px] font-mono text-[#b7ff00] shrink-0">R$ {(o.priceCharged || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                      <button
+                        onClick={() => onUpdateOrder(o.id, { status: 'QUEUE', printingProgress: 0 })}
+                        className="flex items-center gap-1 px-2 py-1 bg-emerald-500/20 hover:bg-emerald-500/35 text-emerald-300 text-[10px] font-bold rounded-md border border-emerald-500/30 transition shrink-0"
+                      >
+                        <Check className="w-3 h-3" /> Aceitar
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+      })()}
+
+      {/* Recently Accepted Orders */}
       <div className="p-3 bg-[#0C0E0D] border border-[#232B27] rounded-xl">
-        <h4 className="text-[10px] uppercase font-bold text-[#8BA58D] mb-2">Pedidos Recentes</h4>
-        {orders.length === 0 ? (
-          <p className="text-[10px] text-[#8BA58D]">Nenhum pedido registrado.</p>
+        <h4 className="text-[10px] uppercase font-bold text-[#8BA58D] mb-2">Últimos Pedidos Aceitos</h4>
+        {orders.filter((o: any) => o.status !== 'WAITING').length === 0 ? (
+          <p className="text-[10px] text-[#8BA58D]">Nenhum pedido aceito ainda.</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-[11px]">
@@ -401,7 +445,7 @@ export const PrintFlowTab: React.FC<PrintFlowTabProps> = ({
                 </tr>
               </thead>
               <tbody>
-                {[...orders].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)).slice(0, 6).map((o: any) => {
+                {[...orders].filter((o: any) => o.status !== 'WAITING').sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)).slice(0, 6).map((o: any) => {
                   const now = Date.now();
                   let label = 'Aguardando';
                   let cls = 'bg-amber-500/15 text-amber-300 border-amber-500/30';
