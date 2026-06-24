@@ -347,6 +347,9 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
   const [cLastContactDate, setCLastContactDate] = useState('');
   const [cStockCount, setCStockCount] = useState('0');
   const [cStockValue, setCStockValue] = useState('0');
+  const [cProductsStock, setCProductsStock] = useState<Array<{ name: string; qty: number; imageUrl?: string }>>([]);
+  const [cCatalogPick, setCCatalogPick] = useState<string>('');
+  const [cCatalogQty, setCCatalogQty] = useState<number>(1);
 
   // Printer configuration dialog/states
   const [editingPrinterId, setEditingPrinterId] = useState<number | null>(null);
