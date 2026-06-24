@@ -111,6 +111,7 @@ export interface SupplyStock {
   stockCount: number;
   minStockCount: number;
   unitCost: number;
+  imageUrl?: string;
 }
 
 export interface Expense {

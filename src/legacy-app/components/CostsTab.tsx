@@ -196,6 +196,7 @@ export const CostsTab: React.FC<CostsTabProps> = ({
   const [sCount, setSCount] = useState(10);
   const [sMinCount, setSMinCount] = useState(5);
   const [sUnitCost, setSUnitCost] = useState(2.50);
+  const [sImage, setSImage] = useState('');
   const [showAddSupplyForm, setShowAddSupplyForm] = useState(false);
 
   // Fallbacks client-side to guarantee at least 5 items
@@ -875,10 +876,12 @@ export const CostsTab: React.FC<CostsTabProps> = ({
       name: sName.trim(),
       stockCount: sCount,
       minStockCount: sMinCount,
-      unitCost: sUnitCost
+      unitCost: sUnitCost,
+      imageUrl: sImage.trim() || undefined
     };
     setSuppliesStocks(prev => [...prev, newSupply]);
     setSName('');
+    setSImage('');
     setShowAddSupplyForm(false);
     triggerFeedback('Insumo cadastrado no estoque com sucesso!');
   };
@@ -3493,6 +3496,31 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                   </div>
                 </div>
 
+                <div className="space-y-1">
+                  <label className="text-[9px] text-[#8BA58D]">Foto do Insumo (opcional)</label>
+                  <div className="flex items-center gap-2">
+                    {sImage && (
+                      <img src={sImage} alt="preview" className="h-10 w-10 rounded-md object-cover border border-[#232B27]" />
+                    )}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleImageUpload(e, setSImage)}
+                      className="flex-1 text-[10px] text-[#8BA58D] file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-[10px] file:font-bold file:bg-[#b7ff00] file:text-[#0C0E0D] hover:file:bg-yellow-500"
+                    />
+                    {sImage && (
+                      <button type="button" onClick={() => setSImage('')} className="text-[10px] text-red-400 hover:underline">remover</button>
+                    )}
+                  </div>
+                  <input
+                    type="text"
+                    value={sImage}
+                    onChange={(e) => setSImage(e.target.value)}
+                    placeholder="Cole a URL ou faça upload acima..."
+                    className="w-full bg-[#151917] border border-[#232B27] px-2.5 py-1.5 rounded-lg text-[10px] text-white font-mono mt-1"
+                  />
+                </div>
+
                 <button
                   type="submit"
                   className="w-full py-1.5 bg-[#b7ff00] hover:bg-yellow-500 text-[#0C0E0D] text-xs font-black rounded-lg transition"
@@ -3515,7 +3543,37 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                   <div key={sup.id} className={`p-3 bg-[#0C0E0D] border rounded-xl flex items-center justify-between gap-4 transition-all duration-300 ${
                     low ? 'border-red-500/80 shadow-[0_0_10px_rgba(239,68,68,0.15)] ring-1 ring-red-500/20' : 'border-[#232B27]'
                   }`}>
-                    <div className="space-y-1">
+                    <label
+                      className="relative shrink-0 h-14 w-14 rounded-lg overflow-hidden border border-[#232B27] bg-[#151917] cursor-pointer group/img"
+                      title="Clique para alterar a foto"
+                    >
+                      {sup.imageUrl ? (
+                        <img src={sup.imageUrl} alt={sup.name} className="h-full w-full object-cover" />
+                      ) : (
+                        <div className="h-full w-full flex items-center justify-center text-[8px] text-[#8BA58D] text-center px-1">
+                          + Foto
+                        </div>
+                      )}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+                          const reader = new FileReader();
+                          reader.onloadend = () => {
+                            if (typeof reader.result === 'string') {
+                              setSuppliesStocks(prev => prev.map(s => s.id === sup.id ? { ...s, imageUrl: reader.result as string } : s));
+                              triggerFeedback('Foto do insumo atualizada!');
+                            }
+                          };
+                          reader.readAsDataURL(file);
+                          e.target.value = '';
+                        }}
+                      />
+                    </label>
+                    <div className="space-y-1 flex-1 min-w-0">
                       <div className="flex items-center gap-1.5">
                         <Box className="h-3.5 w-3.5 text-[#b7ff00]" />
                         <span className="text-xs font-bold text-white leading-tight">{sup.name}</span>
