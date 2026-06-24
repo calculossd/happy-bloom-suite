@@ -3013,7 +3013,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
               </div>
             </form>
           )}
-          <div className="relative overflow-hidden bg-gradient-to-br from-[#172014] via-[#11170F] to-[#0B0F0A] border border-[#b7ff00]/25 p-5 rounded-2xl space-y-4 shadow-[0_24px_60px_-30px_rgba(183,255,0,0.35)]" id="product-stock-section">
+          <div className="relative overflow-hidden bg-gradient-to-br from-[#161B19] via-[#121613] to-[#0E1210] border border-[#232B27] p-5 rounded-2xl space-y-4 shadow-[0_24px_60px_-30px_rgba(149,187,162,0.25)]" id="product-stock-section">
             <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-[#b7ff00]/10 blur-3xl opacity-70" />
             <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-3 border-b border-white/5 pb-4">
               <div className="flex min-w-0 items-center gap-3">
