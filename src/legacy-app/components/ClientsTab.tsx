@@ -13,6 +13,7 @@ import { safeStorage } from '../utils/storage';
 
 import {
   type ProspectLead,
+  LEAD_CATEGORIES,
 } from '../lib/prospect-helpers';
 import { useProspectLeads } from '../hooks/useProspectLeads';
 
