@@ -403,22 +403,14 @@ function CalibrationPage() {
                         </CalcBox>
                       )}
 
-                      {s.video && (
-                        <div className="mt-3 aspect-video w-full overflow-hidden rounded-lg border border-white/10">
-                          <iframe src={s.video} title="tutorial" className="h-full w-full" allowFullScreen />
-                        </div>
-                      )}
-
                       <div className="mt-3 flex items-center justify-between border-t border-white/5 pt-3">
                         <button onClick={() => toggleSkip(s.id)} className="inline-flex items-center gap-1.5 text-xs text-white/50 hover:text-white">
                           <SkipForward className="h-3.5 w-3.5" />
                           {isSkipped ? "Reativar etapa" : "Marcar como N/A"}
                         </button>
-                        {!s.video && (
-                          <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent("3d printer " + s.title)}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-xs text-rose-300 hover:text-rose-200">
-                            <Youtube className="h-3.5 w-3.5" /> Buscar tutorial
-                          </a>
-                        )}
+                        <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent("3d printer " + s.title)}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-xs text-rose-300 hover:text-rose-200">
+                          <Youtube className="h-3.5 w-3.5" /> Buscar tutorial
+                        </a>
                       </div>
                     </div>
                   )}
