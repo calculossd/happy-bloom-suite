@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Client, Printer, PrintOrder } from '../types';
 import { ClientProductsCatalogPicker } from './clients/ClientProductsCatalogPicker';
 import { ClientForm, type ClientFormData } from './clients/ClientForm';
+import { ClientsDashboard } from './clients/ClientsDashboard';
 import { 
   User, ShieldAlert, Cpu, CheckSquare, Plus, PenTool, Trash2, Edit3, Settings2, 
   Globe, Clock, Eye, X, Package, Camera, CheckCircle, MapPin, Search, Filter, 
@@ -264,6 +265,9 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
           <p className="text-xs text-[var(--brand-muted)]">Contatos cadastrados, faturamento individual e frota de equipamentos</p>
         </div>
       </div>
+      )}
+      {viewMode !== 'printers' && viewMode !== 'prospect' && (
+        <ClientsDashboard clients={clients} orders={orders} />
       )}
       <div className={viewMode === 'full' ? 'grid grid-cols-1 lg:grid-cols-2 gap-6' : 'grid grid-cols-1 gap-6'}>
         
