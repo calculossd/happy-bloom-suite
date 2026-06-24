@@ -517,12 +517,114 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
       const customGroqKey = safeStorage.getItem('bambuzau_custom_groq_key', '');
       const customGeminiKey = safeStorage.getItem('bambuzau_custom_gemini_key', '');
 
-      const fetchUrl = `/api/local-leads?q=${encodeURIComponent(query)}&region=${encodeURIComponent(prospectRegion.trim())}`;
+      const tavilyKey = customTavilyKey.trim();
+      const jinaKey = customJinaKey.trim();
+
+      if (!tavilyKey) {
+        throw new Error('Tavily key ausente — configure em Ajustes para mapeamento real.');
+      }
+
+      const region = prospectRegion.trim();
+      const tavilyQuery = `${query} em ${region} telefone whatsapp endereço site:.br`;
+
+      const tavilyRes = await fetch('https://api.tavily.com/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          api_key: tavilyKey,
+          query: tavilyQuery,
+          search_depth: 'advanced',
+          include_answer: false,
+          include_raw_content: true,
+          max_results: 12,
+          country: 'brazil',
+        }),
+      });
+
+      if (!tavilyRes.ok) {
+        throw new Error(`Tavily falhou (${tavilyRes.status})`);
+      }
+
+      const tavilyData = await tavilyRes.json();
+      const results: any[] = Array.isArray(tavilyData?.results) ? tavilyData.results : [];
+
+      // Regex helpers
+      const phoneRx = /\(?\b\d{2}\)?[\s-]?9?\d{4}[\s-]?\d{4}\b/;
+      const addressRx = /((?:Rua|Avenida|Av\.?|Travessa|Estrada|Rodovia|Alameda|Praça|Praca)\s+[A-ZÀ-Úa-zà-ú0-9.\- ]{3,80},?\s*\d{1,5})/;
+
+      const enrichWithJina = async (url: string): Promise<string> => {
+        try {
+          const r = await fetch(`https://r.jina.ai/${url}`, {
+            headers: jinaKey ? { Authorization: `Bearer ${jinaKey}` } : {},
+          });
+          if (!r.ok) return '';
+          return await r.text();
+        } catch { return ''; }
+      };
+
+      const ddd = guessDDD(region);
+      const mapped: ProspectLead[] = [];
+
+      for (let idx = 0; idx < results.length; idx++) {
+        const item = results[idx];
+        const haystackParts = [item?.raw_content, item?.content, item?.title].filter(Boolean);
+        let haystack = haystackParts.join('\n');
+        let phoneMatch = haystack.match(phoneRx);
+        let addrMatch = haystack.match(addressRx);
+
+        if ((!phoneMatch || !addrMatch) && item?.url) {
+          const extra = await enrichWithJina(item.url);
+          if (extra) {
+            haystack = `${haystack}\n${extra}`;
+            phoneMatch = phoneMatch || extra.match(phoneRx);
+            addrMatch = addrMatch || extra.match(addressRx);
+          }
+        }
+
+        if (!phoneMatch) continue; // exige telefone real
+
+        const name = String(item?.title || '')
+          .replace(/\s+[-–|]\s+.*$/, '')
+          .replace(/\s+/g, ' ')
+          .trim()
+          .slice(0, 80) || `Lead ${idx + 1}`;
+
+        const address = (addrMatch?.[0] || `${region}`).trim();
+        const phoneDigits = phoneMatch[0].replace(/\D/g, '');
+        const ddTel = phoneDigits.length >= 10 ? phoneDigits.slice(0, 2) : ddd;
+        const rest = phoneDigits.slice(-9);
+        const phone = rest.length === 9
+          ? `(${ddTel}) ${rest.slice(0, 5)}-${rest.slice(5)}`
+          : `(${ddTel}) ${rest.slice(0, 4)}-${rest.slice(4)}`;
+
+        mapped.push({
+          id: `lead-tavily-${Date.now()}-${idx}`,
+          name,
+          phone,
+          address: address.includes(region) ? address : `${address} - ${region}`,
+          category: resolvedCategory || 'Geek',
+          pitch: getCategoryPitch(resolvedCategory || 'Geek'),
+          status: 'PROSPECT',
+          timelineChecklist: { s1: false, s2: false, s3: false, s4: false },
+          note: `Capturado via Tavily${jinaKey ? ' + Jina Reader' : ''} — ${item?.url || ''}`,
+        });
+      }
+
+      if (mapped.length > 0) {
+        setSearchingLeads(false);
+        setActiveCategoryFilter('Todos');
+        setProspectLeads(mapped);
+        alert(`Radar Tavily + Jina vasculhou ${region}: ${mapped.length} leads reais com telefone capturado.`);
+        return;
+      }
+
+      // Fallback antigo (backend Render) — caso Tavily não retorne nada útil
+      const fetchUrl = `/api/local-leads?q=${encodeURIComponent(query)}&region=${encodeURIComponent(region)}`;
       const res = await fetch(getApiUrl(fetchUrl), {
         headers: {
           'X-Custom-Serpapi-Key': customSerpKey.trim(),
-          'X-Custom-Tavily-Key': customTavilyKey.trim(),
-          'X-Custom-Jina-Key': customJinaKey.trim(),
+          'X-Custom-Tavily-Key': tavilyKey,
+          'X-Custom-Jina-Key': jinaKey,
           'X-Custom-Groq-Key': customGroqKey.trim(),
           'X-Custom-Gemini-Key': customGeminiKey.trim(),
         }
@@ -536,19 +638,19 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
               id: item.id || `lead-real-${Date.now()}-${idx}`,
               name: item.name || `Ponto Sourcing ${idx}`,
               phone: item.phone || `(19) 99999-9999`,
-              address: item.address || prospectRegion.trim(),
+              address: item.address || region,
               category: item.category || (resolvedCategory || 'Geek'),
               pitch: item.pitch || 'Oferecer artigos 3D premium bicolores.',
               status: item.status || 'PROSPECT',
               timelineChecklist: item.timelineChecklist || { s1: false, s2: false, s3: false, s4: false },
-              note: item.note || `Prospectado via Inteligência Artificial integrada de alta fidelidade em ${prospectRegion.trim()}.`
+              note: item.note || `Prospectado via Inteligência Artificial integrada de alta fidelidade em ${region}.`
             };
           });
 
           setSearchingLeads(false);
           setActiveCategoryFilter('Todos');
           setProspectLeads(mappedLeads);
-          alert(`Excelente! O Radar de Inteligência Artificial vasculhou a região de ${prospectRegion.trim()} com sucesso! 📡\n\nTotal de ${mappedLeads.length} leads qualificados estruturados com pitch personalizado para o seu portfólio no WhatsApp carregados.`);
+          alert(`Radar AI vasculhou ${region}: ${mappedLeads.length} leads qualificados.`);
           return;
         }
       }
