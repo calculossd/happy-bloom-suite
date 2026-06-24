@@ -2484,8 +2484,16 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                 <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Estoque</div>
                 <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">Físico</span>
               </div>
-              <p className="text-xs text-[var(--brand-muted)]">Carretéis de filamento, insumos e hardware sincronizados em tempo real</p>
+              <p className="text-xs text-[var(--brand-muted)]">Produtos prontos, carretéis de filamento, insumos e hardware sincronizados em tempo real</p>
             </div>
+            <button
+              onClick={() => { setEditingProduct(null); setShowAddProductManualForm(true); }}
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#b7ff00]/30 bg-[#b7ff00]/15 px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#b7ff00] transition hover:bg-[#b7ff00]/25 hover:border-[#b7ff00]/50"
+              id="btn_open_product_stock_form"
+            >
+              <Plus className="h-4 w-4" />
+              Novo Produto
+            </button>
           </div>
           {showAddProductManualForm && (
             <form onSubmit={handleSaveManualProduct} className="p-5 bg-[#151917] border border-[#232B27] rounded-2xl space-y-4 animate-fade-in" id="manual_catalog_product_form">
