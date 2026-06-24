@@ -609,65 +609,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
       )}
 
       {viewMode !== 'monitor' && (<>
-      {/* Alerts for critical stocks */}
-      {(lowFilaments.length > 0 || lowCatalogItems.length > 0) && (
-        <div className="bg-[#2E1719] rounded-xl border border-[#EF5350]/30 p-4 space-y-3 shadow-xl transition-all">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#FF1744] inline-block animate-ping" />
-            <span className="text-xs font-black text-[#FF8A80] uppercase tracking-wider">
-              COMPRAS RECOMENDADAS (ESTOQUE CRÍTICO)
-            </span>
-          </div>
-
-          {lowFilaments.length > 0 && (
-            <div className="space-y-2">
-              <h4 className="text-xs font-semibold text-white/90">
-                Filamentos abaixo do mínimo de segurança:
-              </h4>
-              <div className="space-y-1.5 pl-2 border-l border-[#FF1744]/25">
-                {lowFilaments.map(fil => (
-                  <div key={fil.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 py-0.5">
-                    <span className="text-xs text-[#F1F4EE]">
-                      • <strong className="text-[#E5B242]">{fil.type}</strong> {fil.color} ({Math.round(fil.stockGrams)}g / min. {Math.round(fil.minStockGrams)}g)
-                    </span>
-                    <div className="flex items-center gap-2 self-end sm:self-auto">
-                      <button
-                        onClick={() => handleIncreaseFilament(fil.id, fil.stockGrams)}
-                        className="px-2 py-0.5 bg-[#5E8B61]/15 hover:bg-[#5E8B61]/35 text-[#95BBA2] text-[10px] font-extrabold rounded border border-[#5E8B61]/30 transition flex items-center justify-center cursor-pointer"
-                      >
-                        +1 Rolo (1kg)
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {lowCatalogItems.length > 0 && (
-            <div className="space-y-2 pt-1">
-              <h4 className="text-xs font-semibold text-white/90">
-                Peças acabadas do catálogo com falta de reposição:
-              </h4>
-              <div className="space-y-1.5 pl-2 border-l border-[#EF5350]/25">
-                {lowCatalogItems.map((cat: any) => (
-                  <div key={cat.id} className="flex items-center justify-between gap-4 py-0.5">
-                    <span className="text-xs text-[#F1F4EE]">
-                      • {cat.name} ({cat.stockCount} de {cat.minStockCount} itens)
-                    </span>
-                    <button
-                      onClick={() => handleProduceDeficitItem(cat)}
-                      className="px-2.5 py-1 bg-[#E5B242]/15 hover:bg-[#E5B242]/30 text-[#E5B242] text-[9px] font-extrabold rounded border border-[#E5B242]/30 transition flex items-center gap-1 shrink-0 cursor-pointer"
-                    >
-                      +1 Produzir 🛠️
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
+      {/* Alerta de compras recomendadas foi movido para a aba Estoque */}
 
       {/* Beautiful, professional, integrated manufacturing progress bar */}
       <div className="bg-[#151917] rounded-xl border border-[#232B27] p-4 space-y-3.5 shadow-md relative overflow-hidden select-none">
