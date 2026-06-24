@@ -1866,6 +1866,7 @@ export default function App() {
         {/* EXQUISITE NEW HEADER DE CADA PÁGINA (Título grande + Subtítulo curto + Relógio/Data ao vivo mounted) */}
         {(() => {
           if (currentTab === 0) return null;
+          if (currentTab === 4 && costsSubTab === 'AI') return null;
           const headerInfo = getTabHeader(currentTab);
           if (!headerInfo.title) return null;
           const formattedDate = currentTime.toLocaleDateString('pt-BR', { 
