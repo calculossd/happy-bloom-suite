@@ -781,7 +781,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
           />
         </div>
 
-        <div className="overflow-x-auto scrollbar-none flex items-center gap-2 pb-2">
+        <div className="flex flex-wrap items-center gap-2 pb-2">
           {filterOptions.map((opt) => {
             const isSelected = selectedFilter === opt.key;
             const count = opt.key === 'TODOS' ? orders.length : orders.filter(o => o.status === opt.key).length;
