@@ -561,6 +561,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
     geminiKey: localGeminiKey, setGeminiKey: setLocalGeminiKey,
     groqKey: localGroqKey, setGroqKey: setLocalGroqKey,
     serpKey: localSerpKey, setSerpKey: setLocalSerpKey,
+    serpKey2: localSerpKey2, setSerpKey2: setLocalSerpKey2,
     tavilyKey: localTavilyKey, setTavilyKey: setLocalTavilyKey,
     jinaKey: localJinaKey, setJinaKey: setLocalJinaKey,
   } = useCustomKeys();
@@ -1649,6 +1650,28 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
           showError={showError}
         />
 
+        {/* 3b. SERPAPI FALLBACK KEY FIELD */}
+        <ApiKeyField
+          icon={<Search className="h-3.5 w-3.5 text-sky-300" />}
+          label="Chave SerpApi Secundária (Fallback)"
+          description="Usada automaticamente se a chave principal falhar ou estourar a cota. Limite global: 3 buscas por dia."
+          placeholder="Cole sua segunda SerpApi Key (fallback)"
+          value={localSerpKey2}
+          onChange={setLocalSerpKey2}
+          storageKey="bambuzau_custom_serp_key_2"
+          inputId="input-serp-key-2-unified"
+          buttonId="btn-save-serp-2-unified"
+          saveLabel="Salvar Serp Fallback"
+          buttonClass="bg-sky-700 hover:bg-sky-600 text-white"
+          validateFormat
+          invalidMsg="Chave SerpApi (fallback) inválida!"
+          successMsg="Chave SerpApi de fallback salva — será usada quando a principal falhar."
+          errorPrefix="Erro ao salvar SerpApi fallback"
+          link={{ href: "https://serpapi.com/", text: "Criar 2ª Conta ↗", className: "text-[10px] text-sky-300 hover:underline font-semibold font-sans flex items-center gap-0.5" }}
+          showSuccess={showSuccess}
+          showError={showError}
+        />
+
         {/* 4. TAVILY API KEY FIELD */}
         <ApiKeyField
           icon={<Search className="h-3.5 w-3.5 text-amber-400" />}
@@ -1728,6 +1751,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                 const trimmedGemini = (localGeminiKey || '').trim();
                 const trimmedGroq = (localGroqKey || '').trim();
                 const trimmedSerp = (localSerpKey || '').trim();
+                const trimmedSerp2 = (localSerpKey2 || '').trim();
                 const trimmedTavily = (localTavilyKey || '').trim();
                 const trimmedJina = (localJinaKey || '').trim();
                 
@@ -1752,16 +1776,25 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                     return;
                   }
                 }
+                if (trimmedSerp2) {
+                  const check = validateApiKeyFormat(trimmedSerp2);
+                  if (!check.isValid) {
+                    showError("Chave SerpApi (fallback): " + (check.reason || 'inválida!'));
+                    return;
+                  }
+                }
 
                 setLocalGeminiKey(trimmedGemini);
                 setLocalGroqKey(trimmedGroq);
                 setLocalSerpKey(trimmedSerp);
+                setLocalSerpKey2(trimmedSerp2);
                 setLocalTavilyKey(trimmedTavily);
                 setLocalJinaKey(trimmedJina);
                 
                 safeStorage.setItem('bambuzau_custom_gemini_key', trimmedGemini);
                 safeStorage.setItem('bambuzau_custom_groq_key', trimmedGroq);
                 safeStorage.setItem('bambuzau_custom_serp_key', trimmedSerp);
+                safeStorage.setItem('bambuzau_custom_serp_key_2', trimmedSerp2);
                 safeStorage.setItem('bambuzau_custom_tavily_key', trimmedTavily);
                 safeStorage.setItem('bambuzau_custom_jina_key', trimmedJina);
                 
