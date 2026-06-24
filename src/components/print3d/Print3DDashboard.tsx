@@ -642,10 +642,12 @@ function Hygrometers({ devices = [] }: { devices?: any[] }) {
 /* ---------- STL gallery (recent orders) ---------- */
 function StlGallery({ orders = [], clients = [] }: { orders?: any[]; clients?: any[] }) {
   const stockImageByName: Record<string, string | undefined> = {};
+  const stockQtyByName: Record<string, number> = {};
   clients.forEach((c: any) => {
     (c?.productsStock || []).forEach((p: any) => {
       const key = String(p?.name || "").toLowerCase().trim();
       if (key && p?.imageUrl && !stockImageByName[key]) stockImageByName[key] = p.imageUrl;
+      if (key) stockQtyByName[key] = (stockQtyByName[key] || 0) + Number(p?.qty || 0);
     });
   });
   try {
@@ -656,15 +658,19 @@ function StlGallery({ orders = [], clients = [] }: { orders?: any[]; clients?: a
     (cat || []).forEach((c: any) => {
       const key = String(c?.name || "").toLowerCase().trim();
       if (key && c?.imageUrl && !stockImageByName[key]) stockImageByName[key] = c.imageUrl;
+      if (key && c?.stockCount != null && stockQtyByName[key] == null)
+        stockQtyByName[key] = Number(c.stockCount) || 0;
     });
   } catch {}
   const orderItems = orders.map((o: any) => {
     const key = String(o?.itemName || "").toLowerCase().trim();
+    const qty = stockQtyByName[key];
     return {
       name: o.itemName,
       ts: o.createdAt || 0,
       date: o.createdAt ? new Date(o.createdAt).toLocaleDateString("pt-BR") : "",
       mat: `${o.filamentType ?? ""}${o.filamentColor ? ` — ${o.filamentColor}` : ""}`,
+      stockQty: qty,
       imageUrl: o.imageUrl || stockImageByName[key],
       source: "Pedido",
     };
