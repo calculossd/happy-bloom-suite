@@ -316,7 +316,7 @@ interface ClientsTabProps {
   onAddPrinter: (printer: Omit<Printer, 'id'>) => void;
   onDeletePrinter: (id: number) => void;
   onAddOrder: (order: Partial<PrintOrder>) => void;
-  viewMode?: 'full' | 'clients' | 'printers';
+  viewMode?: 'full' | 'clients' | 'printers' | 'prospect';
 }
 
 export const ClientsTab: React.FC<ClientsTabProps> = ({
