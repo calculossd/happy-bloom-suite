@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState } from 'react';
 import { Client, Printer, PrintOrder } from '../types';
 import { 
@@ -1050,7 +1049,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
     setCLastContactDate(client.lastContactDate ? new Date(client.lastContactDate).toISOString().split('T')[0] : '');
     setCStockCount(String(client.stockCount || 0));
     setCStockValue(String(client.stockValue || 0));
-    setCProductsStock(Array.isArray((client as any).productsStock) ? (client as any).productsStock : []);
+    setCProductsStock(Array.isArray(client.productsStock) ? client.productsStock : []);
     setShowClientForm(true);
   };
 
@@ -3177,7 +3176,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
       {viewMode !== 'printers' && selectedClientForPage && (() => {
         // Resolve latest client model to stay in sync with props changes
         const client = clients.find(c => c.id === selectedClientForPage.id) || selectedClientForPage;
-        const stockItems = (client as any).productsStock || [
+        const stockItems = client.productsStock || [
           { name: 'Vaso Espiral Moderno', qty: 3, imageUrl: 'https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=300&q=80' },
           { name: 'Dragão Articulado 3D', qty: 1, imageUrl: 'https://images.unsplash.com/photo-1608889175123-8ec330b86f84?auto=format&fit=crop&w=300&q=80' },
           { name: 'Suporte de Headset Universal', qty: 4, imageUrl: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=300&q=80' }
