@@ -674,16 +674,16 @@ function StlGallery({ orders = [], clients = [] }: { orders?: any[]; clients?: a
       {items.length === 0 && (
         <div className="text-[12px] text-white/40 py-6 text-center">Sem peças recentes.</div>
       )}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {items.map((s, i) => (
           <div key={i} className="group cursor-pointer">
-            <div className="aspect-square rounded-xl bg-gradient-to-br from-white/[0.05] to-white/[0.01] border border-white/[0.05] grid place-items-center mb-2 group-hover:border-white/15 transition relative overflow-hidden">
+            <div className="aspect-[4/3] rounded-xl bg-gradient-to-br from-white/[0.05] to-white/[0.01] border border-white/[0.05] grid place-items-center mb-2 group-hover:border-white/15 transition relative overflow-hidden">
               {s.imageUrl ? (
                 <img src={s.imageUrl} alt={s.name} className="absolute inset-0 w-full h-full object-cover" />
               ) : (
-                <Box className="size-10 text-white/30 group-hover:scale-110 transition" />
+                <Box className="size-16 text-white/30 group-hover:scale-110 transition" />
               )}
-              <div className="absolute top-1 left-1 px-1.5 py-0.5 rounded text-[8.5px] font-semibold uppercase tracking-wider" style={{ background: s.source === "Estoque" ? `${LIME}25` : "rgba(0,0,0,0.55)", color: s.source === "Estoque" ? LIME : "#fff", border: `1px solid ${s.source === "Estoque" ? LIME + "55" : "rgba(255,255,255,0.1)"}` }}>{s.source}</div>
+              <div className="absolute top-2 left-2 px-2 py-0.5 rounded text-[9.5px] font-semibold uppercase tracking-wider" style={{ background: s.source === "Estoque" ? `${LIME}25` : "rgba(0,0,0,0.55)", color: s.source === "Estoque" ? LIME : "#fff", border: `1px solid ${s.source === "Estoque" ? LIME + "55" : "rgba(255,255,255,0.1)"}` }}>{s.source}</div>
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition" style={{ background: `radial-gradient(circle at center, ${LIME}15, transparent 70%)` }} />
             </div>
             <div className="text-[11.5px] font-medium text-white truncate">{s.name}</div>
