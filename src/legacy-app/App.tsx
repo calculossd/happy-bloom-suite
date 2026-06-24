@@ -2199,6 +2199,7 @@ export default function App() {
           <SoldTab
             orders={orders}
             clients={clients}
+            onDeleteOrder={handleDeleteOrder}
           />
         )}
 
