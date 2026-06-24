@@ -1268,8 +1268,8 @@ export default function App() {
         };
       case 1:
         return {
-          title: "Produção & Impressoras",
-          subtitle: "Filas de trabalho, monitoramento de extrusão e status das máquinas",
+          title: "Produção",
+          subtitle: "Filas de trabalho e monitoramento de extrusão",
         };
       case 2:
         return {
