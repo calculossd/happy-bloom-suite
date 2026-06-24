@@ -793,6 +793,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
 
   // States for Order Intake Form inside Customer Sheet
   const [orderItemName, setOrderItemName] = useState('');
+  const [orderItemImage, setOrderItemImage] = useState<string>('');
   const [orderQuantity, setOrderQuantity] = useState(1);
   const [orderFilamentType, setOrderFilamentType] = useState('PLA');
   const [orderFilamentColor, setOrderFilamentColor] = useState('Preto');
