@@ -158,7 +158,16 @@ export const CostsTab: React.FC<CostsTabProps> = ({
   // Force scroll-to-top when subtab changes
   React.useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
-    window.dispatchEvent(new CustomEvent('costs_subtab_changed', { detail: activeSubTab }));
+    document.documentElement.setAttribute('data-costs-subtab', activeSubTab);
+    const notifyParent = () => window.dispatchEvent(new CustomEvent('costs_subtab_changed', { detail: activeSubTab }));
+    notifyParent();
+    const retryNotify = window.setTimeout(notifyParent, 0);
+    return () => {
+      window.clearTimeout(retryNotify);
+      if (document.documentElement.getAttribute('data-costs-subtab') === activeSubTab) {
+        document.documentElement.removeAttribute('data-costs-subtab');
+      }
+    };
   }, [activeSubTab]);
 
   // Allow external triggers (sidebar/mobile nav) to switch the internal sub-tab

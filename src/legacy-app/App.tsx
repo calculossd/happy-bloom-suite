@@ -356,7 +356,14 @@ export function safeGetLocalStorageItem(key: string, defaultValue: string = ''):
 export default function App() {
   const [currentTab, setCurrentTab] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [costsSubTab, setCostsSubTab] = useState<string>('STOCK');
+  const [costsSubTab, setCostsSubTab] = useState<string>(() => {
+    try {
+      const saved = localStorage.getItem('bambuzau_costs_subtab_override');
+      return ['CALC', 'CATALOG', 'STOCK', 'SHOP', 'QUOTE', 'AI'].includes(saved || '') ? saved! : 'STOCK';
+    } catch {
+      return 'STOCK';
+    }
+  });
   useEffect(() => {
     const h = (e: any) => { if (typeof e?.detail === 'string') setCostsSubTab(e.detail); };
     window.addEventListener('costs_subtab_changed', h as EventListener);
