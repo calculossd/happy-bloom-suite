@@ -1532,6 +1532,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                           setFormWeightGrams(matchedItem.weightGrams);
                           setFormPrintTime(matchedItem.printTimeHours);
                           setFormPriceCharged(matchedItem.defaultPrice);
+                          if (matchedItem.imageUrl) setFormImageUrl(matchedItem.imageUrl);
                         }
                       }}
                       className="w-full bg-[#0C0E0D] border border-[#232B27] rounded-lg py-2 px-3 text-white focus:border-[#95BBA2] text-xs font-mono select-text focus:outline-none"
