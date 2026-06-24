@@ -1394,7 +1394,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
         )}
 
         {/* RIGHT COLUMN: 3D PRINTERS & HARDWARE CHECKLISTS */}
-        {viewMode !== 'clients' && (
+        {viewMode !== 'clients' && viewMode !== 'prospect' && (
         <div className="glow-card border border-[#b7ff00]/15 p-6 rounded-2xl space-y-5 animate-in fade-in duration-300" id="printers-catalog">
           <div className="flex items-center justify-between flex-wrap gap-2 pb-3 border-b border-[#b7ff00]/10">
             <div className="space-y-1">
