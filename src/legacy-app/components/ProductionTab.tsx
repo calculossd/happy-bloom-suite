@@ -320,6 +320,10 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
   useEffect(() => {
     const handler = () => handleOpenAddDialog();
     window.addEventListener('open-new-order', handler);
+    if ((window as any).__pendingOpenNewOrder) {
+      (window as any).__pendingOpenNewOrder = false;
+      handler();
+    }
     return () => window.removeEventListener('open-new-order', handler);
   }, [clients, filamentStocks]);
 
