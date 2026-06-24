@@ -2150,6 +2150,7 @@ export default function App() {
             <IntegrationTab
               onImportOrder={handleImportExternalOrder}
               importedExternalIds={importedExternalIds}
+              orders={orders}
             />
           </>
         )}

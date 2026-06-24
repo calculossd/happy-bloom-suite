@@ -115,9 +115,10 @@ const renderPlatformIcon = (name: string) => {
 interface IntegrationTabProps {
   onImportOrder: (externalOrder: ExternalPlatformOrder) => void;
   importedExternalIds: string[];
+  orders?: any[];
 }
 
-export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, importedExternalIds }) => {
+export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, importedExternalIds, orders = [] }) => {
   const [connections, setConnections] = useState<PlatformConnection[]>(() => {
     const defaultConnections = [
       { platformName: 'Mercado Livre', storeName: 'Minha Loja 3D ML', token: 'MLB-12739343', isConnected: true, clientId: 'ML-9382', clientSecret: '••••••••••' },
@@ -261,7 +262,24 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
   };
 
   // Filter out orders that were deleted less than 1 hour ago
-  const visibleOrders = ordersStream.filter(order => {
+  const balcaoOrders: ExternalPlatformOrder[] = (orders || [])
+    .filter((o: any) => (o.platformSource === 'MANUAL') && o.status !== 'DELIVERED')
+    .map((o: any) => ({
+      id: `BALCAO-${o.id}`,
+      platform: 'BALCAO' as const,
+      itemName: o.itemName || 'Pedido Balcão',
+      clientName: o.clientName || 'Cliente Balcão',
+      clientPhone: o.clientPhone || '',
+      clientAddress: o.clientAddress || '',
+      weightGrams: Number(o.weightGrams) || 0,
+      printTimeHours: Number(o.printTimeHours) || 0,
+      priceCharged: Number(o.priceCharged) || 0,
+      statusText: o.status || 'WAITING',
+      isImported: true,
+      createdAt: o.createdAt || Date.now(),
+    }));
+
+  const visibleOrders = [...ordersStream, ...balcaoOrders].filter(order => {
     const dismissRecord = dismissedOrders.find(d => d.id === order.id);
     if (dismissRecord) {
       const timeSinceDismiss = Date.now() - dismissRecord.dismissedAt;
@@ -482,9 +500,11 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
                             ? 'bg-blue-500/15 text-blue-400'
                             : order.platform === 'TIKTOK_SHOP'
                             ? 'bg-cyan-500/15 text-rose-400 border border-rose-500/25'
+                            : order.platform === 'BALCAO'
+                            ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25'
                             : 'bg-yellow-500/15 text-yellow-300'
                         }`}>
-                          {order.platform.replace('_', ' ')}
+                          {order.platform === 'BALCAO' ? '🧑‍💼 BALCÃO' : order.platform.replace('_', ' ')}
                         </span>
                         <span className="text-[9px] font-mono text-[var(--brand-muted)]">Cód: {order.id}</span>
                         {!isItemImported && (

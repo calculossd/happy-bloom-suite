@@ -152,7 +152,7 @@ export interface PlatformConnection {
 
 export interface ExternalPlatformOrder {
   id: string;
-  platform: 'MERCADO_LIVRE' | 'SHOPEE' | 'NUVEMSHOP' | 'AMAZON' | 'TIKTOK_SHOP';
+  platform: 'MERCADO_LIVRE' | 'SHOPEE' | 'NUVEMSHOP' | 'AMAZON' | 'TIKTOK_SHOP' | 'BALCAO';
   itemName: string;
   clientName: string;
   clientPhone: string;
@@ -162,6 +162,7 @@ export interface ExternalPlatformOrder {
   priceCharged: number;
   statusText: string;
   isImported?: boolean;
+  createdAt?: number;
 }
 
 export interface AppAlert {
