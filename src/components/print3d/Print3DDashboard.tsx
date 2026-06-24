@@ -1118,9 +1118,11 @@ export function Print3DPanel({
           {/* Row 2: Mapa | Impressão ao Vivo | Pedidos | Higrômetros */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
             <Card>
-              <h3 className="text-[14px] font-semibold text-white">Mapa de Clientes</h3>
-              <p className="text-[11px] text-white/45 mb-2">{clients.length} clientes cadastrados</p>
-              <ClientsMap clients={clients} />
+              <h3 className="text-[14px] font-semibold text-white">Em breve</h3>
+              <p className="text-[11px] text-white/45 mb-2">Espaço reservado para um novo widget</p>
+              <div className="flex items-center justify-center h-[220px] rounded-lg border border-dashed border-white/10 text-white/30 text-[11px]">
+                Reservado
+              </div>
             </Card>
             <LivePrinters printers={printers} orders={orders} />
             <OrdersList orders={orders} clients={clients} onSelectTab={onSelectTab} />
@@ -1141,6 +1143,19 @@ export function Print3DPanel({
             <HourlyChart data={hourly} />
             <FinanceSummary revenue={monthRevenue} expense={monthExpenses} profit={monthProfit} margin={monthMargin} onSelectTab={onSelectTab} />
           </div>
+
+          {/* Row 5: Mapa de Clientes (full width, cobre a tela) */}
+          <Card>
+            <div className="flex items-center justify-between mb-2">
+              <div>
+                <h3 className="text-[14px] font-semibold text-white">Mapa de Clientes</h3>
+                <p className="text-[11px] text-white/45">{clients.length} clientes cadastrados</p>
+              </div>
+            </div>
+            <div className="h-[78vh] w-full">
+              <ClientsMap clients={clients} />
+            </div>
+          </Card>
     </div>
   );
 }
