@@ -943,17 +943,35 @@ export const CostsTab: React.FC<CostsTabProps> = ({
 
   const handleReplenishStock = (id: number, current: number) => {
     const filament = filamentStocks.find(f => f.id === id);
-    const extra = prompt('Quantas gramas gostaria de adicionar à bobina?', '1000');
-    if (!extra) return;
-    const added = parseFloat(extra);
-    if (isNaN(added) || added <= 0) return;
-    const currentPriceRoll = filament?.priceRoll ?? 0;
-    const priceStr = prompt(
-      `Qual o preço pago por 1kg (rolo) nesta nova compra? (atual médio: R$ ${currentPriceRoll.toFixed(2)})\nDeixe vazio para manter o preço atual.`,
-      currentPriceRoll.toFixed(2)
+    const mode = confirm(
+      `Atual: ${current}g\n\nOK = ADICIONAR gramas (reposição/compra)\nCancelar = DEFINIR quantidade exata (auditoria)`
     );
-    const updates: Partial<FilamentStock> = { stockGrams: current + added };
-    if (priceStr && priceStr.trim() !== '') {
+    let added = 0;
+    let newTotal = current;
+    if (mode) {
+      const extra = prompt('Quantas gramas gostaria de ADICIONAR à bobina?', '1000');
+      if (!extra) return;
+      added = parseFloat(extra.replace(',', '.'));
+      if (isNaN(added) || added <= 0) return;
+      newTotal = current + added;
+    } else {
+      const exact = prompt(`Defina a quantidade EXATA em gramas (atual: ${current}g):`, String(current));
+      if (exact === null) return;
+      const parsed = parseFloat(exact.replace(',', '.'));
+      if (isNaN(parsed) || parsed < 0) return;
+      newTotal = parsed;
+      added = parsed - current; // pode ser negativo (ajuste de auditoria)
+    }
+    const currentPriceRoll = filament?.priceRoll ?? 0;
+    const updates: Partial<FilamentStock> = { stockGrams: Math.max(0, newTotal) };
+    // só pede preço novo quando está ADICIONANDO estoque (compra)
+    const priceStr = added > 0
+      ? prompt(
+          `Qual o preço pago por 1kg (rolo) nesta nova compra? (atual médio: R$ ${currentPriceRoll.toFixed(2)})\nDeixe vazio para manter o preço atual.`,
+          currentPriceRoll.toFixed(2)
+        )
+      : null;
+    if (priceStr && priceStr.trim() !== '' && added > 0) {
       const newPriceRoll = parseFloat(priceStr.replace(',', '.'));
       if (!isNaN(newPriceRoll) && newPriceRoll >= 0) {
         // weighted average per gram, expressed back as price per 1kg roll
@@ -965,7 +983,7 @@ export const CostsTab: React.FC<CostsTabProps> = ({
       }
     }
     onUpdateFilament(id, updates);
-    triggerFeedback('Estoque reabastecido e preço médio atualizado!');
+    triggerFeedback(mode ? 'Estoque reabastecido!' : 'Quantidade ajustada (auditoria)!');
   };
 
   const handleAddShopping = (e: React.FormEvent) => {
