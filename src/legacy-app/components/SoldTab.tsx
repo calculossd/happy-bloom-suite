@@ -403,12 +403,26 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients, onDeleteOrder
                 <div className="space-y-2">
                   <h4 className="text-[9px] font-black text-[var(--brand-text)] font-mono text-[var(--brand-primary)] uppercase tracking-wider">#VND-{item.id}</h4>
                   
-                  <div>
-                    <h3 className="text-xs font-bold text-white leading-snug pr-14 truncate" title={item.itemName}>{item.itemName}</h3>
-                    <p className="text-[10.5px] text-[var(--brand-muted)] mt-0.5 flex items-center gap-1">
-                      <User className="h-2.5 w-2.5 shrink-0 text-zinc-500" />
-                      <span>Para: <strong className="text-zinc-200 font-semibold">{item.clientName}</strong></span>
-                    </p>
+                  <div className="flex items-start gap-2.5">
+                    {item.imageUrl ? (
+                      <img
+                        src={item.imageUrl}
+                        alt={item.itemName}
+                        loading="lazy"
+                        className="shrink-0 w-12 h-12 rounded-lg object-cover border border-[var(--brand-border)]/60 bg-black/40"
+                      />
+                    ) : (
+                      <div className="shrink-0 w-12 h-12 rounded-lg border border-dashed border-[var(--brand-border)]/60 bg-black/30 flex items-center justify-center text-[9px] font-bold uppercase tracking-wider text-zinc-600">
+                        3D
+                      </div>
+                    )}
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-xs font-bold text-white leading-snug pr-14 truncate" title={item.itemName}>{item.itemName}</h3>
+                      <p className="text-[10.5px] text-[var(--brand-muted)] mt-0.5 flex items-center gap-1">
+                        <User className="h-2.5 w-2.5 shrink-0 text-zinc-500" />
+                        <span className="truncate">Para: <strong className="text-zinc-200 font-semibold">{item.clientName}</strong></span>
+                      </p>
+                    </div>
                   </div>
 
                   <div className="bg-black/15 border border-[var(--brand-border)]/40 p-2 rounded-lg space-y-0.5 text-[10.2px] text-[var(--brand-muted)] leading-relaxed">
