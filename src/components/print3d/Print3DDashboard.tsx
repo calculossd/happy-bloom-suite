@@ -1192,7 +1192,7 @@ export function Print3DPanel({
 
           {/* Row 3: STL | Estoque Crítico | Cotação | IA Precificação */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-            <div className="md:col-span-2 xl:col-span-1"><StlGallery orders={orders} /></div>
+            <div className="md:col-span-2 xl:col-span-1"><StlGallery orders={orders} clients={clients} /></div>
             <Hygrometers devices={tuyaDevices} />
             <FilamentQuotes />
             <AiPricing />
