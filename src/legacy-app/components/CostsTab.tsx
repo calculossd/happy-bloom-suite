@@ -3350,7 +3350,24 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                     <div className="space-y-1.5">
                       <div className="flex items-end justify-between font-mono">
                         <span className="text-lg font-black text-white tabular-nums">{fil.stockGrams}<span className="text-xs text-[var(--brand-text-subtle)] ml-0.5">g</span></span>
-                        <span className="text-[10px] text-[var(--brand-text-subtle)]">mín {fil.minStockGrams}g</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const input = window.prompt(`Estoque crítico (g) para ${fil.type} ${fil.color}:`, String(fil.minStockGrams));
+                            if (input === null) return;
+                            const next = parseInt(input, 10);
+                            if (!Number.isFinite(next) || next < 0) {
+                              triggerFeedback('Valor inválido.');
+                              return;
+                            }
+                            onUpdateFilament(fil.id, { minStockGrams: next });
+                            triggerFeedback('Estoque crítico atualizado!');
+                          }}
+                          className="text-[10px] text-[var(--brand-text-subtle)] hover:text-white underline decoration-dotted cursor-pointer"
+                          title="Alterar estoque crítico"
+                        >
+                          mín {fil.minStockGrams}g
+                        </button>
                       </div>
                       <div className="h-1.5 rounded-full bg-white/5 overflow-hidden">
                         <div
