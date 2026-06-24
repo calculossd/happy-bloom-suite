@@ -1944,7 +1944,10 @@ export default function App() {
               )}
               {currentTab === 3 && (
                 <button
-                  onClick={() => setCurrentTab(1)}
+                  onClick={() => {
+                    setCurrentTab(1);
+                    setTimeout(() => window.dispatchEvent(new CustomEvent('open-new-order')), 60);
+                  }}
                   className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#b7ff00]/30 bg-[#b7ff00]/15 px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#b7ff00] transition hover:bg-[#b7ff00]/25 hover:border-[#b7ff00]/50 shrink-0"
                   id="btn_cadastrar_pedido_header"
                 >
