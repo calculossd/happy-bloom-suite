@@ -355,6 +355,7 @@ export function safeGetLocalStorageItem(key: string, defaultValue: string = ''):
 export default function App() {
   const [currentTab, setCurrentTab] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showAddPrinterFormTab16, setShowAddPrinterFormTab16] = useState(false);
 
   // Open the Costs tab (id=4) jumping to a specific internal sub-tab.
   // CostsTab listens for the 'costs_set_subtab' event and also reads the
