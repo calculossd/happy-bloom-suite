@@ -708,9 +708,6 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                         <span className="text-[10px] px-1.5 py-0.5 rounded font-mono" style={{ background: `${getStatusColor(order.status)}22`, color: getStatusColor(order.status) }}>
                           {getStatusLabel(order.status)}
                         </span>
-                        {isPrinting && (
-                          <span className="text-[10px] font-mono font-bold text-emerald-300">{progressPct}%</span>
-                        )}
                       </div>
                       <div className={`flex items-center gap-3 text-[11px] mt-0.5 ${isCritical ? 'text-red-300/80' : 'text-[#8BA58D]'}`}>
                         <span className="truncate">{order.clientName}</span>
