@@ -3520,6 +3520,13 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                         +
                       </button>
                       <button
+                        onClick={() => handleReplenishSupply(sup.id)}
+                        className="px-2 py-0.5 bg-[#151917] border border-[#232B27] hover:border-[#b7ff00] text-white rounded font-bold text-[10px] uppercase tracking-wider"
+                        title="Reabastecer informando o preço da nova compra (calcula custo médio)"
+                      >
+                        Recarregar
+                      </button>
+                      <button
                         onClick={() => handleDeleteSupply(sup.id)}
                         className="p-1 text-red-400 hover:bg-red-500/10 rounded ml-1"
                       >
