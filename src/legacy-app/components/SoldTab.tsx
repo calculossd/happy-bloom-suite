@@ -13,16 +13,18 @@ import {
   LayoutList, 
   Plus, 
   CheckCircle,
-  FileText
+  FileText,
+  Trash2
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 
 interface SoldTabProps {
   orders: PrintOrder[];
   clients: Array<{ id: number; name: string }>;
+  onDeleteOrder?: (id: number) => void;
 }
 
-export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
+export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients, onDeleteOrder }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [platformFilter, setPlatformFilter] = useState<'ALL' | 'MANUAL' | 'SHOPEE' | 'MERCADO_LIVRE' | 'NUVEMSHOP' | 'AMAZON' | 'TIKTOK_SHOP'>('ALL');
   const [methodFilter, setMethodFilter] = useState<'ALL' | 'DINHEIRO' | 'CARTÃO' | 'CONSIGNADO' | 'OUTROS'>('ALL');
