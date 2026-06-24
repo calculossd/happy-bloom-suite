@@ -4290,7 +4290,10 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       {activeSubTab === 'AI' && (
         <div className="space-y-4 animate-fade-in" id="ai-chat-full-panel">
           {/* Standardized subtab header */}
-          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm">
+          <div
+            className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm"
+            style={{ '--tab-accent': '167, 139, 250' } as React.CSSProperties}
+          >
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <div className="text-sm font-bold uppercase tracking-[0.14em] text-[#c4b5fd] font-sans select-none leading-none">Assistente</div>
