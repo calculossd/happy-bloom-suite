@@ -1027,16 +1027,6 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
             <button
               onClick={() => {
                 setEditingClientId(null);
-                setCName('');
-                setCPhone('');
-                setCEmail('');
-                setCAddress('');
-                setCCep('');
-                setCCity('');
-                setCState('');
-                setCNote('');
-                setCStockCount('0');
-                setCStockValue('0');
                 setShowClientForm(!showClientForm);
               }}
               className="px-3 py-1.5 bg-[#b7ff00]/10 hover:bg-[#b7ff00]/20 text-[#b7ff00] border border-[#b7ff00]/25 font-bold text-xs rounded-xl transition flex items-center gap-1"
