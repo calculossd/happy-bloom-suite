@@ -158,6 +158,7 @@ export const CostsTab: React.FC<CostsTabProps> = ({
   // Force scroll-to-top when subtab changes
   React.useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
+    window.dispatchEvent(new CustomEvent('costs_subtab_changed', { detail: activeSubTab }));
   }, [activeSubTab]);
 
   // Allow external triggers (sidebar/mobile nav) to switch the internal sub-tab
