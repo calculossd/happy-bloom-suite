@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PrintOrder } from '../types';
 import { 
   Search, 
@@ -133,6 +133,12 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
     doc.save(`relatorio_vendas_gestao3d.pdf`);
   };
 
+  useEffect(() => {
+    const handler = () => handleExportPDFReport();
+    window.addEventListener('export-sales-report', handler);
+    return () => window.removeEventListener('export-sales-report', handler);
+  });
+
   const handleExportReceipt = (item: PrintOrder) => {
     const doc = new jsPDF();
     
@@ -191,19 +197,6 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
 
   return (
     <div className="space-y-6" id="sold-orders-tab-container">
-      {/* Export action */}
-      <div className="flex justify-end" id="sold-tab-actions">
-        <button
-          onClick={handleExportPDFReport}
-          disabled={filteredSold.length === 0}
-          className="px-4 py-2.5 bg-gradient-lime text-black hover:shadow-[0_0_24px_-4px_rgba(183,255,0,0.55)] disabled:opacity-40 text-xs font-black uppercase tracking-wider rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-md shrink-0"
-          id="btn_download_sales_report"
-        >
-          <Download className="h-4 w-4" />
-          Exportar Relatório de Vendas
-        </button>
-      </div>
-
       {/* Financial Metrics Row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4" id="sold-metrics-panels">
         

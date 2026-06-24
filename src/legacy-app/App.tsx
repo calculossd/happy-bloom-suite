@@ -93,6 +93,7 @@ import {
   BookOpen,
   TrendingUp,
   Radar,
+  Download,
   Printer as PrinterNavIcon
 } from 'lucide-react';
 
@@ -1862,10 +1863,11 @@ export default function App() {
           const headerBadge = currentTab === 6
             ? `${deliveredCount} Concluídas`
             : null;
+          const flatHeader = currentTab === 1 || currentTab === 3 || currentTab === 6;
 
           return (
             <div
-              className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]"
+              className={`flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 p-5 rounded-2xl ${flatHeader ? 'header-flat' : 'glow-card shadow-sm shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]'}`}
               id="view-page-header"
             >
               <div className="space-y-1 min-w-0">
@@ -1885,6 +1887,16 @@ export default function App() {
                   </p>
                 )}
               </div>
+              {currentTab === 6 && (
+                <button
+                  onClick={() => window.dispatchEvent(new CustomEvent('export-sales-report'))}
+                  className="px-4 py-2.5 bg-gradient-lime text-black hover:shadow-[0_0_24px_-4px_rgba(183,255,0,0.55)] text-xs font-black uppercase tracking-wider rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-md shrink-0"
+                  id="btn_download_sales_report_header"
+                >
+                  <Download className="h-4 w-4" />
+                  Exportar Relatório
+                </button>
+              )}
             </div>
           );
         })()}
