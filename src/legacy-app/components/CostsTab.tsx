@@ -833,6 +833,12 @@ export const CostsTab: React.FC<CostsTabProps> = ({
     localStorage.setItem('bambuzau_local_catalog_production', JSON.stringify(catalogItems));
   }, [catalogItems]);
 
+  useEffect(() => {
+    const handler = () => { setEditingProduct(null); setShowAddProductManualForm(true); };
+    window.addEventListener('open-new-product', handler);
+    return () => window.removeEventListener('open-new-product', handler);
+  });
+
   // Filament Search Store list
   const [searchQuery, setSearchQuery] = useState('PLA');
   const [searchedOffers, setSearchedOffers] = useState<any[]>(staticFilamentOffers.PLA);
