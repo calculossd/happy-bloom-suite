@@ -429,7 +429,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
     } else {
       onUpdateOrder(order.id, {
         status: nextStatus as any,
-        printingProgress: nextStatus === 'POST_PROCESS' || nextStatus === 'READY' || nextStatus === 'DELIVERED' ? 1.0 : 0.0
+        printingProgress: nextStatus === 'POST_PROCESS' || nextStatus === 'PACKING' || nextStatus === 'READY' || nextStatus === 'DELIVERED' ? 1.0 : 0.0
       });
     }
   };
