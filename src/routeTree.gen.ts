@@ -13,6 +13,7 @@ import { Route as StoriesRouteImport } from './routes/stories'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiSearchImageRouteImport } from './routes/api/search-image'
 import { Route as ApiQuotationsRouteImport } from './routes/api/quotations'
+import { Route as ApiPlacesLeadsRouteImport } from './routes/api/places-leads'
 import { Route as ApiLocalLeadsRouteImport } from './routes/api/local-leads'
 import { Route as ApiKeysStatusRouteImport } from './routes/api/keys-status'
 import { Route as Api3dTrendsRouteImport } from './routes/api/3d-trends'
@@ -36,6 +37,11 @@ const ApiSearchImageRoute = ApiSearchImageRouteImport.update({
 const ApiQuotationsRoute = ApiQuotationsRouteImport.update({
   id: '/api/quotations',
   path: '/api/quotations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPlacesLeadsRoute = ApiPlacesLeadsRouteImport.update({
+  id: '/api/places-leads',
+  path: '/api/places-leads',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiLocalLeadsRoute = ApiLocalLeadsRouteImport.update({
@@ -65,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/api/3d-trends': typeof Api3dTrendsRoute
   '/api/keys-status': typeof ApiKeysStatusRoute
   '/api/local-leads': typeof ApiLocalLeadsRoute
+  '/api/places-leads': typeof ApiPlacesLeadsRoute
   '/api/quotations': typeof ApiQuotationsRoute
   '/api/search-image': typeof ApiSearchImageRoute
   '/api/serpapi/status': typeof ApiSerpapiStatusRoute
@@ -75,6 +82,7 @@ export interface FileRoutesByTo {
   '/api/3d-trends': typeof Api3dTrendsRoute
   '/api/keys-status': typeof ApiKeysStatusRoute
   '/api/local-leads': typeof ApiLocalLeadsRoute
+  '/api/places-leads': typeof ApiPlacesLeadsRoute
   '/api/quotations': typeof ApiQuotationsRoute
   '/api/search-image': typeof ApiSearchImageRoute
   '/api/serpapi/status': typeof ApiSerpapiStatusRoute
@@ -86,6 +94,7 @@ export interface FileRoutesById {
   '/api/3d-trends': typeof Api3dTrendsRoute
   '/api/keys-status': typeof ApiKeysStatusRoute
   '/api/local-leads': typeof ApiLocalLeadsRoute
+  '/api/places-leads': typeof ApiPlacesLeadsRoute
   '/api/quotations': typeof ApiQuotationsRoute
   '/api/search-image': typeof ApiSearchImageRoute
   '/api/serpapi/status': typeof ApiSerpapiStatusRoute
@@ -98,6 +107,7 @@ export interface FileRouteTypes {
     | '/api/3d-trends'
     | '/api/keys-status'
     | '/api/local-leads'
+    | '/api/places-leads'
     | '/api/quotations'
     | '/api/search-image'
     | '/api/serpapi/status'
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
     | '/api/3d-trends'
     | '/api/keys-status'
     | '/api/local-leads'
+    | '/api/places-leads'
     | '/api/quotations'
     | '/api/search-image'
     | '/api/serpapi/status'
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
     | '/api/3d-trends'
     | '/api/keys-status'
     | '/api/local-leads'
+    | '/api/places-leads'
     | '/api/quotations'
     | '/api/search-image'
     | '/api/serpapi/status'
@@ -129,6 +141,7 @@ export interface RootRouteChildren {
   Api3dTrendsRoute: typeof Api3dTrendsRoute
   ApiKeysStatusRoute: typeof ApiKeysStatusRoute
   ApiLocalLeadsRoute: typeof ApiLocalLeadsRoute
+  ApiPlacesLeadsRoute: typeof ApiPlacesLeadsRoute
   ApiQuotationsRoute: typeof ApiQuotationsRoute
   ApiSearchImageRoute: typeof ApiSearchImageRoute
   ApiSerpapiStatusRoute: typeof ApiSerpapiStatusRoute
@@ -162,6 +175,13 @@ declare module '@tanstack/react-router' {
       path: '/api/quotations'
       fullPath: '/api/quotations'
       preLoaderRoute: typeof ApiQuotationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/places-leads': {
+      id: '/api/places-leads'
+      path: '/api/places-leads'
+      fullPath: '/api/places-leads'
+      preLoaderRoute: typeof ApiPlacesLeadsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/local-leads': {
@@ -201,6 +221,7 @@ const rootRouteChildren: RootRouteChildren = {
   Api3dTrendsRoute: Api3dTrendsRoute,
   ApiKeysStatusRoute: ApiKeysStatusRoute,
   ApiLocalLeadsRoute: ApiLocalLeadsRoute,
+  ApiPlacesLeadsRoute: ApiPlacesLeadsRoute,
   ApiQuotationsRoute: ApiQuotationsRoute,
   ApiSearchImageRoute: ApiSearchImageRoute,
   ApiSerpapiStatusRoute: ApiSerpapiStatusRoute,
