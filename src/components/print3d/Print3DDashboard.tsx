@@ -827,7 +827,6 @@ function StockOverview({ filaments = [], onSelectTab }: { filaments?: any[]; onS
               <FilamentSpool type={c.type} color={colorHex(c.color)} size={28} className="shrink-0" label={c.name} />
               <div className="flex-1 min-w-0">
                 <div className="text-[12px] font-medium text-white truncate flex items-center gap-1.5">
-                  <span>{c.type}</span>
                   <span
                     className="inline-block size-2 rounded-full shrink-0 ring-1 ring-white/15"
                     style={{ background: colorHex(c.color) }}
