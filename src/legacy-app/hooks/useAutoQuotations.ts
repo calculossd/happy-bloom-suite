@@ -20,30 +20,31 @@ const getCurrentQuotationsPeriod = (): string => {
   return `${dateStr}_${period}`;
 };
 
-const buildQuotationsUrl = (key: string, query?: string): string => {
+const buildQuotationsUrl = (key: string, key2: string, query?: string): string => {
   const params: string[] = [];
   if (key) params.push(`api_key=${encodeURIComponent(key.trim())}`);
+  if (key2) params.push(`api_key_2=${encodeURIComponent(key2.trim())}`);
   if (query) params.push(`q=${encodeURIComponent(query)}`);
   const qs = params.length ? `?${params.join('&')}` : '';
   return getApiUrl(`/api/quotations${qs}`);
 };
 
-const fetchQuotations = async (url: string, key: string, signal?: AbortSignal): Promise<any> => {
-  const res = await fetch(url, {
-    headers: { 'X-Custom-Serpapi-Key': key.trim() },
-    signal,
-  });
+const fetchQuotations = async (url: string, key: string, key2: string, signal?: AbortSignal): Promise<any> => {
+  const headers: Record<string, string> = {};
+  if (key) headers['X-Custom-Serpapi-Key'] = key.trim();
+  if (key2) headers['X-Custom-Serpapi-Key-2'] = key2.trim();
+  const res = await fetch(url, { headers, signal });
   if (!res.ok) {
     throw new Error(`HTTP ${res.status} (${res.statusText})`);
   }
   return res.json();
 };
 
-const fetchWithRetries = async (key: string, signal: AbortSignal, attempts = 3): Promise<any[] | null> => {
+const fetchWithRetries = async (key: string, key2: string, signal: AbortSignal, attempts = 2): Promise<any[] | null> => {
   for (let i = 0; i < attempts; i++) {
     if (signal.aborted) return null;
     try {
-      const data = await fetchQuotations(buildQuotationsUrl(key), key, signal);
+      const data = await fetchQuotations(buildQuotationsUrl(key, key2), key, key2, signal);
       if (Array.isArray(data) && data.length > 0) return data;
     } catch (err) {
       if ((err as any)?.name === 'AbortError') return null;
@@ -56,43 +57,8 @@ const fetchWithRetries = async (key: string, signal: AbortSignal, attempts = 3):
   return null;
 };
 
-const optimizeOffers = async (data: any[], key: string, signal: AbortSignal): Promise<any[]> => {
-  const cleaned = [...data];
-  for (const mat of MATERIALS) {
-    if (signal.aborted) return cleaned;
-    let group = cleaned.find(
-      (g: any) => g && String(g.type || '').toUpperCase() === mat,
-    );
-    if (!group) {
-      group = { type: mat, offers: [] };
-      cleaned.push(group);
-    }
-    if (group.offers && group.offers.length >= 5) continue;
-
-    const queryStr = EXPANDED_TERMS[mat];
-    try {
-      const customData = await fetchQuotations(
-        buildQuotationsUrl(key, queryStr),
-        key,
-        signal,
-      );
-      const newOffers = customData?.[0]?.offers;
-      if (
-        Array.isArray(newOffers) &&
-        newOffers.length > 0 &&
-        (!group.offers || newOffers.length > group.offers.length)
-      ) {
-        group.offers = newOffers;
-        group.searchQuery = queryStr;
-      }
-    } catch (e) {
-      if ((e as any)?.name === 'AbortError') return cleaned;
-      console.warn(`[Auto-Quotes] Expanded query for ${mat} failed:`, e);
-    }
-    await new Promise((r) => setTimeout(r, 600));
-  }
-  return cleaned;
-};
+// Cota economizada: usamos apenas a busca inicial (1 chamada por material por
+// período). Limitado a 3 execuções por dia via getCurrentQuotationsPeriod.
 
 const persistQuotations = (data: any[], period: string): void => {
   const cleanData = dedupeQuotationGroups(data);
@@ -111,20 +77,15 @@ const runAutoQuoteFetch = async (signal: AbortSignal): Promise<void> => {
   if (currentPeriod === lastPeriod) return;
 
   const key = safeStorage.getItem('bambuzau_custom_serp_key', '');
-  const data = await fetchWithRetries(key, signal);
+  const key2 = safeStorage.getItem('bambuzau_custom_serp_key_2', '');
+  const data = await fetchWithRetries(key, key2, signal);
   if (!data || signal.aborted) {
     console.warn('[Auto-Quotes] No valid data fetched.');
     return;
   }
 
-  let finalData = data;
-  try {
-    finalData = await optimizeOffers(data, key, signal);
-  } catch (err) {
-    console.warn('[Auto-Quotes] Optimization failed:', err);
-  }
   if (signal.aborted) return;
-  persistQuotations(finalData, currentPeriod);
+  persistQuotations(data, currentPeriod);
 };
 
 export const useAutoQuotations = (): void => {
