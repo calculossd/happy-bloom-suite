@@ -28,6 +28,7 @@ const getStatusLabel = (status: string): string => {
     case 'QUEUE': return "NaFila / Pagar";
     case 'PRINTING': return "Imprimindo";
     case 'POST_PROCESS': return "Pós-Processo";
+    case 'PACKING': return "Embalando";
     case 'READY': return "Pronto";
     case 'DELIVERED': return "Entregue";
     default: return status;
@@ -39,7 +40,8 @@ const getNextStatusActionLabel = (status: string): string => {
     case 'WAITING': return "Estudo/Fila";
     case 'QUEUE': return "Iniciar Impressão";
     case 'PRINTING': return "Ir p/ Acabamento";
-    case 'POST_PROCESS': return "Marcar Pronto";
+    case 'POST_PROCESS': return "Ir p/ Embalando";
+    case 'PACKING': return "Marcar Pronto";
     case 'READY': return "Marcar Entregue";
     default: return "";
   }
@@ -50,7 +52,8 @@ const getNextStatusValue = (status: string): string | null => {
     case 'WAITING': return "QUEUE";
     case 'QUEUE': return "PRINTING";
     case 'PRINTING': return "POST_PROCESS";
-    case 'POST_PROCESS': return "READY";
+    case 'POST_PROCESS': return "PACKING";
+    case 'PACKING': return "READY";
     case 'READY': return "DELIVERED";
     default: return null;
   }
@@ -62,6 +65,7 @@ const getStatusColor = (status: string): string => {
     case 'QUEUE': return 'var(--brand-accent)';
     case 'PRINTING': return 'var(--brand-primary)';
     case 'POST_PROCESS': return 'var(--brand-accent)';
+    case 'PACKING': return '#a855f7';
     case 'READY': return '#3b82f6'; // Azul vibrante para pronto / empacotado
     case 'DELIVERED': return '#10b981'; // Verde para entregue / finalizado
     default: return 'var(--brand-muted)';
@@ -91,6 +95,7 @@ const getProgressPercentage = (status: string, printingProgress: number = 0): nu
     case 'QUEUE': return 35;
     case 'PRINTING': return Math.min(80, Math.max(40, 40 + Math.round(printingProgress * 40)));
     case 'POST_PROCESS': return 85;
+    case 'PACKING': return 93;
     case 'READY': return 100;
     default: return 0;
   }
@@ -424,7 +429,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
     } else {
       onUpdateOrder(order.id, {
         status: nextStatus as any,
-        printingProgress: nextStatus === 'POST_PROCESS' || nextStatus === 'READY' || nextStatus === 'DELIVERED' ? 1.0 : 0.0
+        printingProgress: nextStatus === 'POST_PROCESS' || nextStatus === 'PACKING' || nextStatus === 'READY' || nextStatus === 'DELIVERED' ? 1.0 : 0.0
       });
     }
   };
@@ -482,8 +487,9 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
     { key: 'WAITING', label: 'Aguard. Arq' },
     { key: 'QUEUE', label: 'NaFila' },
     { key: 'PRINTING', label: 'Imprimindo' },
-    { key: 'POST_PROCESS', label: 'Pós-Proc' },
-    { key: 'READY', label: 'Pronto / Emb' }
+    { key: 'POST_PROCESS', label: 'Acabamento' },
+    { key: 'PACKING', label: 'Embalando' },
+    { key: 'READY', label: 'Pronto' }
   ];
 
   const filteredOrders = orders.filter(order => {
@@ -1529,6 +1535,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                         <option value="QUEUE">NaFila / Pagar</option>
                         <option value="PRINTING">Imprimindo</option>
                         <option value="POST_PROCESS">Pós-Processo / Acabamento</option>
+                        <option value="PACKING">Embalando</option>
                         <option value="READY">Pronto p/ Entrega</option>
                         <option value="DELIVERED">Entregue / Concluído</option>
                       </select>
