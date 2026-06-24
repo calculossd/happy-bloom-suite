@@ -1874,11 +1874,9 @@ export default function App() {
             : currentTab === 2
               ? `${clients.length} Cadastrados`
               : null;
-          const flatHeader = currentTab === 1 || currentTab === 2 || currentTab === 3 || currentTab === 6;
-
           return (
             <div
-              className={`flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 p-5 rounded-2xl ${flatHeader ? 'header-flat' : 'glow-card shadow-sm shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]'}`}
+              className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 p-5 rounded-2xl"
               id="view-page-header"
             >
               <div className="space-y-1 min-w-0">
