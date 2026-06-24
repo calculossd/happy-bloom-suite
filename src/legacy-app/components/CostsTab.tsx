@@ -196,6 +196,7 @@ export const CostsTab: React.FC<CostsTabProps> = ({
   const [sCount, setSCount] = useState(10);
   const [sMinCount, setSMinCount] = useState(5);
   const [sUnitCost, setSUnitCost] = useState(2.50);
+  const [sImage, setSImage] = useState('');
   const [showAddSupplyForm, setShowAddSupplyForm] = useState(false);
 
   // Fallbacks client-side to guarantee at least 5 items
