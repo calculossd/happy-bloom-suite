@@ -892,6 +892,35 @@ export const CostsTab: React.FC<CostsTabProps> = ({
     }));
   };
 
+  const handleReplenishSupply = (id: number) => {
+    const supply = suppliesStocks.find(s => s.id === id);
+    if (!supply) return;
+    const qtyStr = prompt('Quantas unidades você comprou agora?', '1');
+    if (!qtyStr) return;
+    const addedQty = parseFloat(qtyStr);
+    if (isNaN(addedQty) || addedQty <= 0) return;
+    const priceStr = prompt(
+      `Qual o preço unitário desta nova compra? (atual médio: R$ ${supply.unitCost.toFixed(2)})\nDeixe vazio para manter o preço atual.`,
+      supply.unitCost.toFixed(2)
+    );
+    let newUnitCost = supply.unitCost;
+    if (priceStr && priceStr.trim() !== '') {
+      const newPrice = parseFloat(priceStr.replace(',', '.'));
+      if (!isNaN(newPrice) && newPrice >= 0) {
+        const totalQty = supply.stockCount + addedQty;
+        newUnitCost = totalQty > 0
+          ? (supply.stockCount * supply.unitCost + addedQty * newPrice) / totalQty
+          : newPrice;
+      }
+    }
+    setSuppliesStocks(prev => prev.map(s =>
+      s.id === id
+        ? { ...s, stockCount: s.stockCount + addedQty, unitCost: parseFloat(newUnitCost.toFixed(4)) }
+        : s
+    ));
+    triggerFeedback('Insumo reabastecido e custo médio atualizado!');
+  };
+
   const handleDeleteSupply = (id: number) => {
     if (confirm('Deseja realmente remover este insumo do estoque?')) {
       setSuppliesStocks(prev => prev.filter(s => s.id !== id));
@@ -900,14 +929,30 @@ export const CostsTab: React.FC<CostsTabProps> = ({
   };
 
   const handleReplenishStock = (id: number, current: number) => {
+    const filament = filamentStocks.find(f => f.id === id);
     const extra = prompt('Quantas gramas gostaria de adicionar à bobina?', '1000');
-    if (extra) {
-      const added = parseFloat(extra);
-      if (!isNaN(added)) {
-        onUpdateFilament(id, { stockGrams: current + added });
-        triggerFeedback('Estoques atualizados!');
+    if (!extra) return;
+    const added = parseFloat(extra);
+    if (isNaN(added) || added <= 0) return;
+    const currentPriceRoll = filament?.priceRoll ?? 0;
+    const priceStr = prompt(
+      `Qual o preço pago por 1kg (rolo) nesta nova compra? (atual médio: R$ ${currentPriceRoll.toFixed(2)})\nDeixe vazio para manter o preço atual.`,
+      currentPriceRoll.toFixed(2)
+    );
+    const updates: Partial<FilamentStock> = { stockGrams: current + added };
+    if (priceStr && priceStr.trim() !== '') {
+      const newPriceRoll = parseFloat(priceStr.replace(',', '.'));
+      if (!isNaN(newPriceRoll) && newPriceRoll >= 0) {
+        // weighted average per gram, expressed back as price per 1kg roll
+        const totalGrams = current + added;
+        const avgPerGram = totalGrams > 0
+          ? (current * (currentPriceRoll / 1000) + added * (newPriceRoll / 1000)) / totalGrams
+          : newPriceRoll / 1000;
+        updates.priceRoll = parseFloat((avgPerGram * 1000).toFixed(2));
       }
     }
+    onUpdateFilament(id, updates);
+    triggerFeedback('Estoque reabastecido e preço médio atualizado!');
   };
 
   const handleAddShopping = (e: React.FormEvent) => {
