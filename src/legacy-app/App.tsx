@@ -2079,7 +2079,7 @@ export default function App() {
         )}
 
         {currentTab !== 0 && currentTab !== 2 && (
-          <div className="rounded-2xl p-4 sm:p-6 bg-[rgba(18,18,20,0.7)] border border-white/[0.05] shadow-sm">
+          <div className="p-0">
         {currentTab === 1 && (
           <>
             <ProductionTab
