@@ -2171,6 +2171,43 @@ export default function App() {
                 viewMode="prospect"
               />
             )}
+            {currentTab === 16 && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 px-1 py-1">
+                  <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">
+                    Impressoras
+                  </div>
+                </div>
+                <ProductionTab
+                  orders={orders}
+                  printers={printers}
+                  filamentStocks={filamentStocks}
+                  clients={clients}
+                  onAddOrder={handleAddOrder}
+                  onAddClient={handleAddClient}
+                  onUpdateOrder={handleUpdateOrder}
+                  onDeleteOrder={handleDeleteOrder}
+                  onSimulateTick={handleSimulateTick}
+                  onUpdateFilament={handleUpdateFilamentStock}
+                  onUpdatePrinter={handleUpdatePrinter}
+                  viewMode="monitor"
+                />
+                <PrinterQueueList printers={printers} orders={orders} />
+                <ClientsTab
+                  clients={clients}
+                  printers={printers}
+                  orders={orders}
+                  onAddClient={handleAddClient}
+                  onUpdateClient={handleUpdateClient}
+                  onDeleteClient={handleDeleteClient}
+                  onAddPrinter={handleAddPrinter}
+                  onUpdatePrinter={handleUpdatePrinter}
+                  onDeletePrinter={handleDeletePrinter}
+                  onAddOrder={handleAddOrder}
+                  viewMode="printers"
+                />
+              </div>
+            )}
           </Suspense>
         )}
           </div>
