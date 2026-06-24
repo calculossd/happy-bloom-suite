@@ -1007,13 +1007,13 @@ export function Print3DPanel({
             </Card>
             <LivePrinters printers={printers} orders={orders} />
             <OrdersList orders={orders} clients={clients} onSelectTab={onSelectTab} />
-            <Sensors filaments={filamentStocks} />
+            <StockOverview filaments={filamentStocks} onSelectTab={onSelectTab} />
           </div>
 
           {/* Row 3: STL | Estoque Crítico | Cotação | IA Precificação */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
             <div className="md:col-span-2 xl:col-span-1"><StlGallery orders={orders} /></div>
-            <CriticalStock filaments={filamentStocks} onSelectTab={onSelectTab} />
+            <Hygrometers devices={tuyaDevices} />
             <FilamentQuotes />
             <AiPricing />
           </div>
