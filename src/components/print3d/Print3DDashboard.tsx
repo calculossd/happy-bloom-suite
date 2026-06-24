@@ -727,7 +727,9 @@ function StlGallery({ orders = [], clients = [] }: { orders?: any[]; clients?: a
               ) : (
                 <Box className="size-16 text-white/30 group-hover:scale-110 transition" />
               )}
-              <div className="absolute top-2 left-2 px-2 py-0.5 rounded text-[9.5px] font-semibold uppercase tracking-wider" style={{ background: s.source === "Estoque" ? `${LIME}25` : "rgba(0,0,0,0.55)", color: s.source === "Estoque" ? LIME : "#fff", border: `1px solid ${s.source === "Estoque" ? LIME + "55" : "rgba(255,255,255,0.1)"}` }}>{s.source}</div>
+              {s.source !== "Estoque" && (
+                <div className="absolute top-2 left-2 px-2 py-0.5 rounded text-[9.5px] font-semibold uppercase tracking-wider" style={{ background: "rgba(0,0,0,0.55)", color: "#fff", border: "1px solid rgba(255,255,255,0.1)" }}>{s.source}</div>
+              )}
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition" style={{ background: `radial-gradient(circle at center, ${LIME}15, transparent 70%)` }} />
             </div>
             <div className="text-[11.5px] font-medium text-white truncate">{s.name}</div>
