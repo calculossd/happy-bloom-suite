@@ -2326,199 +2326,6 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
             </div>
           </div>
 
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="catalog-products-cards-grid">
-            {catalogItems.length === 0 ? (
-              <div className="p-12 text-center text-[#8BA58D] col-span-full border border-dashed border-[#232B27] bg-[#151917]/20 rounded-2xl">
-                <BookOpen className="h-12 w-12 text-[#8BA58D]/30 mx-auto mb-3" />
-                <p className="text-xs font-bold">Nenhum produto cadastrado no catálogo.</p>
-                <p className="text-[11px] mt-1 text-[#8BA58D]/70">Utilize a Calculadora de Preço de Produtos ao lado para fatiar, precificar e salvar itens aqui!</p>
-              </div>
-            ) : (
-              catalogItems.map((item) => (
-                <div key={item.id} className="p-4 bg-[#151917] border border-[#232B27] rounded-2xl space-y-3 flex flex-col justify-between">
-                  <div className="space-y-2">
-                    {/* Product picture */}
-                    <div className="h-28 w-full bg-[#0C0E0D] border border-[#232B27]/40 rounded-xl overflow-hidden relative flex items-center justify-center">
-                      <img
-                        src={item.imageUrl || 'https://images.unsplash.com/photo-1608156639585-b3a032ef9689?w=300&auto=format&fit=crop&q=60'}
-                        alt={item.name}
-                        referrerPolicy="no-referrer"
-                        className="w-full h-full object-cover transition duration-350 hover:scale-105"
-                      />
-                    </div>
-
-                    <div className="flex items-center justify-between gap-4">
-                      <span className="text-[9px] font-mono font-black tracking-widest text-[#b7ff00] bg-[#b7ff00]/10 px-2 py-0.5 rounded border border-[#b7ff00]/20">
-                        {item.productCode || 'PROD'}
-                      </span>
-                      {item.filamentType !== 'HARDWARE' && (
-                        <span className="text-[9px] font-bold text-[#b7ff00]">
-                          POLÍMERO: {item.filamentType}
-                        </span>
-                      )}
-                    </div>
-
-                    <h4 className="text-sm font-black text-[#F1F4EE] truncate">{item.name}</h4>
-                    <p className="text-[11px] text-[#8BA58D] leading-relaxed line-clamp-2">
-                      {item.description || 'Nenhuma descrição declarada.'}
-                    </p>
-
-                    <div className="grid grid-cols-3 gap-1 bg-[#0C0E0D]/40 p-2 border border-[#232B27]/40 rounded-xl text-center text-[10.5px]">
-                      <div className="flex flex-col justify-center">
-                        <span className="text-[8px] text-[#8BA58D] uppercase font-bold block">Peso</span>
-                        <span className="font-mono text-white font-medium">{item.weightGrams}g</span>
-                      </div>
-                      <div className="flex flex-col justify-center">
-                        <span className="text-[8px] text-[#8BA58D] uppercase font-bold block">Tempo</span>
-                        <span className="font-mono text-white font-medium">{item.printTimeHours}h</span>
-                      </div>
-                      <div className="flex flex-col items-center justify-center">
-                        <span className="text-[8px] text-[#8BA58D] uppercase font-bold block">Pronta Entr.</span>
-                        <div className="flex items-center gap-1 mt-0.5 justify-center">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setCatalogItems(prev => prev.map(c => c.id === item.id ? { ...c, stockCount: Math.max(0, c.stockCount - 1) } : c))
-                            }}
-                            className="w-4 h-4 bg-[#0C0E0D] border border-[#232B27] rounded text-[#8BA58D] flex items-center justify-center text-[10px] font-bold hover:border-red-400/50 hover:text-red-400 transition cursor-pointer"
-                            title="Remover 1 unidade"
-                          >
-                            -
-                          </button>
-                          <span className="font-mono text-white font-bold px-0.5">{item.stockCount}</span>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setCatalogItems(prev => prev.map(c => c.id === item.id ? { ...c, stockCount: c.stockCount + 1 } : c))
-                            }}
-                            className="w-4 h-4 bg-[#0C0E0D] border border-[#232B27] rounded text-[#8BA58D] flex items-center justify-center text-[10px] font-bold hover:border-[#b7ff00]/50 hover:text-[#b7ff00] transition cursor-pointer"
-                            title="Adicionar 1 unidade"
-                          >
-                            +
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Multimaterial & STL view badges */}
-                    {(item.filamentsUsed || item.suppliesUsed || item.stlFileName) && (
-                      <div className="bg-[#0C0E0D]/60 p-2 rounded-xl space-y-1.5 border border-[#232B27]/30">
-                        {item.filamentsUsed && item.filamentsUsed.length > 0 && (
-                          <div className="space-y-1">
-                            <span className="text-[8px] text-[#8BA58D] uppercase font-bold block">Filamentos Receita:</span>
-                            <div className="flex flex-wrap gap-1 text-[9px]">
-                              {item.filamentsUsed.map((f, idx) => {
-                                const st = filamentStocks.find(x => x.id === f.filamentStockId);
-                                const cStyle = st ? getHexColorByName(st.color) : null;
-                                return (
-                                  <span key={idx} className="bg-teal-500/10 text-teal-300 px-2 py-0.5 rounded border border-teal-500/20 font-mono flex items-center gap-1.5 inline-flex">
-                                    {cStyle && (
-                                      <span 
-                                        className="w-2 h-2 rounded-full inline-block shrink-0" 
-                                        style={{ 
-                                          backgroundColor: cStyle.bg, 
-                                          border: cStyle.bg === 'transparent' ? `1.2px solid ${cStyle.border}` : `1px solid ${cStyle.border}`
-                                        }} 
-                                      />
-                                    )}
-                                    {st ? `${st.type} ${st.color}` : 'Filamento'} ({f.weightGrams}g)
-                                  </span>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        )}
-
-                        {item.suppliesUsed && item.suppliesUsed.length > 0 && (
-                          <div className="space-y-1">
-                            <span className="text-[8px] text-[#8BA58D] uppercase font-bold block">Insumos/Hardware:</span>
-                            <div className="flex flex-wrap gap-1 text-[9px]">
-                              {item.suppliesUsed.map((s, idx) => {
-                                const sup = suppliesStocks.find(x => x.id === s.supplyStockId);
-                                return (
-                                  <span key={idx} className="bg-amber-500/10 text-amber-300 px-1.5 py-0.5 rounded border border-amber-500/20 font-mono">
-                                    📦 {sup ? sup.name : 'Insumo'} ({s.quantity}x)
-                                  </span>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        )}
-
-                        {item.stlFileName && (
-                          <div className="pt-1 flex items-center justify-between border-t border-[#232B27]/20">
-                            <span className="text-[9px] text-purple-300 font-bold flex items-center gap-1 truncate max-w-[150px]" title={item.stlFileName}>
-                              📐 {item.stlFileName}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                alert(`Arquivo CAD de impressão 3D "${item.stlFileName}" pronto para download! (${item.stlFileData || 'Binário'})`);
-                              }}
-                              className="text-[8px] bg-purple-500 hover:bg-purple-400 text-black px-1.5 py-0.5 rounded font-black uppercase tracking-wider transition cursor-pointer"
-                            >
-                              Baixar .STL
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="border-t border-[#232B27]/40 pt-3 flex items-center justify-between gap-4">
-                    <span className="text-sm font-black text-[#b7ff00] font-mono">
-                      R$ {item.defaultPrice.toFixed(2)}
-                    </span>
-
-                    <div className="flex items-center gap-1.5">
-                      <button
-                        onClick={() => handleEditCatalogProduct(item)}
-                        className="text-amber-400 hover:text-amber-500 hover:bg-amber-500/10 p-1.5 rounded-lg transition"
-                        title="Editar Produto"
-                      >
-                        <Edit3 className="h-4 w-4" />
-                      </button>
-
-                      <button
-                        onClick={() => handleDeleteCatalogProduct(item.id)}
-                        className="text-red-400 hover:text-red-500 hover:bg-red-500/10 p-1.5 rounded-lg transition"
-                        title="Deletar Produto do Catálogo"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-
-        </div>
-      )}
-
-      {/* SUBTAB 3: DOUBLE SECTORS - RAW FILAMENTS AND CONSUMABLE SUPPLIES */}
-      {activeSubTab === 'STOCK' && (
-        <div className="space-y-6 animate-fade-in" id="stocks-physical-layout">
-          {/* Standardized subtab header */}
-          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Estoque</div>
-                <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">Físico</span>
-              </div>
-              <p className="text-xs text-[var(--brand-muted)]">Carretéis de filamento, insumos e hardware sincronizados em tempo real</p>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Filamentos Stocks */}
-          <div className="relative overflow-hidden bg-gradient-to-br from-[#161B19] via-[#121613] to-[#0E1210] border border-[#232B27] p-5 rounded-2xl space-y-4 shadow-[0_24px_60px_-30px_rgba(149,187,162,0.25)]">
-            <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-emerald-500/10 blur-3xl opacity-60" />
-            <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-white/5 pb-4">
-              <div className="flex min-w-0 items-center gap-3">
-                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-emerald-500/10 ring-1 ring-inset ring-emerald-400/20 text-emerald-300">
-                  <Disc className="h-4 w-4" />
-                </div>
           {showAddProductManualForm && (
             <form onSubmit={handleSaveManualProduct} className="p-5 bg-[#151917] border border-[#232B27] rounded-2xl space-y-4 animate-fade-in" id="manual_catalog_product_form">
               <div className="flex items-center justify-between border-b border-[#232B27]/40 pb-2">
@@ -2991,6 +2798,199 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
               </div>
             </form>
           )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="catalog-products-cards-grid">
+            {catalogItems.length === 0 ? (
+              <div className="p-12 text-center text-[#8BA58D] col-span-full border border-dashed border-[#232B27] bg-[#151917]/20 rounded-2xl">
+                <BookOpen className="h-12 w-12 text-[#8BA58D]/30 mx-auto mb-3" />
+                <p className="text-xs font-bold">Nenhum produto cadastrado no catálogo.</p>
+                <p className="text-[11px] mt-1 text-[#8BA58D]/70">Utilize a Calculadora de Preço de Produtos ao lado para fatiar, precificar e salvar itens aqui!</p>
+              </div>
+            ) : (
+              catalogItems.map((item) => (
+                <div key={item.id} className="p-4 bg-[#151917] border border-[#232B27] rounded-2xl space-y-3 flex flex-col justify-between">
+                  <div className="space-y-2">
+                    {/* Product picture */}
+                    <div className="h-28 w-full bg-[#0C0E0D] border border-[#232B27]/40 rounded-xl overflow-hidden relative flex items-center justify-center">
+                      <img
+                        src={item.imageUrl || 'https://images.unsplash.com/photo-1608156639585-b3a032ef9689?w=300&auto=format&fit=crop&q=60'}
+                        alt={item.name}
+                        referrerPolicy="no-referrer"
+                        className="w-full h-full object-cover transition duration-350 hover:scale-105"
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="text-[9px] font-mono font-black tracking-widest text-[#b7ff00] bg-[#b7ff00]/10 px-2 py-0.5 rounded border border-[#b7ff00]/20">
+                        {item.productCode || 'PROD'}
+                      </span>
+                      {item.filamentType !== 'HARDWARE' && (
+                        <span className="text-[9px] font-bold text-[#b7ff00]">
+                          POLÍMERO: {item.filamentType}
+                        </span>
+                      )}
+                    </div>
+
+                    <h4 className="text-sm font-black text-[#F1F4EE] truncate">{item.name}</h4>
+                    <p className="text-[11px] text-[#8BA58D] leading-relaxed line-clamp-2">
+                      {item.description || 'Nenhuma descrição declarada.'}
+                    </p>
+
+                    <div className="grid grid-cols-3 gap-1 bg-[#0C0E0D]/40 p-2 border border-[#232B27]/40 rounded-xl text-center text-[10.5px]">
+                      <div className="flex flex-col justify-center">
+                        <span className="text-[8px] text-[#8BA58D] uppercase font-bold block">Peso</span>
+                        <span className="font-mono text-white font-medium">{item.weightGrams}g</span>
+                      </div>
+                      <div className="flex flex-col justify-center">
+                        <span className="text-[8px] text-[#8BA58D] uppercase font-bold block">Tempo</span>
+                        <span className="font-mono text-white font-medium">{item.printTimeHours}h</span>
+                      </div>
+                      <div className="flex flex-col items-center justify-center">
+                        <span className="text-[8px] text-[#8BA58D] uppercase font-bold block">Pronta Entr.</span>
+                        <div className="flex items-center gap-1 mt-0.5 justify-center">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setCatalogItems(prev => prev.map(c => c.id === item.id ? { ...c, stockCount: Math.max(0, c.stockCount - 1) } : c))
+                            }}
+                            className="w-4 h-4 bg-[#0C0E0D] border border-[#232B27] rounded text-[#8BA58D] flex items-center justify-center text-[10px] font-bold hover:border-red-400/50 hover:text-red-400 transition cursor-pointer"
+                            title="Remover 1 unidade"
+                          >
+                            -
+                          </button>
+                          <span className="font-mono text-white font-bold px-0.5">{item.stockCount}</span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setCatalogItems(prev => prev.map(c => c.id === item.id ? { ...c, stockCount: c.stockCount + 1 } : c))
+                            }}
+                            className="w-4 h-4 bg-[#0C0E0D] border border-[#232B27] rounded text-[#8BA58D] flex items-center justify-center text-[10px] font-bold hover:border-[#b7ff00]/50 hover:text-[#b7ff00] transition cursor-pointer"
+                            title="Adicionar 1 unidade"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Multimaterial & STL view badges */}
+                    {(item.filamentsUsed || item.suppliesUsed || item.stlFileName) && (
+                      <div className="bg-[#0C0E0D]/60 p-2 rounded-xl space-y-1.5 border border-[#232B27]/30">
+                        {item.filamentsUsed && item.filamentsUsed.length > 0 && (
+                          <div className="space-y-1">
+                            <span className="text-[8px] text-[#8BA58D] uppercase font-bold block">Filamentos Receita:</span>
+                            <div className="flex flex-wrap gap-1 text-[9px]">
+                              {item.filamentsUsed.map((f, idx) => {
+                                const st = filamentStocks.find(x => x.id === f.filamentStockId);
+                                const cStyle = st ? getHexColorByName(st.color) : null;
+                                return (
+                                  <span key={idx} className="bg-teal-500/10 text-teal-300 px-2 py-0.5 rounded border border-teal-500/20 font-mono flex items-center gap-1.5 inline-flex">
+                                    {cStyle && (
+                                      <span 
+                                        className="w-2 h-2 rounded-full inline-block shrink-0" 
+                                        style={{ 
+                                          backgroundColor: cStyle.bg, 
+                                          border: cStyle.bg === 'transparent' ? `1.2px solid ${cStyle.border}` : `1px solid ${cStyle.border}`
+                                        }} 
+                                      />
+                                    )}
+                                    {st ? `${st.type} ${st.color}` : 'Filamento'} ({f.weightGrams}g)
+                                  </span>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
+
+                        {item.suppliesUsed && item.suppliesUsed.length > 0 && (
+                          <div className="space-y-1">
+                            <span className="text-[8px] text-[#8BA58D] uppercase font-bold block">Insumos/Hardware:</span>
+                            <div className="flex flex-wrap gap-1 text-[9px]">
+                              {item.suppliesUsed.map((s, idx) => {
+                                const sup = suppliesStocks.find(x => x.id === s.supplyStockId);
+                                return (
+                                  <span key={idx} className="bg-amber-500/10 text-amber-300 px-1.5 py-0.5 rounded border border-amber-500/20 font-mono">
+                                    📦 {sup ? sup.name : 'Insumo'} ({s.quantity}x)
+                                  </span>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
+
+                        {item.stlFileName && (
+                          <div className="pt-1 flex items-center justify-between border-t border-[#232B27]/20">
+                            <span className="text-[9px] text-purple-300 font-bold flex items-center gap-1 truncate max-w-[150px]" title={item.stlFileName}>
+                              📐 {item.stlFileName}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                alert(`Arquivo CAD de impressão 3D "${item.stlFileName}" pronto para download! (${item.stlFileData || 'Binário'})`);
+                              }}
+                              className="text-[8px] bg-purple-500 hover:bg-purple-400 text-black px-1.5 py-0.5 rounded font-black uppercase tracking-wider transition cursor-pointer"
+                            >
+                              Baixar .STL
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="border-t border-[#232B27]/40 pt-3 flex items-center justify-between gap-4">
+                    <span className="text-sm font-black text-[#b7ff00] font-mono">
+                      R$ {item.defaultPrice.toFixed(2)}
+                    </span>
+
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        onClick={() => handleEditCatalogProduct(item)}
+                        className="text-amber-400 hover:text-amber-500 hover:bg-amber-500/10 p-1.5 rounded-lg transition"
+                        title="Editar Produto"
+                      >
+                        <Edit3 className="h-4 w-4" />
+                      </button>
+
+                      <button
+                        onClick={() => handleDeleteCatalogProduct(item.id)}
+                        className="text-red-400 hover:text-red-500 hover:bg-red-500/10 p-1.5 rounded-lg transition"
+                        title="Deletar Produto do Catálogo"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+
+        </div>
+      )}
+
+      {/* SUBTAB 3: DOUBLE SECTORS - RAW FILAMENTS AND CONSUMABLE SUPPLIES */}
+      {activeSubTab === 'STOCK' && (
+        <div className="space-y-6 animate-fade-in" id="stocks-physical-layout">
+          {/* Standardized subtab header */}
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Estoque</div>
+                <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">Físico</span>
+              </div>
+              <p className="text-xs text-[var(--brand-muted)]">Carretéis de filamento, insumos e hardware sincronizados em tempo real</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Filamentos Stocks */}
+          <div className="relative overflow-hidden bg-gradient-to-br from-[#161B19] via-[#121613] to-[#0E1210] border border-[#232B27] p-5 rounded-2xl space-y-4 shadow-[0_24px_60px_-30px_rgba(149,187,162,0.25)]">
+            <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-emerald-500/10 blur-3xl opacity-60" />
+            <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-white/5 pb-4">
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-emerald-500/10 ring-1 ring-inset ring-emerald-400/20 text-emerald-300">
+                  <Disc className="h-4 w-4" />
+                </div>
                 <div className="min-w-0">
                   <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-emerald-300/80">Filamentos</span>
                   <h3 className="text-[14px] font-bold tracking-[-0.01em] text-[#F1F4EE] truncate">Estoque de Carretéis</h3>
