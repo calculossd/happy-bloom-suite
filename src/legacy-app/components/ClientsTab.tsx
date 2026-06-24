@@ -833,6 +833,9 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
         phone: cPhone,
         email: cEmail,
         address: cAddress,
+        cep: cCep,
+        city: cCity,
+        state: cState,
         note: cNote,
         lastContactDate: parsedDate,
         stockCount: parsedStockCount,
@@ -845,6 +848,9 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
         phone: cPhone,
         email: cEmail,
         address: cAddress,
+        cep: cCep,
+        city: cCity,
+        state: cState,
         note: cNote,
         lastContactDate: parsedDate,
         stockCount: parsedStockCount,
@@ -857,6 +863,9 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
     setCPhone('');
     setCEmail('');
     setCAddress('');
+    setCCep('');
+    setCCity('');
+    setCState('');
     setCNote('');
     setCLastContactDate('');
     setCStockCount('0');
@@ -870,6 +879,9 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
     setCPhone(client.phone);
     setCEmail(client.email);
     setCAddress(client.address);
+    setCCep(client.cep || '');
+    setCCity(client.city || '');
+    setCState(client.state || '');
     setCNote(client.note || '');
     setCLastContactDate(client.lastContactDate ? new Date(client.lastContactDate).toISOString().split('T')[0] : '');
     setCStockCount(String(client.stockCount || 0));
