@@ -500,9 +500,11 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
                             ? 'bg-blue-500/15 text-blue-400'
                             : order.platform === 'TIKTOK_SHOP'
                             ? 'bg-cyan-500/15 text-rose-400 border border-rose-500/25'
+                            : order.platform === 'BALCAO'
+                            ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25'
                             : 'bg-yellow-500/15 text-yellow-300'
                         }`}>
-                          {order.platform.replace('_', ' ')}
+                          {order.platform === 'BALCAO' ? '🧑‍💼 BALCÃO' : order.platform.replace('_', ' ')}
                         </span>
                         <span className="text-[9px] font-mono text-[var(--brand-muted)]">Cód: {order.id}</span>
                         {!isItemImported && (
