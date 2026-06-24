@@ -1639,7 +1639,17 @@ export default function App() {
           ] as Array<{ section: string | null; items: Array<{ id: number; label: string; icon: any; badge?: number; onClick?: () => void }> }>).map((group, gi) => (
             <div key={gi} className="flex flex-col gap-0.5">
               {group.section && (
-                <div className="px-3 mb-1 text-[9px] uppercase tracking-[0.22em] text-[#b7ff00] font-semibold">
+                <div
+                  className="px-3 mb-1 text-[9px] uppercase tracking-[0.22em] font-semibold"
+                  style={{
+                    color:
+                      group.section === 'Principal' ? '#D4A017' :
+                      group.section === 'Operacional' ? '#3B82F6' :
+                      group.section === 'Marketing' ? '#8B5CF6' :
+                      group.section === 'Financeiro' ? '#22C55E' :
+                      '#b7ff00',
+                  }}
+                >
                   {group.section}
                 </div>
               )}
