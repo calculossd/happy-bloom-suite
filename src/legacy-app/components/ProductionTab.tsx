@@ -16,7 +16,8 @@ import {
   ClipboardList,
   PlayCircle,
   Camera,
-  Video
+  Video,
+  Wrench
 } from 'lucide-react';
 import { initialCatalogItems } from '../utils/initialData';
 import { PrinterCameraModal } from './PrinterCameraModal';
