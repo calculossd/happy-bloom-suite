@@ -18,6 +18,7 @@ import { SoldTab } from './components/SoldTab';
 import { OkLojaAssistant } from './components/OkLojaAssistant';
 import { ShowcaseView } from './components/ShowcaseView';
 import { PrintFlowTab } from './components/PrintFlowTab';
+import { PrinterQueueList } from './components/PrinterQueueList';
 import {
   PriceResearchTab, PreCheckTab, AgendaTab, ToolsTab, ModelsTab
 } from './components/NewTabs';
@@ -91,7 +92,8 @@ import {
   Calculator,
   BookOpen,
   TrendingUp,
-  Radar
+  Radar,
+  Printer as PrinterNavIcon
 } from 'lucide-react';
 
 // STUNNING 3D CUBE & PRINTER EXTENSION GEOMETRIC LOGO
@@ -1620,6 +1622,7 @@ export default function App() {
             {
               section: 'Operacional',
               items: [
+                { id: 16, label: 'Impressoras', icon: PrinterNavIcon },
                 { id: 12, label: 'Pré-check', icon: ClipboardCheck },
                 { id: 14, label: 'Sites', icon: Globe },
               ],
