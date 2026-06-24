@@ -279,6 +279,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
   const [formCreatedAt, setFormCreatedAt] = useState<string>('');
   const [formPaymentMethod, setFormPaymentMethod] = useState<'CONSIGNADO' | 'CARTÃO' | 'DINHEIRO' | 'OUTROS'>('DINHEIRO');
   const [formPaymentStatus, setFormPaymentStatus] = useState<'PAGO' | 'PENDENTE'>('PENDENTE');
+  const [formImageUrl, setFormImageUrl] = useState<string>('');
 
   const availableColors = filamentStocks
     .filter(f => f.type === formFilamentType)
