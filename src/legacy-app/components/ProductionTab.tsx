@@ -1083,6 +1083,18 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
               className={`group relative flex items-stretch gap-3 rounded-xl bg-gradient-to-br from-[#13181500] via-[#13181580] to-[#0F1310] border ${isLate ? 'border-red-500/60 shadow-[0_0_14px_rgba(239,68,68,0.18)]' : 'border-[#232B27] hover:border-[#3a4a40]'} px-3 py-2.5 transition-all duration-300 backdrop-blur-sm cursor-pointer hover:shadow-[0_4px_20px_rgba(0,0,0,0.4)]`}
             >
               <span aria-hidden className="absolute left-0 top-2 bottom-2 w-[3px] rounded-full" style={{ background: color, boxShadow: `0 0 8px ${color}80` }} />
+              {order.imageUrl ? (
+                <img
+                  src={order.imageUrl}
+                  alt={order.itemName}
+                  className="shrink-0 w-12 h-12 rounded-lg object-cover border border-[#232B27] bg-black/40"
+                  loading="lazy"
+                />
+              ) : (
+                <div className="shrink-0 w-12 h-12 rounded-lg border border-dashed border-[#232B27] bg-black/30 flex items-center justify-center text-[9px] text-[#3a4640] font-bold uppercase tracking-wider">
+                  3D
+                </div>
+              )}
               <div className="flex-1 min-w-0 pl-1.5">
                 <div className="flex items-center gap-2 min-w-0">
                   <span className="truncate text-[13px] font-semibold text-[#F1F4EE] tracking-tight">{order.itemName}</span>
