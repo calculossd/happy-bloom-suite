@@ -1195,6 +1195,22 @@ export function Print3DPanel({
   catalog.forEach((c: any) => {
     if (c?.name) imageByName[String(c.name).toUpperCase().trim()] = c.imageUrl;
   });
+  // Fallback: search images from clients' productsStock entries
+  clients.forEach((cli: any) => {
+    (cli?.productsStock || []).forEach((p: any) => {
+      const key = String(p?.name || "").toUpperCase().trim();
+      if (key && !imageByName[key] && (p?.imageUrl || p?.image)) {
+        imageByName[key] = p.imageUrl || p.image;
+      }
+    });
+  });
+  // Fallback: image from any order with that itemName
+  orders.forEach((o: any) => {
+    const key = String(o?.itemName || "").toUpperCase().trim();
+    if (key && !imageByName[key] && (o?.imageUrl || o?.image)) {
+      imageByName[key] = o.imageUrl || o.image;
+    }
+  });
   const prevMonthStart = new Date(today.getFullYear(), today.getMonth() - 1, 1).getTime();
   const salesThis: Record<string, number> = {};
   const salesPrev: Record<string, number> = {};
