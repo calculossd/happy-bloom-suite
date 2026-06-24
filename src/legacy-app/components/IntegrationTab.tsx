@@ -116,9 +116,10 @@ interface IntegrationTabProps {
   onImportOrder: (externalOrder: ExternalPlatformOrder) => void;
   importedExternalIds: string[];
   orders?: any[];
+  onUpdateOrder?: (id: number, updated: any) => void;
 }
 
-export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, importedExternalIds, orders = [] }) => {
+export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, importedExternalIds, orders = [], onUpdateOrder }) => {
   const [connections, setConnections] = useState<PlatformConnection[]>(() => {
     const defaultConnections = [
       { platformName: 'Mercado Livre', storeName: 'Minha Loja 3D ML', token: 'MLB-12739343', isConnected: true, clientId: 'ML-9382', clientSecret: '••••••••••' },
