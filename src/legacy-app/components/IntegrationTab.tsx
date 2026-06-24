@@ -634,6 +634,75 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
           </div>
         </div>
 
+        {/* Balcão sales — separated from online stream */}
+        <div className="bg-[#0C0E0D] border border-emerald-500/20 rounded-2xl p-5 space-y-4" id="balcao-orders-list">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.14em] text-emerald-300 font-sans leading-none">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse inline-block shadow-[0_0_10px_#10b981]" />
+              <span>Vendas no Balcão ({visibleBalcaoOrders.length})</span>
+            </div>
+            <span className="text-[9px] text-[var(--brand-muted)] font-mono">Pedidos manuais (presenciais)</span>
+          </div>
+
+          <div className="space-y-2 max-h-[400px] overflow-y-auto pr-1">
+            {visibleBalcaoOrders.length === 0 ? (
+              <div className="p-6 bg-[var(--brand-card)]/20 border border-emerald-500/15 border-dashed rounded-2xl text-xs text-[var(--brand-muted)] italic text-center space-y-2">
+                <CheckCircle className="h-6 w-6 text-emerald-500/40 mx-auto" />
+                <p>Nenhuma venda no balcão registrada.</p>
+              </div>
+            ) : (
+              [...visibleBalcaoOrders].sort((a, b) => a.createdAt - b.createdAt).map((order) => {
+                const orderTime = order.createdAt || Date.now();
+                const elapsedMs = Date.now() - orderTime;
+                const hrsVal = Math.floor(elapsedMs / (1000 * 3600));
+                const minsVal = Math.floor((elapsedMs % (1000 * 3600)) / (1000 * 60));
+                const elapsedStr = hrsVal > 0 ? `${hrsVal}h ${minsVal}m atrás` : `${minsVal}m atrás`;
+                const dateObj = new Date(orderTime);
+                const formatTime = dateObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                const formatDate = dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+                return (
+                  <div
+                    key={order.id}
+                    className="group relative overflow-hidden rounded-xl border border-emerald-500/25 bg-gradient-to-r from-emerald-950/30 via-[#0B0F0D] to-[#0A0C0B] hover:border-emerald-400/50 hover:shadow-[0_8px_24px_-12px_rgba(16,185,129,0.4)] transition-all duration-300"
+                  >
+                    <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-emerald-400 via-emerald-500 to-emerald-600 shadow-[0_0_10px_rgba(16,185,129,0.6)]" />
+                    <div className="flex items-center gap-3 px-4 py-2.5 pl-5">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <span className="text-[8.5px] font-black px-1.5 py-[1px] rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 tracking-wider">
+                            BALCÃO
+                          </span>
+                          <span className="text-[8.5px] font-mono text-emerald-400/50">#{order.id}</span>
+                          <span className="text-[8.5px] font-mono text-zinc-500">· {formatDate} {formatTime}</span>
+                          <span className="text-[8.5px] font-mono text-zinc-500 hidden sm:inline">· {elapsedStr}</span>
+                        </div>
+                        <div className="flex items-baseline gap-2 flex-wrap">
+                          <h4 className="text-[13px] font-bold text-white tracking-tight truncate">{order.itemName}</h4>
+                          <span className="text-[10px] text-zinc-400 truncate">
+                            <span className="text-zinc-500">·</span> {order.clientName}
+                            <span className="text-zinc-600 mx-1">·</span> {order.weightGrams}g
+                            <span className="text-zinc-600 mx-1">·</span> {order.printTimeHours}h
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 shrink-0">
+                        <div className="text-right leading-tight">
+                          <div className="text-[8px] uppercase tracking-widest text-emerald-400/60 font-bold">Total</div>
+                          <div className="text-[15px] font-black text-emerald-300 font-mono tabular-nums">R$ {order.priceCharged.toFixed(2)}</div>
+                        </div>
+                        <span className="flex items-center gap-1 text-[9.5px] text-emerald-300 font-bold bg-emerald-500/15 border border-emerald-500/40 px-2 py-1 rounded-md">
+                          <CheckCircle className="h-3 w-3" />
+                          Pago
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+
       </div>
 
       {/* INTERACTIVE EXPLANATION POPUP (Help Modal) */}
