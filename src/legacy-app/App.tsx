@@ -1278,8 +1278,8 @@ export default function App() {
         };
       case 6:
         return {
-          title: "Histórico",
-          subtitle: "Vendas concluídas, métricas e relatórios de pedidos entregues",
+          title: "Histórico de Vendas",
+          subtitle: "Ordens de produção entregues e faturadas com sucesso",
         };
       case 7:  return { title: "Pesquisa de Preços", subtitle: "Compare preços entre marketplaces e fornecedores" };
       case 8:  return { title: "Stls",        subtitle: "Biblioteca de produtos com material, tempo e preço" };
@@ -1858,23 +1858,32 @@ export default function App() {
           });
           const formattedTime = currentTime.toLocaleTimeString('pt-BR');
 
+          const deliveredCount = orders.filter(o => o.status === 'DELIVERED').length;
+          const headerBadge = currentTab === 6
+            ? `${deliveredCount} Concluídas`
+            : null;
+
           return (
             <div
               className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]"
               id="view-page-header"
             >
-              <div className="flex items-center gap-3 min-w-0">
-                <span className="inline-block h-2 w-2 rounded-full bg-[#b7ff00] shadow-[0_0_8px_rgba(183,255,0,0.8)]" />
-                <div className="min-w-0">
-                  <h2 className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans leading-none">
+              <div className="space-y-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">
                     {headerInfo.title}
-                  </h2>
-                  {headerInfo.subtitle && (
-                    <p className="text-[10px] sm:text-[11px] text-[var(--brand-muted)] max-w-xl mt-0.5">
-                      {headerInfo.subtitle}
-                    </p>
+                  </div>
+                  {headerBadge && (
+                    <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">
+                      {headerBadge}
+                    </span>
                   )}
                 </div>
+                {headerInfo.subtitle && (
+                  <p className="text-xs text-[var(--brand-muted)]">
+                    {headerInfo.subtitle}
+                  </p>
+                )}
               </div>
             </div>
           );

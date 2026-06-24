@@ -191,18 +191,8 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients }) => {
 
   return (
     <div className="space-y-6" id="sold-orders-tab-container">
-      {/* Header Bento Title */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm" id="sold-tab-header">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-          <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Histórico de Vendas</div>
-            <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">
-              {soldOrders.length} Concluídas
-            </span>
-          </div>
-          <p className="text-xs text-[var(--brand-muted)]">Ordens de produção entregues e faturadas com sucesso</p>
-        </div>
-
+      {/* Export action */}
+      <div className="flex justify-end" id="sold-tab-actions">
         <button
           onClick={handleExportPDFReport}
           disabled={filteredSold.length === 0}
