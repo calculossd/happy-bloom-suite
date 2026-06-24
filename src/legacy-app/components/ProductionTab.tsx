@@ -417,6 +417,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
   const handleFastStatusAdvance = (order: PrintOrder, nextStatus: string) => {
     if (nextStatus === 'PRINTING') {
       const idlePrinters = printers.filter(p => p.status === 'IDLE');
+      const availablePrinters = printers.filter(p => p.status !== 'MAINTENANCE');
       if (idlePrinters.length > 0) {
         const defaultPrinter = idlePrinters[0];
         onUpdateOrder(order.id, {
@@ -428,8 +429,8 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
         onUpdatePrinter(defaultPrinter.id, { status: 'PRINTING', printProgress: 5 });
       } else {
         // Sem impressora ociosa: a fila de produção manda. Atribui a primeira impressora
-        // existente (se houver) e segue para PRINTING — sem modal de alocação.
-        const fallbackPrinter = printers[0];
+        // existente que NÃO esteja em manutenção e segue para PRINTING — sem modal de alocação.
+        const fallbackPrinter = availablePrinters[0];
         onUpdateOrder(order.id, {
           status: 'PRINTING',
           assignedPrinterId: fallbackPrinter ? fallbackPrinter.id : null,
