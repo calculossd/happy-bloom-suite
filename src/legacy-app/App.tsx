@@ -1889,7 +1889,7 @@ export default function App() {
                   <div aria-hidden className="pointer-events-none absolute -bottom-24 -right-16 h-56 w-56 rounded-full bg-amber-400/10 blur-3xl opacity-60" />
                 </>
               )}
-              <div className="space-y-1 min-w-0">
+              <div className="relative z-10 space-y-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">
                     {headerInfo.title}
