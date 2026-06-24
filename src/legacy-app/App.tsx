@@ -90,7 +90,8 @@ import {
   Globe,
   Calculator,
   BookOpen,
-  TrendingUp
+  TrendingUp,
+  Radar
 } from 'lucide-react';
 
 // STUNNING 3D CUBE & PRINTER EXTENSION GEOMETRIC LOGO
