@@ -1862,7 +1862,9 @@ export default function App() {
           const deliveredCount = orders.filter(o => o.status === 'DELIVERED').length;
           const headerBadge = currentTab === 6
             ? `${deliveredCount} Concluídas`
-            : null;
+            : currentTab === 2
+              ? `${clients.length} Cadastrados`
+              : null;
           const flatHeader = currentTab === 1 || currentTab === 2 || currentTab === 3 || currentTab === 6;
 
           return (
