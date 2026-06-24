@@ -487,8 +487,9 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
     { key: 'WAITING', label: 'Aguard. Arq' },
     { key: 'QUEUE', label: 'NaFila' },
     { key: 'PRINTING', label: 'Imprimindo' },
-    { key: 'POST_PROCESS', label: 'Pós-Proc' },
-    { key: 'READY', label: 'Pronto / Emb' }
+    { key: 'POST_PROCESS', label: 'Acabamento' },
+    { key: 'PACKING', label: 'Embalando' },
+    { key: 'READY', label: 'Pronto' }
   ];
 
   const filteredOrders = orders.filter(order => {
