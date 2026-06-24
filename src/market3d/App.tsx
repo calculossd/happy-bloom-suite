@@ -832,24 +832,25 @@ export default function App() {
             </div>
 
             {/* Quick action Scanner Buttons */}
-            <div className="grid grid-cols-2 gap-2 text-xs">
+            <div className="grid grid-cols-2 gap-3 text-xs">
               <button
                 onClick={() => handleLiveAnalysis(searchQuery)}
                 disabled={isLoading || !searchQuery.trim()}
-                className="w-full bg-black/40 hover:bg-[#b7ff00]/5 disabled:bg-slate-900 border border-[#b7ff00]/25 hover:border-[#b7ff00]/50 disabled:border-slate-800 disabled:text-slate-600 text-[#b7ff00] font-bold uppercase tracking-wider text-[11px] py-2 px-3 rounded-lg transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer"
+                className="group relative overflow-hidden w-full bg-gradient-to-br from-white/[0.04] to-white/[0.01] hover:from-[#b7ff00]/10 hover:to-[#b7ff00]/[0.02] disabled:opacity-40 disabled:cursor-not-allowed border border-white/10 hover:border-[#b7ff00]/40 text-[#e7ffb0] hover:text-[#b7ff00] font-semibold uppercase tracking-[0.14em] text-[10.5px] py-2.5 px-4 rounded-xl shadow-[0_8px_24px_-16px_rgba(183,255,0,0.4)] hover:shadow-[0_12px_30px_-12px_rgba(183,255,0,0.45)] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] flex items-center justify-center gap-2 cursor-pointer backdrop-blur-xl"
               >
-                <Search className="w-3.5 h-3.5" />
+                <Search className="w-3.5 h-3.5 transition-transform duration-300 group-hover:scale-110" />
                 <span>Análise de Banco Local</span>
               </button>
 
               <button
                 onClick={() => handleRealtimeTrack(searchQuery)}
                 disabled={isLoading || !searchQuery.trim()}
-                className="w-full bg-[#b7ff00] hover:brightness-110 disabled:bg-slate-800 disabled:text-slate-500 text-black font-bold uppercase tracking-wider text-[11px] py-2 px-3 rounded-lg shadow-[0_0_18px_-6px_rgba(183,255,0,0.7)] transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer"
+                className="group relative overflow-hidden w-full bg-gradient-to-br from-[#b7ff00] via-[#a8f000] to-[#9ad900] hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed text-black font-bold uppercase tracking-[0.14em] text-[10.5px] py-2.5 px-4 rounded-xl shadow-[0_10px_28px_-10px_rgba(183,255,0,0.7),inset_0_1px_0_rgba(255,255,255,0.4)] hover:shadow-[0_14px_36px_-10px_rgba(183,255,0,0.85),inset_0_1px_0_rgba(255,255,255,0.5)] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer"
                 title="Consulte o mercado real na Shopee, Jina, Tavily e Groq em Tempo Real"
               >
-                <Sparkles className="w-3.5 h-3.5 animate-pulse" />
-                <span>Rastreamento em Tempo Real</span>
+                <span aria-hidden className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                <Sparkles className="w-3.5 h-3.5 animate-pulse relative" />
+                <span className="relative">Rastreamento em Tempo Real</span>
               </button>
             </div>
           </div>
