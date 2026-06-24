@@ -1569,44 +1569,6 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-1">
                       <label className="block text-[#8BA58D] font-extrabold">Quantidade</label>
-                  </div>
-                  <div className="space-y-1">
-                    <label className="block text-[#8BA58D] font-extrabold">Imagem do Produto</label>
-                    <div className="flex items-center gap-3">
-                      <div className="h-16 w-16 rounded-lg overflow-hidden border border-[#232B27] bg-[#0C0E0D] flex items-center justify-center shrink-0">
-                        {formImageUrl ? (
-                          <img src={formImageUrl} alt="produto" className="h-full w-full object-cover" />
-                        ) : (
-                          <span className="text-[10px] text-[#8BA58D]/60 font-mono">SEM IMG</span>
-                        )}
-                      </div>
-                      <div className="flex-1 space-y-2">
-                        <input
-                          type="text"
-                          placeholder="URL da imagem (https://...)"
-                          value={formImageUrl}
-                          onChange={(e) => setFormImageUrl(e.target.value)}
-                          className="w-full bg-[#0C0E0D] border border-[#232B27] rounded-lg py-2 px-3 text-white text-xs font-mono focus:outline-none focus:border-[#95BBA2]"
-                        />
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (!file) return;
-                            const reader = new FileReader();
-                            reader.onload = () => setFormImageUrl(reader.result as string);
-                            reader.readAsDataURL(file);
-                          }}
-                          className="block w-full text-[10px] text-[#8BA58D] file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-[10px] file:bg-[#232B27] file:text-[#F1F4EE]"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-1">
-                      <label className="block text-[#8BA58D] font-extrabold">Quantidade (Removed Dup)</label>
                       <input
                         type="number"
                         min="1"
