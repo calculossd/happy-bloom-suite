@@ -525,28 +525,52 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
       }
 
       const region = prospectRegion.trim();
-      const tavilyQuery = `${query} em ${region} telefone whatsapp endereço site:.br`;
+      const baseQ = query;
+      const tavilyQueries = [
+        `${baseQ} em ${region} telefone whatsapp endereço`,
+        `lojas de ${baseQ} ${region} contato site:.br`,
+        `${baseQ} ${region} endereço telefone`,
+        `${baseQ} próximo a ${region}`,
+      ];
 
-      const tavilyRes = await fetch('https://api.tavily.com/search', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          api_key: tavilyKey,
-          query: tavilyQuery,
-          search_depth: 'advanced',
-          include_answer: false,
-          include_raw_content: true,
-          max_results: 12,
-          country: 'brazil',
-        }),
-      });
+      const runTavily = async (q: string) => {
+        try {
+          const r = await fetch('https://api.tavily.com/search', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              api_key: tavilyKey,
+              query: q,
+              search_depth: 'advanced',
+              include_answer: false,
+              include_raw_content: true,
+              max_results: 20,
+              country: 'brazil',
+            }),
+          });
+          if (!r.ok) return [];
+          const j = await r.json();
+          return Array.isArray(j?.results) ? j.results : [];
+        } catch { return []; }
+      };
 
-      if (!tavilyRes.ok) {
-        throw new Error(`Tavily falhou (${tavilyRes.status})`);
+      const buckets = await Promise.all(tavilyQueries.map(runTavily));
+      const seen = new Set<string>();
+      const results: any[] = [];
+      for (const bucket of buckets) {
+        for (const item of bucket) {
+          const url: string = String(item?.url || '');
+          if (!url) continue;
+          const key = url.split('?')[0].toLowerCase();
+          if (seen.has(key)) continue;
+          seen.add(key);
+          results.push(item);
+        }
       }
 
-      const tavilyData = await tavilyRes.json();
-      const results: any[] = Array.isArray(tavilyData?.results) ? tavilyData.results : [];
+      if (results.length === 0) {
+        throw new Error('Tavily não retornou resultados.');
+      }
 
       // Regex helpers
       const phoneRx = /\(?\b\d{2}\)?[\s-]?9?\d{4}[\s-]?\d{4}\b/;
@@ -565,14 +589,18 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
       const ddd = guessDDD(region);
       const mapped: ProspectLead[] = [];
 
-      for (let idx = 0; idx < results.length; idx++) {
+      const MAX_LEADS = 40;
+      let jinaBudget = 12; // limite de fetches Jina para não travar
+
+      for (let idx = 0; idx < results.length && mapped.length < MAX_LEADS; idx++) {
         const item = results[idx];
         const haystackParts = [item?.raw_content, item?.content, item?.title].filter(Boolean);
         let haystack = haystackParts.join('\n');
         let phoneMatch = haystack.match(phoneRx);
         let addrMatch = haystack.match(addressRx);
 
-        if ((!phoneMatch || !addrMatch) && item?.url) {
+        if ((!phoneMatch || !addrMatch) && item?.url && jinaBudget > 0) {
+          jinaBudget--;
           const extra = await enrichWithJina(item.url);
           if (extra) {
             haystack = `${haystack}\n${extra}`;
@@ -581,8 +609,6 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
           }
         }
 
-        if (!phoneMatch) continue; // exige telefone real
-
         const name = String(item?.title || '')
           .replace(/\s+[-–|]\s+.*$/, '')
           .replace(/\s+/g, ' ')
@@ -590,12 +616,15 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
           .slice(0, 80) || `Lead ${idx + 1}`;
 
         const address = (addrMatch?.[0] || `${region}`).trim();
-        const phoneDigits = phoneMatch[0].replace(/\D/g, '');
-        const ddTel = phoneDigits.length >= 10 ? phoneDigits.slice(0, 2) : ddd;
-        const rest = phoneDigits.slice(-9);
-        const phone = rest.length === 9
-          ? `(${ddTel}) ${rest.slice(0, 5)}-${rest.slice(5)}`
-          : `(${ddTel}) ${rest.slice(0, 4)}-${rest.slice(4)}`;
+        let phone = `(${ddd}) — buscar`;
+        if (phoneMatch) {
+          const phoneDigits = phoneMatch[0].replace(/\D/g, '');
+          const ddTel = phoneDigits.length >= 10 ? phoneDigits.slice(0, 2) : ddd;
+          const rest = phoneDigits.slice(-9);
+          phone = rest.length === 9
+            ? `(${ddTel}) ${rest.slice(0, 5)}-${rest.slice(5)}`
+            : `(${ddTel}) ${rest.slice(0, 4)}-${rest.slice(4)}`;
+        }
 
         mapped.push({
           id: `lead-tavily-${Date.now()}-${idx}`,
@@ -606,7 +635,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
           pitch: getCategoryPitch(resolvedCategory || 'Geek'),
           status: 'PROSPECT',
           timelineChecklist: { s1: false, s2: false, s3: false, s4: false },
-          note: `Capturado via Tavily${jinaKey ? ' + Jina Reader' : ''} — ${item?.url || ''}`,
+          note: `Capturado via Tavily${jinaKey ? ' + Jina Reader' : ''}${phoneMatch ? '' : ' (telefone não detectado — abrir link)'} — ${item?.url || ''}`,
         });
       }
 
