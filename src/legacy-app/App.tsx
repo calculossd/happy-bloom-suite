@@ -2032,7 +2032,23 @@ export default function App() {
           />
         )}
 
-        {currentTab !== 0 && (
+        {currentTab === 2 && (
+          <ClientsTab
+            clients={clients}
+            printers={printers}
+            orders={orders}
+            onAddClient={handleAddClient}
+            onUpdateClient={handleUpdateClient}
+            onDeleteClient={handleDeleteClient}
+            onAddPrinter={handleAddPrinter}
+            onUpdatePrinter={handleUpdatePrinter}
+            onDeletePrinter={handleDeletePrinter}
+            onAddOrder={handleAddOrder}
+            viewMode="clients"
+          />
+        )}
+
+        {currentTab !== 0 && currentTab !== 2 && (
           <div className="rounded-2xl p-4 sm:p-6 bg-[rgba(18,18,20,0.7)] border border-white/[0.05] shadow-sm">
         {currentTab === 1 && (
           <>
@@ -2056,22 +2072,6 @@ export default function App() {
               viewMode="orders"
             />
           </>
-        )}
-
-        {currentTab === 2 && (
-          <ClientsTab
-            clients={clients}
-            printers={printers}
-            orders={orders}
-            onAddClient={handleAddClient}
-            onUpdateClient={handleUpdateClient}
-            onDeleteClient={handleDeleteClient}
-            onAddPrinter={handleAddPrinter}
-            onUpdatePrinter={handleUpdatePrinter}
-            onDeletePrinter={handleDeletePrinter}
-            onAddOrder={handleAddOrder}
-            viewMode="clients"
-          />
         )}
 
         {currentTab === 3 && (
