@@ -525,10 +525,19 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
                           <div className="text-[8px] uppercase tracking-widest text-emerald-400/60 font-bold">Total</div>
                           <div className="text-[15px] font-black text-emerald-300 font-mono tabular-nums">R$ {order.priceCharged.toFixed(2)}</div>
                         </div>
-                        <span className="flex items-center gap-1 text-[9.5px] text-emerald-300 font-bold bg-emerald-500/15 border border-emerald-500/40 px-2 py-1 rounded-md">
-                          <CheckCircle className="h-3 w-3" />
-                          Pago
-                        </span>
+                        <button
+                          onClick={() => {
+                            const numericId = parseInt(String(order.id).replace('BALCAO-', ''), 10);
+                            if (onUpdateOrder && !isNaN(numericId)) {
+                              onUpdateOrder(numericId, { status: 'QUEUE', printingProgress: 0 });
+                            }
+                          }}
+                          className="flex items-center gap-1 text-[10px] text-black font-black bg-emerald-400 hover:bg-emerald-300 border border-emerald-300 px-3 py-1.5 rounded-md shadow-[0_4px_14px_-4px_rgba(16,185,129,0.6)] hover:shadow-[0_6px_20px_-4px_rgba(16,185,129,0.8)] transition-all duration-200 cursor-pointer"
+                          title="Aceitar pedido e enviar para Produção"
+                        >
+                          <CheckCircle className="h-3.5 w-3.5" />
+                          ACEITAR
+                        </button>
                       </div>
                     </div>
                   </div>
