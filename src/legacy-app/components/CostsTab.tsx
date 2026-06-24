@@ -833,6 +833,12 @@ export const CostsTab: React.FC<CostsTabProps> = ({
     localStorage.setItem('bambuzau_local_catalog_production', JSON.stringify(catalogItems));
   }, [catalogItems]);
 
+  useEffect(() => {
+    const handler = () => { setEditingProduct(null); setShowAddProductManualForm(true); };
+    window.addEventListener('open-new-product', handler);
+    return () => window.removeEventListener('open-new-product', handler);
+  });
+
   // Filament Search Store list
   const [searchQuery, setSearchQuery] = useState('PLA');
   const [searchedOffers, setSearchedOffers] = useState<any[]>(staticFilamentOffers.PLA);
@@ -2525,17 +2531,6 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       {/* SUBTAB 3: DOUBLE SECTORS - RAW FILAMENTS AND CONSUMABLE SUPPLIES */}
       {activeSubTab === 'STOCK' && (
         <div className="space-y-6 animate-fade-in" id="stocks-physical-layout">
-          {/* Action: novo produto */}
-          <div className="flex justify-end">
-            <button
-              onClick={() => { setEditingProduct(null); setShowAddProductManualForm(true); }}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#b7ff00]/30 bg-[#b7ff00]/15 px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#b7ff00] transition hover:bg-[#b7ff00]/25 hover:border-[#b7ff00]/50"
-              id="btn_open_product_stock_form"
-            >
-              <Plus className="h-4 w-4" />
-              Novo Produto
-            </button>
-          </div>
           {showAddProductManualForm && (
             <form onSubmit={handleSaveManualProduct} className="p-5 bg-[#151917] border border-[#232B27] rounded-2xl space-y-4 animate-fade-in" id="manual_catalog_product_form">
               <div className="flex items-center justify-between border-b border-[#232B27]/40 pb-2">

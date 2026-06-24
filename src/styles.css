@@ -988,6 +988,9 @@ input, select, textarea {
 #clients_tab_container [id="clients-catalog"],
 #clients_tab_container [id="printers-catalog"],
 #clients_tab_container [id="crm-b2b-leads-section"],
+#costs_tab_container .glow-card,
+#costs_tab_container > div[class*="bg-[#151917]"],
+#costs_tab_container div[class*="bg-[#0a0d0c]"],
 #sold-orders-tab-container .glow-card {
   background-color: transparent !important;
   background-image: linear-gradient(135deg, rgba(var(--tab-accent), 0.04), rgba(10, 12, 16, 0.9)) !important;
