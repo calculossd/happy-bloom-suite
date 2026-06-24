@@ -370,6 +370,7 @@ export default function App() {
   const openCostsSubtab = (sub: 'CALC' | 'CATALOG' | 'STOCK' | 'SHOP' | 'QUOTE' | 'AI') => {
     try { localStorage.setItem('bambuzau_costs_subtab_override', sub); } catch {}
     setCurrentTab(4);
+    setCostsSubTab(sub);
     setSidebarOpen(false);
     try {
       window.dispatchEvent(new CustomEvent('costs_set_subtab', { detail: sub }));
