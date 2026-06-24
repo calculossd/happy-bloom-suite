@@ -424,7 +424,14 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
           printerName: defaultPrinter.name,
           printingProgress: 0.05
         });
+        onUpdatePrinter(defaultPrinter.id, { status: 'PRINTING', printProgress: 5 });
       } else {
+        // No idle printer — still move the order to PRINTING so it shows in "Fila Imprimindo".
+        // User can pick a printer afterwards via the quick allocation modal.
+        onUpdateOrder(order.id, {
+          status: 'PRINTING',
+          printingProgress: 0.05,
+        });
         setQuickPrintOrder(order);
       }
     } else {
@@ -1104,8 +1111,8 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
         };
 
         const queues = [
-          { key: 'WAITING',  title: 'Fila Aguardando Aceite', color: '#eab308', subtitle: 'Pendentes de aprovação, arquivo ou pagamento', list: filteredOrders.filter(o => o.status === 'WAITING' || o.status === 'QUEUE') },
-          { key: 'PRINT',    title: 'Fila Imprimindo',        color: '#95BBA2', subtitle: 'Pedidos em impressão (% ao vivo da impressora)', list: filteredOrders.filter(o => o.status === 'PRINTING') },
+          { key: 'WAITING',  title: 'Fila Aguardando Aceite', color: '#F1F4EE', subtitle: 'Pendentes de aprovação, arquivo ou pagamento', list: filteredOrders.filter(o => o.status === 'WAITING' || o.status === 'QUEUE') },
+          { key: 'PRINT',    title: 'Fila Imprimindo',        color: '#22c55e', subtitle: 'Pedidos em impressão (% ao vivo da impressora)', list: filteredOrders.filter(o => o.status === 'PRINTING') },
           { key: 'FINISH',   title: 'Fila de Acabamento',     color: '#f59e0b', subtitle: 'Pós-processamento e finalização',           list: filteredOrders.filter(o => o.status === 'POST_PROCESS') },
           { key: 'PACKING',  title: 'Fila de Embalando',      color: '#a855f7', subtitle: 'Embalagem antes da entrega',                list: filteredOrders.filter(o => o.status === 'PACKING') },
           { key: 'READY',    title: 'Prontos para Entrega',   color: '#3b82f6', subtitle: 'Aguardando retirada / envio',               list: filteredOrders.filter(o => o.status === 'READY') },
