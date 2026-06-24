@@ -738,6 +738,51 @@ export const CostsTab: React.FC<CostsTabProps> = ({
   const [manualStlFileName, setManualStlFileName] = useState('');
   const [manualStlFileData, setManualStlFileData] = useState('');
 
+  const openManualProductForm = React.useCallback(() => {
+    try {
+      (window as any).__pendingOpenNewOrder = false;
+      (window as any).__pendingOpenNewProduct = false;
+      localStorage.removeItem('bambuzau_open_product_form_pending');
+    } catch {}
+    setEditingProduct(null);
+    setActiveSubTab('STOCK');
+    setManualProdName('');
+    setManualProdCode('');
+    setManualProdMaterial('PLA');
+    setManualProdColor('Multicor');
+    setManualProdWeight(150);
+    setManualProdTime(5.0);
+    setManualProdPrice(50);
+    setManualProdStock(4);
+    setManualProdMinStock(1);
+    setManualProdImage('');
+    setManualProdFilaments([]);
+    setManualProdSupplies([]);
+    setManualStlFileName('');
+    setManualStlFileData('');
+    setShowAddProductManualForm(true);
+
+    window.setTimeout(() => {
+      const el = document.getElementById('manual_catalog_product_form');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
+  }, []);
+
+  React.useEffect(() => {
+    const handler = () => openManualProductForm();
+    window.addEventListener('open-new-product', handler);
+    let hasPendingProductOpen = false;
+    try {
+      hasPendingProductOpen = Boolean((window as any).__pendingOpenNewProduct) || localStorage.getItem('bambuzau_open_product_form_pending') === '1';
+    } catch {
+      hasPendingProductOpen = Boolean((window as any).__pendingOpenNewProduct);
+    }
+    if (hasPendingProductOpen) {
+      window.setTimeout(handler, 0);
+    }
+    return () => window.removeEventListener('open-new-product', handler);
+  }, [openManualProductForm]);
+
   // React state & handlers to support custom base64 image uploading and stock inventory pictures selection
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, imageSetter: (url: string) => void) => {
     const file = e.target.files?.[0];
@@ -3092,7 +3137,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                 </div>
               </div>
               <button
-                onClick={() => { setEditingProduct(null); setShowAddProductManualForm(!showAddProductManualForm); }}
+                onClick={openManualProductForm}
                 className="shrink-0 inline-flex items-center gap-1.5 rounded-xl border border-[#b7ff00]/30 bg-[#b7ff00]/15 px-3.5 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-[#b7ff00] transition-all duration-300 hover:border-[#b7ff00]/50 hover:bg-[#b7ff00]/25 active:scale-[0.97]"
                 id="btn-trigger-product-stock-form"
               >

@@ -383,6 +383,24 @@ export default function App() {
       window.dispatchEvent(new CustomEvent('costs_set_subtab', { detail: sub }));
     } catch {}
   };
+
+  const openNewProductForm = () => {
+    try {
+      (window as any).__pendingOpenNewOrder = false;
+      (window as any).__pendingOpenNewProduct = true;
+      localStorage.setItem('bambuzau_costs_subtab_override', 'STOCK');
+      localStorage.setItem('bambuzau_open_product_form_pending', '1');
+    } catch {}
+    setCurrentTab(4);
+    setCostsSubTab('STOCK');
+    setSidebarOpen(false);
+    window.setTimeout(() => {
+      try {
+        window.dispatchEvent(new CustomEvent('costs_set_subtab', { detail: 'STOCK' }));
+        window.dispatchEvent(new CustomEvent('open-new-product'));
+      } catch {}
+    }, 80);
+  };
   const [dismissedPriceAlert, setDismissedPriceAlert] = useState(false);
   const [dismissedStockAlert, setDismissedStockAlert] = useState(false);
 
@@ -1934,7 +1952,7 @@ export default function App() {
               )}
               {currentTab === 4 && costsSubTab !== 'CATALOG' && costsSubTab !== 'AI' && costsSubTab !== 'SHOP' && (
                 <button
-                  onClick={() => window.dispatchEvent(new CustomEvent('open-new-product'))}
+                  onClick={openNewProductForm}
                   className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#b7ff00]/30 bg-[#b7ff00]/15 px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#b7ff00] transition hover:bg-[#b7ff00]/25 hover:border-[#b7ff00]/50 shrink-0"
                   id="btn_open_product_stock_form_header"
                 >
