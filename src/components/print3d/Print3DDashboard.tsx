@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import "leaflet/dist/leaflet.css";
 import {
   LayoutDashboard, ShoppingCart, FileText, Users, Package, Printer as PrinterIcon,
   ListOrdered, Radio, Box, Layers, Wrench, Truck, Activity, Wallet, Receipt,
@@ -343,14 +344,6 @@ function ClientsMap({ clients = [] }: { clients?: any[] }) {
     let cancelled = false;
     (async () => {
       const L = (await import("leaflet")).default;
-      // CSS via CDN (Tailwind v4 disallows remote @import)
-      if (!document.getElementById("leaflet-css")) {
-        const link = document.createElement("link");
-        link.id = "leaflet-css";
-        link.rel = "stylesheet";
-        link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
-        document.head.appendChild(link);
-      }
       if (cancelled || !ref.current || mapRef.current) return;
       const map = L.map(ref.current, {
         center: [-14.235, -51.9253], zoom: 4, zoomControl: true, attributionControl: false,
@@ -429,7 +422,7 @@ function ClientsMap({ clients = [] }: { clients?: any[] }) {
     return () => { cancelled = true; };
   }, [ready, clients]);
 
-  return <div ref={ref} className="h-full w-full min-h-[300px] rounded-lg overflow-hidden border border-white/[0.05]" />;
+  return <div ref={ref} className="relative z-10 h-full w-full min-h-[420px] overflow-hidden" />;
 }
 
 /* ---------- Live printers ---------- */
@@ -1144,18 +1137,20 @@ export function Print3DPanel({
             <FinanceSummary revenue={monthRevenue} expense={monthExpenses} profit={monthProfit} margin={monthMargin} onSelectTab={onSelectTab} />
           </div>
 
-          {/* Row 5: Mapa de Clientes (full width, cobre a tela) */}
-          <Card>
-            <div className="flex items-center justify-between mb-2">
+          {/* Row 5: Mapa de Clientes — último bloco, grande e cobrindo a tela */}
+          <section id="dashboard-client-map-bottom" className="overflow-hidden rounded-2xl border border-white/[0.08] bg-[#050908] shadow-[0_28px_80px_-34px_rgba(163,230,53,0.45)]">
+            <div className="flex items-center justify-between gap-3 border-b border-white/[0.06] bg-[#0a0d0c]/95 px-5 py-4">
               <div>
-                <h3 className="text-[14px] font-semibold text-white">Mapa de Clientes</h3>
+                <div className="text-[10px] font-bold uppercase tracking-[0.22em]" style={{ color: LIME }}>Aqui embaixo</div>
+                <h3 className="text-[18px] font-bold text-white">Mapa de Clientes</h3>
                 <p className="text-[11px] text-white/45">{clients.length} clientes cadastrados</p>
               </div>
             </div>
-            <div className="h-[78vh] w-full">
+            <div className="relative h-[calc(100vh-120px)] min-h-[720px] w-full bg-[#050908]">
+              <div className="absolute inset-0 grid place-items-center text-[12px] text-white/35">Carregando mapa...</div>
               <ClientsMap clients={clients} />
             </div>
-          </Card>
+          </section>
     </div>
   );
 }
