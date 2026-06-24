@@ -292,6 +292,15 @@ async function geocodeByCep(cepValue?: any): Promise<{ lat: number; lng: number 
     const point = Number.isFinite(lat) && Number.isFinite(lng) ? { lat, lng } : null;
     return isBrazilPoint(point) ? point : null;
   } catch {}
+  try {
+    const r = await fetch(`https://cep.awesomeapi.com.br/json/${cep}`, { headers: { Accept: "application/json" } });
+    if (!r.ok) return null;
+    const j = await r.json();
+    const lat = Number(j?.lat);
+    const lng = Number(j?.lng);
+    const point = Number.isFinite(lat) && Number.isFinite(lng) ? { lat, lng } : null;
+    return isBrazilPoint(point) ? point : null;
+  } catch {}
   return null;
 }
 async function geocodeOne(q: string): Promise<{ lat: number; lng: number } | null> {
@@ -373,7 +382,16 @@ function ClientsMap({ clients = [] }: { clients?: any[] }) {
         if (cancelled) return;
         const queries = buildClientGeocodeQueries(c);
         let point: { lat: number; lng: number } | null = null;
+        if (digitsOnly(c?.cep).length === 8) {
+          const cepKey = `cep:${digitsOnly(c.cep)}`;
+          if (!(cepKey in cache)) {
+            cache[cepKey] = await geocodeByCep(c.cep);
+            saveGeocodeCache(cache);
+          }
+          point = cache[cepKey];
+        }
         for (const q of queries) {
+          if (point) break;
           const key = `nom:${q}`;
           if (!(key in cache)) {
             cache[key] = await geocodeOne(q);
@@ -384,14 +402,6 @@ function ClientsMap({ clients = [] }: { clients?: any[] }) {
             point = cache[key];
             break;
           }
-        }
-        if (!point && digitsOnly(c?.cep).length === 8) {
-          const cepKey = `cep:${digitsOnly(c.cep)}`;
-          if (!(cepKey in cache)) {
-            cache[cepKey] = await geocodeByCep(c.cep);
-            saveGeocodeCache(cache);
-          }
-          point = cache[cepKey];
         }
         if (point) {
           points.push({ ...point, name: c.name || "Cliente" });
