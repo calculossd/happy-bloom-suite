@@ -40,7 +40,6 @@ html {
 .glass-panel {
   background: rgba(14, 14, 18, 0.5) !important;
   backdrop-filter: blur(28px) saturate(190%) !important;
-  -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
   border: 1px solid rgba(255, 255, 255, 0.06) !important;
   box-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.03) !important;
 }
@@ -879,7 +878,6 @@ input, select, textarea {
 .glow-card {
   background: rgba(18, 18, 20, 0.7);
   backdrop-filter: blur(16px) saturate(140%);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
   border: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: var(--p3d-shadow-soft);
   border-radius: 18px;
@@ -937,7 +935,6 @@ input, select, textarea {
   border-radius: 1rem !important;
   box-shadow: 0 20px 50px -20px rgba(56, 189, 248, 0.35) !important;
   backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
   transform: none !important;
 }
 
@@ -955,6 +952,7 @@ input, select, textarea {
 [data-tab-category="operacional"] { --tab-accent: 56, 189, 248;  } /* azul */
 [data-tab-category="marketing"]   { --tab-accent: 167, 139, 250; } /* lilás */
 [data-tab-category="financeiro"]  { --tab-accent: 16, 185, 129;  } /* esmeralda */
+[data-tab-category="estoque"]     { --tab-accent: 234, 179, 8;   } /* mesmo acento dos clientes */
 
 /* Header de cada página: mesmo estilo da notificação (borda + brilho, sem bloco) */
 .legacy-skin #view-page-header,
@@ -1000,4 +998,44 @@ input, select, textarea {
   border: 1px solid rgba(var(--tab-accent), 0.18) !important;
   box-shadow: 0 18px 40px -22px rgba(var(--tab-accent), 0.22) !important;
   backdrop-filter: blur(18px) saturate(140%) !important;
+}
+
+/* Estoque — preto premium com blur amarelo discreto, igual à linguagem de Clientes */
+#costs_tab_container #stocks-physical-layout > .relative.overflow-hidden.rounded-2xl,
+#costs_tab_container #product-stock-section,
+#costs_tab_container #manual_catalog_product_form,
+#costs_tab_container #filament-rolls-listing > div,
+#costs_tab_container #supplies-listing > div,
+#costs_tab_container #stocks-physical-layout form,
+#costs_tab_container #stocks-physical-layout .bg-\[\#151917\],
+#costs_tab_container #stocks-physical-layout .bg-\[\#0C0E0D\],
+#costs_tab_container #stocks-physical-layout .bg-\[\#0C0E0D\]\/60,
+#costs_tab_container #stocks-physical-layout .bg-\[\#0C0E0D\]\/80 {
+  background-color: rgba(4, 4, 5, 0.86) !important;
+  background-image: linear-gradient(135deg, rgba(16, 16, 18, 0.96) 0%, rgba(0, 0, 0, 0.98) 72%, rgba(var(--tab-accent), 0.055) 100%) !important;
+  border-color: rgba(var(--tab-accent), 0.18) !important;
+  box-shadow:
+    0 24px 56px -34px rgba(var(--tab-accent), 0.38),
+    0 18px 44px -28px rgba(0, 0, 0, 0.95),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+  backdrop-filter: blur(18px) saturate(135%) !important;
+}
+
+#costs_tab_container #stocks-physical-layout > .relative.overflow-hidden.rounded-2xl::before,
+#costs_tab_container #product-stock-section::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  inset: -1px;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 88% 0%, rgba(var(--tab-accent), 0.14), transparent 34%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.055), transparent 42%);
+  opacity: 0.82;
+}
+
+#costs_tab_container #stocks-physical-layout > .relative.overflow-hidden.rounded-2xl > *,
+#costs_tab_container #product-stock-section > * {
+  position: relative;
+  z-index: 1;
 }

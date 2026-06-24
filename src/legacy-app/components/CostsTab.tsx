@@ -833,12 +833,6 @@ export const CostsTab: React.FC<CostsTabProps> = ({
     localStorage.setItem('bambuzau_local_catalog_production', JSON.stringify(catalogItems));
   }, [catalogItems]);
 
-  useEffect(() => {
-    const handler = () => { setEditingProduct(null); setShowAddProductManualForm(true); };
-    window.addEventListener('open-new-product', handler);
-    return () => window.removeEventListener('open-new-product', handler);
-  });
-
   // Filament Search Store list
   const [searchQuery, setSearchQuery] = useState('PLA');
   const [searchedOffers, setSearchedOffers] = useState<any[]>(staticFilamentOffers.PLA);
@@ -2531,16 +2525,6 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       {/* SUBTAB 3: DOUBLE SECTORS - RAW FILAMENTS AND CONSUMABLE SUPPLIES */}
       {activeSubTab === 'STOCK' && (
         <div className="space-y-6 animate-fade-in" id="stocks-physical-layout">
-          <div className="flex justify-end">
-            <button
-              onClick={() => { setEditingProduct(null); setShowAddProductManualForm(true); }}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#b7ff00]/30 bg-[#b7ff00]/15 px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#b7ff00] transition hover:bg-[#b7ff00]/25 hover:border-[#b7ff00]/50"
-              id="btn_open_product_stock_form"
-            >
-              <Plus className="h-4 w-4" />
-              Novo Produto
-            </button>
-          </div>
           {showAddProductManualForm && (
             <form onSubmit={handleSaveManualProduct} className="p-5 bg-[#151917] border border-[#232B27] rounded-2xl space-y-4 animate-fade-in" id="manual_catalog_product_form">
               <div className="flex items-center justify-between border-b border-[#232B27]/40 pb-2">
@@ -3026,21 +3010,13 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                   <p className="text-[11px] text-zinc-500 truncate">Cadastro de produtos prontos do portfólio; o catálogo só exibe estes itens</p>
                 </div>
               </div>
-              <button
-                onClick={() => { setEditingProduct(null); setShowAddProductManualForm(!showAddProductManualForm); }}
-                className="shrink-0 inline-flex items-center gap-1.5 rounded-xl border border-[#b7ff00]/30 bg-[#b7ff00]/15 px-3.5 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-[#b7ff00] transition-all duration-300 hover:border-[#b7ff00]/50 hover:bg-[#b7ff00]/25 active:scale-[0.97]"
-                id="btn-trigger-product-stock-form"
-              >
-                <Plus className="h-3.5 w-3.5" />
-                Novo Produto
-              </button>
             </div>
 
             {catalogItems.length === 0 ? (
               <div className="relative p-8 text-center text-[#8BA58D] border border-dashed border-[#b7ff00]/20 bg-black/20 rounded-2xl">
                 <Tag className="h-10 w-10 text-[#b7ff00]/35 mx-auto mb-3" />
                 <p className="text-xs font-bold text-[#F1F4EE]">Nenhum produto cadastrado no estoque.</p>
-                <p className="text-[11px] mt-1 text-[#8BA58D]/75">Clique em Novo Produto para cadastrar os produtos do portfólio. O catálogo será preenchido automaticamente.</p>
+                <p className="text-[11px] mt-1 text-[#8BA58D]/75">Nenhum item disponível no estoque de produtos.</p>
               </div>
             ) : (
               <div className="relative grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3" id="product-stock-listing">
