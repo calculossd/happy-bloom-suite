@@ -1060,8 +1060,8 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
 
   return (
     <div className="space-y-6" id="clients_tab_container">
-      {/* Header Bento Title — hidden in printers-only view */}
-      {viewMode !== 'printers' && (
+      {/* Header Bento Title — hidden in printers-only / prospect views */}
+      {viewMode !== 'printers' && viewMode !== 'prospect' && (
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm" id="clients-tab-header">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
@@ -1077,7 +1077,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
       <div className={viewMode === 'full' ? 'grid grid-cols-1 lg:grid-cols-2 gap-6' : 'grid grid-cols-1 gap-6'}>
         
         {/* LEFT COLUMN: CLIENT CATALOG */}
-        {viewMode !== 'printers' && (
+        {viewMode !== 'printers' && viewMode !== 'prospect' && (
         <div className="bg-[#151917] border border-[#232B27] p-6 rounded-2xl space-y-4" id="clients-catalog">
           <div className="flex items-center justify-between pb-2 border-b border-[#232B27]">
             <div>
