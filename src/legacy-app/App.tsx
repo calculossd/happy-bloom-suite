@@ -90,7 +90,8 @@ import {
   Globe,
   Calculator,
   BookOpen,
-  TrendingUp
+  TrendingUp,
+  Radar
 } from 'lucide-react';
 
 // STUNNING 3D CUBE & PRINTER EXTENSION GEOMETRIC LOGO
@@ -1285,6 +1286,7 @@ export default function App() {
       case 12: return { title: "Pré-check",          subtitle: "Checklist antes de iniciar a impressão" };
       case 13: return { title: "Agenda",             subtitle: "Eventos, entregas e manutenções programadas" };
       case 14: return { title: "Sites",              subtitle: "Lojas e sites conectados ao seu ateliê" };
+      case 15: return { title: "Prospecção",         subtitle: "Radar B2B Google Maps — captação de lojas e leads" };
       default:
         return {
           title: "Ateliê 3D",
@@ -1588,6 +1590,7 @@ export default function App() {
               section: 'Principal',
               items: [
                 { id: 2, label: 'Clientes', icon: Users },
+                { id: 15, label: 'Prospecção', icon: Radar },
                 { id: 3, label: 'Pedidos', icon: GitPullRequest, badge: pendingOrdersCount },
                 { id: 6, label: 'Histórico', icon: ShoppingBag },
                 { id: 1, label: 'Produção', icon: Activity },
@@ -1685,6 +1688,7 @@ export default function App() {
             { id: 1, label: 'Produção', icon: Activity },
             { id: 6, label: 'Histórico', icon: ShoppingBag },
             { id: 2, label: 'Clientes', icon: Users },
+            { id: 15, label: 'Prospecção', icon: Radar },
             { id: 3, label: 'Pedidos', icon: GitPullRequest, badge: pendingOrdersCount },
             { id: 4, label: 'Cálculo', icon: Calculator, onClick: () => openCostsSubtab('CALC') },
             { id: 4, label: 'Catálogo Inova', icon: BookOpen, onClick: () => openCostsSubtab('CATALOG') },
@@ -2162,6 +2166,21 @@ export default function App() {
             {currentTab === 12 && <PreCheckTabNew />}
             {currentTab === 13 && <AgendaTabNew />}
             {currentTab === 14 && <SitesTab />}
+            {currentTab === 15 && (
+              <ClientsTab
+                clients={clients}
+                printers={printers}
+                orders={orders}
+                onAddClient={handleAddClient}
+                onUpdateClient={handleUpdateClient}
+                onDeleteClient={handleDeleteClient}
+                onAddPrinter={handleAddPrinter}
+                onUpdatePrinter={handleUpdatePrinter}
+                onDeletePrinter={handleDeletePrinter}
+                onAddOrder={handleAddOrder}
+                viewMode="prospect"
+              />
+            )}
           </Suspense>
         )}
           </div>
