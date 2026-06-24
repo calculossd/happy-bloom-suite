@@ -201,7 +201,7 @@ function Kpi({ label, value, delta, Icon }: { label: string; value: string; delt
 }
 
 /* ---------- Real Leaflet map with client geocoding ---------- */
-const GEOCODE_CACHE_KEY = "print3d_geocode_cache_v1";
+const GEOCODE_CACHE_KEY = "print3d_geocode_cache_v3";
 function loadGeocodeCache(): Record<string, { lat: number; lng: number } | null> {
   try {
     return JSON.parse(localStorage.getItem(GEOCODE_CACHE_KEY) || "{}");
@@ -212,18 +212,113 @@ function loadGeocodeCache(): Record<string, { lat: number; lng: number } | null>
 function saveGeocodeCache(c: Record<string, { lat: number; lng: number } | null>) {
   try { localStorage.setItem(GEOCODE_CACHE_KEY, JSON.stringify(c)); } catch {}
 }
-function normalizeQuery(addr: string) {
-  // Use last 2 segments (cidade, estado) for better match
-  const parts = addr.split(",").map((s) => s.trim()).filter(Boolean);
-  const tail = parts.slice(-3).join(", ");
-  return (tail || addr).trim();
+function normalizeText(value?: any) {
+  return String(value || "").replace(/\s+/g, " ").trim();
+}
+function digitsOnly(value?: any) {
+  return String(value || "").replace(/\D/g, "");
+}
+function formatCep(value?: any) {
+  const cep = digitsOnly(value);
+  return cep.length === 8 ? `${cep.slice(0, 5)}-${cep.slice(5)}` : normalizeText(value);
+}
+function stripAccents(value: string) {
+  return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+}
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+function isBrazilPoint(p: { lat: number; lng: number } | null) {
+  return !!p && p.lat >= -34.5 && p.lat <= 6.5 && p.lng >= -74.5 && p.lng <= -32;
+}
+function getClientCityState(c: any) {
+  const address = normalizeText(c?.address);
+  let city = normalizeText(c?.city);
+  let state = normalizeText(c?.state).toUpperCase();
+  if ((!city || !state) && address) {
+    const match = address.match(/(?:,\s*)?([^,]+?)\s*[-/]\s*([A-Z]{2})(?:\s*,?\s*Brasil)?\s*$/i);
+    if (match) {
+      if (!city) city = normalizeText(match[1]);
+      if (!state) state = normalizeText(match[2]).toUpperCase();
+    }
+  }
+  return { city, state };
+}
+function cleanStreetAddress(address: string, city: string, state: string, cep: string) {
+  let street = normalizeText(address)
+    .replace(/\bBrasil\b/gi, "")
+    .replace(/\bCEP\b/gi, "")
+    .replace(/\d{5}-?\d{3}/g, "")
+    .replace(/\s*,\s*$/g, "")
+    .trim();
+  if (city && state) {
+    street = street.replace(new RegExp(`,?\\s*${escapeRegExp(city)}\\s*[-/]\\s*${escapeRegExp(state)}\\s*$`, "i"), "").trim();
+  }
+  if (state) {
+    street = street.replace(new RegExp(`,?\\s*${escapeRegExp(state)}\\s*$`, "i"), "").trim();
+  }
+  if (cep) {
+    street = street.replace(new RegExp(escapeRegExp(cep), "gi"), "").trim();
+  }
+  return street.replace(/\s*,\s*,/g, ",").replace(/\s+,/g, ",").replace(/,\s*$/g, "");
+}
+function buildClientGeocodeQueries(c: any) {
+  const address = normalizeText(c?.address);
+  const cep = formatCep(c?.cep);
+  const { city, state } = getClientCityState(c);
+  const cityState = city && state ? `${city} - ${state}` : [city, state].filter(Boolean).join(", ");
+  const street = cleanStreetAddress(address, city, state, cep);
+
+  const candidates = [
+    [street, cityState, cep, "Brasil"].filter(Boolean).join(", "),
+    [street, cityState, "Brasil"].filter(Boolean).join(", "),
+    [street, cep, "Brasil"].filter(Boolean).join(", "),
+    [address, cityState, cep, "Brasil"].filter(Boolean).join(", "),
+    [cep, cityState, "Brasil"].filter(Boolean).join(", "),
+  ];
+
+  return Array.from(new Set(candidates.map(normalizeText).filter((q) => q.length > 4)));
+}
+async function geocodeByCep(cepValue?: any): Promise<{ lat: number; lng: number } | null> {
+  const cep = digitsOnly(cepValue);
+  if (cep.length !== 8) return null;
+  try {
+    const r = await fetch(`https://brasilapi.com.br/api/cep/v2/${cep}`, { headers: { Accept: "application/json" } });
+    if (!r.ok) return null;
+    const j = await r.json();
+    const coords = j?.location?.coordinates;
+    const lat = Number(coords?.latitude);
+    const lng = Number(coords?.longitude);
+    const point = Number.isFinite(lat) && Number.isFinite(lng) ? { lat, lng } : null;
+    return isBrazilPoint(point) ? point : null;
+  } catch {}
+  return null;
 }
 async function geocodeOne(q: string): Promise<{ lat: number; lng: number } | null> {
-  const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=br&q=${encodeURIComponent(q)}`;
+  const specificQuery = /\d{5}-?\d{3}/.test(q) || /,\s*\d+\b/.test(q) || /\b(rua|avenida|av\.?|travessa|estrada|rodovia|alameda|praça|praca)\b/i.test(q);
+  const url = `https://nominatim.openstreetmap.org/search?format=json&limit=5&addressdetails=1&countrycodes=br&accept-language=pt-BR&q=${encodeURIComponent(q)}`;
   try {
     const r = await fetch(url, { headers: { Accept: "application/json" } });
     const j = await r.json();
-    if (Array.isArray(j) && j[0]) return { lat: parseFloat(j[0].lat), lng: parseFloat(j[0].lon) };
+    if (!Array.isArray(j)) return null;
+    const scored = j
+      .map((item: any) => {
+        const point = { lat: parseFloat(item.lat), lng: parseFloat(item.lon) };
+        if (!isBrazilPoint(point)) return null;
+        const display = stripAccents(`${item.display_name || ""} ${JSON.stringify(item.address || {})}`);
+        const query = stripAccents(q);
+        const administrativeTypes = ["city", "town", "village", "municipality", "administrative", "state"];
+        let score = Number(item.importance || 0);
+        if (/\d{5}-?\d{3}/.test(q) && display.includes(digitsOnly(q).slice(0, 5))) score += 4;
+        if (/\b(rua|avenida|av\.?|travessa|estrada|rodovia|alameda|praça|praca)\b/i.test(q) && /(road|residential|house_number|postcode|suburb)/.test(display)) score += 3;
+        if (/\b[A-Z]{2}\b/.test(q) && query.split(/\s+/).some((part) => part.length === 2 && display.includes(part))) score += 1;
+        if (specificQuery && administrativeTypes.includes(String(item.type || "").toLowerCase())) score -= 8;
+        return { point, score };
+      })
+      .filter(Boolean)
+      .sort((a: any, b: any) => b.score - a.score);
+    const best = scored[0] as any;
+    if (best && (!specificQuery || best.score > -2)) return best.point;
   } catch {}
   return null;
 }
@@ -272,27 +367,36 @@ function ClientsMap({ clients = [] }: { clients?: any[] }) {
       const L = (await import("leaflet")).default;
       const cache = loadGeocodeCache();
       const points: Array<{ lat: number; lng: number; name: string }> = [];
-      const queries = Array.from(
-        new Set(
-          clients
-            .map((c: any) => normalizeQuery(c.address || ""))
-            .filter((q) => q && q.length > 2),
-        ),
-      );
-      // Geocode missing ones sequentially (Nominatim rate limit ~1 req/s)
-      for (const q of queries) {
+      const clientsToMap = clients.filter((c: any) => c?.address || c?.cep);
+      // Geocode missing ones sequentially (public geocoders have low rate limits)
+      for (const c of clientsToMap) {
         if (cancelled) return;
-        if (!(q in cache)) {
-          cache[q] = await geocodeOne(q);
-          saveGeocodeCache(cache);
-          await new Promise((r) => setTimeout(r, 1100));
+        const queries = buildClientGeocodeQueries(c);
+        let point: { lat: number; lng: number } | null = null;
+        for (const q of queries) {
+          const key = `nom:${q}`;
+          if (!(key in cache)) {
+            cache[key] = await geocodeOne(q);
+            saveGeocodeCache(cache);
+            await new Promise((r) => setTimeout(r, 1100));
+          }
+          if (cache[key]) {
+            point = cache[key];
+            break;
+          }
+        }
+        if (!point && digitsOnly(c?.cep).length === 8) {
+          const cepKey = `cep:${digitsOnly(c.cep)}`;
+          if (!(cepKey in cache)) {
+            cache[cepKey] = await geocodeByCep(c.cep);
+            saveGeocodeCache(cache);
+          }
+          point = cache[cepKey];
+        }
+        if (point) {
+          points.push({ ...point, name: c.name || "Cliente" });
         }
       }
-      clients.forEach((c: any) => {
-        const q = normalizeQuery(c.address || "");
-        const p = cache[q];
-        if (p) points.push({ ...p, name: c.name || "Cliente" });
-      });
       if (cancelled) return;
       layerRef.current.clearLayers();
       const icon = L.divIcon({
@@ -304,10 +408,13 @@ function ClientsMap({ clients = [] }: { clients?: any[] }) {
       points.forEach((p) => {
         L.marker([p.lat, p.lng], { icon }).bindTooltip(p.name).addTo(layerRef.current);
       });
-      if (points.length) {
+      if (points.length === 1) {
+        mapRef.current.setView([points[0].lat, points[0].lng], 14);
+      } else if (points.length > 1) {
         const bounds = L.latLngBounds(points.map((p) => [p.lat, p.lng] as [number, number]));
-        mapRef.current.fitBounds(bounds.pad(0.3), { maxZoom: 8 });
+        mapRef.current.fitBounds(bounds.pad(0.25), { maxZoom: 13 });
       }
+      setTimeout(() => mapRef.current?.invalidateSize(), 50);
     })();
     return () => { cancelled = true; };
   }, [ready, clients]);
