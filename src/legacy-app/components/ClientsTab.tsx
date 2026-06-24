@@ -938,6 +938,9 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                 setCPhone('');
                 setCEmail('');
                 setCAddress('');
+                setCCep('');
+                setCCity('');
+                setCState('');
                 setCNote('');
                 setCStockCount('0');
                 setCStockValue('0');
