@@ -1600,14 +1600,6 @@ export default function App() {
               ],
             },
             {
-              section: 'Financeiro',
-              items: [
-                { id: 4, label: 'Gastos', icon: DollarSign, onClick: () => openCostsSubtab('SHOP') },
-                { id: 4, label: 'Cotação', icon: TrendingUp, onClick: () => openCostsSubtab('QUOTE') },
-                { id: 4, label: 'Calculadora', icon: Calculator, onClick: () => openCostsSubtab('CALC') },
-              ],
-            },
-            {
               section: 'Marketing',
               items: [
                 { id: 7, label: 'Preços', icon: Search },
@@ -1626,6 +1618,14 @@ export default function App() {
                 { id: 16, label: 'Impressoras', icon: PrinterNavIcon },
                 { id: 12, label: 'Pré-check', icon: ClipboardCheck },
                 { id: 14, label: 'Sites', icon: Globe },
+              ],
+            },
+            {
+              section: 'Financeiro',
+              items: [
+                { id: 4, label: 'Gastos', icon: DollarSign, onClick: () => openCostsSubtab('SHOP') },
+                { id: 4, label: 'Cotação', icon: TrendingUp, onClick: () => openCostsSubtab('QUOTE') },
+                { id: 4, label: 'Calculadora', icon: Calculator, onClick: () => openCostsSubtab('CALC') },
               ],
             },
             {
