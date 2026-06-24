@@ -947,15 +947,24 @@ input, select, textarea {
   background-image: none !important;
 }
 
-/* Header de cada página: mesmo estilo da notificação (borda azul + brilho, sem bloco) */
+/* Cor de destaque por categoria de aba */
+[data-tab-category] {
+  --tab-accent: 56, 189, 248; /* azul padrão */
+}
+[data-tab-category="principal"]   { --tab-accent: 234, 179, 8;   } /* dourado */
+[data-tab-category="operacional"] { --tab-accent: 56, 189, 248;  } /* azul */
+[data-tab-category="marketing"]   { --tab-accent: 167, 139, 250; } /* lilás */
+[data-tab-category="financeiro"]  { --tab-accent: 16, 185, 129;  } /* esmeralda */
+
+/* Header de cada página: mesmo estilo da notificação (borda + brilho, sem bloco) */
 .legacy-skin #view-page-header,
 #view-page-header {
   background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
-  border: 1px solid rgba(56, 189, 248, 0.25) !important;
+  border: 1px solid rgba(var(--tab-accent), 0.25) !important;
   border-radius: 1rem !important;
-  box-shadow: 0 20px 50px -20px rgba(56, 189, 248, 0.35) !important;
+  box-shadow: 0 20px 50px -20px rgba(var(--tab-accent), 0.35) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
@@ -972,7 +981,7 @@ input, select, textarea {
   padding-right: 0 !important;
 }
 
-/* Degradê azul nos blocos internos de Produção / Pedidos / Histórico */
+/* Degradê de acento nos blocos internos por categoria */
 #production-dashboard-container .glow-card,
 #integration_tab_container .glow-card,
 #clients_tab_container .glow-card,
@@ -981,9 +990,9 @@ input, select, textarea {
 #clients_tab_container [id="printers-catalog"],
 #clients_tab_container [id="crm-b2b-leads-section"],
 #sold-orders-tab-container .glow-card {
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(15, 23, 42, 0.6)) !important;
+  background: linear-gradient(135deg, rgba(var(--tab-accent), 0.08), rgba(15, 23, 42, 0.6)) !important;
   background-color: transparent !important;
-  background-image: linear-gradient(135deg, rgba(56, 189, 248, 0.10), rgba(15, 23, 42, 0.55)) !important;
-  border: 1px solid rgba(56, 189, 248, 0.25) !important;
-  box-shadow: 0 20px 50px -20px rgba(56, 189, 248, 0.35) !important;
+  background-image: linear-gradient(135deg, rgba(var(--tab-accent), 0.10), rgba(15, 23, 42, 0.55)) !important;
+  border: 1px solid rgba(var(--tab-accent), 0.25) !important;
+  box-shadow: 0 20px 50px -20px rgba(var(--tab-accent), 0.35) !important;
 }
