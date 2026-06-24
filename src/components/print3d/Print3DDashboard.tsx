@@ -338,6 +338,7 @@ function ClientsMap({ clients = [] }: { clients?: any[] }) {
   const mapRef = useRef<any>(null);
   const layerRef = useRef<any>(null);
   const [ready, setReady] = useState(false);
+  const [interactive, setInteractive] = useState(false);
 
   // Init Leaflet once
   useEffect(() => {
@@ -346,11 +347,25 @@ function ClientsMap({ clients = [] }: { clients?: any[] }) {
       const L = (await import("leaflet")).default;
       if (cancelled || !ref.current || mapRef.current) return;
       const map = L.map(ref.current, {
-        center: [-14.235, -51.9253], zoom: 4, zoomControl: true, attributionControl: false,
+        center: [-14.235, -51.9253],
+        zoom: 4,
+        zoomControl: false,
+        attributionControl: false,
+        dragging: false,
+        scrollWheelZoom: false,
+        doubleClickZoom: false,
+        touchZoom: false,
+        boxZoom: false,
+        keyboard: false,
       });
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-        maxZoom: 19,
-      }).addTo(map);
+      L.tileLayer(
+        "https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png",
+        { maxZoom: 19, subdomains: "abcd" },
+      ).addTo(map);
+      L.tileLayer(
+        "https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png",
+        { maxZoom: 19, subdomains: "abcd", pane: "shadowPane" },
+      ).addTo(map);
       mapRef.current = map;
       layerRef.current = L.layerGroup().addTo(map);
       setReady(true);
@@ -360,6 +375,20 @@ function ClientsMap({ clients = [] }: { clients?: any[] }) {
       if (mapRef.current) { mapRef.current.remove(); mapRef.current = null; }
     };
   }, []);
+
+  // Toggle interaction (zoom/drag) on demand
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    const fns = ["dragging", "scrollWheelZoom", "doubleClickZoom", "touchZoom", "boxZoom", "keyboard"] as const;
+    fns.forEach((f) => {
+      const handler = (map as any)[f];
+      if (handler && typeof handler.enable === "function") {
+        interactive ? handler.enable() : handler.disable();
+      }
+    });
+    setTimeout(() => map.invalidateSize(), 30);
+  }, [interactive, ready]);
 
   // Geocode + render markers
   useEffect(() => {
@@ -422,7 +451,22 @@ function ClientsMap({ clients = [] }: { clients?: any[] }) {
     return () => { cancelled = true; };
   }, [ready, clients]);
 
-  return <div ref={ref} className="relative z-10 h-full w-full min-h-[420px] overflow-hidden" />;
+  return (
+    <div className="relative h-full w-full min-h-[420px]">
+      <div ref={ref} className="relative z-10 h-full w-full min-h-[420px] overflow-hidden" />
+      <button
+        type="button"
+        onClick={() => setInteractive((v) => !v)}
+        className={`absolute top-3 right-3 z-[400] px-3 py-1.5 rounded-lg text-[11px] font-semibold border backdrop-blur-sm transition ${
+          interactive
+            ? "bg-[var(--brand-lime,#c6ff3a)] text-black border-transparent shadow-lg"
+            : "bg-black/60 text-white border-white/15 hover:bg-black/80"
+        }`}
+      >
+        {interactive ? "🔓 Mapa Liberado" : "🔒 Habilitar Zoom"}
+      </button>
+    </div>
+  );
 }
 
 /* ---------- Live printers ---------- */
