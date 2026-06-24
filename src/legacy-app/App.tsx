@@ -1404,7 +1404,7 @@ export default function App() {
           letter-spacing: -0.02em !important;
         }
 
-        /* Auto GLASSMORPHISM for cards and grids with glowing hover border effects */
+        /* Auto GLASSMORPHISM for cards and grids without animated glow borders */
         .bg-\\[\\#151917\\],
         .bg-zinc-900,
         .bg-neutral-900,
@@ -1418,11 +1418,10 @@ export default function App() {
           -webkit-backdrop-filter: blur(20px) !important;
           border-radius: 1.25rem !important; /* rounded-2xl */
           box-shadow: 0 20px 40px -15px rgba(0,0,0,0.7) !important;
-          transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
         
         .bg-\\[\\#151917\\]:hover {
-          border-color: rgba(255, 255, 255, 0.09) !important;
+          border-color: var(--brand-border) !important;
         }
 
         /* Global custom rounded class and shadows */
