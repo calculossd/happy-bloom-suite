@@ -356,7 +356,14 @@ export function safeGetLocalStorageItem(key: string, defaultValue: string = ''):
 export default function App() {
   const [currentTab, setCurrentTab] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [costsSubTab, setCostsSubTab] = useState<string>('STOCK');
+  const [costsSubTab, setCostsSubTab] = useState<string>(() => {
+    try {
+      const saved = localStorage.getItem('bambuzau_costs_subtab_override');
+      return ['CALC', 'CATALOG', 'STOCK', 'SHOP', 'QUOTE', 'AI'].includes(saved || '') ? saved! : 'STOCK';
+    } catch {
+      return 'STOCK';
+    }
+  });
   useEffect(() => {
     const h = (e: any) => { if (typeof e?.detail === 'string') setCostsSubTab(e.detail); };
     window.addEventListener('costs_subtab_changed', h as EventListener);
@@ -1866,7 +1873,7 @@ export default function App() {
         {/* EXQUISITE NEW HEADER DE CADA PÁGINA (Título grande + Subtítulo curto + Relógio/Data ao vivo mounted) */}
         {(() => {
           if (currentTab === 0) return null;
-          if (currentTab === 4 && costsSubTab === 'AI') return null;
+          if (currentTab === 4 && (costsSubTab === 'AI' || costsSubTab === 'CATALOG')) return null;
           const headerInfo = getTabHeader(currentTab);
           if (!headerInfo.title) return null;
           const formattedDate = currentTime.toLocaleDateString('pt-BR', { 
