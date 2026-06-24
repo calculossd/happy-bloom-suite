@@ -52,12 +52,6 @@ function MarketingPage() {
   return (
     <AppShell>
       <div className="relative min-h-screen overflow-hidden">
-        {/* Ambient glows */}
-        <div className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute -top-32 -left-32 w-[520px] h-[520px] rounded-full bg-cyan-500/15 blur-[140px]" />
-          <div className="absolute top-1/3 -right-40 w-[480px] h-[480px] rounded-full bg-violet-500/15 blur-[140px]" />
-          <div className="absolute bottom-0 left-1/3 w-[420px] h-[420px] rounded-full bg-blue-600/10 blur-[140px]" />
-        </div>
 
         <div className="px-6 md:px-10 py-10 max-w-7xl 2xl:max-w-[1600px] mx-auto">
           <div className="flex flex-col gap-2 mb-10">
