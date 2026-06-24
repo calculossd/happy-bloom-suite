@@ -317,6 +317,12 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
     setIsDialogOpen(true);
   };
 
+  useEffect(() => {
+    const handler = () => handleOpenAddDialog();
+    window.addEventListener('open-new-order', handler);
+    return () => window.removeEventListener('open-new-order', handler);
+  }, [clients, filamentStocks]);
+
   const handleOpenEditDialog = (order: PrintOrder) => {
     setEditingOrder(order);
     setFormClientId(order.clientId ? order.clientId.toString() : 'CUSTOM');
