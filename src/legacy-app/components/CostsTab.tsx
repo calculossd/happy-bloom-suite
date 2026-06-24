@@ -788,7 +788,7 @@ export const CostsTab: React.FC<CostsTabProps> = ({
       };
       setCatalogItems(prev => prev.map(c => c.id === editingProduct.id ? updatedProg : c));
       setEditingProduct(null);
-      triggerFeedback(`Produto comercial "${updatedProg.name}" atualizado com sucesso no catálogo!`);
+      triggerFeedback(`Produto comercial "${updatedProg.name}" atualizado com sucesso no estoque de produtos!`);
     } else {
       const newProg: CatalogItem = {
         id: catalogItems.length > 0 ? Math.max(...catalogItems.map(c => c.id)) + 1 : 1,
@@ -809,7 +809,7 @@ export const CostsTab: React.FC<CostsTabProps> = ({
         stlFileData: manualStlFileData || undefined
       };
       setCatalogItems(prev => [newProg, ...prev]);
-      triggerFeedback(`Produto comercial "${newProg.name}" cadastrado diretamente no catálogo!`);
+      triggerFeedback(`Produto comercial "${newProg.name}" cadastrado no estoque de produtos! Ele aparecerá no catálogo automaticamente.`);
     }
 
     setManualProdName('');
@@ -819,6 +819,13 @@ export const CostsTab: React.FC<CostsTabProps> = ({
     setManualStlFileName('');
     setManualStlFileData('');
     setShowAddProductManualForm(false);
+  };
+
+  const handleUpdateCatalogProductStock = (id: number, delta: number) => {
+    setCatalogItems(prev => prev.map(item => {
+      if (item.id !== id) return item;
+      return { ...item, stockCount: Math.max(0, Number(item.stockCount || 0) + delta) };
+    }));
   };
 
   useEffect(() => {
