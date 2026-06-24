@@ -1034,8 +1034,8 @@ input, select, textarea {
   opacity: 0.82;
 }
 
-#costs_tab_container #stocks-physical-layout > .relative.overflow-hidden.rounded-2xl > *,
-#costs_tab_container #product-stock-section > * {
+#costs_tab_container #stocks-physical-layout > .relative.overflow-hidden.rounded-2xl > :not([aria-hidden]),
+#costs_tab_container #product-stock-section > :not([aria-hidden]) {
   position: relative;
   z-index: 1;
 }
