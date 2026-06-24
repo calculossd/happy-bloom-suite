@@ -876,10 +876,12 @@ export const CostsTab: React.FC<CostsTabProps> = ({
       name: sName.trim(),
       stockCount: sCount,
       minStockCount: sMinCount,
-      unitCost: sUnitCost
+      unitCost: sUnitCost,
+      imageUrl: sImage.trim() || undefined
     };
     setSuppliesStocks(prev => [...prev, newSupply]);
     setSName('');
+    setSImage('');
     setShowAddSupplyForm(false);
     triggerFeedback('Insumo cadastrado no estoque com sucesso!');
   };
