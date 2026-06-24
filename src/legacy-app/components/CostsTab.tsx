@@ -3362,6 +3362,10 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                           }}
                         />
                       </div>
+                      <div className="flex items-center justify-between font-mono text-[10px] text-[var(--brand-text-subtle)]">
+                        <span>Preço médio</span>
+                        <span className="text-white font-bold tabular-nums">R$ {fil.priceRoll.toFixed(2)}<span className="text-[var(--brand-text-subtle)] font-normal">/kg</span></span>
+                      </div>
                     </div>
 
                     <div className="flex items-center gap-1.5 pt-1">
