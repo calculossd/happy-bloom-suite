@@ -199,63 +199,6 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients, onDeleteOrder
 
   return (
     <div className="space-y-6" id="sold-orders-tab-container">
-      {/* Financial Metrics Row */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4" id="sold-metrics-panels">
-        
-        {/* Metric 1 */}
-        <div className="glow-card p-3 px-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
-          <div className="space-y-0.5">
-            <span className="text-[9.5px] font-bold text-[var(--brand-muted)] uppercase tracking-[0.14em] font-sans block">Faturamento Real</span>
-            <span className="text-xs md:text-base font-bold text-[var(--brand-text)] font-sans block">
-              R$ {totalSales.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </span>
-          </div>
-          <div className="p-2 sm:p-2.5 bg-emerald-500/10 rounded-xl text-emerald-400 shrink-0">
-            <DollarSign className="h-4.5 w-4.5" />
-          </div>
-        </div>
-
-        {/* Metric 2 */}
-        <div className="glow-card p-3 px-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
-          <div className="space-y-0.5">
-            <span className="text-[9.5px] font-bold text-[var(--brand-muted)] uppercase tracking-[0.14em] font-sans block">Produtos Vendidos</span>
-            <span className="text-xs md:text-base font-bold text-[var(--brand-text)] font-sans block">
-              {totalItems} Peças
-            </span>
-          </div>
-          <div className="p-2 sm:p-2.5 bg-cyan-500/10 rounded-xl text-cyan-400 shrink-0">
-            <ShoppingBag className="h-4.5 w-4.5" />
-          </div>
-        </div>
-
-        {/* Metric 3 */}
-        <div className="glow-card p-3 px-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
-          <div className="space-y-0.5">
-            <span className="text-[9.5px] font-bold text-[var(--brand-muted)] uppercase tracking-[0.14em] font-sans block">Ticket Médio</span>
-            <span className="text-xs md:text-base font-bold text-[var(--brand-text)] font-sans block">
-              R$ {averageTicket.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </span>
-          </div>
-          <div className="p-2 sm:p-2.5 bg-[#b7ff00]/10 rounded-xl text-[#b7ff00] shrink-0">
-            <TrendingUp className="h-4.5 w-4.5" />
-          </div>
-        </div>
-
-        {/* Metric 4 */}
-        <div className="glow-card p-3 px-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
-          <div className="space-y-0.5">
-            <span className="text-[9.5px] font-bold text-[var(--brand-muted)] uppercase tracking-[0.14em] font-sans block">Insumos Despachados</span>
-            <span className="text-xs md:text-base font-bold text-[var(--brand-text)] font-sans block">
-              {(totalWeightDelivered / 1000).toFixed(2)} kg
-            </span>
-          </div>
-          <div className="p-2 sm:p-2.5 bg-amber-500/10 rounded-xl text-amber-400 shrink-0">
-            <Clock className="h-4.5 w-4.5" />
-          </div>
-        </div>
-
-      </div>
-
       {/* Filter Options Row */}
       <div className="glow-card p-4 rounded-2xl space-y-4 shadow-sm" id="sold-filters">
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
