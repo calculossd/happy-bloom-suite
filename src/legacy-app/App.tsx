@@ -1660,7 +1660,6 @@ export default function App() {
                 { id: 7, label: 'Preços', icon: Search },
                 { id: 9, label: 'Marketing', icon: Megaphone },
                 { id: 15, label: 'Prospecção', icon: Radar },
-                { id: 4, label: 'Assistente', icon: Sparkles, onClick: () => openCostsSubtab('AI') },
                 { id: 11, label: 'Modelos', icon: FileBox },
                 { id: 8, label: 'Stls', icon: Box },
                 { id: 4, label: 'Catálogo', icon: BookOpen, onClick: () => openCostsSubtab('CATALOG') },
