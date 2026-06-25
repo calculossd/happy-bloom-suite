@@ -252,13 +252,13 @@ export const ProductionDashboard: React.FC<Props> = ({ orders, printers }) => {
             </div>
           ) : (
             <div style={{ width: '100%', height: 180, minWidth: 0 }}>
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" debounce={80}>
                 <BarChart data={stats.days}>
                   <CartesianGrid stroke="rgba(255,255,255,0.05)" vertical={false} />
                   <XAxis dataKey="label" tick={{ fontSize: 10, fill: '#94A3B8' }} axisLine={false} tickLine={false} />
                   <YAxis tick={{ fontSize: 10, fill: '#94A3B8' }} axisLine={false} tickLine={false} width={28} allowDecimals={false} />
                   <Tooltip contentStyle={{ background: 'rgba(10,12,10,0.95)', border: '1px solid rgba(255,255,255,0.1)', fontSize: 11, backdropFilter: 'blur(8px)' }} />
-                  <Bar dataKey="entregues" fill="#10B981" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="entregues" fill="#10B981" radius={[4, 4, 0, 0]} isAnimationActive={false} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -272,9 +272,9 @@ export const ProductionDashboard: React.FC<Props> = ({ orders, printers }) => {
             </div>
           ) : (
             <div style={{ width: '100%', height: 180, minWidth: 0 }}>
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" debounce={80}>
                 <PieChart>
-                  <Pie data={stats.statusData} dataKey="value" nameKey="name" outerRadius={60} label={{ fontSize: 10 }}>
+                  <Pie data={stats.statusData} dataKey="value" nameKey="name" outerRadius={60} label={{ fontSize: 10 }} isAnimationActive={false}>
                     {stats.statusData.map((d, i) => (
                       <Cell key={i} fill={STATUS_COLORS[d.key] || '#94A3B8'} />
                     ))}
@@ -294,13 +294,13 @@ export const ProductionDashboard: React.FC<Props> = ({ orders, printers }) => {
             </div>
           ) : (
             <div style={{ width: '100%', height: 180, minWidth: 0 }}>
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" debounce={80}>
                 <BarChart data={stats.loadByPrinter} layout="vertical">
                   <CartesianGrid stroke="rgba(255,255,255,0.05)" horizontal={false} />
                   <XAxis type="number" tick={{ fontSize: 10, fill: '#94A3B8' }} axisLine={false} tickLine={false} allowDecimals={false} />
                   <YAxis type="category" dataKey="name" tick={{ fontSize: 10, fill: '#94A3B8' }} axisLine={false} tickLine={false} width={70} />
                   <Tooltip contentStyle={{ background: 'rgba(10,12,10,0.95)', border: '1px solid rgba(255,255,255,0.1)', fontSize: 11, backdropFilter: 'blur(8px)' }} />
-                  <Bar dataKey="jobs" fill="#3B82F6" radius={[0, 4, 4, 0]} />
+                  <Bar dataKey="jobs" fill="#3B82F6" radius={[0, 4, 4, 0]} isAnimationActive={false} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
