@@ -651,8 +651,8 @@ function OrdersList({ orders = [], clients = [], onSelectTab }: { orders?: any[]
                   <span className="text-white/40 truncate hidden sm:inline">· {o.clientName}</span>
                 )}
               </div>
-              {isPrinting ? (
-                <div className="flex items-center gap-1.5 shrink-0 w-[110px]">
+              {isPrinting && (
+                <div className="flex items-center gap-1.5 shrink-0 w-[90px]">
                   <div className="flex-1 h-1 rounded-full bg-white/[0.05] overflow-hidden">
                     <div
                       className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-[#b7ff00] transition-all duration-700"
@@ -661,14 +661,11 @@ function OrdersList({ orders = [], clients = [], onSelectTab }: { orders?: any[]
                   </div>
                   <span className="text-[10px] font-mono font-bold tabular-nums text-emerald-300 w-7 text-right">{pct}%</span>
                 </div>
-              ) : (
-                <>
-                  <span className="text-white/40 tabular-nums hidden md:inline text-[10px] shrink-0">
-                    {o.deadline ? new Date(o.deadline).toLocaleDateString("pt-BR") : "—"}
-                  </span>
-                  <StatusPill s={ORDER_STATUS_LABEL[o.status] || o.status} />
-                </>
               )}
+              <span className="text-white/40 tabular-nums hidden md:inline text-[10px] shrink-0">
+                {o.deadline ? new Date(o.deadline).toLocaleDateString("pt-BR") : "—"}
+              </span>
+              <StatusPill s={ORDER_STATUS_LABEL[o.status] || o.status} />
             </li>
           );
         })}
