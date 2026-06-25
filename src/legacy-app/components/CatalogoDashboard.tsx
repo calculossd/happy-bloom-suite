@@ -200,8 +200,8 @@ export const CatalogoDashboard: React.FC<Props> = ({ catalogItems }) => {
               <span className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">Aguardando métricas</span>
             </div>
           ) : (
-            <div style={{ width: '100%', height: 180 }}>
-              <ResponsiveContainer>
+            <div style={{ width: '100%', height: 180, minWidth: 0 }}>
+              <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={stats.typeDist} dataKey="value" nameKey="name" outerRadius={60} label={{ fontSize: 10 }}>
                     {stats.typeDist.map((_, i) => <Cell key={i} fill={PIE[i % PIE.length]} />)}
@@ -220,8 +220,8 @@ export const CatalogoDashboard: React.FC<Props> = ({ catalogItems }) => {
               <span className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">Dados insuficientes</span>
             </div>
           ) : (
-            <div style={{ width: '100%', height: 180 }}>
-              <ResponsiveContainer>
+            <div style={{ width: '100%', height: 180, minWidth: 0 }}>
+              <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={stats.topPriced} margin={{ top: 4, right: 4, left: -18, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
                   <XAxis dataKey="name" tick={{ fill: 'rgba(255,255,255,0.55)', fontSize: 9 }} />

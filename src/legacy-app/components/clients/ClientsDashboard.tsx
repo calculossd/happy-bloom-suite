@@ -257,8 +257,8 @@ export const ClientsDashboard: React.FC<Props> = ({ clients, orders }) => {
               <span className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">Aguardando métricas</span>
             </div>
           ) : (
-            <div style={{ width: '100%', height: 180 }}>
-              <ResponsiveContainer>
+            <div style={{ width: '100%', height: 180, minWidth: 0 }}>
+              <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={stats.sourceData} dataKey="value" nameKey="name" outerRadius={60} label={{ fontSize: 10 }}>
                     {stats.sourceData.map((_, i) => (
@@ -280,8 +280,8 @@ export const ClientsDashboard: React.FC<Props> = ({ clients, orders }) => {
               <span className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">Dados insuficientes</span>
             </div>
           ) : (
-            <div style={{ width: '100%', height: 180 }}>
-              <ResponsiveContainer>
+            <div style={{ width: '100%', height: 180, minWidth: 0 }}>
+              <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={stats.dealData} dataKey="value" nameKey="name" outerRadius={60} label={{ fontSize: 10 }}>
                     {stats.dealData.map((_, i) => (

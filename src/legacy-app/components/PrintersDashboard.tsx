@@ -250,8 +250,8 @@ export const PrintersDashboard: React.FC<Props> = ({ orders, printers }) => {
               <span className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">Sem impressoras</span>
             </div>
           ) : (
-            <div style={{ width: '100%', height: 180 }}>
-              <ResponsiveContainer>
+            <div style={{ width: '100%', height: 180, minWidth: 0 }}>
+              <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={stats.statusData} dataKey="value" nameKey="name" outerRadius={60} label={{ fontSize: 10 }}>
                     {stats.statusData.map((d, i) => (
@@ -272,8 +272,8 @@ export const PrintersDashboard: React.FC<Props> = ({ orders, printers }) => {
               <span className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">Sem dados</span>
             </div>
           ) : (
-            <div style={{ width: '100%', height: 180 }}>
-              <ResponsiveContainer>
+            <div style={{ width: '100%', height: 180, minWidth: 0 }}>
+              <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={stats.loadByPrinter} layout="vertical" stackOffset="sign">
                   <CartesianGrid stroke="rgba(255,255,255,0.05)" horizontal={false} />
                   <XAxis type="number" tick={{ fontSize: 10, fill: '#94A3B8' }} axisLine={false} tickLine={false} allowDecimals={false} />
@@ -294,8 +294,8 @@ export const PrintersDashboard: React.FC<Props> = ({ orders, printers }) => {
               <span className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">Sem entregas no período</span>
             </div>
           ) : (
-            <div style={{ width: '100%', height: 180 }}>
-              <ResponsiveContainer>
+            <div style={{ width: '100%', height: 180, minWidth: 0 }}>
+              <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={stats.throughput}>
                   <CartesianGrid stroke="rgba(255,255,255,0.05)" vertical={false} />
                   <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#94A3B8' }} axisLine={false} tickLine={false} />

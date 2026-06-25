@@ -222,8 +222,8 @@ export const EstoqueDashboard: React.FC<Props> = ({ catalogItems, filamentStocks
               <span className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">Sem filamentos</span>
             </div>
           ) : (
-            <div style={{ width: '100%', height: 180 }}>
-              <ResponsiveContainer>
+            <div style={{ width: '100%', height: 180, minWidth: 0 }}>
+              <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={stats.filamentByType} dataKey="value" nameKey="name" outerRadius={60} label={{ fontSize: 10 }}>
                     {stats.filamentByType.map((_, i) => (
@@ -261,8 +261,8 @@ export const EstoqueDashboard: React.FC<Props> = ({ catalogItems, filamentStocks
         </Panel>
 
         <Panel tone="gold" title="Valor por Categoria">
-          <div style={{ width: '100%', height: 180 }}>
-            <ResponsiveContainer>
+          <div style={{ width: '100%', height: 180, minWidth: 0 }}>
+            <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={[
                   { name: 'Produtos', valor: Math.round(stats.productsValue) },
