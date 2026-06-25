@@ -12,7 +12,7 @@ import {
   PieChart, Pie, Cell, LabelList,
 } from "recharts";
 import { FilamentSpool, materialColor } from "@/legacy-app/components/FilamentSpool";
-import { Kpi as PremiumKpi, SectionTitle } from "@/legacy-app/components/DashboardShell";
+import { Kpi as PremiumKpi } from "@/legacy-app/components/DashboardShell";
 
 // Color name → hex swatch for filament color chips
 const COLOR_HEX: Record<string, string> = {
@@ -173,25 +173,26 @@ function TopBar() {
 
 /* ---------- Card primitive (Obsidian Glass) ---------- */
 function Card({ children, className = "", onClick, glow }: { children: React.ReactNode; className?: string; onClick?: () => void; glow?: string }) {
+  const tone = glow || LIME;
   return (
-    <div
-      onClick={onClick}
-      className={`group relative rounded-2xl border border-white/[0.06] p-5 backdrop-blur-xl transition-all duration-500 hover:border-white/[0.12] hover:-translate-y-[1px] ${className}`}
-      style={{
-        background:
-          "linear-gradient(180deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.012) 100%), #0c100e",
-        boxShadow:
-          "0 1px 0 rgba(255,255,255,0.04) inset, 0 30px 60px -30px rgba(0,0,0,0.85)",
-      }}
-    >
-      {glow && (
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-2xl opacity-60 transition-opacity duration-500 group-hover:opacity-100"
-          style={{ background: `radial-gradient(120% 80% at 0% 0%, ${glow}22 0%, transparent 55%)` }}
-        />
-      )}
-      <div className="relative">{children}</div>
+    <div className={`group relative p-[1px] rounded-2xl bg-white/10 transition-all duration-500 hover:scale-[1.005] ${className}`} onClick={onClick}>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -inset-3 rounded-2xl blur-2xl opacity-50 group-hover:opacity-90 transition-opacity duration-500"
+        style={{ background: `radial-gradient(circle at center, ${tone}33, transparent 70%)` }}
+      />
+      <div
+        className="relative overflow-hidden rounded-[15px] p-5 backdrop-blur-xl border border-white/10 h-full"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.012) 100%), #0a0d0c",
+          boxShadow:
+            "inset 0 1px 0 rgba(255,255,255,0.05), 0 30px 60px -30px rgba(0,0,0,0.85)",
+        }}
+      >
+        <span aria-hidden className="absolute left-0 top-0 bottom-0 w-[3px]" style={{ background: tone }} />
+        <div className="relative h-full">{children}</div>
+      </div>
     </div>
   );
 }
@@ -576,7 +577,7 @@ function LivePrinters({ printers = [], orders = [], onSelectTab }: { printers?: 
     return { name: p.name || p.model, model: p.model || "", customUrl: p.customUrl, material, remaining, pct: Math.max(0, Math.min(100, pct)), isPrinting: p.status === "PRINTING" };
   });
   return (
-    <Card className="flex flex-col overflow-hidden">
+    <Card glow="#a3e635" className="flex flex-col overflow-hidden">
       <div className="flex items-baseline justify-between mb-1">
         <h3 className="text-[14px] font-semibold text-white">Impressão ao Vivo</h3>
         <span className="text-[10px] text-white/45 tabular-nums">
@@ -662,7 +663,7 @@ function OrdersList({ orders = [], clients = [], onSelectTab }: { orders?: any[]
   const cityById: Record<number, string> = {};
   clients.forEach((c: any) => (cityById[c.id] = (c.address || "").split(",").pop()?.trim() || ""));
   return (
-    <Card className="flex flex-col overflow-hidden cursor-pointer hover:bg-white/[0.02] transition" onClick={() => onSelectTab?.(1)}>
+    <Card glow="#10b981" className="flex flex-col overflow-hidden cursor-pointer transition" onClick={() => onSelectTab?.(1)}>
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-[14px] font-semibold text-white">Pedidos a Serem Entregues</h3>
         <button className="text-[11px] text-white/50 hover:text-white" onClick={(e) => { e.stopPropagation(); onSelectTab?.(1); }}>Ver todos</button>
@@ -716,7 +717,7 @@ function Hygrometers({ devices = [], onSelectTab }: { devices?: any[]; onSelectT
     return { color: "#fb7185", label: "Crítico", bg: "rgba(251,113,133,0.12)", border: "rgba(251,113,133,0.32)" };
   };
   return (
-    <Card className="cursor-pointer hover:bg-white/[0.02] transition" onClick={() => onSelectTab?.(5)}>
+    <Card glow="#38bdf8" className="cursor-pointer transition" onClick={() => onSelectTab?.(5)}>
       <div className="flex items-center justify-between mb-1">
         <h3 className="text-[14px] font-semibold text-white">Higrômetros</h3>
         <span className="text-[10px] text-white/40 tabular-nums">{devices.length}</span>
@@ -901,8 +902,7 @@ function StockOverview({ filaments = [], onSelectTab }: { filaments?: any[]; onS
       level: f.stockGrams < f.minStockGrams ? "Crítico" : "Atenção",
     }));
   return (
-    <Card className="relative overflow-hidden flex flex-col cursor-pointer hover:bg-white/[0.02] transition" onClick={() => onSelectTab?.(4)}>
-      <span aria-hidden className="absolute left-0 top-0 bottom-0 w-[3px] bg-rose-500 rounded-l-2xl" />
+    <Card glow="#fb7185" className="relative overflow-hidden flex flex-col cursor-pointer transition" onClick={() => onSelectTab?.(4)}>
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-[14px] font-semibold text-white">Estoque Crítico</h3>
         <button className="text-[11px] text-white/50 hover:text-white" onClick={(e) => { e.stopPropagation(); onSelectTab?.(4); }}>Ver todos</button>
@@ -966,7 +966,7 @@ function FilamentQuotes({ onSelectTab }: { onSelectTab?: (t: number) => void } =
     return { name: g.type || "—", price: avg, min, count: offers.length };
   });
   return (
-    <Card className="cursor-pointer hover:bg-white/[0.02] transition" onClick={() => onSelectTab?.(7)}>
+    <Card glow="#a78bfa" className="cursor-pointer transition" onClick={() => onSelectTab?.(7)}>
       <div className="flex items-baseline justify-between mb-1">
         <h3 className="text-[14px] font-semibold text-white">Cotação de Filamentos</h3>
         <span className="text-[10px] text-white/40">SerpAPI</span>
@@ -1054,7 +1054,7 @@ function TopProductsChart({
   onSelectTab?: (t: number) => void;
 }) {
   return (
-    <Card className="cursor-pointer hover:bg-white/[0.02] transition" onClick={() => onSelectTab?.(6)}>
+    <Card glow="#f97316" className="cursor-pointer transition" onClick={() => onSelectTab?.(6)}>
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-[14px] font-semibold text-white">Produtos Mais Vendidos</h3>
         <button className="text-[11px] text-white/50 hover:text-white" onClick={(e) => { e.stopPropagation(); onSelectTab?.(6); }}>Ver todos</button>
@@ -1348,7 +1348,6 @@ export function Print3DPanel({
           </div>
 
           {/* Premium dashboard strip — Obsidian Glass */}
-          <SectionTitle icon={Activity} title="Dashboard — Painel de Controle" status="Operacional" />
           <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
             <PremiumKpi tone="lime"    icon={ShoppingBag} label="Pedidos Hoje"       value={String(ordersToday.length)} sub={`${activePrinters}/${printersTotal} impressoras`} />
             <PremiumKpi tone="emerald" icon={DollarSign}  label="Faturamento Hoje"   value={fmtBRL(revenueToday)}       sub="receita do dia" />
