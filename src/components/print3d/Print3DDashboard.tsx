@@ -540,7 +540,7 @@ function LivePrinters({ printers = [], orders = [], onSelectTab }: { printers?: 
     const remaining = activeOrder
       ? `${Math.floor(remainingH)}h ${Math.round((remainingH % 1) * 60)}m restantes`
       : (p.status === "PRINTING" ? "em andamento" : "—");
-    return { name: p.name || p.model, model: p.model || "", customUrl: p.customUrl, material, remaining, pct: Math.max(0, Math.min(100, pct)) };
+    return { name: p.name || p.model, model: p.model || "", customUrl: p.customUrl, material, remaining, pct: Math.max(0, Math.min(100, pct)), isPrinting: p.status === "PRINTING" };
   });
   return (
     <Card className="flex flex-col overflow-hidden">
@@ -565,7 +565,10 @@ function LivePrinters({ printers = [], orders = [], onSelectTab }: { printers?: 
             onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onSelectTab?.(16); } }}
             className="flex items-center gap-3 group cursor-pointer rounded-lg -mx-1 px-1 py-1 hover:bg-white/[0.03] transition"
           >
-            <div className="size-10 rounded-lg overflow-hidden bg-white/[0.03] border border-white/[0.05] shrink-0 relative">
+            <div
+              className={`size-10 rounded-lg overflow-hidden bg-white/[0.03] shrink-0 relative border-2 ${p.isPrinting ? 'border-emerald-400' : 'border-red-500'}`}
+              style={{ boxShadow: p.isPrinting ? '0 0 10px rgba(16,185,129,0.55)' : '0 0 10px rgba(239,68,68,0.5)' }}
+            >
               <img
                 src={getPrinterLogo(p.model, p.customUrl)}
                 alt={p.name}
