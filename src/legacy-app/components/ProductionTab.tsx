@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { PrintOrder, Printer, FilamentStock } from '../types';
+import { ProductionDashboard } from './ProductionDashboard';
 import { 
   Plus, 
   Trash2, 
@@ -667,6 +668,8 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
       {viewMode !== 'monitor' && (<>
       {/* Alerta de compras recomendadas foi movido para a aba Estoque */}
 
+      {/* Dashboard premium — mesma linguagem visual de Clientes/Pedidos */}
+      <ProductionDashboard orders={orders} printers={printers} />
 
       {/* Search row */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-end gap-2.5">
