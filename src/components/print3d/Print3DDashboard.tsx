@@ -599,10 +599,10 @@ function LivePrinters({ printers = [], orders = [], onSelectTab }: { printers?: 
 function StatusPill({ s }: { s: string }) {
   const map: Record<string, string> = {
     "Ag. Arquivo": "bg-amber-400/10 text-amber-300 border-amber-400/20",
-    "NaFila / Pagar": "bg-white/[0.05] text-white/65 border-white/10",
+    "Aguardando Aceite": "bg-white/[0.05] text-white/65 border-white/10",
     "Imprimindo": "bg-violet-400/10 text-violet-300 border-violet-400/20",
-    "Pós-Processo": "bg-sky-400/10 text-sky-300 border-sky-400/20",
-    "Embalando": "bg-fuchsia-400/10 text-fuchsia-300 border-fuchsia-400/20",
+    "Acabamento": "bg-sky-400/10 text-sky-300 border-sky-400/20",
+    "Pronto para Entrega": "bg-fuchsia-400/10 text-fuchsia-300 border-fuchsia-400/20",
     "Pronto": "bg-blue-400/10 text-blue-300 border-blue-400/20",
     "Entregue": "bg-emerald-400/10 text-emerald-300 border-emerald-400/20",
   };
@@ -610,10 +610,10 @@ function StatusPill({ s }: { s: string }) {
 }
 const ORDER_STATUS_LABEL: Record<string, string> = {
   WAITING: "Ag. Arquivo",
-  QUEUE: "NaFila / Pagar",
+  QUEUE: "Aguardando Aceite",
   PRINTING: "Imprimindo",
-  POST_PROCESS: "Pós-Processo",
-  PACKING: "Embalando",
+  POST_PROCESS: "Acabamento",
+  PACKING: "Pronto para Entrega",
   READY: "Pronto",
   DELIVERED: "Entregue",
 };
