@@ -1930,7 +1930,8 @@ export default function App() {
               : '#D4A017';
           return (
             <div
-              className="relative flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 px-1 py-2"
+              className="relative flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 px-1 py-3 border-y bg-transparent rounded-none"
+              style={{ borderColor: `${titleColor}33` }}
               id="view-page-header"
             >
               <div className="relative z-10 space-y-1 min-w-0">

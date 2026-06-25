@@ -960,10 +960,13 @@ input, select, textarea {
   background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
-  border: 1px solid rgba(var(--tab-accent), 0.25) !important;
-  border-radius: 1rem !important;
-  box-shadow: 0 20px 50px -20px rgba(var(--tab-accent), 0.35) !important;
-  backdrop-filter: blur(18px) saturate(140%) !important;
+  border-top: 1px solid rgba(var(--tab-accent), 0.28) !important;
+  border-bottom: 1px solid rgba(var(--tab-accent), 0.22) !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
 }
 
 html[data-costs-subtab="CATALOG"] [data-tab-category="estoque"] #view-page-header,
