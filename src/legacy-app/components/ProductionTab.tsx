@@ -792,7 +792,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                         </div>
                       )}
                       
-                      <h4 className="text-xs md:text-sm font-black text-[#F1F4EE] leading-tight truncate">
+                      <h4 className="text-xs md:text-sm font-bold text-[#F1F4EE] leading-tight truncate">
                         {order.itemName}
                       </h4>
                     </div>
@@ -1243,7 +1243,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
               className="bg-[#151917] border border-[#232B27] rounded-2xl max-w-sm w-full p-6 space-y-4 shadow-2xl"
             >
               <div className="flex items-center justify-between">
-                <h4 className="text-sm font-black text-[#F1F4EE] flex items-center gap-1.5 text-[#E5B242]">
+                <h4 className="text-sm font-bold text-[#F1F4EE] flex items-center gap-1.5 text-[#E5B242]">
                   <PrinterIcon className="w-4 h-4 text-[#E5B242]" />
                   Alocar Impressora
                 </h4>
