@@ -1102,9 +1102,10 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
               animate={{ opacity: 1, y: 0 }}
               whileHover={{ y: -1 }}
               onClick={() => setDetailOrder(order)}
-              className={`group relative flex items-stretch gap-3 rounded-xl bg-gradient-to-br from-[#13181500] via-[#13181580] to-[#0F1310] border ${isLate ? 'border-red-500/60 shadow-[0_0_14px_rgba(239,68,68,0.18)]' : 'border-[#232B27] hover:border-[#3a4a40]'} px-3 py-2.5 transition-all duration-300 backdrop-blur-sm cursor-pointer hover:shadow-[0_4px_20px_rgba(0,0,0,0.4)]`}
+              className={`group relative flex flex-col gap-2 rounded-xl bg-gradient-to-br from-[#13181500] via-[#13181580] to-[#0F1310] border ${isLate ? 'border-red-500/60 shadow-[0_0_14px_rgba(239,68,68,0.18)]' : 'border-[#232B27] hover:border-[#3a4a40]'} px-3 py-2.5 transition-all duration-300 backdrop-blur-sm cursor-pointer hover:shadow-[0_4px_20px_rgba(0,0,0,0.4)]`}
             >
               <span aria-hidden className="absolute left-0 top-2 bottom-2 w-[3px] rounded-full" style={{ background: color, boxShadow: `0 0 8px ${color}80` }} />
+              <div className="flex items-stretch gap-3">
               {order.imageUrl ? (
                 <img
                   src={order.imageUrl}
@@ -1147,25 +1148,11 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                 )}
               </div>
               <div className="flex flex-col items-end justify-between shrink-0 gap-1">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded" style={{ background: `${color}1f`, color }}>
-                    {getStatusLabel(order.status)}
-                  </span>
-                  <span className={`text-[9.5px] font-mono tabular-nums flex items-center gap-1 ${isLate ? 'text-red-400' : 'text-[#8BA58D]'}`}>
-                    <Clock className="w-2.5 h-2.5" />{elapsedStr}
-                  </span>
-                </div>
+                <span className={`text-[9.5px] font-mono tabular-nums flex items-center gap-1 ${isLate ? 'text-red-400' : 'text-[#8BA58D]'}`}>
+                  <Clock className="w-2.5 h-2.5" />{elapsedStr}
+                </span>
                 <div className="flex items-center gap-2">
                   <span className="text-[12px] font-bold text-[#F1F4EE] tabular-nums">R$ {order.priceCharged.toFixed(0)}</span>
-                  {nextStatus && (
-                    <button
-                      onClick={(e) => { e.stopPropagation(); handleFastStatusAdvance(order, nextStatus); }}
-                      className="text-[10px] font-bold px-2 py-1 rounded-md border transition-all duration-200 hover:scale-[1.03] active:scale-95"
-                      style={{ borderColor: `${color}55`, color, background: `${color}12` }}
-                    >
-                      {nextLabel} →
-                    </button>
-                  )}
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -1180,6 +1167,16 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                   </button>
                 </div>
               </div>
+              </div>
+              {nextStatus && (
+                <button
+                  onClick={(e) => { e.stopPropagation(); handleFastStatusAdvance(order, nextStatus); }}
+                  className="w-full text-[11px] font-bold px-2 py-2 rounded-md border transition-all duration-200 hover:brightness-110 active:scale-[0.98]"
+                  style={{ borderColor: `${color}55`, color, background: `${color}12` }}
+                >
+                  {nextLabel} →
+                </button>
+              )}
             </motion.div>
           );
         };
