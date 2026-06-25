@@ -1722,6 +1722,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
         </div>
 
       </div>
+      </div>
       )}
 
       {/* ========================================================================= */}
