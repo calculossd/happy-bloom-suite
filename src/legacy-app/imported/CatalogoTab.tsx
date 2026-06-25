@@ -15,6 +15,7 @@ import {
   HardDrive,
   Layers,
 } from "lucide-react";
+import { AiRecommendation, SectionTitle, Kpi } from "@/legacy-app/components/DashboardShell";
 import {
   listModels,
   saveModel,
@@ -206,54 +207,71 @@ function CatalogPage() {
         </div>
 
         <div className="w-full py-6 space-y-6">
-          {/* Editorial header */}
-          <header className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-transparent p-8 md:p-10 backdrop-blur-xl">
-            <div className="pointer-events-none absolute -top-24 -right-24 h-[320px] w-[320px] rounded-full bg-cyan-500/15 blur-[120px]" />
-            <div className="pointer-events-none absolute -bottom-20 -left-20 h-[260px] w-[260px] rounded-full bg-sky-600/10 blur-[120px]" />
-            <div className="relative flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-              <div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[10px] uppercase tracking-[0.32em] text-white/60">
-                  <Sparkles className="h-3 w-3 text-cyan-300" /> Biblioteca Local
-                </div>
-                <h1 className="mt-4 text-4xl md:text-5xl font-semibold tracking-tight text-white" style={{ fontFamily: "'Sora', sans-serif" }}>
-                  STL <span className="bg-gradient-to-r from-cyan-300 via-sky-200 to-white bg-clip-text text-transparent">Vault</span>
-                </h1>
-                <p className="mt-2 max-w-xl text-sm text-white/55">
-                  {models.length} modelo(s) armazenados localmente — funciona offline, com miniaturas geradas automaticamente.
-                </p>
-              </div>
-              <div className="grid grid-cols-3 gap-3 md:gap-4">
-                {[
-                  { label: "Modelos", value: models.length, icon: Boxes, color: "text-cyan-200", glow: "from-cyan-500/15" },
-                  { label: "STL / 3MF", value: `${models.filter(m=>m.fileType==='stl').length}/${models.filter(m=>m.fileType==='3mf').length}`, icon: Layers, color: "text-sky-200", glow: "from-sky-500/15" },
-                  { label: "Total", value: `${(models.reduce((a,b)=>a+b.size,0)/1024/1024).toFixed(1)}MB`, icon: HardDrive, color: "text-emerald-200", glow: "from-emerald-500/15" },
-                ].map((k) => (
-                  <div key={k.label} className={`relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br ${k.glow} to-transparent px-4 py-3`}>
-                    <div className="flex items-center gap-1.5 text-[9px] uppercase tracking-[0.24em] text-white/45">
-                      <k.icon className={`h-3 w-3 ${k.color}`} />{k.label}
-                    </div>
-                    <div className={`mt-1 text-xl font-semibold tabular-nums ${k.color}`}>{k.value}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="relative mt-6 flex flex-wrap gap-2 border-t border-white/10 pt-5">
+          {/* AI Recommendation + KPI strip (padrão Clientes) */}
+          <AiRecommendation
+            title={
+              models.length === 0
+                ? 'Comece subindo seus primeiros STLs'
+                : models.filter((m) => !m.thumbnail).length > 0
+                  ? `${models.filter((m) => !m.thumbnail).length} modelo(s) sem miniatura`
+                  : 'Vault organizado — faça backup hoje'
+            }
+            body={
+              models.length === 0
+                ? 'Sem arquivos no Vault a IA não consegue prever materiais nem agrupar peças. Arraste seus .stl/.3mf para começar.'
+                : models.filter((m) => !m.thumbnail).length > 0
+                  ? 'Modelos sem preview não convertem bem no catálogo público. Reabra para regenerar a miniatura automaticamente.'
+                  : 'Você tem arquivos importantes armazenados localmente. Gere um ZIP de backup para evitar perda em caso de troca de máquina.'
+            }
+            savings={`${(models.reduce((a, b) => a + b.size, 0) / 1024 / 1024).toFixed(1)} MB`}
+            action={models.length === 0 ? 'Subir STL' : 'Backup ZIP'}
+            onAction={() => (models.length === 0 ? inputRef.current?.click() : bulkDownload())}
+          />
+
+          <SectionTitle icon={Boxes} title="Dashboard — STL Vault" />
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            <Kpi icon={Boxes} label="Modelos" value={models.length} tone="gold" />
+            <Kpi icon={Layers} label="STL" value={models.filter((m) => m.fileType === 'stl').length} tone="lime" />
+            <Kpi icon={Layers} label="3MF" value={models.filter((m) => m.fileType === '3mf').length} tone="blue" />
+            <Kpi
+              icon={HardDrive}
+              label="Armazenamento"
+              value={`${(models.reduce((a, b) => a + b.size, 0) / 1024 / 1024).toFixed(1)} MB`}
+              sub="local"
+              tone="emerald"
+            />
+            <Kpi
+              icon={TagIcon}
+              label="Categorias"
+              value={new Set(models.map((m) => m.category)).size}
+              tone="purple"
+            />
+            <Kpi
+              icon={Sparkles}
+              label="Sem Miniatura"
+              value={models.filter((m) => !m.thumbnail).length}
+              tone={models.filter((m) => !m.thumbnail).length > 0 ? 'orange' : 'emerald'}
+            />
+          </div>
+
+          {/* Action bar */}
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={bulkDownload}
+              className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 backdrop-blur transition-all hover:-translate-y-0.5 hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-100"
+            >
+              <Archive className="h-4 w-4" /> Backup ZIP {selected.size ? `(${selected.size})` : '(todos)'}
+            </button>
+            {selected.size > 0 && (
               <button
-                onClick={bulkDownload}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 backdrop-blur transition-all hover:-translate-y-0.5 hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-100"
+                onClick={bulkDelete}
+                className="inline-flex items-center gap-2 rounded-xl border border-red-500/30 bg-gradient-to-br from-red-500/15 to-red-600/5 px-4 py-2 text-sm text-red-100 transition-all hover:-translate-y-0.5 hover:from-red-500/25 hover:shadow-[0_0_24px_-8px_rgba(248,113,113,0.6)]"
               >
-                <Archive className="h-4 w-4" /> Backup ZIP {selected.size ? `(${selected.size})` : "(todos)"}
+                <Trash2 className="h-4 w-4" /> Excluir ({selected.size})
               </button>
-              {selected.size > 0 && (
-                <button
-                  onClick={bulkDelete}
-                  className="inline-flex items-center gap-2 rounded-xl border border-red-500/30 bg-gradient-to-br from-red-500/15 to-red-600/5 px-4 py-2 text-sm text-red-100 transition-all hover:-translate-y-0.5 hover:from-red-500/25 hover:shadow-[0_0_24px_-8px_rgba(248,113,113,0.6)]"
-                >
-                  <Trash2 className="h-4 w-4" /> Excluir ({selected.size})
-                </button>
-              )}
-            </div>
-          </header>
+            )}
+          </div>
 
           {/* Upload zone */}
           <div
