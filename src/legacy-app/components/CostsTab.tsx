@@ -8,6 +8,7 @@ import { dedupeOffers, dedupeQuotationGroups } from '../utils/offerDedupe';
 import { FilamentSpool, materialColor } from './FilamentSpool';
 import { EstoqueDashboard } from './EstoqueDashboard';
 import { CatalogoDashboard } from './CatalogoDashboard';
+import { AiRecommendation, SectionTitle, Kpi } from './DashboardShell';
 import { 
   Disc, 
   ShoppingCart, 
@@ -32,7 +33,11 @@ import {
   DollarSign,
   FileCode,
   Search,
-  Edit3
+  Edit3,
+  Wallet,
+  Receipt,
+  TrendingDown,
+  Package
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 
