@@ -410,7 +410,7 @@ export const PrintFlowTab: React.FC<PrintFlowTabProps> = ({
                     Ação Necessária
                   </span>
                 </div>
-                <h3 className="text-[14px] font-bold tracking-[-0.01em] text-zinc-50">
+                <h3 className="text-sm font-bold text-[#F1F4EE]">
                   Compras recomendadas — estoque crítico
                 </h3>
                 <p className="text-[12px] leading-relaxed text-zinc-400 max-w-2xl">

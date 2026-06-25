@@ -1888,7 +1888,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                   {isAuditOverdue ? 'Ação Necessária' : 'Tudo Certo'}
                 </span>
               </div>
-              <h3 className="text-[14px] font-bold tracking-[-0.01em] text-zinc-50 truncate">
+              <h3 className="text-sm font-bold text-[#F1F4EE] truncate">
                 {isAuditOverdue ? 'Recontagem de estoques pendente' : 'Auditoria em dia'}
               </h3>
               <p className="text-[12px] leading-relaxed text-zinc-400 max-w-2xl">
@@ -3131,7 +3131,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                 </div>
                 <div className="min-w-0">
                   <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-[#b7ff00]/80">Produtos</span>
-                  <h3 className="text-[14px] font-bold tracking-[-0.01em] text-[#F1F4EE] truncate">Estoque de Produtos</h3>
+                  <h3 className="text-sm font-bold text-[#F1F4EE] truncate">Estoque de Produtos</h3>
                   <p className="text-[11px] text-zinc-500 truncate">Cadastro de produtos prontos do portfólio; o catálogo só exibe estes itens</p>
                 </div>
               </div>
@@ -3250,7 +3250,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                 </div>
                 <div className="min-w-0">
                   <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-emerald-300/80">Filamentos</span>
-                  <h3 className="text-[14px] font-bold tracking-[-0.01em] text-[#F1F4EE] truncate">Estoque de Carretéis</h3>
+                  <h3 className="text-sm font-bold text-[#F1F4EE] truncate">Estoque de Carretéis</h3>
                   <p className="text-[11px] text-zinc-500 truncate">Acompanhe suas bobinas ativas</p>
                 </div>
               </div>
@@ -3535,7 +3535,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                 </div>
                 <div className="min-w-0">
                   <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-amber-300/80">Hardware</span>
-                  <h3 className="text-[14px] font-bold tracking-[-0.01em] text-[#F1F4EE] truncate">Estoque de Insumos</h3>
+                  <h3 className="text-sm font-bold text-[#F1F4EE] truncate">Estoque de Insumos</h3>
                   <p className="text-[11px] text-zinc-500 truncate">Caixas, componentes e bicos de reposição</p>
                 </div>
               </div>
