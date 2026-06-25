@@ -171,9 +171,9 @@ function TopBar() {
 }
 
 /* ---------- Card primitive ---------- */
-function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+function Card({ children, className = "", onClick }: { children: React.ReactNode; className?: string; onClick?: () => void }) {
   return (
-    <div className={`rounded-2xl bg-[#0f1311] border border-white/[0.05] p-5 ${className}`} style={{ boxShadow: "0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px -24px rgba(0,0,0,0.7)" }}>
+    <div onClick={onClick} className={`rounded-2xl bg-[#0f1311] border border-white/[0.05] p-5 ${className}`} style={{ boxShadow: "0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px -24px rgba(0,0,0,0.7)" }}>
       {children}
     </div>
   );
