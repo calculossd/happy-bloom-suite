@@ -95,12 +95,15 @@ export const PrintersDashboard: React.FC<Props> = ({ orders, printers }) => {
   }, [orders, printers]);
 
   const aiTip = useMemo(() => {
+    const fire = (name: string, detail?: any) => { try { window.dispatchEvent(new CustomEvent(name, { detail })); } catch {} };
+    const goPrinters = () => fire('navigate-tab', 16);
     if (stats.total === 0) {
       return {
         title: 'Cadastre suas impressoras para começar',
         body: 'Sem impressoras cadastradas a IA não consegue calcular ocupação, manutenção nem throughput. Adicione ao menos 1 impressora.',
         savings: '—',
         action: 'Cadastrar',
+        onAction: goPrinters,
       };
     }
     if (stats.maintDue > 0) {
@@ -109,6 +112,7 @@ export const PrintersDashboard: React.FC<Props> = ({ orders, printers }) => {
         body: 'Manutenção preventiva atrasada aumenta a chance de falhas e refugos. Pause a impressão e revise correia, bico e firmware.',
         savings: `-${stats.maintDue} risco${stats.maintDue > 1 ? 's' : ''}`,
         action: 'Ver manutenção',
+        onAction: goPrinters,
       };
     }
     if (stats.utilization >= 80) {
@@ -117,6 +121,7 @@ export const PrintersDashboard: React.FC<Props> = ({ orders, printers }) => {
         body: `Utilização em ${stats.utilization}% com ${stats.printing}/${stats.total} máquinas ativas. Uma impressora adicional reduz fila e protege prazos.`,
         savings: `${stats.utilization}% uso`,
         action: 'Planejar +1',
+        onAction: goPrinters,
       };
     }
     if (stats.utilization < 30 && stats.total > 1) {
@@ -125,6 +130,7 @@ export const PrintersDashboard: React.FC<Props> = ({ orders, printers }) => {
         body: `Apenas ${stats.utilization}% da frota está ativa. Aproveite para consolidar pedidos, rodar pré-produção de estoque ou agendar manutenção.`,
         savings: `${stats.idle} ociosas`,
         action: 'Otimizar',
+        onAction: goPrinters,
       };
     }
     return {
@@ -132,6 +138,7 @@ export const PrintersDashboard: React.FC<Props> = ({ orders, printers }) => {
       body: `Utilização em ${stats.utilization}%, ${stats.online}/${stats.total} online, progresso médio dos jobs ativos em ${stats.avgProgress}%.`,
       savings: `${stats.utilization}% uso`,
       action: 'Ver detalhes',
+      onAction: goPrinters,
     };
   }, [stats]);
 
@@ -213,7 +220,7 @@ export const PrintersDashboard: React.FC<Props> = ({ orders, printers }) => {
           <div className="hidden md:flex flex-col items-end gap-2 shrink-0 pl-4 border-l border-white/10">
             <span className="text-[9px] font-bold uppercase tracking-widest text-zinc-500">Sinal</span>
             <span className="text-xl font-extrabold text-[#b7ff00] tabular-nums">{aiTip.savings}</span>
-            <button className="mt-1 px-3 py-1.5 bg-[#b7ff00] text-black text-[10px] font-extrabold uppercase tracking-widest rounded-lg hover:scale-105 active:scale-95 transition-transform shadow-[0_0_20px_rgba(183,255,0,0.3)] flex items-center gap-1.5">
+            <button onClick={(aiTip as any).onAction} className="mt-1 px-3 py-1.5 bg-[#b7ff00] text-black text-[10px] font-extrabold uppercase tracking-widest rounded-lg hover:scale-105 active:scale-95 transition-transform shadow-[0_0_20px_rgba(183,255,0,0.3)] flex items-center gap-1.5">
               {aiTip.action} <ArrowRight className="w-3 h-3" />
             </button>
           </div>

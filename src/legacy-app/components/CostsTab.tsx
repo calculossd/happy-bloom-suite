@@ -3880,6 +3880,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                     : `Todos os itens do carrinho foram adquiridos. Categoria com maior gasto acumulado: ${maiorCat}.`}
                   savings={`R$ ${pendente.toFixed(2)}`}
                   action={pendente > 0 ? 'Revisar' : undefined}
+                  onAction={() => { try { document.getElementById('shopping-cart-section')?.scrollIntoView({ behavior: 'smooth' }); } catch {} }}
                 />
                 <div className="flex items-center justify-between">
                   <SectionTitle icon={Wallet} title="Dashboard — Gastos / Carteira" status="Operacional" />

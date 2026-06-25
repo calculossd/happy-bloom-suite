@@ -126,12 +126,14 @@ export const PedidosDashboard: React.FC<Props> = ({ orders }) => {
   }, [orders]);
 
   const aiTip = useMemo(() => {
+    const fire = (name: string, detail?: any) => { try { window.dispatchEvent(new CustomEvent(name, { detail })); } catch {} };
     if (stats.total === 0) {
       return {
         title: 'Sem pedidos ainda — importe seu primeiro!',
         body: 'Conecte um canal de vendas ou cadastre um pedido manual para começar a ver previsões de receita, gargalos e tendências em tempo real.',
         savings: 'R$ 0',
         action: 'Conectar canal',
+        onAction: () => fire('navigate-tab', 5),
       };
     }
     if (stats.pending > stats.inProd * 2 && stats.pending > 3) {
@@ -140,6 +142,7 @@ export const PedidosDashboard: React.FC<Props> = ({ orders }) => {
         body: `Você tem ${stats.pending} pedidos aguardando aceite contra apenas ${stats.inProd} em produção. Acelere o aceite para não perder prazo nem reputação nos marketplaces.`,
         savings: `${stats.pending} pedidos`,
         action: 'Ver fila',
+        onAction: () => fire('navigate-tab', 1),
       };
     }
     return {
@@ -147,6 +150,7 @@ export const PedidosDashboard: React.FC<Props> = ({ orders }) => {
       body: `Ticket médio atual: ${fmtBRL(stats.ticketMedio)}. Empacotar itens em combos pode elevar essa média em 15–25% e aumentar margem por entrega.`,
       savings: `+ ${fmtBRL(stats.ticketMedio * 0.2 * stats.ordersMonth)}`,
       action: 'Sugerir combos',
+      onAction: () => fire('navigate-tab', 9),
     };
   }, [stats]);
 
@@ -224,7 +228,7 @@ export const PedidosDashboard: React.FC<Props> = ({ orders }) => {
           <div className="hidden md:flex flex-col items-end gap-2 shrink-0 pl-4 border-l border-white/10">
             <span className="text-[9px] font-bold uppercase tracking-widest text-zinc-500">Oportunidade</span>
             <span className="text-xl font-extrabold text-[#b7ff00] tabular-nums">{aiTip.savings}</span>
-            <button className="mt-1 px-3 py-1.5 bg-[#b7ff00] text-black text-[10px] font-extrabold uppercase tracking-widest rounded-lg hover:scale-105 active:scale-95 transition-transform shadow-[0_0_20px_rgba(183,255,0,0.3)] flex items-center gap-1.5">
+            <button onClick={(aiTip as any).onAction} className="mt-1 px-3 py-1.5 bg-[#b7ff00] text-black text-[10px] font-extrabold uppercase tracking-widest rounded-lg hover:scale-105 active:scale-95 transition-transform shadow-[0_0_20px_rgba(183,255,0,0.3)] flex items-center gap-1.5">
               {aiTip.action} <ArrowRight className="w-3 h-3" />
             </button>
           </div>
