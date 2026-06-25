@@ -577,7 +577,7 @@ function LivePrinters({ printers = [], orders = [], onSelectTab }: { printers?: 
     return { name: p.name || p.model, model: p.model || "", customUrl: p.customUrl, material, remaining, pct: Math.max(0, Math.min(100, pct)), isPrinting: p.status === "PRINTING" };
   });
   return (
-    <Card glow="#a3e635" className="flex flex-col overflow-hidden">
+    <Card glow="#38bdf8" className="flex flex-col overflow-hidden">
       <div className="flex items-baseline justify-between mb-1">
         <h3 className="text-[14px] font-semibold text-white">Impressão ao Vivo</h3>
         <span className="text-[10px] text-white/45 tabular-nums">
@@ -663,7 +663,7 @@ function OrdersList({ orders = [], clients = [], onSelectTab }: { orders?: any[]
   const cityById: Record<number, string> = {};
   clients.forEach((c: any) => (cityById[c.id] = (c.address || "").split(",").pop()?.trim() || ""));
   return (
-    <Card glow="#10b981" className="flex flex-col overflow-hidden cursor-pointer transition" onClick={() => onSelectTab?.(1)}>
+    <Card glow="#f0c674" className="flex flex-col overflow-hidden cursor-pointer transition" onClick={() => onSelectTab?.(1)}>
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-[14px] font-semibold text-white">Pedidos a Serem Entregues</h3>
         <button className="text-[11px] text-white/50 hover:text-white" onClick={(e) => { e.stopPropagation(); onSelectTab?.(1); }}>Ver todos</button>
@@ -850,7 +850,7 @@ function StlGallery({ orders = [], clients = [] }: { orders?: any[]; clients?: a
     .sort((a, b) => (b.ts || 0) - (a.ts || 0))
     .slice(0, 10);
   return (
-    <Card>
+    <Card glow="#f0c674">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-[14px] font-semibold text-white">Últimas Peças Impressas</h3>
         <button className="text-[11px] text-white/50 hover:text-white">Ver todos</button>
@@ -966,7 +966,7 @@ function FilamentQuotes({ onSelectTab }: { onSelectTab?: (t: number) => void } =
     return { name: g.type || "—", price: avg, min, count: offers.length };
   });
   return (
-    <Card glow="#a78bfa" className="cursor-pointer transition" onClick={() => onSelectTab?.(7)}>
+    <Card glow="#047857" className="cursor-pointer transition" onClick={() => onSelectTab?.(7)}>
       <div className="flex items-baseline justify-between mb-1">
         <h3 className="text-[14px] font-semibold text-white">Cotação de Filamentos</h3>
         <span className="text-[10px] text-white/40">SerpAPI</span>
@@ -1017,7 +1017,7 @@ function AiPricing({ orders = [], onSelectTab }: { orders?: any[]; onSelectTab?:
   };
   return (
     <Card
-      glow={LIME}
+      glow="#a78bfa"
       className="cursor-pointer transition hover:border-white/[0.12]"
       onClick={openCalc}
     >
@@ -1095,7 +1095,7 @@ function TopProductsChart({
   onSelectTab?: (t: number) => void;
 }) {
   return (
-    <Card glow="#f97316" className="cursor-pointer transition" onClick={() => onSelectTab?.(6)}>
+    <Card glow="#a78bfa" className="cursor-pointer transition" onClick={() => onSelectTab?.(6)}>
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-[14px] font-semibold text-white">Produtos Mais Vendidos</h3>
         <button className="text-[11px] text-white/50 hover:text-white" onClick={(e) => { e.stopPropagation(); onSelectTab?.(6); }}>Ver todos</button>
@@ -1138,7 +1138,7 @@ function HourlyChart({ data }: { data?: Array<{ h: string; v: number }> }) {
   );
   const chartData = data && data.length ? data : fallback;
   return (
-    <Card>
+    <Card glow="#047857">
       <h3 className="text-[14px] font-semibold text-white">Faturamento por Dia da Semana</h3>
       <p className="text-[11px] text-white/45 mb-3">Receita acumulada por dia da semana no mês</p>
       <div className="h-[180px] -mx-2 min-w-0">
@@ -1189,7 +1189,7 @@ function FinanceSummary({
   const m = Math.max(0, Math.min(100, Math.round(margin)));
   const data = [{ v: m }, { v: 100 - m }];
   return (
-    <Card>
+    <Card glow="#047857">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-[14px] font-semibold text-white">Resumo Financeiro</h3>
         <button className="text-[11px] text-white/50 hover:text-white" onClick={() => onSelectTab?.(5)}>Ver todos</button>
