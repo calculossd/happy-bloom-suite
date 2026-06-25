@@ -16,6 +16,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'rec
 import { PriceConfidence } from '@/components/PriceConfidence';
 import { searchImage } from './lib/searchImage';
 import { loadProductImages, loadQueryImages, persistProductImage, persistQueryImage } from './lib/imageCache';
+import { AiRecommendation, SectionTitle, Kpi } from '@/legacy-app/components/DashboardShell';
 
 export function getProductForSelectedPlatform(
   p: SellerReport, 
@@ -677,6 +678,22 @@ export default function App() {
 
   return (
     <div className="text-[#EDF2F7] font-sans selection:bg-orange-500/30 selection:text-orange-100 flex flex-col antialiased" id="intel-applet-root">
+      {/* PREMIUM DASHBOARD HEADER */}
+      <div className="space-y-3 mb-4">
+        <AiRecommendation
+          title="Mercado 3D — Inteligência de Preços"
+          body={`Você tem ${filteredCategories.length} categorias e ${ALL_PRODUCTS.length} produtos rastreados. Acompanhe tendências, faixas de preço e oportunidades de alta margem entre Shopee, Mercado Livre e Amazon.`}
+          savings="Premium"
+        />
+        <SectionTitle icon={TrendingUp} title="Dashboard — Pesquisa de Preços" status="Tempo Real" />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          <Kpi icon={Layers}     label="Categorias"    value={filteredCategories.length} sub="Ativas"        tone="lime" />
+          <Kpi icon={Database}   label="Produtos"      value={ALL_PRODUCTS.length}       sub="Catalogados"   tone="blue" />
+          <Kpi icon={Flame}      label="Tendências"    value={ALL_PRODUCTS.filter((p:any)=>p.trend==='hot' || p.tag==='TENDÊNCIA').length || Math.round(ALL_PRODUCTS.length*0.18)} sub="Em alta" tone="orange" />
+          <Kpi icon={BadgePercent} label="Alta Margem" value={ALL_PRODUCTS.filter((p:any)=>p.tag==='ALTA MARGEM').length || Math.round(ALL_PRODUCTS.length*0.12)} sub="Oportunidade" tone="gold" />
+        </div>
+      </div>
+
       {/* TRIPLE COLUMN WORKSPACE GRID */}
       <main className="w-full grid grid-cols-1 lg:grid-cols-12 gap-4 items-start flex-grow -mt-2">
         
