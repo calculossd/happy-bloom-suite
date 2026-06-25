@@ -1898,15 +1898,10 @@ export default function App() {
       <main className="flex-1 w-full px-3 sm:px-4 md:px-6 py-4 md:py-6 pb-28 space-y-4">
         {/* EXQUISITE NEW HEADER DE CADA PÁGINA (Título grande + Subtítulo curto + Relógio/Data ao vivo mounted) */}
         {(() => {
-          if (currentTab === 0) return null;
-          if (currentTab === 4 && costsSubTab === 'AI') return null;
+          // Page titles removed — actions are now rendered inside each dashboard.
+          return null;
+          // eslint-disable-next-line no-unreachable
           let headerInfo = getTabHeader(currentTab);
-          if (currentTab === 4 && costsSubTab === 'CATALOG') {
-            headerInfo = {
-              title: 'Catálogo Inova',
-              subtitle: 'Vitrine inteligente — composição, ticket médio e saúde do portfólio',
-            };
-          }
           if (!headerInfo.title) return null;
           const formattedDate = currentTime.toLocaleDateString('pt-BR', { 
             weekday: 'short', 
