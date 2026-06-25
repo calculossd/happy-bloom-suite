@@ -853,7 +853,7 @@ export default function App() {
             </div>
 
             {/* Quick action Scanner Buttons */}
-            <div className="grid grid-cols-2 gap-3 text-xs">
+            <div className="relative grid grid-cols-2 gap-3 text-xs">
               <button
                 onClick={() => handleLiveAnalysis(searchQuery)}
                 disabled={isLoading || !searchQuery.trim()}
@@ -889,7 +889,8 @@ export default function App() {
 
           {/* Scrollable list or spreadsheet table of feeds */}
           {viewMode === 'list' ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 max-h-[64vh] overflow-y-auto scrollbar-thin scrollbar-thumb-[#151D2F] pr-1">
+            <div className="relative grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 max-h-[64vh] overflow-y-auto scrollbar-thin scrollbar-thumb-[#151D2F] pr-1 rounded-2xl border border-white/10 bg-white/[0.018] p-3 backdrop-blur-2xl shadow-[0_20px_70px_-48px_rgba(0,0,0,0.9)]">
+              <div className="pointer-events-none absolute -top-28 right-16 h-56 w-56 rounded-full bg-[#b7ff00]/8 blur-3xl" />
               {filteredProducts.map((p, idx) => {
                 const isSelected = report?.id === p.id;
                 
@@ -920,22 +921,25 @@ export default function App() {
                       setIsDetailOpen(true);
                     }}
                     title={p.title}
-                    className={`relative aspect-square rounded-lg border cursor-pointer overflow-hidden group transition-all duration-200 ${
+                    style={{ animationDelay: `${idx * 24}ms` }}
+                    className={`relative aspect-square rounded-xl border cursor-pointer overflow-hidden group animate-fade-in transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:scale-[1.015] hover:z-10 ${
                       isSelected
                         ? p.estimatedMargin < 10
-                          ? 'border-red-500/60 shadow-lg shadow-red-955/10'
-                          : 'border-orange-500/60 shadow-lg'
+                          ? 'border-red-500/60 shadow-[0_18px_42px_-24px_rgba(239,68,68,0.8)]'
+                          : 'border-[#b7ff00]/60 shadow-[0_18px_42px_-24px_rgba(183,255,0,0.85)]'
                         : p.estimatedMargin < 10
                           ? 'border-red-500/30 hover:border-red-500/60'
-                          : 'border-[#121826]/70 hover:border-orange-500/40'
+                          : 'border-white/10 hover:border-[#b7ff00]/45 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]'
                     }`}
                   >
+                    <span className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-br from-white/10 via-transparent to-black/35 opacity-60" />
+                    <span className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-px bg-gradient-to-r from-transparent via-white/35 to-transparent" />
                     {/* Image (90% area) */}
                     {showProductImage ? (
                       <img
                         src={productImageUrl}
                         alt={p.title}
-                        className="absolute inset-0 w-full h-full object-cover"
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
                         loading="lazy"
                         referrerPolicy="no-referrer"
                         onError={() => productImageUrl && setBrokenImageUrls(prev => ({ ...prev, [productImageUrl]: true }))}
@@ -947,8 +951,8 @@ export default function App() {
                     )}
 
                     {/* Rank number */}
-                    <span className={`absolute top-1 left-1 z-10 w-5 h-5 rounded-full flex items-center justify-center font-black text-[10px] ${
-                      idx < 3 ? 'bg-[#FF6600]/95 text-white' : 'bg-black/70 text-slate-200'
+                    <span className={`absolute top-1.5 left-1.5 z-10 w-6 h-6 rounded-full flex items-center justify-center font-black text-[10px] border shadow-lg ${
+                      idx < 3 ? 'bg-[#D4A017] text-black border-[#f6d05f]/60 shadow-[#D4A017]/30' : 'bg-black/70 text-slate-200 border-white/15'
                     }`}>{idx + 1}</span>
 
                     {/* Kanban toggle */}
@@ -957,26 +961,26 @@ export default function App() {
                       title={isInKanban(p.id) ? 'Remover do Kanban' : 'Adicionar ao Kanban'}
                       className={`absolute top-1 right-1 z-10 w-5 h-5 rounded-md border flex items-center justify-center transition-all ${
                         isInKanban(p.id)
-                          ? 'bg-emerald-500/90 border-emerald-400 text-white'
-                          : 'bg-black/60 border-white/20 text-slate-200 hover:text-emerald-300'
+                          ? 'bg-emerald-500/90 border-emerald-400 text-white shadow-[0_0_16px_rgba(16,185,129,0.35)]'
+                          : 'bg-black/55 border-white/20 text-slate-200 hover:text-[#b7ff00] hover:border-[#b7ff00]/35'
                       }`}
                     >
                       {isInKanban(p.id) ? <Check className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
                     </button>
 
                     {/* Characteristic badge (top center) */}
-                    <span className={`absolute top-1 left-1/2 -translate-x-1/2 z-10 px-1.5 py-0.5 rounded text-[8px] font-extrabold uppercase tracking-wide whitespace-nowrap ${badgeClasses}`}>
+                    <span className={`absolute top-1.5 left-1/2 -translate-x-1/2 z-10 px-2 py-0.5 rounded-md text-[8px] font-extrabold uppercase tracking-wide whitespace-nowrap shadow-lg backdrop-blur-xl ${badgeClasses}`}>
                       {badgeText}
                     </span>
 
                     {/* Bottom overlay: vendas/mês + faixa de preço */}
-                    <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/95 via-black/75 to-transparent px-1.5 py-1 flex items-end justify-between gap-1">
+                    <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/95 via-black/80 to-transparent px-2 py-2 flex items-end justify-between gap-1">
                       <div className="leading-tight min-w-0">
-                        <span className="block text-[8px] text-slate-400 uppercase">Vendas/mês</span>
+                        <span className="block text-[8px] text-slate-400 uppercase tracking-wider">Vendas/mês</span>
                         <span className="block text-[11px] font-black text-white font-mono">{p.monthlySales.toLocaleString('pt-BR')}</span>
                       </div>
                       <div className="leading-tight text-right min-w-0">
-                        <span className="block text-[8px] text-slate-400 uppercase">Faixa</span>
+                        <span className="block text-[8px] text-slate-400 uppercase tracking-wider">Faixa</span>
                         <span className={`block text-[10px] font-extrabold font-mono whitespace-nowrap ${p.estimatedMargin < 10 ? 'text-red-400' : 'text-[#10B981]'}`}>
                           {p.priceRange || `R$${(p.pricePromo * 0.8).toFixed(0)}-${(p.pricePromo * 1.3).toFixed(0)}`}
                         </span>
@@ -995,7 +999,7 @@ export default function App() {
               )}
             </div>
           ) : (
-            <div className="bg-[#090D16]/95 border border-[#121826]/70 rounded-2xl overflow-hidden shadow-xl max-h-[64vh] overflow-y-auto scrollbar-thin scrollbar-thumb-[#151D2F] pr-1">
+            <div className="bg-white/[0.025] border border-white/10 rounded-2xl overflow-hidden shadow-[0_20px_70px_-48px_rgba(0,0,0,0.9)] max-h-[64vh] overflow-y-auto scrollbar-thin scrollbar-thumb-[#151D2F] pr-1 backdrop-blur-2xl">
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse text-[10px] font-mono whitespace-nowrap min-w-[500px]">
                   <thead className="bg-[#05080E] text-slate-500 border-b border-[#121826] sticky top-0 z-10 text-[8.2px] uppercase tracking-wider font-extrabold">
