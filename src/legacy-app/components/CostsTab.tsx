@@ -2478,12 +2478,22 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
         <div className="space-y-4 animate-fade-in" id="portfolio-catalog-panel">
           {/* Standardized subtab header */}
           <div
-            className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm"
-            style={{ '--tab-accent': '167, 139, 250' } as React.CSSProperties}
+            className="relative flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 px-5 py-4 border rounded-2xl overflow-hidden min-h-[78px]"
+            style={{
+              borderColor: '#A78BFA33',
+              background: 'linear-gradient(135deg, #A78BFA14, #A78BFA05)',
+              backdropFilter: 'blur(14px) saturate(140%)',
+              boxShadow: '0 0 32px -12px #A78BFA55, inset 0 1px 0 #A78BFA22',
+            }}
           >
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Catálogo</div>
+            <div className="relative z-10 space-y-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <div
+                  className="text-sm font-bold uppercase tracking-[0.18em] select-none leading-none font-sans"
+                  style={{ color: '#A78BFA', textShadow: '0 0 18px #A78BFA55' }}
+                >
+                  Catálogo
+                </div>
                 <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">Portfólio</span>
               </div>
               <p className="text-xs text-[var(--brand-muted)]">Somente vitrine: os itens cadastrados no estoque de produtos aparecem aqui para compartilhar</p>
