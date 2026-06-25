@@ -1936,8 +1936,8 @@ export default function App() {
               <div className="relative z-10 space-y-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <div
-                    className="text-base md:text-lg font-extrabold uppercase tracking-[0.16em] font-sans select-none leading-none"
-                    style={{ color: titleColor, textShadow: `0 0 22px ${titleColor}88, 0 0 6px ${titleColor}55` }}
+                    className="text-sm font-bold uppercase tracking-[0.14em] font-sans select-none leading-none"
+                    style={{ color: titleColor, textShadow: `0 0 18px ${titleColor}55` }}
                   >
                     {headerInfo.title}
                   </div>
