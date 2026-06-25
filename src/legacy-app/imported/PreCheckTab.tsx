@@ -244,7 +244,7 @@ function CalibrationPage() {
 
   return (
     <AppShell>
-      <div className="mx-auto max-w-6xl px-6 pt-20 pb-12">
+      <div className="w-full pt-6 pb-8">
         {/* Premium Header — Obsidian Glass */}
         <div
           className="relative mb-6 overflow-hidden rounded-2xl border border-white/10 p-6 animate-fade-in"
