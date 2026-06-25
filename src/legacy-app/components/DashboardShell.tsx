@@ -52,7 +52,6 @@ export const AiRecommendation: React.FC<{
       <div className="relative shrink-0 -my-3">
         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#D4A017]/30 to-[#b7ff00]/20 blur-2xl animate-pulse" />
         <img src={robotMascot.url} alt="Assistente" className="relative w-24 h-24 object-contain drop-shadow-[0_6px_16px_rgba(0,0,0,0.6)]" />
-        <span className="absolute top-1 right-1 w-3 h-3 rounded-full bg-[#b7ff00] shadow-[0_0_10px_#b7ff00] animate-pulse" />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
