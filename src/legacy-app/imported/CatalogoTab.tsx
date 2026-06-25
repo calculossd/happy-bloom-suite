@@ -11,6 +11,9 @@ import {
   Archive,
   Tag as TagIcon,
   X,
+  Sparkles,
+  HardDrive,
+  Layers,
 } from "lucide-react";
 import {
   listModels,
@@ -194,52 +197,84 @@ function CatalogPage() {
 
   return (
     <AppShell>
-      <div className="mx-auto max-w-7xl 2xl:max-w-[1600px] px-6 pt-20 pb-12">
-        <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-white" style={{ fontFamily: "'Sora', sans-serif" }}>
-              Stls
-            </h1>
-            <p className="mt-1 text-sm text-white/60">
-              {models.length} modelo(s) — biblioteca local, funciona offline
-            </p>
-          </div>
-          <div className="flex gap-2">
-            <button
-              onClick={bulkDownload}
-              className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 hover:bg-white/10"
-            >
-              <Archive className="h-4 w-4" /> Backup ZIP {selected.size ? `(${selected.size})` : "(todos)"}
-            </button>
-            {selected.size > 0 && (
-              <button
-                onClick={bulkDelete}
-                className="inline-flex items-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm text-red-200 hover:bg-red-500/20"
-              >
-                <Trash2 className="h-4 w-4" /> Excluir ({selected.size})
-              </button>
-            )}
-          </div>
+      <div className="relative min-h-screen w-full overflow-hidden">
+        {/* Ambient glows */}
+        <div className="pointer-events-none absolute inset-0 -z-10">
+          <div className="absolute -top-40 left-1/3 h-[560px] w-[560px] rounded-full bg-cyan-500/10 blur-[160px]" />
+          <div className="absolute top-1/2 -right-40 h-[460px] w-[460px] rounded-full bg-sky-600/10 blur-[150px]" />
+          <div className="absolute -bottom-32 left-0 h-[420px] w-[420px] rounded-full bg-emerald-500/[0.06] blur-[150px]" />
         </div>
 
-        {/* Upload zone */}
-        <div
+        <div className="mx-auto max-w-7xl 2xl:max-w-[1600px] px-6 py-10 md:px-10 md:py-14 space-y-8">
+          {/* Editorial header */}
+          <header className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-transparent p-8 md:p-10 backdrop-blur-xl">
+            <div className="pointer-events-none absolute -top-24 -right-24 h-[320px] w-[320px] rounded-full bg-cyan-500/15 blur-[120px]" />
+            <div className="pointer-events-none absolute -bottom-20 -left-20 h-[260px] w-[260px] rounded-full bg-sky-600/10 blur-[120px]" />
+            <div className="relative flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+              <div>
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[10px] uppercase tracking-[0.32em] text-white/60">
+                  <Sparkles className="h-3 w-3 text-cyan-300" /> Biblioteca Local
+                </div>
+                <h1 className="mt-4 text-4xl md:text-5xl font-semibold tracking-tight text-white" style={{ fontFamily: "'Sora', sans-serif" }}>
+                  STL <span className="bg-gradient-to-r from-cyan-300 via-sky-200 to-white bg-clip-text text-transparent">Vault</span>
+                </h1>
+                <p className="mt-2 max-w-xl text-sm text-white/55">
+                  {models.length} modelo(s) armazenados localmente — funciona offline, com miniaturas geradas automaticamente.
+                </p>
+              </div>
+              <div className="grid grid-cols-3 gap-3 md:gap-4">
+                {[
+                  { label: "Modelos", value: models.length, icon: Boxes, color: "text-cyan-200", glow: "from-cyan-500/15" },
+                  { label: "STL / 3MF", value: `${models.filter(m=>m.fileType==='stl').length}/${models.filter(m=>m.fileType==='3mf').length}`, icon: Layers, color: "text-sky-200", glow: "from-sky-500/15" },
+                  { label: "Total", value: `${(models.reduce((a,b)=>a+b.size,0)/1024/1024).toFixed(1)}MB`, icon: HardDrive, color: "text-emerald-200", glow: "from-emerald-500/15" },
+                ].map((k) => (
+                  <div key={k.label} className={`relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br ${k.glow} to-transparent px-4 py-3`}>
+                    <div className="flex items-center gap-1.5 text-[9px] uppercase tracking-[0.24em] text-white/45">
+                      <k.icon className={`h-3 w-3 ${k.color}`} />{k.label}
+                    </div>
+                    <div className={`mt-1 text-xl font-semibold tabular-nums ${k.color}`}>{k.value}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="relative mt-6 flex flex-wrap gap-2 border-t border-white/10 pt-5">
+              <button
+                onClick={bulkDownload}
+                className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 backdrop-blur transition-all hover:-translate-y-0.5 hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-100"
+              >
+                <Archive className="h-4 w-4" /> Backup ZIP {selected.size ? `(${selected.size})` : "(todos)"}
+              </button>
+              {selected.size > 0 && (
+                <button
+                  onClick={bulkDelete}
+                  className="inline-flex items-center gap-2 rounded-xl border border-red-500/30 bg-gradient-to-br from-red-500/15 to-red-600/5 px-4 py-2 text-sm text-red-100 transition-all hover:-translate-y-0.5 hover:from-red-500/25 hover:shadow-[0_0_24px_-8px_rgba(248,113,113,0.6)]"
+                >
+                  <Trash2 className="h-4 w-4" /> Excluir ({selected.size})
+                </button>
+              )}
+            </div>
+          </header>
+
+          {/* Upload zone */}
+          <div
           onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
           onDragLeave={() => setDragOver(false)}
           onDrop={onDrop}
           onClick={() => inputRef.current?.click()}
-          className={`mb-6 cursor-pointer rounded-2xl border-2 border-dashed p-8 text-center transition-colors ${
+          className={`group cursor-pointer rounded-3xl border-2 border-dashed p-10 text-center backdrop-blur-xl transition-all duration-300 ${
             dragOver
-              ? "border-cyan-400/60 bg-cyan-500/10"
-              : "border-white/15 bg-white/[0.02] hover:bg-white/[0.04]"
+              ? "border-cyan-400/60 bg-cyan-500/10 shadow-[0_0_60px_-12px_rgba(34,211,238,0.45)] scale-[1.01]"
+              : "border-white/15 bg-white/[0.02] hover:border-cyan-400/30 hover:bg-white/[0.04] hover:shadow-[0_0_40px_-16px_rgba(34,211,238,0.3)]"
           }`}
         >
-          <Upload className="mx-auto h-8 w-8 text-white/60" />
-          <p className="mt-3 text-sm text-white/80">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-gradient-to-br from-cyan-500/20 to-sky-600/10 transition-transform duration-300 group-hover:scale-110">
+            <Upload className="h-6 w-6 text-cyan-200" />
+          </div>
+          <p className="mt-4 text-sm text-white/80">
             Arraste arquivos <span className="font-mono text-cyan-300">.stl</span> e{" "}
             <span className="font-mono text-cyan-300">.3mf</span> aqui — ou clique para selecionar
           </p>
-          <p className="mt-1 text-xs text-white/40">Miniaturas geradas automaticamente</p>
+          <p className="mt-1.5 text-[11px] uppercase tracking-[0.24em] text-white/40">Miniaturas geradas automaticamente</p>
           <input
             ref={inputRef}
             type="file"
@@ -248,15 +283,15 @@ function CatalogPage() {
             className="hidden"
             onChange={(e) => e.target.files && handleFiles(e.target.files)}
           />
-        </div>
+          </div>
 
         {uploads.length > 0 && (
-          <div className="mb-6 space-y-2">
+          <div className="space-y-2">
             {uploads.map((u, i) => (
-              <div key={i} className="rounded-lg border border-white/10 bg-white/[0.03] p-3">
+              <div key={i} className="rounded-xl border border-white/10 bg-white/[0.03] p-3 backdrop-blur">
                 <div className="flex justify-between text-xs text-white/70">
                   <span className="truncate">{u.name}</span>
-                  <span>
+                  <span className="tabular-nums">
                     {u.status === "done" && "✓ pronto"}
                     {u.status === "dup" && "duplicado"}
                     {u.status === "error" && `erro: ${u.message}`}
@@ -265,8 +300,8 @@ function CatalogPage() {
                 </div>
                 <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-white/10">
                   <div
-                    className={`h-full transition-all ${
-                      u.status === "error" ? "bg-red-400" : u.status === "dup" ? "bg-amber-400" : "bg-cyan-400"
+                    className={`h-full transition-all duration-500 ${
+                      u.status === "error" ? "bg-gradient-to-r from-red-500 to-red-400" : u.status === "dup" ? "bg-gradient-to-r from-amber-500 to-amber-400" : "bg-gradient-to-r from-cyan-500 to-sky-400"
                     }`}
                     style={{ width: `${u.pct}%` }}
                   />
@@ -277,26 +312,26 @@ function CatalogPage() {
         )}
 
         {previewError && (
-          <div className="mb-6 rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200">
+          <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200 backdrop-blur">
             {previewError}
           </div>
         )}
 
         {/* Filters */}
-        <div className="mb-6 grid grid-cols-1 gap-3 md:grid-cols-4">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
           <div className="relative md:col-span-2">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-white/40" />
+            <Search className="absolute left-3.5 top-3 h-4 w-4 text-cyan-300/70" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Buscar por nome, tag, notas…"
-              className="w-full rounded-xl border border-white/10 bg-white/[0.03] py-2 pl-10 pr-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-cyan-400/50"
+              className="w-full rounded-xl border border-white/10 bg-white/[0.03] py-2.5 pl-10 pr-3 text-sm text-white placeholder:text-white/35 outline-none backdrop-blur-xl transition-all focus:border-cyan-400/50 focus:bg-white/[0.05] focus:shadow-[0_0_30px_-12px_rgba(34,211,238,0.4)]"
             />
           </div>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white"
+            className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2.5 text-sm text-white backdrop-blur-xl transition-colors hover:border-white/20 focus:border-cyan-400/40 outline-none"
           >
             <option value="all" className="bg-[#0b0b14]">Todas categorias</option>
             {CATEGORIES.map((c) => (
@@ -307,7 +342,7 @@ function CatalogPage() {
             <select
               value={fileType}
               onChange={(e) => setFileType(e.target.value as any)}
-              className="flex-1 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white"
+              className="flex-1 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2.5 text-sm text-white backdrop-blur-xl transition-colors hover:border-white/20 focus:border-cyan-400/40 outline-none"
             >
               <option value="all" className="bg-[#0b0b14]">Todos</option>
               <option value="stl" className="bg-[#0b0b14]">STL</option>
@@ -316,7 +351,7 @@ function CatalogPage() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
-              className="flex-1 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white"
+              className="flex-1 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2.5 text-sm text-white backdrop-blur-xl transition-colors hover:border-white/20 focus:border-cyan-400/40 outline-none"
             >
               <option value="date" className="bg-[#0b0b14]">Data</option>
               <option value="name" className="bg-[#0b0b14]">Nome</option>
@@ -327,48 +362,57 @@ function CatalogPage() {
 
         {/* Grid */}
         {filtered.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-white/10 p-16 text-center">
-            <Boxes className="mx-auto h-10 w-10 text-white/30" />
-            <p className="mt-3 text-white/60">{models.length === 0 ? "Sem modelos ainda" : "Nenhum modelo encontrado"}</p>
+          <div className="rounded-3xl border border-dashed border-white/10 bg-white/[0.02] p-20 text-center backdrop-blur-xl">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.06] to-transparent">
+              <Boxes className="h-8 w-8 text-white/30" />
+            </div>
+            <p className="mt-4 text-sm text-white/60">{models.length === 0 ? "Sem modelos ainda" : "Nenhum modelo encontrado"}</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {filtered.map((m) => (
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {filtered.map((m, idx) => (
               <div
                 key={m.id}
-                className={`group relative rounded-2xl border ${
-                  selected.has(m.id) ? "border-cyan-400/60" : "border-white/10"
-                } bg-white/[0.03] p-3 transition-all hover:-translate-y-0.5 hover:bg-white/[0.05]`}
+                className={`group relative overflow-hidden rounded-2xl border bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-3 backdrop-blur-xl transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_60px_-20px_rgba(34,211,238,0.35)] animate-in fade-in slide-in-from-bottom-2 ${
+                  selected.has(m.id) ? "border-cyan-400/60 shadow-[0_0_28px_-10px_rgba(34,211,238,0.55)]" : "border-white/10 hover:border-cyan-400/30"
+                }`}
+                style={{ animationDelay: `${Math.min(idx * 30, 600)}ms`, animationFillMode: "both" }}
               >
+                <div className="pointer-events-none absolute inset-0 -z-10 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+                  <div className="absolute -top-10 -right-10 h-32 w-32 rounded-full bg-cyan-500/20 blur-2xl" />
+                </div>
                 <label className="absolute left-4 top-4 z-10">
                   <input
                     type="checkbox"
                     checked={selected.has(m.id)}
                     onChange={() => toggleSel(m.id)}
-                    className="h-4 w-4 cursor-pointer"
+                    className="h-4 w-4 cursor-pointer accent-cyan-400"
                   />
                 </label>
                 <div className="block"
                 >
-                  <div className="aspect-square overflow-hidden rounded-xl bg-gradient-to-br from-white/[0.04] to-white/[0.01]">
+                  <div className="relative aspect-square overflow-hidden rounded-xl bg-gradient-to-br from-white/[0.06] to-white/[0.01] ring-1 ring-white/5">
                     {m.thumbnail ? (
-                      <img src={m.thumbnail} alt={m.name} className="h-full w-full object-contain" loading="lazy" />
+                      <img src={m.thumbnail} alt={m.name} className="h-full w-full object-contain transition-transform duration-[600ms] ease-out group-hover:scale-110" loading="lazy" />
                     ) : (
                       <div className="flex h-full items-center justify-center text-white/30">
                         <Boxes className="h-12 w-12" />
                       </div>
                     )}
+                    <span className="absolute right-2 top-2 rounded-full border border-white/15 bg-black/40 px-2 py-0.5 text-[9px] font-medium uppercase tracking-wider text-white/80 backdrop-blur">
+                      {m.fileType}
+                    </span>
                   </div>
                   <div className="mt-3">
-                    <div className="truncate text-sm font-medium text-white">{m.name}</div>
-                    <div className="mt-1 flex items-center justify-between text-xs text-white/50">
-                      <span className="uppercase">{m.fileType}</span>
-                      <span>{(m.size / 1024 / 1024).toFixed(2)} MB</span>
+                    <div className="truncate text-sm font-medium tracking-tight text-white">{m.name}</div>
+                    <div className="mt-1 flex items-center justify-between text-[11px] text-white/50">
+                      <span className="uppercase tracking-wider">{m.category}</span>
+                      <span className="tabular-nums">{(m.size / 1024 / 1024).toFixed(2)} MB</span>
                     </div>
                     {m.tags.length > 0 && (
                       <div className="mt-2 flex flex-wrap gap-1">
                         {m.tags.slice(0, 3).map((t) => (
-                          <span key={t} className="inline-flex items-center gap-1 rounded-full bg-white/[0.06] px-2 py-0.5 text-[10px] text-white/70">
+                          <span key={t} className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.06] px-2 py-0.5 text-[10px] text-white/70">
                             <TagIcon className="h-2.5 w-2.5" /> {t}
                           </span>
                         ))}
@@ -376,30 +420,30 @@ function CatalogPage() {
                     )}
                   </div>
                 </div>
-                <div className="mt-3 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+                <div className="mt-3 flex gap-1 opacity-0 translate-y-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
                   <button
                     onClick={() => previewOne(m)}
-                    className="flex-1 rounded-lg border border-white/10 bg-white/5 py-1.5 text-center text-xs text-white/80 hover:bg-white/10"
+                    className="flex-1 rounded-lg border border-white/10 bg-white/5 py-2 text-center text-xs text-white/80 transition-all hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-100"
                     title="Visualizar 3D"
                   >
                     <Eye className="mx-auto h-3.5 w-3.5" />
                   </button>
                   <button
                     onClick={() => setSendModel(m)}
-                    className="flex-1 rounded-lg border border-white/10 bg-white/5 py-1.5 text-xs text-white/80 hover:bg-white/10"
+                    className="flex-1 rounded-lg border border-white/10 bg-white/5 py-2 text-xs text-white/80 transition-all hover:border-emerald-400/30 hover:bg-emerald-500/10 hover:text-emerald-100"
                     title="Enviar para impressora"
                   >
                     <Send className="mx-auto h-3.5 w-3.5" />
                   </button>
                   <button
                     onClick={() => downloadOne(m)}
-                    className="flex-1 rounded-lg border border-white/10 bg-white/5 py-1.5 text-xs text-white/80 hover:bg-white/10"
+                    className="flex-1 rounded-lg border border-white/10 bg-white/5 py-2 text-xs text-white/80 transition-all hover:border-sky-400/30 hover:bg-sky-500/10 hover:text-sky-100"
                   >
                     <Download className="mx-auto h-3.5 w-3.5" />
                   </button>
                   <button
                     onClick={() => removeOne(m)}
-                    className="flex-1 rounded-lg border border-red-500/30 bg-red-500/10 py-1.5 text-xs text-red-200 hover:bg-red-500/20"
+                    className="flex-1 rounded-lg border border-red-500/30 bg-red-500/10 py-2 text-xs text-red-200 transition-all hover:bg-red-500/20 hover:shadow-[0_0_16px_-6px_rgba(248,113,113,0.6)]"
                   >
                     <Trash2 className="mx-auto h-3.5 w-3.5" />
                   </button>
@@ -408,6 +452,7 @@ function CatalogPage() {
             ))}
           </div>
         )}
+        </div>
       </div>
 
       <SendToPrinterDialog model={sendModel} open={!!sendModel} onClose={() => setSendModel(null)} />
