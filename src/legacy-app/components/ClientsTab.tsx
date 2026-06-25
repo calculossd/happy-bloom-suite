@@ -24,8 +24,6 @@ import {
   buildConsignadoText,
   buildRefinedText,
 } from '../lib/prospect-pitch-templates';
-import { AiRecommendation, SectionTitle, Kpi } from './DashboardShell';
-import { Radar, Phone, Target } from 'lucide-react';
 
 
 const streets = [
@@ -987,22 +985,6 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
       {/* ========================================================================= */}
       {(viewMode === 'prospect' || viewMode === 'full') && (
       <div className="relative mt-6 animate-fade-in" id="crm-b2b-leads-section">
-        {/* PREMIUM DASHBOARD HEADER */}
-        <div className="space-y-3 mb-5">
-          <AiRecommendation
-            title="Radar B2B — Captação de Lojistas"
-            body={`Você tem ${prospectLeads.length} leads no pipeline. Foque nos PROSPECT iniciais e priorize contato via WhatsApp para acelerar a conversão.`}
-            savings={`${prospectLeads.filter((l:any)=>l.status==='QUALIFIED' || l.status==='WON').length} qualificados`}
-          />
-          <SectionTitle icon={Radar} title="Dashboard — Prospecção" status="Capturando" />
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-            <Kpi icon={Building2} label="Total Leads"    value={prospectLeads.length} sub="No CRM" tone="lime" />
-            <Kpi icon={Phone}     label="Com WhatsApp"   value={prospectLeads.filter((l:any)=>l.phone).length} sub="Contatáveis" tone="emerald" />
-            <Kpi icon={Target}    label="Qualificados"   value={prospectLeads.filter((l:any)=>l.status==='QUALIFIED' || l.status==='WON').length} sub="Prontos p/ venda" tone="blue" />
-            <Kpi icon={MapPin}    label="Região Ativa"   value={prospectRegion || '—'} sub="GPS atual" tone="orange" />
-          </div>
-        </div>
-
         {/* Radial glows */}
         <div className="absolute -top-20 -left-10 w-[420px] h-[420px] rounded-full bg-[#b7ff00]/10 blur-[120px] pointer-events-none" />
         <div className="absolute -top-10 right-0 w-[340px] h-[340px] rounded-full bg-emerald-500/10 blur-[120px] pointer-events-none" />
