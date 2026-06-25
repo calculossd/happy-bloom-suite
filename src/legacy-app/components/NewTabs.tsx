@@ -2,7 +2,8 @@
 import { useState } from 'react';
 import {
   Search, Box, Megaphone, Columns3, FileBox, ClipboardCheck,
-  Calendar, Globe, Wrench, Plus, ExternalLink, Check, Trash2, ShoppingBag, Star, TrendingDown, Loader2
+  Calendar, Globe, Wrench, Plus, ExternalLink, Check, Trash2, ShoppingBag, Star, TrendingDown, Loader2,
+  Sparkles, Flame, Headphones, Smartphone, Briefcase, Package
 } from 'lucide-react';
 import { getApiUrl } from '../utils/api';
 import { safeStorage } from '../utils/storage';
@@ -73,44 +74,82 @@ export function PriceResearchTab() {
     }
   };
 
-  const examples = ['garrafa térmica stanley', 'fone bluetooth', 'suporte celular carro', 'mochila executiva'];
+  const examples: { label: string; icon: any; tone: string }[] = [
+    { label: 'garrafa térmica stanley', icon: Flame, tone: 'from-orange-400/20 to-rose-400/10 text-orange-200 border-orange-300/20' },
+    { label: 'fone bluetooth', icon: Headphones, tone: 'from-sky-400/20 to-indigo-400/10 text-sky-200 border-sky-300/20' },
+    { label: 'suporte celular carro', icon: Smartphone, tone: 'from-violet-400/20 to-fuchsia-400/10 text-violet-200 border-violet-300/20' },
+    { label: 'mochila executiva', icon: Briefcase, tone: 'from-emerald-400/20 to-teal-400/10 text-emerald-200 border-emerald-300/20' },
+  ];
   const lowest = offers.length ? offers.reduce((best, item) => Number(item.price) < Number(best.price) ? item : best, offers[0]) : null;
 
   return (
-    <div className="space-y-4">
-      <div className={panel}>
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+    <div className="space-y-5">
+      {/* Premium header */}
+      <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-black/40 backdrop-blur-xl p-6 shadow-[0_30px_80px_-40px_rgba(165,216,75,0.35)]">
+        <div className="pointer-events-none absolute -top-32 -right-24 h-72 w-72 rounded-full bg-[var(--cat-lime,#A5D84B)]/15 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-32 -left-24 h-72 w-72 rounded-full bg-emerald-400/10 blur-3xl" />
+        <div className="relative flex flex-col lg:flex-row lg:items-end justify-between gap-5">
           <div className="space-y-2 flex-1">
-            <h3 className={sectionTitle + " mb-0"}>Pesquisa de produtos</h3>
-            <p className="text-[11px] text-zinc-400 max-w-2xl">Busque qualquer produto no Google Shopping e compare as melhores ofertas por menor preço.</p>
-            <div className="flex flex-col sm:flex-row gap-2">
+            <div className="flex items-center gap-3">
+              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-[var(--cat-lime,#A5D84B)]/30 to-emerald-500/10 border border-[var(--cat-lime,#A5D84B)]/30 shadow-[0_8px_24px_-8px_rgba(165,216,75,0.55)]">
+                <Search className="h-5 w-5 text-[var(--cat-lime,#A5D84B)]" />
+              </div>
+              <div className="min-w-0">
+                <h3 className="text-[11px] font-black uppercase tracking-[0.18em] text-[var(--cat-lime,#A5D84B)]">Pesquisa de Preços</h3>
+                <p className="text-[12px] text-zinc-300/90 font-medium">Compare as melhores ofertas em tempo real.</p>
+              </div>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-2 pt-1">
               <input
-                className={inputCls + " py-3"}
+                className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-[13px] text-white placeholder-zinc-500 focus:outline-none focus:border-[var(--cat-lime,#A5D84B)]/60 focus:ring-2 focus:ring-[var(--cat-lime,#A5D84B)]/20 transition"
                 placeholder="Ex.: garrafa térmica, fone bluetooth, suporte celular..."
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 onKeyDown={e => { if (e.key === 'Enter') runSearch(); }}
               />
-              <button onClick={() => runSearch()} disabled={loading} className={btnPrimary + " justify-center py-3 min-w-[132px] disabled:opacity-60"}>
-                {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Search className="h-3.5 w-3.5" />}
+              <button onClick={() => runSearch()} disabled={loading} className="group inline-flex items-center justify-center gap-2 px-5 py-3 min-w-[140px] rounded-xl bg-gradient-to-r from-[var(--cat-lime,#A5D84B)] to-emerald-400 text-black text-[12px] font-black uppercase tracking-wider shadow-[0_10px_30px_-10px_rgba(165,216,75,0.7)] hover:shadow-[0_14px_40px_-10px_rgba(165,216,75,0.9)] hover:-translate-y-0.5 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] disabled:opacity-60 disabled:translate-y-0">
+                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4 group-hover:scale-110 transition-transform" />}
                 {loading ? 'Buscando' : 'Pesquisar'}
               </button>
             </div>
           </div>
           {lowest && (
-            <div className="rounded-xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 min-w-[190px]">
-              <div className="text-[9px] text-emerald-300 uppercase font-black flex items-center gap-1"><TrendingDown className="h-3 w-3" />Menor preço</div>
-              <div className="text-xl font-black text-white">R$ {Number(lowest.price || 0).toFixed(2)}</div>
-              <div className="text-[10px] text-zinc-400 truncate">{lowest.storeName}</div>
+            <div className="relative overflow-hidden rounded-2xl border border-emerald-400/25 bg-gradient-to-br from-emerald-400/15 to-emerald-500/5 px-5 py-3 min-w-[200px] shadow-[0_12px_32px_-12px_rgba(16,185,129,0.5)]">
+              <div className="absolute -top-8 -right-8 h-20 w-20 rounded-full bg-emerald-300/20 blur-2xl" />
+              <div className="relative">
+                <div className="text-[9px] text-emerald-300 uppercase font-black tracking-[0.18em] flex items-center gap-1"><TrendingDown className="h-3 w-3" />Menor preço</div>
+                <div className="text-2xl font-black text-white tracking-tight mt-0.5">R$ {Number(lowest.price || 0).toFixed(2)}</div>
+                <div className="text-[10px] text-zinc-300/80 truncate">{lowest.storeName}</div>
+              </div>
             </div>
           )}
         </div>
-        <div className="flex flex-wrap gap-2 mt-3">
-          {examples.map(ex => (
-            <button key={ex} onClick={() => { setQuery(ex); runSearch(ex); }} className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-[10px] text-zinc-300 hover:text-white hover:border-[var(--cat-lime,#A5D84B)]/40">{ex}</button>
-          ))}
+        <div className="relative mt-5">
+          <div className="flex items-center gap-2 mb-2.5">
+            <Sparkles className="h-3 w-3 text-[var(--cat-lime,#A5D84B)]" />
+            <span className="text-[9px] uppercase tracking-[0.22em] font-black text-zinc-400">Sugestões em alta</span>
+            <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {examples.map((ex, idx) => {
+              const Icon = ex.icon;
+              return (
+                <button
+                  key={ex.label}
+                  onClick={() => { setQuery(ex.label); runSearch(ex.label); }}
+                  style={{ animationDelay: `${idx * 70}ms` }}
+                  className={`group relative inline-flex items-center gap-2 pl-2.5 pr-3.5 py-1.5 rounded-full border bg-gradient-to-r ${ex.tone} backdrop-blur-md text-[11px] font-semibold capitalize transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-8px_rgba(255,255,255,0.2)] hover:border-white/30`}
+                >
+                  <span className="grid h-5 w-5 place-items-center rounded-full bg-black/30 border border-white/10 group-hover:scale-110 transition-transform">
+                    <Icon className="h-3 w-3" />
+                  </span>
+                  <span>{ex.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
-        {error && <div className="mt-3 text-[11px] text-amber-300 bg-amber-500/10 border border-amber-500/20 rounded-lg p-2">{error}</div>}
+        {error && <div className="relative mt-3 text-[11px] text-amber-200 bg-amber-500/10 border border-amber-500/20 rounded-xl p-2.5 backdrop-blur-sm">{error}</div>}
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
