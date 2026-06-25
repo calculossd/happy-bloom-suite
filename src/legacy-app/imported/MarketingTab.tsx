@@ -54,28 +54,65 @@ function MarketingPage() {
       <div className="relative min-h-screen overflow-hidden">
 
         <div className="px-6 md:px-10 py-10 max-w-7xl 2xl:max-w-[1600px] mx-auto">
-          <div className="flex flex-col gap-2 mb-10">
-            <div className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-cyan-300/70">
-              <Megaphone className="h-3.5 w-3.5" /> Divulgação
-            </div>
-            <h1
-              className="text-4xl md:text-5xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-cyan-200 to-violet-300"
-              style={{ fontFamily: "Sora, system-ui, sans-serif" }}
-            >
-              Compartilhe seus prints
-            </h1>
-            <p className="text-white/60 max-w-2xl">
-              Monte a mensagem e a foto uma vez e dispare em todas as suas redes com 1 clique.
-            </p>
-
-            <div className="mt-3">
-              <Link
-                to="/stories"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-white bg-gradient-to-r from-violet-600/30 to-pink-600/30 border border-violet-400/40 hover:from-violet-600/40 hover:to-pink-600/40 transition-colors shadow-[0_8px_24px_-8px_rgba(168,85,247,0.6)]"
-              >
-                <Sparkles className="h-4 w-4 text-violet-200" />
-                Gerador de Stories IA
-              </Link>
+          {/* Premium Obsidian Glass Header */}
+          <div className="relative mb-10 animate-fade-in">
+            <div className="absolute -top-24 -left-10 w-[420px] h-[420px] rounded-full bg-cyan-500/10 blur-[120px] pointer-events-none" />
+            <div className="absolute -top-16 right-0 w-[360px] h-[360px] rounded-full bg-violet-500/10 blur-[120px] pointer-events-none" />
+            <div className="relative rounded-3xl border border-white/10 bg-white/[0.025] backdrop-blur-2xl p-8 md:p-10 shadow-[0_30px_80px_-40px_rgba(34,211,238,0.35)] overflow-hidden">
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/40 to-transparent" />
+              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+                <div className="flex items-start gap-5">
+                  <div className="relative shrink-0">
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-400/40 to-violet-500/40 blur-xl" />
+                    <div className="relative h-14 w-14 rounded-2xl bg-gradient-to-br from-white/15 to-white/[0.03] border border-white/15 flex items-center justify-center shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]">
+                      <Megaphone className="h-6 w-6 text-cyan-200" />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.32em] text-cyan-300/80 font-medium">
+                      <span className="h-1 w-1 rounded-full bg-cyan-300 animate-pulse" />
+                      Divulgação
+                    </div>
+                    <h1
+                      className="text-[2.5rem] md:text-[3.25rem] leading-[1.02] font-semibold tracking-[-0.02em] bg-clip-text text-transparent bg-gradient-to-br from-white via-cyan-100 to-violet-200"
+                      style={{ fontFamily: "Sora, system-ui, sans-serif" }}
+                    >
+                      Compartilhe seus prints
+                    </h1>
+                    <p className="text-white/55 max-w-xl text-[15px] leading-relaxed">
+                      Monte a mensagem e a foto uma vez e dispare em todas as suas redes com um único clique.
+                    </p>
+                  </div>
+                </div>
+                <Link
+                  to="/stories"
+                  className="group relative inline-flex items-center gap-2.5 px-5 py-3 rounded-full text-sm font-medium text-white bg-gradient-to-r from-violet-500/25 to-pink-500/25 border border-violet-300/30 hover:border-violet-200/50 shadow-[0_12px_40px_-12px_rgba(168,85,247,0.65)] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5 hover:shadow-[0_18px_50px_-12px_rgba(168,85,247,0.8)]"
+                >
+                  <Sparkles className="h-4 w-4 text-violet-100 transition-transform duration-500 group-hover:rotate-12" />
+                  Gerador de Stories IA
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-violet-100/70 ml-1">novo</span>
+                </Link>
+              </div>
+              <div className="mt-8 pt-6 border-t border-white/[0.06] grid grid-cols-2 md:grid-cols-4 gap-3">
+                {[
+                  { label: "Redes", value: "6+", tone: "from-cyan-400/20 to-cyan-500/5", text: "text-cyan-200" },
+                  { label: "Modelos", value: "4", tone: "from-violet-400/20 to-violet-500/5", text: "text-violet-200" },
+                  { label: "Cliques", value: "1", tone: "from-emerald-400/20 to-emerald-500/5", text: "text-emerald-200" },
+                  { label: "IA Stories", value: "ON", tone: "from-pink-400/20 to-pink-500/5", text: "text-pink-200" },
+                ].map((k, i) => (
+                  <div
+                    key={k.label}
+                    className="relative rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-3 backdrop-blur-xl animate-fade-in"
+                    style={{ animationDelay: `${i * 80}ms` }}
+                  >
+                    <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${k.tone} opacity-60 pointer-events-none`} />
+                    <div className="relative">
+                      <div className="text-[10px] uppercase tracking-[0.25em] text-white/45">{k.label}</div>
+                      <div className={`mt-1 text-xl font-semibold ${k.text} tabular-nums`}>{k.value}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
