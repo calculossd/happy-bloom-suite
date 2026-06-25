@@ -376,11 +376,20 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
       )}
 
       {/* Unified header: title + active sales channels in a single card */}
-      <div className="bg-[#0C0E0D] border border-[#232B27] p-5 rounded-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-        <div className="min-w-0">
-          <div className="flex items-center gap-2 text-sm font-bold text-[#F1F4EE]">
-            <Database className="h-4 w-4 text-[#b7ff00]" />
-            <span>Integração Automática com E-Commerce</span>
+      <div
+        className="relative overflow-hidden rounded-2xl border border-white/[0.06] p-5 backdrop-blur-xl flex flex-col lg:flex-row lg:items-center justify-between gap-5 animate-fade-in"
+        style={{
+          background: 'linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.012) 100%), #0c100e',
+          boxShadow: '0 1px 0 rgba(255,255,255,0.04) inset, 0 24px 50px -28px rgba(0,0,0,0.85)',
+        }}
+      >
+        <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(120% 100% at 0% 0%, rgba(183,255,0,0.10) 0%, transparent 55%)' }} />
+        <div className="relative min-w-0">
+          <div className="flex items-center gap-2 text-[13px] font-bold tracking-[0.02em] text-[#F1F4EE]">
+            <div className="grid place-items-center h-7 w-7 rounded-lg border border-[#b7ff00]/30 bg-[#b7ff00]/10" style={{ boxShadow: '0 6px 18px -6px rgba(183,255,0,0.45)' }}>
+              <Database className="h-3.5 w-3.5 text-[#b7ff00]" />
+            </div>
+            <span style={{ textShadow: '0 0 20px rgba(183,255,0,0.35)' }}>Integração Automática com E-Commerce</span>
             <button
               type="button"
               onClick={() => setShowHelp(true)}
@@ -390,10 +399,10 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
               <HelpCircle className="h-5 w-5 text-[#E2B144]" />
             </button>
           </div>
-          <p className="text-xs text-[#8BA58D] mt-1">Canais de venda ativos — clique no logo para ver detalhes ou ligar/desligar.</p>
+          <p className="text-[11px] text-white/45 mt-1.5 pl-9">Canais de venda ativos — clique no logo para ver detalhes ou ligar/desligar.</p>
         </div>
 
-        <div className="flex items-center gap-4 lg:gap-5 shrink-0">
+        <div className="relative flex items-center gap-4 lg:gap-5 shrink-0">
           {connections.map((c, i) => {
             const isConn = c.isConnected;
             const logoColor = c.platformName === 'Mercado Livre' ? 'bg-[#FFF159]' :
@@ -435,14 +444,26 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
         )}
 
         {/* Streaming orders backlog */}
-        <div className="bg-[#0C0E0D] border border-[#232B27] rounded-2xl p-5 space-y-4" id="streams-orders-backlog">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-sm font-bold text-[#F1F4EE]">
-              <span className="w-2 h-2 rounded-full bg-[#b7ff00] animate-pulse inline-block shadow-[0_0_10px_#b7ff00]" />
-              <span>Stream de Vendas Online ({visibleOrders.filter(o => !o.isImported && !importedExternalIds.includes(o.id)).length})</span>
+        <div
+          className="relative overflow-hidden rounded-2xl border border-white/[0.06] p-5 space-y-4 backdrop-blur-xl"
+          id="streams-orders-backlog"
+          style={{
+            background: 'linear-gradient(180deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.01) 100%), #0c100e',
+            boxShadow: '0 1px 0 rgba(255,255,255,0.04) inset, 0 24px 50px -28px rgba(0,0,0,0.85)',
+          }}
+        >
+          <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(120% 100% at 100% 0%, rgba(16,185,129,0.10) 0%, transparent 55%)' }} />
+          <div className="relative flex items-center justify-between">
+            <div className="flex items-center gap-2.5 text-[13px] font-bold tracking-[0.02em] text-[#F1F4EE]">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse inline-block" style={{ boxShadow: '0 0 14px rgba(16,185,129,0.9), 0 0 4px rgba(16,185,129,0.9)' }} />
+              <span style={{ textShadow: '0 0 18px rgba(16,185,129,0.35)' }}>Stream de Vendas Online</span>
+              <span className="text-[10px] font-mono font-bold tabular-nums px-2 py-0.5 rounded-md border border-emerald-400/30 text-emerald-300 bg-emerald-400/10">
+                {visibleOrders.filter(o => !o.isImported && !importedExternalIds.includes(o.id)).length}
+              </span>
             </div>
-            <span className="text-[9px] text-[var(--brand-muted)] font-mono">Última atualização: Tempo real</span>
+            <span className="text-[10px] text-white/40 font-mono tracking-wide">Tempo real</span>
           </div>
+          <div className="relative">
 
           <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1" id="orders-stream-list">
             {visibleOrders.length === 0 ? (
