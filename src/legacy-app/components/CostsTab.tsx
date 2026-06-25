@@ -6,6 +6,7 @@ import { getApiUrl, checkIsAndroidWebView } from '../utils/api';
 import { safeStorage } from '../utils/storage';
 import { dedupeOffers, dedupeQuotationGroups } from '../utils/offerDedupe';
 import { FilamentSpool, materialColor } from './FilamentSpool';
+import { EstoqueDashboard } from './EstoqueDashboard';
 import { 
   Disc, 
   ShoppingCart, 
