@@ -37,7 +37,10 @@ import {
   Wallet,
   Receipt,
   TrendingDown,
-  Package
+  Package,
+  Percent,
+  Zap,
+  Clock
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 
@@ -2075,17 +2078,32 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       {/* SUBTAB 1: PRODUCT PRICE PRECISION CALCULATOR */}
       {activeSubTab === 'CALC' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-fade-in" id="precificator-active-panel">
-          <div
-            className="lg:col-span-12 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm"
-            style={{ '--tab-accent': '16, 185, 129' } as React.CSSProperties}
-          >
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Calculadora</div>
-                <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">Precificação</span>
-              </div>
-              <p className="text-xs text-[var(--brand-muted)]">Precifique produtos com base no fatiador e seus custos reais</p>
-            </div>
+          {/* Premium Dashboard Header — padrão oficial */}
+          <div className="lg:col-span-12 space-y-6">
+            {(() => {
+              const margem = finalPriceSuggested > 0 ? (netEarningsProfit / finalPriceSuggested) * 100 : 0;
+              const saude = margem >= 35 ? 'Saudável' : margem >= 20 ? 'Atenção' : 'Crítico';
+              return (
+                <>
+                  <AiRecommendation
+                    title={`Margem líquida estimada: ${margem.toFixed(1)}% — ${saude}`}
+                    body={margem >= 35
+                      ? `Preço sugerido de R$ ${finalPriceSuggested.toFixed(2)} mantém lucro de R$ ${netEarningsProfit.toFixed(2)} por peça após comissão do marketplace.`
+                      : `Reveja o markup (${calcMargin}%) ou reduza custos diretos (R$ ${directMachineCost.toFixed(2)}/peça) para elevar a margem acima de 35%.`}
+                    savings={`R$ ${netEarningsProfit.toFixed(2)}`}
+                  />
+                  <SectionTitle icon={Calculator} title="Dashboard — Calculadora / Precificação" status="Operacional" />
+                  <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
+                    <Kpi icon={DollarSign} label="Preço Sugerido" value={`R$ ${finalPriceSuggested.toFixed(2)}`} sub="Final" tone="lime" />
+                    <Kpi icon={TrendingUp} label="Lucro Líquido" value={`R$ ${netEarningsProfit.toFixed(2)}`} sub="Por peça" tone="emerald" />
+                    <Kpi icon={Percent} label="Margem" value={`${margem.toFixed(1)}%`} sub={saude} tone={margem >= 35 ? 'emerald' : margem >= 20 ? 'gold' : 'orange'} />
+                    <Kpi icon={TrendingDown} label="Custo Direto" value={`R$ ${directMachineCost.toFixed(2)}`} sub="Fabricação" tone="orange" />
+                    <Kpi icon={Receipt} label="Comissão" value={`R$ ${commissionPaidToMarketplace.toFixed(2)}`} sub="Marketplace" tone="purple" />
+                    <Kpi icon={Zap} label="Energia" value={`R$ ${electricityCost.toFixed(2)}`} sub={`${calcTime}h`} tone="blue" />
+                  </div>
+                </>
+              );
+            })()}
           </div>
 
           {/* Inputs Section */}
@@ -4319,19 +4337,38 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       {/* SUBTAB 4.5: GOOGLE SHOPPING QUOTATIONS & MATERIAL MINIMUM PRICES */}
       {activeSubTab === 'QUOTE' && (
         <div className="space-y-3 animate-fade-in" id="quotations-view-container">
-          {/* Standardized subtab header */}
-          <div
-            className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm"
-            style={{ '--tab-accent': '16, 185, 129' } as React.CSSProperties}
-          >
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Cotação</div>
-                <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">Ao vivo</span>
+          {/* Premium Dashboard Header — padrão oficial */}
+          {(() => {
+            const grupos = quotationGroups.length;
+            const todasOfertas = quotationGroups.flatMap((g: any) => g.offers || []);
+            const totalOfertas = todasOfertas.length;
+            const precos = todasOfertas.map((o: any) => Number(o.price) || 0).filter(p => p > 0);
+            const menor = precos.length ? Math.min(...precos) : 0;
+            const medio = precos.length ? precos.reduce((a, b) => a + b, 0) / precos.length : 0;
+            const lojas = new Set(todasOfertas.map((o: any) => o.source || o.store).filter(Boolean)).size;
+            return (
+              <div className="space-y-6 pb-2">
+                <AiRecommendation
+                  title={menor > 0 ? `Melhor oferta detectada: R$ ${menor.toFixed(2)}` : 'Atualize a cotação para receber recomendações'}
+                  body={menor > 0
+                    ? `Comparando ${totalOfertas} ofertas em ${lojas} lojas. Preço médio do mercado: R$ ${medio.toFixed(2)}. Economia potencial: R$ ${(medio - menor).toFixed(2)} por unidade.`
+                    : 'Sem ofertas carregadas. Clique em "Atualizar Padrões" ou pesquise um item para iniciar a comparação.'}
+                  savings={menor > 0 ? `R$ ${(medio - menor).toFixed(2)}` : 'R$ 0'}
+                  action={menor > 0 ? 'Comparar' : undefined}
+                  onAction={() => document.getElementById('quotations-view-container')?.scrollBy({ top: 400, behavior: 'smooth' })}
+                />
+                <SectionTitle icon={TrendingUp} title="Dashboard — Cotação / Mercado ao Vivo" status={loadingQuotes ? 'Consultando' : 'Operacional'} />
+                <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
+                  <Kpi icon={Tag} label="Categorias" value={grupos} sub="Grupos" tone="lime" />
+                  <Kpi icon={Search} label="Ofertas" value={totalOfertas} sub="Live" tone="cyan" />
+                  <Kpi icon={DollarSign} label="Menor Preço" value={menor > 0 ? `R$ ${menor.toFixed(2)}` : '—'} sub="Mínimo" tone="emerald" />
+                  <Kpi icon={TrendingUp} label="Preço Médio" value={medio > 0 ? `R$ ${medio.toFixed(2)}` : '—'} sub="Mercado" tone="gold" />
+                  <Kpi icon={Share2} label="Lojas" value={lojas} sub="Fontes" tone="purple" />
+                  <Kpi icon={Clock} label="Atualizado" value={lastQuotesUpdate || '—'} sub="Último ping" tone="blue" />
+                </div>
               </div>
-              <p className="text-xs text-[var(--brand-muted)]">Compare preços ao vivo entre marketplaces e fornecedores</p>
-            </div>
-          </div>
+            );
+          })()}
           {/* Header Description */}
           <div className="p-3 bg-gradient-to-r from-[#17211B] to-[#121A15] border border-[#232B27] rounded-xl flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
             <div className="flex items-center gap-2 min-w-0 flex-1">
