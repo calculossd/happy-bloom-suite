@@ -3124,7 +3124,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
             );
           })()}
           <div className="space-y-4" id="product-stock-section">
-            <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-3 border-b border-white/5 pb-4">
+            <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-3 border-b-2 border-white/25 pb-4">
               <div className="flex min-w-0 items-center gap-3">
                 <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#b7ff00]/10 ring-1 ring-inset ring-[#b7ff00]/25 text-[#b7ff00]">
                   <Tag className="h-4 w-4" />
@@ -3243,7 +3243,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Filamentos Stocks */}
           <div className="space-y-4">
-            <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-white/5 pb-4">
+            <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b-2 border-white/25 pb-4">
               <div className="flex min-w-0 items-center gap-3">
                 <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-emerald-500/10 ring-1 ring-inset ring-emerald-400/20 text-emerald-300">
                   <Disc className="h-4 w-4" />
@@ -3528,7 +3528,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
 
           {/* Consumable Supplies Stocks */}
           <div className="space-y-4">
-            <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-white/5 pb-4">
+            <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b-2 border-white/25 pb-4">
               <div className="flex min-w-0 items-center gap-3">
                 <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-amber-500/10 ring-1 ring-inset ring-amber-400/20 text-amber-300">
                   <Box className="h-4 w-4" />
