@@ -160,8 +160,8 @@ export const EstoqueDashboard: React.FC<Props> = ({ catalogItems, filamentStocks
         <div className="relative bg-[#0a0c0a]/80 backdrop-blur-2xl rounded-[15px] p-5 border border-white/10 flex items-start gap-5">
           <div className="relative shrink-0">
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#b7ff00]/40 to-emerald-500/30 blur-xl animate-pulse" />
-            <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-[#1a1f1c] to-[#0a0c0a] border border-white/15 flex items-center justify-center shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
-              <img src={robotMascot.url} alt="Assistente" className="w-14 h-14 object-contain" />
+            <div className="relative w-24 h-24 flex items-center justify-center shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+              <img src={robotMascot.url} alt="Assistente" className="relative w-24 h-24 object-contain drop-shadow-[0_6px_16px_rgba(0,0,0,0.6)]" />
               <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-emerald-400 shadow-[0_0_10px_#10B981] animate-pulse" />
             </div>
           </div>
