@@ -1928,7 +1928,7 @@ export default function App() {
                   currentTab === 2 ? 'bg-amber-400/10 opacity-40' : 'bg-[#b7ff00]/10 opacity-70'
                 }`} />
               )}
-              <div className="relative z-10 space-y-1 min-w-0 pb-3 border-b-2 border-white/25">
+              <div className="relative z-10 space-y-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">
                     {headerInfo.title}
