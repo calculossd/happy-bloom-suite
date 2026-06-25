@@ -1209,8 +1209,8 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                   <div className="flex items-center gap-2.5">
                     <span className="w-2.5 h-2.5 rounded-full" style={{ background: q.color, boxShadow: `0 0 12px ${q.color}` }} />
                     <div>
-                      <h3 className="text-sm font-extrabold uppercase tracking-[0.18em]" style={{ color: q.color }}>{q.title}</h3>
-                      <p className="text-[10px] uppercase tracking-wider text-[#8BA58D]/70">{q.subtitle}</p>
+                      <h3 className="text-sm font-bold" style={{ color: q.color }}>{q.title}</h3>
+                      <p className="text-[11px] text-zinc-500 truncate">{q.subtitle}</p>
                     </div>
                   </div>
                   <span className="text-[10px] font-mono text-[#8BA58D] bg-black/40 border border-[#232B27] px-2 py-0.5 rounded">
