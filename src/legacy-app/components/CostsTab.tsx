@@ -2682,6 +2682,11 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       {/* SUBTAB 3: DOUBLE SECTORS - RAW FILAMENTS AND CONSUMABLE SUPPLIES */}
       {activeSubTab === 'STOCK' && (
         <div className="space-y-6 animate-fade-in" id="stocks-physical-layout">
+          <EstoqueDashboard
+            catalogItems={catalogItems}
+            filamentStocks={filamentStocks}
+            suppliesStocks={suppliesStocks}
+          />
           {showAddProductManualForm && (
             <form onSubmit={handleSaveManualProduct} className="p-5 bg-[#151917] border border-[#232B27] rounded-2xl space-y-4 animate-fade-in" id="manual_catalog_product_form">
               <div className="flex items-center justify-between border-b border-[#232B27]/40 pb-2">
