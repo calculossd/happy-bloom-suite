@@ -1357,19 +1357,21 @@ export function Print3DPanel({
             <PremiumKpi tone="gold"    icon={TrendingUp}  label="Margem do Mês"      value={`${monthMargin.toFixed(1)}%`} sub={fmtBRL(monthProfit)} />
           </div>
 
-          {/* Row 2: Impressão ao Vivo | Pedidos | Estoque Crítico — 6-col grid alinhado ao strip */}
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-3 items-stretch [&>*]:min-h-[260px]">
-            <div className="xl:col-span-2"><LivePrinters printers={printers} orders={orders} onSelectTab={onSelectTab} /></div>
-            <div className="md:col-span-2 xl:col-span-2"><OrdersList orders={orders} clients={clients} onSelectTab={onSelectTab} /></div>
-            <div className="xl:col-span-2"><StockOverview filaments={filamentStocks} onSelectTab={onSelectTab} /></div>
+          {/* Row 2: Mapa | Impressão ao Vivo | Pedidos | Higrômetros */}
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 [&>*]:h-[260px]">
+            <LivePrinters printers={printers} orders={orders} onSelectTab={onSelectTab} />
+            <div className="md:col-span-2 xl:col-span-2">
+              <OrdersList orders={orders} clients={clients} onSelectTab={onSelectTab} />
+            </div>
+            <StockOverview filaments={filamentStocks} onSelectTab={onSelectTab} />
           </div>
 
-          {/* Row 3: STL | Higrômetros | Cotação | IA Precificação — 6 col */}
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-3 items-stretch [&>*]:min-h-[260px]">
+          {/* Row 3: STL | Estoque Crítico | Cotação | IA Precificação */}
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 items-stretch [&>*]:min-h-[260px]">
             <div className="md:col-span-2 xl:col-span-1"><StlGallery orders={orders} clients={clients} /></div>
-            <div className="xl:col-span-2"><Hygrometers devices={tuyaDevices} onSelectTab={onSelectTab} /></div>
-            <div className="xl:col-span-2"><FilamentQuotes onSelectTab={onSelectTab} /></div>
-            <div className="xl:col-span-1"><AiPricing /></div>
+            <Hygrometers devices={tuyaDevices} onSelectTab={onSelectTab} />
+            <FilamentQuotes onSelectTab={onSelectTab} />
+            <AiPricing />
           </div>
 
           {/* Row 4: Categorias | Hora | Resumo Financeiro */}
