@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { PrintOrder, Printer, FilamentStock } from '../types';
 import { ProductionDashboard } from './ProductionDashboard';
+import { PrintersDashboard } from './PrintersDashboard';
 import { 
   Plus, 
   Trash2, 
@@ -551,6 +552,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
       {/* ONLINE PRINTER CONNECTIONS */}
       {viewMode !== 'orders' && (
       <div className="space-y-3" id="online-printers-tracker">
+        <PrintersDashboard orders={orders} printers={printers} />
         <div
           className="relative overflow-hidden rounded-2xl border border-white/[0.06] bg-gradient-to-br from-[#0c100e] via-[#0a0d0b] to-[#080a09] backdrop-blur-xl px-4 py-3 animate-fade-in"
           id="active-printers-header"
