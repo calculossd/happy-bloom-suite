@@ -205,7 +205,7 @@ function CatalogPage() {
           <div className="absolute -bottom-32 left-0 h-[420px] w-[420px] rounded-full bg-emerald-500/[0.06] blur-[150px]" />
         </div>
 
-        <div className="mx-auto max-w-7xl 2xl:max-w-[1600px] px-6 py-10 md:px-10 md:py-14 space-y-8">
+        <div className="w-full py-6 space-y-6">
           {/* Editorial header */}
           <header className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-transparent p-8 md:p-10 backdrop-blur-xl">
             <div className="pointer-events-none absolute -top-24 -right-24 h-[320px] w-[320px] rounded-full bg-cyan-500/15 blur-[120px]" />
