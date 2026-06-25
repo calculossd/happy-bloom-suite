@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import type { CatalogItem, FilamentStock, SupplyStock } from '../types';
 import {
   Package, Layers, Disc, Box, AlertTriangle, DollarSign,
-  Bot, Sparkles, ArrowRight, TrendingDown,
+  Bot, Sparkles, ArrowRight, TrendingDown, Plus,
 } from 'lucide-react';
 import {
   PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer,
@@ -187,13 +187,23 @@ export const EstoqueDashboard: React.FC<Props> = ({ catalogItems, filamentStocks
           <Package className="h-4 w-4 text-[#b7ff00]" />
           <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-white">Dashboard — Estoque</h3>
         </div>
-        <span className={`text-[10px] font-bold uppercase flex items-center gap-2 ${totalLow > 0 ? 'text-red-400' : 'text-emerald-400'}`}>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent('request-new-product'))}
+            className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-[#b7ff00]/30 bg-[#b7ff00]/15 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-[#b7ff00] transition hover:bg-[#b7ff00]/25 hover:border-[#b7ff00]/50"
+            id="btn_novo_produto_dashboard"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            Novo Produto
+          </button>
+          <span className={`text-[10px] font-bold uppercase flex items-center gap-2 ${totalLow > 0 ? 'text-red-400' : 'text-emerald-400'}`}>
           <span className="relative flex h-1.5 w-1.5">
             <span className={`absolute inline-flex h-full w-full rounded-full opacity-60 animate-ping ${totalLow > 0 ? 'bg-red-400' : 'bg-emerald-400'}`} />
             <span className={`relative inline-flex rounded-full h-1.5 w-1.5 ${totalLow > 0 ? 'bg-red-400 shadow-[0_0_8px_#ef4444]' : 'bg-emerald-400 shadow-[0_0_8px_#10B981]'}`} />
           </span>
           {totalLow > 0 ? `${totalLow} crítico${totalLow > 1 ? 's' : ''}` : 'tudo ok'}
-        </span>
+          </span>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 relative">
