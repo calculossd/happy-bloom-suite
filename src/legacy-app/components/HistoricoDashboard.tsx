@@ -236,7 +236,7 @@ export const HistoricoDashboard: React.FC<Props> = ({ orders }) => {
             </div>
           ) : (
             <div style={{ width: '100%', height: 200 }}>
-              <ResponsiveContainer>
+              <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={stats.days}>
                   <CartesianGrid stroke="rgba(255,255,255,0.05)" vertical={false} />
                   <XAxis dataKey="label" tick={{ fontSize: 9, fill: '#94A3B8' }} axisLine={false} tickLine={false} interval={4} />
@@ -257,7 +257,7 @@ export const HistoricoDashboard: React.FC<Props> = ({ orders }) => {
             </div>
           ) : (
             <div style={{ width: '100%', height: 200 }}>
-              <ResponsiveContainer>
+              <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={stats.platformData} dataKey="value" nameKey="name" outerRadius={65} label={{ fontSize: 10 }}>
                     {stats.platformData.map((d, i) => (
@@ -280,7 +280,7 @@ export const HistoricoDashboard: React.FC<Props> = ({ orders }) => {
             </div>
           ) : (
             <div style={{ width: '100%', height: 200 }}>
-              <ResponsiveContainer>
+              <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={stats.methodData} dataKey="value" nameKey="name" outerRadius={65} label={{ fontSize: 10 }}>
                     {stats.methodData.map((d, i) => (

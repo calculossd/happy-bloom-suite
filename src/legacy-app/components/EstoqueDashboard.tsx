@@ -223,7 +223,7 @@ export const EstoqueDashboard: React.FC<Props> = ({ catalogItems, filamentStocks
             </div>
           ) : (
             <div style={{ width: '100%', height: 180 }}>
-              <ResponsiveContainer>
+              <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={stats.filamentByType} dataKey="value" nameKey="name" outerRadius={60} label={{ fontSize: 10 }}>
                     {stats.filamentByType.map((_, i) => (
@@ -262,7 +262,7 @@ export const EstoqueDashboard: React.FC<Props> = ({ catalogItems, filamentStocks
 
         <Panel tone="gold" title="Valor por Categoria">
           <div style={{ width: '100%', height: 180 }}>
-            <ResponsiveContainer>
+            <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={[
                   { name: 'Produtos', valor: Math.round(stats.productsValue) },
