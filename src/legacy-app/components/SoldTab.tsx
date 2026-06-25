@@ -17,6 +17,7 @@ import {
   Trash2
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
+import { HistoricoDashboard } from './HistoricoDashboard';
 
 interface SoldTabProps {
   orders: PrintOrder[];
@@ -199,6 +200,8 @@ export const SoldTab: React.FC<SoldTabProps> = ({ orders, clients, onDeleteOrder
 
   return (
     <div className="space-y-6" id="sold-orders-tab-container">
+      <HistoricoDashboard orders={safeOrders} />
+
       {/* Filter Options Row */}
       <div className="glow-card p-4 rounded-2xl space-y-4 shadow-sm" id="sold-filters">
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
