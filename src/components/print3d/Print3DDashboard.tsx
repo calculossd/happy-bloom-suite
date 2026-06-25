@@ -868,11 +868,11 @@ function StockOverview({ filaments = [], onSelectTab }: { filaments?: any[]; onS
       level: f.stockGrams < f.minStockGrams ? "Crítico" : "Atenção",
     }));
   return (
-    <Card className="relative overflow-hidden flex flex-col">
+    <Card className="relative overflow-hidden flex flex-col cursor-pointer hover:bg-white/[0.02] transition" onClick={() => onSelectTab?.(4)}>
       <span aria-hidden className="absolute left-0 top-0 bottom-0 w-[3px] bg-rose-500 rounded-l-2xl" />
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-[14px] font-semibold text-white">Estoque Crítico</h3>
-        <button className="text-[11px] text-white/50 hover:text-white" onClick={() => onSelectTab?.(8)}>Ver todos</button>
+        <button className="text-[11px] text-white/50 hover:text-white" onClick={(e) => { e.stopPropagation(); onSelectTab?.(4); }}>Ver todos</button>
       </div>
 
       {items.length === 0 ? (
