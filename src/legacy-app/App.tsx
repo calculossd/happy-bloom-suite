@@ -1942,7 +1942,7 @@ export default function App() {
               <div className="relative z-10 space-y-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <div
-                    className="text-2xl font-normal tracking-tight select-none leading-none"
+                    className="text-3xl md:text-4xl font-semibold tracking-tight select-none leading-none"
                     style={{ color: titleColor, textShadow: `0 0 18px ${titleColor}55`, fontFamily: '"Instrument Serif", Georgia, ui-serif, serif' }}
                   >
                     {headerInfo.title}
