@@ -2078,17 +2078,32 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       {/* SUBTAB 1: PRODUCT PRICE PRECISION CALCULATOR */}
       {activeSubTab === 'CALC' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-fade-in" id="precificator-active-panel">
-          <div
-            className="lg:col-span-12 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm"
-            style={{ '--tab-accent': '16, 185, 129' } as React.CSSProperties}
-          >
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Calculadora</div>
-                <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">Precificação</span>
-              </div>
-              <p className="text-xs text-[var(--brand-muted)]">Precifique produtos com base no fatiador e seus custos reais</p>
-            </div>
+          {/* Premium Dashboard Header — padrão oficial */}
+          <div className="lg:col-span-12 space-y-6">
+            {(() => {
+              const margem = finalPriceSuggested > 0 ? (netEarningsProfit / finalPriceSuggested) * 100 : 0;
+              const saude = margem >= 35 ? 'Saudável' : margem >= 20 ? 'Atenção' : 'Crítico';
+              return (
+                <>
+                  <AiRecommendation
+                    title={`Margem líquida estimada: ${margem.toFixed(1)}% — ${saude}`}
+                    body={margem >= 35
+                      ? `Preço sugerido de R$ ${finalPriceSuggested.toFixed(2)} mantém lucro de R$ ${netEarningsProfit.toFixed(2)} por peça após comissão do marketplace.`
+                      : `Reveja o markup (${calcMargin}%) ou reduza custos diretos (R$ ${directMachineCost.toFixed(2)}/peça) para elevar a margem acima de 35%.`}
+                    savings={`R$ ${netEarningsProfit.toFixed(2)}`}
+                  />
+                  <SectionTitle icon={Calculator} title="Dashboard — Calculadora / Precificação" status="Operacional" />
+                  <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
+                    <Kpi icon={DollarSign} label="Preço Sugerido" value={`R$ ${finalPriceSuggested.toFixed(2)}`} sub="Final" tone="lime" />
+                    <Kpi icon={TrendingUp} label="Lucro Líquido" value={`R$ ${netEarningsProfit.toFixed(2)}`} sub="Por peça" tone="emerald" />
+                    <Kpi icon={Percent} label="Margem" value={`${margem.toFixed(1)}%`} sub={saude} tone={margem >= 35 ? 'emerald' : margem >= 20 ? 'gold' : 'orange'} />
+                    <Kpi icon={TrendingDown} label="Custo Direto" value={`R$ ${directMachineCost.toFixed(2)}`} sub="Fabricação" tone="orange" />
+                    <Kpi icon={Receipt} label="Comissão" value={`R$ ${commissionPaidToMarketplace.toFixed(2)}`} sub="Marketplace" tone="purple" />
+                    <Kpi icon={Zap} label="Energia" value={`R$ ${electricityCost.toFixed(2)}`} sub={`${calcTime}h`} tone="blue" />
+                  </div>
+                </>
+              );
+            })()}
           </div>
 
           {/* Inputs Section */}
