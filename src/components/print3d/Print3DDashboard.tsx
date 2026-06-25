@@ -995,39 +995,52 @@ function FilamentQuotes({ onSelectTab }: { onSelectTab?: (t: number) => void } =
 }
 
 /* ---------- AI pricing ---------- */
-function AiPricing({ onSelectTab }: { onSelectTab?: (t: number) => void }) {
-  const data = [{ name: "m", value: 69 }, { name: "r", value: 31 }];
+function AiPricing({ orders = [], onSelectTab }: { orders?: any[]; onSelectTab?: (t: number) => void }) {
+  // Real data from delivered/sold orders
+  const sample = orders.filter((o: any) => (o?.priceCharged || 0) > 0);
+  const getCost = (o: any) =>
+    Number(o?.cost ?? o?.totalCost ?? o?.productionCost ?? o?.filamentCost ?? 0);
+  const totalPrice = sample.reduce((s, o) => s + Number(o.priceCharged || 0), 0);
+  const totalCost = sample.reduce((s, o) => s + getCost(o), 0);
+  const n = sample.length;
+  const avgCost = n ? totalCost / n : 0;
+  const avgPrice = n ? totalPrice / n : 0;
+  const margin = avgPrice > 0 ? Math.max(0, Math.min(100, ((avgPrice - avgCost) / avgPrice) * 100)) : 0;
+  const marginRounded = Math.round(margin);
+  const suggested = avgCost > 0 ? avgCost / 0.35 : avgPrice; // alvo de 65% de margem
+  const fmt = (v: number) => v.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const data = [{ name: "m", value: marginRounded }, { name: "r", value: 100 - marginRounded }];
+  const openCalc = () => {
+    try { localStorage.setItem("bambuzau_costs_subtab_override", "CALC"); } catch {}
+    window.dispatchEvent(new CustomEvent("navigate-costs-subtab", { detail: "CALC" }));
+    window.dispatchEvent(new CustomEvent("costs_set_subtab", { detail: "CALC" }));
+  };
   return (
     <Card
       glow={LIME}
       className="cursor-pointer transition hover:border-white/[0.12]"
-      onClick={() => {
-        onSelectTab?.(4);
-        window.dispatchEvent(new CustomEvent("navigate-costs-subtab", { detail: "CALC" }));
-      }}
+      onClick={openCalc}
     >
       <div className="flex items-center justify-between mb-1">
         <h3 className="text-[14px] font-semibold text-white">IA de Precificação</h3>
         <button
           className="text-[11px] text-white/50 hover:text-white"
-          onClick={(e) => {
-            e.stopPropagation();
-            onSelectTab?.(4);
-            window.dispatchEvent(new CustomEvent("navigate-costs-subtab", { detail: "CALC" }));
-          }}
+          onClick={(e) => { e.stopPropagation(); openCalc(); }}
         >
           Abrir
         </button>
       </div>
-      <p className="text-[11px] text-white/45 mb-4">Baseado no mercado e histórico</p>
+      <p className="text-[11px] text-white/45 mb-4">
+        {n > 0 ? `Média de ${n} ${n === 1 ? "pedido" : "pedidos"} com preço` : "Sem pedidos com preço ainda"}
+      </p>
       <div className="grid grid-cols-[1fr_1fr_auto] items-center gap-4">
         <div>
           <div className="text-[10px] text-white/45">Custo atual</div>
-          <div className="text-[18px] font-bold text-white tabular-nums">R$ 12,37</div>
+          <div className="text-[18px] font-bold text-white tabular-nums">R$ {fmt(avgCost)}</div>
         </div>
         <div>
           <div className="text-[10px] text-white/45">Preço sugerido</div>
-          <div className="text-[18px] font-bold tabular-nums" style={{ color: LIME }}>R$ 39,90</div>
+          <div className="text-[18px] font-bold tabular-nums" style={{ color: LIME }}>R$ {fmt(suggested)}</div>
         </div>
         <div className="relative size-[78px]">
           <ResponsiveContainer width="100%" height="100%" debounce={80}>
@@ -1040,18 +1053,27 @@ function AiPricing({ onSelectTab }: { onSelectTab?: (t: number) => void }) {
           </ResponsiveContainer>
           <div className="absolute inset-0 grid place-items-center">
             <div className="text-center">
-              <div className="text-[13px] font-bold tabular-nums" style={{ color: LIME }}>69%</div>
-              <div className="text-[8px] text-white/40">ideal</div>
+              <div className="text-[13px] font-bold tabular-nums" style={{ color: LIME }}>{marginRounded}%</div>
+              <div className="text-[8px] text-white/40">margem</div>
             </div>
           </div>
         </div>
       </div>
       <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-white/[0.04]">
-        {[
-          { l: "Demanda",      v: "Alta",   c: LIME },
-          { l: "Concorrência", v: "Média",  c: "#fbbf24" },
-          { l: "Tendência",    v: "Alta",   c: LIME },
-        ].map((x, i) => (
+        {(() => {
+          const demanda = n >= 20 ? "Alta" : n >= 5 ? "Média" : "Baixa";
+          const dc = demanda === "Alta" ? LIME : demanda === "Média" ? "#fbbf24" : "#fb7185";
+          const margemLabel = margin >= 55 ? "Saudável" : margin >= 35 ? "Ok" : "Baixa";
+          const mc = margin >= 55 ? LIME : margin >= 35 ? "#fbbf24" : "#fb7185";
+          const ticket = avgPrice;
+          const tLabel = ticket >= 50 ? "Alto" : ticket >= 20 ? "Médio" : "Baixo";
+          const tc = ticket >= 50 ? LIME : ticket >= 20 ? "#fbbf24" : "#fb7185";
+          return [
+            { l: "Demanda", v: demanda, c: dc },
+            { l: "Margem", v: margemLabel, c: mc },
+            { l: "Ticket médio", v: tLabel, c: tc },
+          ];
+        })().map((x, i) => (
           <div key={i}>
             <div className="text-[10px] text-white/40">{x.l}</div>
             <div className="text-[12px] font-semibold flex items-center gap-1.5" style={{ color: x.c }}>
@@ -1390,7 +1412,7 @@ export function Print3DPanel({
             <div className="md:col-span-2 xl:col-span-1 h-full [&>*]:h-full"><StlGallery orders={orders} clients={clients} /></div>
             <Hygrometers devices={tuyaDevices} onSelectTab={onSelectTab} />
             <FilamentQuotes onSelectTab={onSelectTab} />
-            <AiPricing onSelectTab={onSelectTab} />
+            <AiPricing orders={orders} onSelectTab={onSelectTab} />
           </div>
 
           {/* Row 4: Categorias | Hora | Resumo Financeiro */}
