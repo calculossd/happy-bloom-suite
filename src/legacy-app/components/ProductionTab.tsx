@@ -1203,30 +1203,64 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
 
         return (
           <div className="space-y-8">
-            {queues.map(q => (
-              <section key={q.key} className="space-y-3">
-                <div className="flex items-end justify-between gap-3 border-b border-[#232B27] pb-2">
-                  <div className="flex items-center gap-2.5">
-                    <span className="w-2.5 h-2.5 rounded-full" style={{ background: q.color, boxShadow: `0 0 12px ${q.color}` }} />
-                    <div>
-                      <h3 className="text-sm font-bold" style={{ color: q.color }}>{q.title}</h3>
-                      <p className="text-[11px] text-zinc-500 truncate">{q.subtitle}</p>
+            {queues.map((q, qi) => (
+              <motion.section
+                key={q.key}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: qi * 0.05, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                className="space-y-4"
+              >
+                <div
+                  className="relative overflow-hidden rounded-xl border border-white/[0.06] px-4 py-3 backdrop-blur-xl"
+                  style={{
+                    background: `linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.012) 100%), #0c100e`,
+                    boxShadow: `0 1px 0 rgba(255,255,255,0.04) inset, 0 24px 50px -28px rgba(0,0,0,0.85)`,
+                  }}
+                >
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0"
+                    style={{ background: `radial-gradient(120% 100% at 0% 0%, ${q.color}22 0%, transparent 55%)` }}
+                  />
+                  <div className="relative flex items-end justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <span
+                        className="w-2.5 h-2.5 rounded-full shrink-0"
+                        style={{ background: q.color, boxShadow: `0 0 14px ${q.color}, 0 0 4px ${q.color}` }}
+                      />
+                      <div className="leading-tight">
+                        <h3
+                          className="text-[13px] font-bold tracking-[0.02em]"
+                          style={{ color: q.color, textShadow: `0 0 20px ${q.color}55` }}
+                        >
+                          {q.title}
+                        </h3>
+                        <p className="text-[10.5px] text-white/45 mt-0.5">{q.subtitle}</p>
+                      </div>
                     </div>
+                    <span
+                      className="text-[10px] font-mono font-bold tabular-nums px-2.5 py-1 rounded-md border"
+                      style={{
+                        color: q.color,
+                        background: `${q.color}10`,
+                        borderColor: `${q.color}33`,
+                      }}
+                    >
+                      {q.list.length} {q.list.length === 1 ? 'item' : 'itens'}
+                    </span>
                   </div>
-                  <span className="text-[10px] font-mono text-[#8BA58D] bg-black/40 border border-[#232B27] px-2 py-0.5 rounded">
-                    {q.list.length} {q.list.length === 1 ? 'item' : 'itens'}
-                  </span>
                 </div>
                 {q.list.length === 0 ? (
-                  <div className="text-center text-xs text-[#8BA58D]/60 py-6 border border-dashed border-[#232B27] rounded-lg">
+                  <div className="text-center text-[11px] text-white/35 py-6 border border-dashed border-white/[0.06] rounded-xl bg-white/[0.01]">
                     Fila vazia
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2.5">
                     {q.list.map(renderCompactRow)}
                   </div>
                 )}
-              </section>
+              </motion.section>
             ))}
           </div>
         );
