@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { RefreshCw, ExternalLink, Download, Heart, ImageOff, Lightbulb, Check, Search, X, Sparkles, FileBox, TrendingUp } from "lucide-react";
+import { AiRecommendation, SectionTitle, Kpi } from "@/legacy-app/components/DashboardShell";
 import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
 import {
@@ -205,40 +206,50 @@ function MarketPage() {
         </div>
 
         <div className="w-full py-6 space-y-8">
-          {/* Editorial header */}
-          <header className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-transparent p-8 md:p-10 backdrop-blur-xl">
-            <div className="pointer-events-none absolute -top-24 -right-24 h-[320px] w-[320px] rounded-full bg-fuchsia-500/15 blur-[120px]" />
-            <div className="pointer-events-none absolute -bottom-20 -left-20 h-[260px] w-[260px] rounded-full bg-cyan-500/10 blur-[120px]" />
-            <div className="relative flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-              <div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[10px] uppercase tracking-[0.32em] text-white/60">
-                  <Sparkles className="h-3 w-3 text-fuchsia-300" /> Biblioteca de Modelos
-                </div>
-                <h1 className="mt-4 text-4xl md:text-5xl font-semibold tracking-tight text-white">
-                  Curadoria <span className="bg-gradient-to-r from-fuchsia-300 via-cyan-200 to-white bg-clip-text text-transparent">3D</span>
-                </h1>
-                <p className="mt-2 max-w-xl text-sm text-white/55">
-                  Explore tendências do MakerWorld, importe direto para seu catálogo ou envie ideias para o Kanban.
-                </p>
-              </div>
-              <div className="grid grid-cols-3 gap-3 md:gap-4">
-                {[
-                  { label: "Resultados", value: stats.count, icon: FileBox, color: "text-cyan-200", glow: "from-cyan-500/15" },
-                  { label: "Curtidas", value: stats.likes, icon: Heart, color: "text-fuchsia-200", glow: "from-fuchsia-500/15" },
-                  { label: "Downloads", value: stats.downloads, icon: TrendingUp, color: "text-amber-200", glow: "from-amber-500/15" },
-                ].map((k) => (
-                  <div key={k.label} className={`relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br ${k.glow} to-transparent px-4 py-3`}>
-                    <div className="flex items-center gap-1.5 text-[9px] uppercase tracking-[0.24em] text-white/45">
-                      <k.icon className={`h-3 w-3 ${k.color}`} />{k.label}
-                    </div>
-                    <div className={`mt-1 text-xl font-semibold tabular-nums ${k.color}`}>
-                      {k.value.toLocaleString("pt-BR")}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </header>
+          {/* AI Recommendation + KPI strip (padrão Clientes) */}
+          <AiRecommendation
+            title={
+              loading
+                ? 'Buscando tendências em tempo real…'
+                : stats.count === 0
+                  ? 'Nenhum modelo encontrado para esta categoria'
+                  : `${stats.count} modelos prontos para curar`
+            }
+            body={
+              stats.count === 0
+                ? 'Tente outra categoria ou faça uma busca por palavra-chave. O MakerWorld atualiza tendências a cada hora.'
+                : `Os top resultados somam ${stats.likes.toLocaleString('pt-BR')} curtidas e ${stats.downloads.toLocaleString('pt-BR')} downloads. Selecione os mais relevantes para o seu nicho e envie ao Kanban antes que viralizem.`
+            }
+            savings={stats.downloads.toLocaleString('pt-BR')}
+            action="Atualizar agora"
+            onAction={() => load(true)}
+          />
+
+          <SectionTitle icon={FileBox} title="Dashboard — Modelos / Curadoria 3D" />
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            <Kpi icon={FileBox} label="Resultados" value={stats.count} tone="gold" />
+            <Kpi icon={Heart} label="Curtidas" value={stats.likes.toLocaleString('pt-BR')} tone="fuchsia" />
+            <Kpi icon={TrendingUp} label="Downloads" value={stats.downloads.toLocaleString('pt-BR')} tone="emerald" />
+            <Kpi
+              icon={Sparkles}
+              label={submittedQuery.q ? 'Busca' : 'Categoria'}
+              value={submittedQuery.q || submittedQuery.cat || '—'}
+              tone="lime"
+            />
+            <Kpi
+              icon={Lightbulb}
+              label="No Kanban"
+              value={ideaUrls.size}
+              tone="purple"
+            />
+            <Kpi
+              icon={RefreshCw}
+              label="Atualizado"
+              value={data?.updated_at ? formatAgo(data.updated_at) : '—'}
+              tone="blue"
+            />
+          </div>
 
           {/* Search bar */}
           <form onSubmit={submitSearch} className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-3.5 backdrop-blur-xl transition-all duration-300 focus-within:border-fuchsia-400/40 focus-within:bg-white/[0.05] focus-within:shadow-[0_0_40px_-12px_rgba(232,121,249,0.35)]">
