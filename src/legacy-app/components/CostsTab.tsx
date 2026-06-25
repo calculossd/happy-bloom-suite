@@ -2569,16 +2569,16 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
 
                     {/* Multimaterial & STL view badges */}
                     {(item.filamentsUsed || item.suppliesUsed || item.stlFileName) && (
-                      <div className="bg-[#0C0E0D]/60 p-2 rounded-xl space-y-1.5 border border-[#232B27]/30">
+                      <div className="rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-xl p-2 space-y-1.5">
                         {item.filamentsUsed && item.filamentsUsed.length > 0 && (
                           <div className="space-y-1">
-                            <span className="text-[8px] text-[#8BA58D] uppercase font-bold block">Filamentos Receita:</span>
+                            <span className="text-[8px] uppercase tracking-[0.22em] text-white/40 font-semibold block">Filamentos Receita</span>
                             <div className="flex flex-wrap gap-1 text-[9px]">
                               {item.filamentsUsed.map((f, idx) => {
                                 const st = filamentStocks.find(x => x.id === f.filamentStockId);
                                 const cStyle = st ? getHexColorByName(st.color) : null;
                                 return (
-                                  <span key={idx} className="bg-teal-500/10 text-teal-300 px-2 py-0.5 rounded border border-teal-500/20 font-mono flex items-center gap-1.5 inline-flex">
+                                  <span key={idx} className="bg-teal-500/10 text-teal-200 px-2 py-0.5 rounded-md border border-teal-400/20 font-mono flex items-center gap-1.5 inline-flex">
                                     {cStyle && (
                                       <span 
                                         className="w-2 h-2 rounded-full inline-block shrink-0" 
@@ -2598,12 +2598,12 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
 
                         {item.suppliesUsed && item.suppliesUsed.length > 0 && (
                           <div className="space-y-1">
-                            <span className="text-[8px] text-[#8BA58D] uppercase font-bold block">Insumos/Hardware:</span>
+                            <span className="text-[8px] uppercase tracking-[0.22em] text-white/40 font-semibold block">Insumos / Hardware</span>
                             <div className="flex flex-wrap gap-1 text-[9px]">
                               {item.suppliesUsed.map((s, idx) => {
                                 const sup = suppliesStocks.find(x => x.id === s.supplyStockId);
                                 return (
-                                  <span key={idx} className="bg-amber-500/10 text-amber-300 px-1.5 py-0.5 rounded border border-amber-500/20 font-mono">
+                                  <span key={idx} className="bg-amber-500/10 text-amber-200 px-1.5 py-0.5 rounded-md border border-amber-400/20 font-mono">
                                     📦 {sup ? sup.name : 'Insumo'} ({s.quantity}x)
                                   </span>
                                 );
@@ -2613,8 +2613,8 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                         )}
 
                         {item.stlFileName && (
-                          <div className="pt-1 flex items-center justify-between border-t border-[#232B27]/20">
-                            <span className="text-[9px] text-purple-300 font-bold flex items-center gap-1 truncate max-w-[150px]" title={item.stlFileName}>
+                          <div className="pt-1.5 flex items-center justify-between border-t border-white/5">
+                            <span className="text-[9px] text-violet-200 font-semibold flex items-center gap-1 truncate max-w-[150px]" title={item.stlFileName}>
                               📐 {item.stlFileName}
                             </span>
                             <button
@@ -2622,9 +2622,9 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                               onClick={() => {
                                 alert(`Arquivo CAD de impressão 3D "${item.stlFileName}" pronto para download! (${item.stlFileData || 'Binário'})`);
                               }}
-                              className="text-[8px] bg-purple-500 hover:bg-purple-400 text-black px-1.5 py-0.5 rounded font-black uppercase tracking-wider transition cursor-pointer"
+                              className="text-[9px] inline-flex items-center gap-1 rounded-md border border-violet-400/25 bg-violet-500/10 px-2 py-0.5 font-semibold uppercase tracking-[0.18em] text-violet-100 transition hover:-translate-y-0.5 hover:bg-violet-500/20 hover:shadow-[0_0_16px_-6px_rgba(167,139,250,0.7)]"
                             >
-                              Baixar .STL
+                              .STL
                             </button>
                           </div>
                         )}
