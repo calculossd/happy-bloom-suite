@@ -234,22 +234,7 @@ function KanbanPage() {
 
         <div className="mx-auto w-full max-w-[1300px] 2xl:max-w-[1700px] px-6 py-10 md:px-10">
           {/* Header */}
-          <header className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-            <div>
-              <p className="mb-2 inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.3em] text-cyan-300/70">
-                <Layers className="h-3.5 w-3.5" /> Fluxo de produção
-              </p>
-              <h1
-                className="text-4xl font-bold tracking-tight md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-white via-cyan-200 to-fuchsia-300"
-                style={{ fontFamily: "Sora, system-ui, sans-serif" }}
-              >
-                Kanban da oficina
-              </h1>
-              <p className="mt-2 text-sm text-white/50">
-                {total} {total === 1 ? "card" : "cards"} no quadro · arraste para mover entre abas, clique para editar.
-              </p>
-            </div>
-
+          <header className="mb-6 flex justify-end">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
               <input
