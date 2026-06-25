@@ -624,16 +624,6 @@ export default function App() {
   useAutoBackup();
 
 
-  // Keep a running time state
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [isClientMounted, setIsClientMounted] = useState(false);
-
-  useEffect(() => {
-    setIsClientMounted(true);
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
-
   // Force scroll-to-top on window whenever the main tab selection changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
@@ -1636,6 +1626,16 @@ export default function App() {
         }
         .animate-spin-slow {
           animation: spin-slow 12s linear infinite;
+        }
+        .recharts-wrapper *,
+        .recharts-surface *,
+        .recharts-layer,
+        .recharts-bar-rectangle,
+        .recharts-sector,
+        .recharts-area-area,
+        .recharts-area-curve {
+          animation: none !important;
+          transition: none !important;
         }
       `}</style>
 
