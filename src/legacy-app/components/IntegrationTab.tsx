@@ -663,6 +663,7 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
               })
             )}
           </div>
+          </div>
         </div>
 
       </div>
