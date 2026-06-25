@@ -1741,7 +1741,7 @@ export default function App() {
                     <item.icon
                       data-nav-icon={item.blink ? 'true' : undefined}
                       className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:scale-110"
-                      style={{ color: accent }}
+                      style={{ color: sectionColor }}
                     />
                     <span className="flex-1 truncate">{item.label}</span>
                     {item.badge ? (
