@@ -534,14 +534,41 @@ function CalibrationPage() {
 
           {/* Terminal */}
           <div className="lg:sticky lg:top-20 lg:h-fit">
-            <div className="rounded-2xl border border-white/10 bg-[#05050a] p-4">
-              <div className="mb-3 flex items-center justify-between">
-                <div className="inline-flex items-center gap-2 text-xs uppercase tracking-wide text-white/60">
-                  <Terminal className="h-3.5 w-3.5" /> Terminal G-code
+            <div
+              className="relative overflow-hidden rounded-2xl border border-white/10 p-4 animate-fade-in"
+              style={{
+                background: 'linear-gradient(135deg, rgba(5,5,10,0.95), rgba(10,12,18,0.92))',
+                backdropFilter: 'blur(20px) saturate(140%)',
+                boxShadow: '0 16px 40px -20px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.04)',
+              }}
+            >
+              <div
+                className="pointer-events-none absolute inset-0"
+                style={{ background: 'radial-gradient(400px circle at 100% 0%, rgba(103,232,249,0.10), transparent 55%)' }}
+              />
+              <div className="relative mb-3 flex items-center justify-between">
+                <div className="inline-flex items-center gap-2">
+                  <div
+                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(103,232,249,0.18), rgba(59,130,246,0.08))',
+                      boxShadow: '0 4px 12px -4px rgba(103,232,249,0.4), inset 0 1px 0 rgba(255,255,255,0.08)',
+                    }}
+                  >
+                    <Terminal className="h-3.5 w-3.5 text-cyan-200" />
+                  </div>
+                  <div>
+                    <div className="text-[10px] uppercase tracking-[0.25em] text-white/60">Terminal G-code</div>
+                    <div className="text-[10px] text-white/35">comunicação ao vivo</div>
+                  </div>
                 </div>
-                {printer && <span className="text-xs text-white/40">{printer.type}</span>}
+                {printer && (
+                  <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[10px] uppercase tracking-wider text-white/50">
+                    {printer.type}
+                  </span>
+                )}
               </div>
-              <div ref={logRef} className="h-64 overflow-y-auto rounded-lg bg-black/60 p-3 font-mono text-xs">
+              <div ref={logRef} className="relative h-64 overflow-y-auto rounded-xl border border-white/[0.06] bg-black/70 p-3 font-mono text-xs">
                 {log.length === 0 ? (
                   <div className="text-white/30">Aguardando comandos…</div>
                 ) : log.map((l, i) => (
@@ -552,21 +579,27 @@ function CalibrationPage() {
               </div>
               <form
                 onSubmit={(e) => { e.preventDefault(); if (cmd.trim()) { send(cmd.trim()); setCmd(""); } }}
-                className="mt-2 flex gap-2"
+                className="relative mt-2 flex gap-2"
               >
                 <input
                   value={cmd}
                   onChange={(e) => setCmd(e.target.value)}
                   placeholder="ex: M115"
-                  className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 font-mono text-xs text-white"
+                  className="flex-1 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 font-mono text-xs text-white outline-none transition focus:border-cyan-400/40 focus:bg-white/[0.07]"
                 />
-                <button className="inline-flex items-center gap-1.5 rounded-lg bg-cyan-500/80 px-3 py-2 text-xs text-white">
+                <button
+                  className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs text-white transition hover:-translate-y-0.5"
+                  style={{
+                    background: 'linear-gradient(135deg, #06b6d4, #3b82f6)',
+                    boxShadow: '0 8px 20px -8px rgba(59,130,246,0.5), inset 0 1px 0 rgba(255,255,255,0.15)',
+                  }}
+                >
                   <Send className="h-3.5 w-3.5" />
                 </button>
               </form>
-              <div className="mt-2 flex flex-wrap gap-1">
+              <div className="relative mt-2 flex flex-wrap gap-1">
                 {["M115", "M503", "M500", "G28"].map((c) => (
-                  <button key={c} onClick={() => send(c)} className="rounded bg-white/5 px-2 py-1 font-mono text-[11px] text-white/60 hover:bg-white/10">
+                  <button key={c} onClick={() => send(c)} className="rounded-md border border-white/10 bg-white/[0.04] px-2 py-1 font-mono text-[11px] text-white/60 transition hover:bg-white/[0.08] hover:text-white">
                     {c}
                   </button>
                 ))}
@@ -574,11 +607,31 @@ function CalibrationPage() {
             </div>
 
             {profile && (
-              <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-                <div className="mb-2 inline-flex items-center gap-2 text-xs uppercase tracking-wide text-white/60">
-                  <PrinterIcon className="h-3.5 w-3.5" /> Perfil salvo
+              <div
+                className="relative mt-4 overflow-hidden rounded-2xl border border-white/10 p-4 animate-fade-in"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(12,16,14,0.9), rgba(10,12,18,0.85))',
+                  backdropFilter: 'blur(18px) saturate(140%)',
+                  boxShadow: '0 12px 32px -16px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)',
+                }}
+              >
+                <div
+                  className="pointer-events-none absolute inset-0"
+                  style={{ background: 'radial-gradient(400px circle at 0% 100%, rgba(183,255,0,0.08), transparent 60%)' }}
+                />
+                <div className="relative mb-2 inline-flex items-center gap-2">
+                  <div
+                    className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(183,255,0,0.18), rgba(16,185,129,0.08))',
+                      boxShadow: '0 4px 10px -4px rgba(183,255,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08)',
+                    }}
+                  >
+                    <PrinterIcon className="h-3.5 w-3.5 text-lime-200" />
+                  </div>
+                  <span className="text-[10px] uppercase tracking-[0.25em] text-white/60">Perfil salvo</span>
                 </div>
-                <ul className="space-y-1 text-xs text-white/70">
+                <ul className="relative space-y-1 text-xs text-white/70">
                   <li>E-steps: <span className="font-mono text-cyan-300">{profile.esteps?.toFixed(2) ?? "—"}</span></li>
                   <li>Flow: <span className="font-mono text-cyan-300">{profile.flow ? profile.flow.toFixed(1) + "%" : "—"}</span></li>
                   <li>Atualizado: <span className="text-white/50">{new Date(profile.updatedAt).toLocaleString("pt-BR")}</span></li>
