@@ -1,7 +1,5 @@
 import React from 'react';
-import robotMascotAsset from '@/assets/robot-mascot.png.asset.json';
-
-const robotMascot = robotMascotAsset.url;
+import robotMascot from '@/assets/robot-mascot-transparent.png';
 
 export const RobotMascot: React.FC<{ className?: string }> = ({ className }) => (
   <img
