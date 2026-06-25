@@ -171,9 +171,9 @@ function TopBar() {
 }
 
 /* ---------- Card primitive ---------- */
-function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+function Card({ children, className = "", onClick }: { children: React.ReactNode; className?: string; onClick?: () => void }) {
   return (
-    <div className={`rounded-2xl bg-[#0f1311] border border-white/[0.05] p-5 ${className}`} style={{ boxShadow: "0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px -24px rgba(0,0,0,0.7)" }}>
+    <div onClick={onClick} className={`rounded-2xl bg-[#0f1311] border border-white/[0.05] p-5 ${className}`} style={{ boxShadow: "0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px -24px rgba(0,0,0,0.7)" }}>
       {children}
     </div>
   );
@@ -629,10 +629,10 @@ function OrdersList({ orders = [], clients = [], onSelectTab }: { orders?: any[]
   const cityById: Record<number, string> = {};
   clients.forEach((c: any) => (cityById[c.id] = (c.address || "").split(",").pop()?.trim() || ""));
   return (
-    <Card className="flex flex-col overflow-hidden">
+    <Card className="flex flex-col overflow-hidden cursor-pointer hover:bg-white/[0.02] transition" onClick={() => onSelectTab?.(1)}>
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-[14px] font-semibold text-white">Pedidos a Serem Entregues</h3>
-        <button className="text-[11px] text-white/50 hover:text-white" onClick={() => onSelectTab?.(3)}>Ver todos</button>
+        <button className="text-[11px] text-white/50 hover:text-white" onClick={(e) => { e.stopPropagation(); onSelectTab?.(1); }}>Ver todos</button>
       </div>
       {rows.length === 0 && (
         <div className="text-[12px] text-white/40 py-6 text-center">Sem pedidos pendentes.</div>
@@ -676,14 +676,14 @@ function OrdersList({ orders = [], clients = [], onSelectTab }: { orders?: any[]
 }
 
 /* ---------- Hygrometers (replaces Sensors slot) ---------- */
-function Hygrometers({ devices = [] }: { devices?: any[] }) {
+function Hygrometers({ devices = [], onSelectTab }: { devices?: any[]; onSelectTab?: (t: number) => void }) {
   const tone = (h: number) => {
     if (h < 30) return { color: "#38bdf8", label: "Ideal", bg: "rgba(56,189,248,0.12)", border: "rgba(56,189,248,0.32)" };
     if (h <= 45) return { color: "#fbbf24", label: "Atenção", bg: "rgba(251,191,36,0.12)", border: "rgba(251,191,36,0.32)" };
     return { color: "#fb7185", label: "Crítico", bg: "rgba(251,113,133,0.12)", border: "rgba(251,113,133,0.32)" };
   };
   return (
-    <Card>
+    <Card className="cursor-pointer hover:bg-white/[0.02] transition" onClick={() => onSelectTab?.(5)}>
       <div className="flex items-center justify-between mb-1">
         <h3 className="text-[14px] font-semibold text-white">Higrômetros</h3>
         <span className="text-[10px] text-white/40 tabular-nums">{devices.length}</span>
@@ -868,11 +868,11 @@ function StockOverview({ filaments = [], onSelectTab }: { filaments?: any[]; onS
       level: f.stockGrams < f.minStockGrams ? "Crítico" : "Atenção",
     }));
   return (
-    <Card className="relative overflow-hidden flex flex-col">
+    <Card className="relative overflow-hidden flex flex-col cursor-pointer hover:bg-white/[0.02] transition" onClick={() => onSelectTab?.(4)}>
       <span aria-hidden className="absolute left-0 top-0 bottom-0 w-[3px] bg-rose-500 rounded-l-2xl" />
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-[14px] font-semibold text-white">Estoque Crítico</h3>
-        <button className="text-[11px] text-white/50 hover:text-white" onClick={() => onSelectTab?.(8)}>Ver todos</button>
+        <button className="text-[11px] text-white/50 hover:text-white" onClick={(e) => { e.stopPropagation(); onSelectTab?.(4); }}>Ver todos</button>
       </div>
 
       {items.length === 0 ? (
@@ -923,7 +923,7 @@ function useSerpQuotes() {
   }, []);
   return { groups, updatedAt };
 }
-function FilamentQuotes() {
+function FilamentQuotes({ onSelectTab }: { onSelectTab?: (t: number) => void } = {}) {
   const { groups, updatedAt } = useSerpQuotes();
   const rows = (groups || []).slice(0, 6).map((g: any) => {
     const offers = Array.isArray(g.offers) ? g.offers : [];
@@ -933,7 +933,7 @@ function FilamentQuotes() {
     return { name: g.type || "—", price: avg, min, count: offers.length };
   });
   return (
-    <Card>
+    <Card className="cursor-pointer hover:bg-white/[0.02] transition" onClick={() => onSelectTab?.(7)}>
       <div className="flex items-baseline justify-between mb-1">
         <h3 className="text-[14px] font-semibold text-white">Cotação de Filamentos</h3>
         <span className="text-[10px] text-white/40">SerpAPI</span>
@@ -1021,10 +1021,10 @@ function TopProductsChart({
   onSelectTab?: (t: number) => void;
 }) {
   return (
-    <Card>
+    <Card className="cursor-pointer hover:bg-white/[0.02] transition" onClick={() => onSelectTab?.(6)}>
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-[14px] font-semibold text-white">Produtos Mais Vendidos</h3>
-        <button className="text-[11px] text-white/50 hover:text-white" onClick={() => onSelectTab?.(4)}>Ver todos</button>
+        <button className="text-[11px] text-white/50 hover:text-white" onClick={(e) => { e.stopPropagation(); onSelectTab?.(6); }}>Ver todos</button>
       </div>
       {data.length === 0 && <div className="text-[12px] text-white/40 py-6 text-center">Sem vendas neste mês.</div>}
       <ul className="divide-y divide-white/[0.04]">
@@ -1335,8 +1335,8 @@ export function Print3DPanel({
           {/* Row 3: STL | Estoque Crítico | Cotação | IA Precificação */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
             <div className="md:col-span-2 xl:col-span-1"><StlGallery orders={orders} clients={clients} /></div>
-            <Hygrometers devices={tuyaDevices} />
-            <FilamentQuotes />
+            <Hygrometers devices={tuyaDevices} onSelectTab={onSelectTab} />
+            <FilamentQuotes onSelectTab={onSelectTab} />
             <AiPricing />
           </div>
 
