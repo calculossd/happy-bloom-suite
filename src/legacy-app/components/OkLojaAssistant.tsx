@@ -678,32 +678,39 @@ export function OkLojaAssistant({
 
       {/* ASSISTANT SHELF/MODAL */}
       {isOpen && (
-        <div className="fixed inset-0 bg-black/75 backdrop-blur-sm z-[9999] flex items-center justify-center p-4" id="ok-loja-assistant-overlay">
-          <div className="bg-[#121614] border border-zinc-800 rounded-3xl w-full max-w-xl h-[85vh] sm:h-[75vh] flex flex-col overflow-hidden shadow-2xl animate-scale-up" style={{ borderColor: 'var(--brand-border)' }}>
-            
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-[9999] flex items-center justify-center p-4 animate-fade-in" id="ok-loja-assistant-overlay">
+          <div className="relative w-full max-w-xl h-[85vh] sm:h-[78vh] animate-scale-in">
+            <div className="absolute -top-20 -left-10 w-[360px] h-[360px] rounded-full bg-amber-500/15 blur-[120px] pointer-events-none" />
+            <div className="absolute -bottom-16 -right-10 w-[320px] h-[320px] rounded-full bg-sky-500/10 blur-[120px] pointer-events-none" />
+          <div className="relative bg-white/[0.03] border border-white/10 backdrop-blur-2xl rounded-3xl w-full h-full flex flex-col overflow-hidden shadow-[0_40px_120px_-30px_rgba(245,158,11,0.35)]">
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-300/50 to-transparent pointer-events-none" />
+
             {/* SHELF HEADER */}
-            <div className="p-4 bg-[var(--brand-card)] border-b border-zinc-800 flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8.5 h-8.5 rounded-full bg-gradient-to-tr from-amber-500 to-amber-300 flex items-center justify-center text-black shadow-inner">
-                  <Sparkles className="w-4 h-4 animate-spin" style={{ animationDuration: '10s' }} />
+            <div className="relative px-5 py-4 border-b border-white/[0.06] flex items-center justify-between bg-gradient-to-b from-white/[0.04] to-transparent">
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-amber-400/50 to-amber-600/30 blur-lg" />
+                  <div className="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-500 flex items-center justify-center text-black shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]">
+                    <Sparkles className="w-5 h-5 animate-spin" style={{ animationDuration: '10s' }} />
+                  </div>
                 </div>
                 <div>
-                  <h3 className="text-sm font-black text-[var(--brand-text)] flex items-center gap-1.5 tracking-tight">
-                    Ok Loja AI Assistant 🎙️
-                    <span className="text-[9px] font-black uppercase font-mono bg-amber-500/15 text-amber-400 px-1.5 py-0.2 rounded border border-amber-500/20">
+                  <h3 className="text-[15px] font-semibold text-white flex items-center gap-2 tracking-tight" style={{ fontFamily: 'Sora, system-ui, sans-serif' }}>
+                    Ok Loja AI
+                    <span className="text-[9px] font-bold uppercase font-mono bg-amber-500/15 text-amber-300 px-1.5 py-0.5 rounded-md border border-amber-400/25 tracking-widest">
                       v3.3.0.0
                     </span>
                   </h3>
-                  <div className="flex gap-1.5 mt-0.5 sm:mt-1">
+                  <div className="flex gap-1.5 mt-1.5">
                     <button
                       onClick={() => {
                         safeStorage.setItem('bambuzau_ai_provider', 'gemini');
                         setAiProvider('gemini');
                       }}
-                      className={`text-[8px] sm:text-[9.5px] px-2 py-0.5 rounded-full font-bold transition-all cursor-pointer ${
-                        aiProvider === 'gemini' 
-                          ? 'bg-amber-500 text-black shadow-sm' 
-                          : 'bg-zinc-800 text-zinc-500 hover:text-zinc-300'
+                      className={`text-[10px] px-2.5 py-0.5 rounded-full font-semibold transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] cursor-pointer ${
+                        aiProvider === 'gemini'
+                          ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-black shadow-[0_4px_14px_-2px_rgba(245,158,11,0.55)]'
+                          : 'bg-white/[0.04] border border-white/10 text-white/55 hover:text-white hover:border-white/20'
                       }`}
                     >
                       Gemini
@@ -713,10 +720,10 @@ export function OkLojaAssistant({
                         safeStorage.setItem('bambuzau_ai_provider', 'groq');
                         setAiProvider('groq');
                       }}
-                      className={`text-[8px] sm:text-[9.5px] px-2 py-0.5 rounded-full font-bold transition-all cursor-pointer ${
-                        aiProvider === 'groq' 
-                          ? 'bg-purple-600 text-white shadow-sm' 
-                          : 'bg-zinc-800 text-zinc-500 hover:text-zinc-300'
+                      className={`text-[10px] px-2.5 py-0.5 rounded-full font-semibold transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] cursor-pointer ${
+                        aiProvider === 'groq'
+                          ? 'bg-gradient-to-r from-violet-500 to-purple-600 text-white shadow-[0_4px_14px_-2px_rgba(139,92,246,0.55)]'
+                          : 'bg-white/[0.04] border border-white/10 text-white/55 hover:text-white hover:border-white/20'
                       }`}
                     >
                       Groq ⚡
@@ -729,10 +736,10 @@ export function OkLojaAssistant({
                 {/* Background wake-word continuous trigger toggle */}
                 <button
                   onClick={() => setBackgroundWakeWordEnabled(!backgroundWakeWordEnabled)}
-                  className={`p-2 rounded-xl border transition-colors cursor-pointer ${
-                    backgroundWakeWordEnabled 
-                      ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' 
-                      : 'bg-zinc-850/60 border-zinc-800 text-zinc-500'
+                  className={`p-2 rounded-xl border backdrop-blur-xl transition-all duration-300 cursor-pointer hover:-translate-y-0.5 ${
+                    backgroundWakeWordEnabled
+                      ? 'bg-emerald-400/15 border-emerald-300/35 text-emerald-300 shadow-[0_0_18px_-4px_rgba(16,185,129,0.6)]'
+                      : 'bg-white/[0.04] border-white/10 text-white/50 hover:text-white hover:border-white/20'
                   }`}
                   title={backgroundWakeWordEnabled ? "Mão-livres ativo: diga 'Ok Loja' para abrir" : "Ativar comandos mãos-livres 'Ok Loja'"}
                 >
@@ -747,10 +754,10 @@ export function OkLojaAssistant({
                       window.speechSynthesis.cancel();
                     }
                   }}
-                  className={`p-2 rounded-xl border transition-colors cursor-pointer ${
-                    isVoiceEnabled 
-                      ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' 
-                      : 'bg-zinc-850 border-zinc-800 text-zinc-500'
+                  className={`p-2 rounded-xl border backdrop-blur-xl transition-all duration-300 cursor-pointer hover:-translate-y-0.5 ${
+                    isVoiceEnabled
+                      ? 'bg-amber-400/15 border-amber-300/35 text-amber-300 shadow-[0_0_18px_-4px_rgba(245,158,11,0.6)]'
+                      : 'bg-white/[0.04] border-white/10 text-white/50 hover:text-white hover:border-white/20'
                   }`}
                   title={isVoiceEnabled ? "Mutar feedback de voz" : "Ativar respostas por voz"}
                 >
@@ -765,7 +772,7 @@ export function OkLojaAssistant({
                       window.speechSynthesis.cancel();
                     }
                   }}
-                  className="p-2 bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 text-zinc-400 hover:text-white rounded-xl transition cursor-pointer"
+                  className="p-2 bg-white/[0.04] border border-white/10 hover:bg-white/[0.08] hover:border-white/20 text-white/55 hover:text-white rounded-xl transition-all duration-300 cursor-pointer hover:-translate-y-0.5"
                 >
                   <X className="w-4.5 h-4.5" />
                 </button>
@@ -1153,6 +1160,7 @@ export function OkLojaAssistant({
               </span>
             </div>
 
+          </div>
           </div>
         </div>
       )}
