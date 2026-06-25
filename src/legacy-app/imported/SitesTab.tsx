@@ -32,6 +32,18 @@ const PRESETS: Link[] = [
 
 ];
 
+// Marketplaces appended below to keep diff small
+PRESETS.push(
+  { id: "mk1", name: "Mercado Livre", url: "https://www.mercadolivre.com.br", category: "Marketplace", desc: "Maior marketplace da América Latina." },
+  { id: "mk2", name: "Shopee", url: "https://shopee.com.br", category: "Marketplace", desc: "Marketplace com forte tráfego em nichos 3D." },
+  { id: "mk3", name: "Amazon", url: "https://www.amazon.com.br", category: "Marketplace", desc: "Marketplace global com FBA." },
+  { id: "mk4", name: "Magalu", url: "https://www.magazineluiza.com.br", category: "Marketplace", desc: "Marketplace brasileiro com Magalu Ads." },
+  { id: "mk5", name: "Americanas", url: "https://www.americanas.com.br", category: "Marketplace", desc: "Marketplace tradicional brasileiro." },
+  { id: "mk6", name: "Etsy", url: "https://www.etsy.com", category: "Marketplace", desc: "Marketplace global para produtos autorais e 3D." },
+  { id: "mk7", name: "Elo7", url: "https://www.elo7.com.br", category: "Marketplace", desc: "Marketplace brasileiro de produtos criativos." },
+  { id: "mk8", name: "AliExpress", url: "https://pt.aliexpress.com", category: "Marketplace", desc: "Marketplace global para insumos e revenda." },
+);
+
 const STORAGE_KEY = "sites-directory-v1";
 
 function SitesPage() {
