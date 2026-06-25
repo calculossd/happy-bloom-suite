@@ -1,5 +1,6 @@
 import React from 'react';
 import robotMascotAsset from '@/assets/robot-mascot.png.asset.json';
+
 const robotMascot = robotMascotAsset.url;
 
 export const RobotMascot: React.FC<{ className?: string }> = ({ className }) => (
@@ -7,6 +8,9 @@ export const RobotMascot: React.FC<{ className?: string }> = ({ className }) => 
     src={robotMascot}
     alt="Assistente"
     className={className}
-    style={{ objectFit: 'contain' }}
+    draggable={false}
+    decoding="async"
+    loading="eager"
+    style={{ objectFit: 'contain', background: 'transparent' }}
   />
 );
