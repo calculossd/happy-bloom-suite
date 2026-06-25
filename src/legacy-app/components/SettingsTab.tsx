@@ -1521,7 +1521,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
         <div className="absolute top-0 right-0 h-32 w-32 bg-[#52b788]/5 rounded-full blur-2xl pointer-events-none"></div>
         <div className="space-y-2">
           <span className="text-[10px] uppercase tracking-wider font-extrabold text-[#95BBA2] bg-[#95BBA2]/10 px-2 py-0.5 rounded border border-[#95BBA2]/25 inline-block font-mono">Inteligência Artificial & Conectividade</span>
-          <h3 className="text-base font-bold text-[#F1F4EE] flex items-center gap-1.5 flex-wrap">
+          <h3 className="text-sm font-bold text-[#F1F4EE] flex items-center gap-1.5 flex-wrap">
             <Sparkles className="h-4.5 w-4.5 text-[#52b788]" />
             Painel Geral de Chaves de APIs (Gemini, Groq & SerpApi)
           </h3>
@@ -1817,7 +1817,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
         <div className="absolute top-0 right-0 h-32 w-32 bg-sky-500/5 rounded-full blur-2xl pointer-events-none text-sans"></div>
         <div className="space-y-2 font-sans">
           <span className="text-[10px] uppercase tracking-wider font-extrabold text-sky-400 bg-sky-400/15 px-2 py-0.5 rounded border border-sky-400/25 inline-block font-mono">Monitoramento de Humidade IoT</span>
-          <h3 className="text-base font-bold text-[#F1F4EE] flex items-center gap-1.5 flex-wrap">
+          <h3 className="text-sm font-bold text-[#F1F4EE] flex items-center gap-1.5 flex-wrap">
             <Radio className="h-4.5 w-4.5 text-sky-400 animate-pulse" />
             Higrômetros Wi-Fi Tuya (Acesso Remoto em Tempo Real)
           </h3>
@@ -1973,7 +1973,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
         <div className="p-6 bg-[#151917] border border-[#232B27] rounded-2xl flex flex-col justify-between space-y-4">
           <div className="space-y-2">
             <span className="text-[10px] uppercase tracking-wider font-extrabold text-[#95BBA2] bg-[#95BBA2]/10 px-2 py-0.5 rounded border border-[#95BBA2]/25 inline-block font-mono">Segurança</span>
-            <h3 className="text-base font-bold text-[#F1F4EE] flex items-center gap-1.5 flex-wrap">
+            <h3 className="text-sm font-bold text-[#F1F4EE] flex items-center gap-1.5 flex-wrap">
               <Database className="h-4.5 w-4.5 text-[#E2B144]" />
               Backup & Restauração Local (Computador)
               <button
@@ -2295,7 +2295,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
 
       {/* DETAILED EDUCATIONAL FAQ / HELP CENTER */}
       <div className="p-6 bg-[#151917] border border-[#232B27] rounded-2xl space-y-4">
-        <h3 className="text-base font-bold text-[#F1F4EE] flex items-center gap-2">
+        <h3 className="text-sm font-bold text-[#F1F4EE] flex items-center gap-2">
           <HelpCircle className="h-5 w-5 text-[#E2B144]" />
           Dúvidas Frequentes, Segurança & Atualizações (FAQ)
         </h3>

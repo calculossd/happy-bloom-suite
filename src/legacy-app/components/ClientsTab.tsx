@@ -1744,7 +1744,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
                   <span className="px-2.5 py-1 bg-[#b7ff00]/10 text-[#b7ff00] border border-[#b7ff00]/20 text-[10px] font-mono font-bold uppercase rounded-md tracking-wider">
                     FICHA DETALHADA DO LEAD COMERCIAL • CRM
                   </span>
-                  <h3 className="text-base font-bold text-[#F1F4EE] flex items-center gap-2 mt-1.5">
+                  <h3 className="text-sm font-bold text-[#F1F4EE] flex items-center gap-2 mt-1.5">
                     <Building2 className="h-4.5 w-4.5 text-[#b7ff00]" />
                     {lead.name}
                   </h3>

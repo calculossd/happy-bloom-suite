@@ -482,7 +482,7 @@ export const PrintFlowTab: React.FC<PrintFlowTabProps> = ({
 
       {/* Funnel distribution panel progress bar */}
       <div className="bg-[#151917] rounded-xl border border-[#232B27] p-4 space-y-4 shadow-md">
-        <h3 className="text-sm font-black text-[#F1F4EE]">
+        <h3 className="text-sm font-bold text-[#F1F4EE]">
           Acompanhamento da Produção e Funil das Ordens
         </h3>
 
@@ -528,7 +528,7 @@ export const PrintFlowTab: React.FC<PrintFlowTabProps> = ({
       {/* Filter and search row */}
       <div className="space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-          <h3 className="text-base font-bold text-[#F1F4EE]">Filtrar Produção</h3>
+          <h3 className="text-sm font-bold text-[#F1F4EE]">Filtrar Produção</h3>
           
           <input
             type="text"
@@ -736,7 +736,7 @@ export const PrintFlowTab: React.FC<PrintFlowTabProps> = ({
               className="bg-[#151917] border border-[#232B27] rounded-2xl max-w-sm w-full p-6 space-y-4 shadow-2xl"
             >
               <div className="flex items-center justify-between">
-                <h4 className="text-sm font-black text-[#F1F4EE] flex items-center gap-1.5 text-[#E5B242]">
+                <h4 className="text-sm font-bold text-[#F1F4EE] flex items-center gap-1.5 text-[#E5B242]">
                   <PrinterIcon className="w-4 h-4 text-[#E5B242]" />
                   Alocar Impressora
                 </h4>

@@ -2333,7 +2333,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
 
               <div className="border-b border-[#232B27] pb-3 z-10 relative">
                 <span className="text-[9px] uppercase font-mono tracking-widest text-[#b7ff00] font-black">Detalhamento Técnico de Preços</span>
-                <h3 className="text-base font-bold text-[#F1F4EE] leading-tight">Engenharia Comercial de Custos</h3>
+                <h3 className="text-sm font-bold text-[#F1F4EE] leading-tight">Engenharia Comercial de Custos</h3>
               </div>
 
               <div className="space-y-2.5 text-xs z-10 relative">
@@ -2424,7 +2424,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
 
           <div className="p-5 bg-[#151917] border border-[#232B27] rounded-2xl flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <h3 className="text-base font-bold text-[#F1F4EE] flex items-center gap-2">
+              <h3 className="text-sm font-bold text-[#F1F4EE] flex items-center gap-2">
                 <BookOpen className="h-5 w-5 text-[#b7ff00]" />
                 Catálogo de Peças & Produtos Registrados
               </h3>
@@ -2485,7 +2485,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                       )}
                     </div>
 
-                    <h4 className="text-sm font-black text-[#F1F4EE] truncate">{item.name}</h4>
+                    <h4 className="text-sm font-bold text-[#F1F4EE] truncate">{item.name}</h4>
                     <p className="text-[11px] text-[#8BA58D] leading-relaxed line-clamp-2">
                       {item.description || 'Nenhuma descrição declarada.'}
                     </p>
@@ -3182,7 +3182,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                             </span>
                             {low && <span className="text-[7.5px] font-mono uppercase bg-red-400/15 text-red-400 border border-red-500/30 px-1.5 py-0.5 rounded animate-pulse font-black">Baixo</span>}
                           </div>
-                          <h4 className="text-sm font-black text-[#F1F4EE] truncate">{item.name}</h4>
+                          <h4 className="text-sm font-bold text-[#F1F4EE] truncate">{item.name}</h4>
                           <p className="text-[10px] text-[#8BA58D] truncate">{item.filamentType} {item.filamentColorsUsed || ''} • R$ {Number(item.defaultPrice || 0).toFixed(2)}</p>
                         </div>
                       </div>
@@ -4420,7 +4420,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
           </div>
           <div className="bg-[#151917] border border-[#232B27] p-5 rounded-2xl space-y-4">
           <div>
-            <h3 className="text-base font-bold text-[#F1F4EE] flex items-center gap-2">
+            <h3 className="text-sm font-bold text-[#F1F4EE] flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-[#c4b5fd] animate-pulse" />
               Orientação Inteligente de Engenharia 3D (Fatiadores & Custos)
             </h3>

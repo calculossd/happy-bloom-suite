@@ -660,7 +660,7 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
             <div className="flex items-start gap-3">
               <Database className="h-6 w-6 text-[#95BBA2] shrink-0 mt-1" />
               <div>
-                <h3 className="text-base font-bold text-[#F1F4EE]">Integração com Marketplaces</h3>
+                <h3 className="text-sm font-bold text-[#F1F4EE]">Integração com Marketplaces</h3>
                 <p className="text-[11.5px] text-[#8BA58D] mt-1">Sincronize vendas em lote com seus canais digitais.</p>
               </div>
             </div>
