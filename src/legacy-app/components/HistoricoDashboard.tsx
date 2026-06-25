@@ -95,11 +95,13 @@ export const HistoricoDashboard: React.FC<Props> = ({ orders }) => {
   }, [orders]);
 
   const aiTip = useMemo(() => {
+    const fire = (name: string, detail?: any) => { try { window.dispatchEvent(new CustomEvent(name, { detail })); } catch {} };
     if (stats.total === 0) {
       return {
         title: 'Histórico vazio — marque pedidos como entregues',
         body: 'Conforme os pedidos forem entregues, este painel vai mostrar receita, ticket médio, canais mais rentáveis e produtos campeões.',
         savings: 'R$ 0', action: 'Ir para Produção',
+        onAction: () => fire('navigate-tab', 1),
       };
     }
     if (stats.pending > 0) {
@@ -107,6 +109,7 @@ export const HistoricoDashboard: React.FC<Props> = ({ orders }) => {
         title: `${stats.pending} venda(s) entregue(s) sem pagamento confirmado`,
         body: `Você tem ${fmtBRL(stats.pendingValue)} em recebíveis pendentes. Cobre os clientes consignados ou reconcilie pagamentos para destravar o caixa.`,
         savings: fmtBRL(stats.pendingValue), action: 'Conciliar',
+        onAction: () => fire('navigate-tab', 6),
       };
     }
     return {
@@ -114,6 +117,7 @@ export const HistoricoDashboard: React.FC<Props> = ({ orders }) => {
       body: `Ticket médio em ${fmtBRL(stats.ticket)} com ${stats.uniqueClients} clientes únicos. Uma campanha de recompra com cupom pode trazer 20–30% deles de volta no mês.`,
       savings: `+ ${fmtBRL(stats.ticket * Math.round(stats.uniqueClients * 0.25))}`,
       action: 'Criar campanha',
+      onAction: () => fire('navigate-tab', 9),
     };
   }, [stats]);
 
@@ -188,7 +192,7 @@ export const HistoricoDashboard: React.FC<Props> = ({ orders }) => {
           <div className="hidden md:flex flex-col items-end gap-2 shrink-0 pl-4 border-l border-white/10">
             <span className="text-[9px] font-bold uppercase tracking-widest text-zinc-500">Oportunidade</span>
             <span className="text-xl font-extrabold text-[#b7ff00] tabular-nums">{aiTip.savings}</span>
-            <button className="mt-1 px-3 py-1.5 bg-[#b7ff00] text-black text-[10px] font-extrabold uppercase tracking-widest rounded-lg hover:scale-105 active:scale-95 transition-transform shadow-[0_0_20px_rgba(183,255,0,0.3)] flex items-center gap-1.5">
+            <button onClick={(aiTip as any).onAction} className="mt-1 px-3 py-1.5 bg-[#b7ff00] text-black text-[10px] font-extrabold uppercase tracking-widest rounded-lg hover:scale-105 active:scale-95 transition-transform shadow-[0_0_20px_rgba(183,255,0,0.3)] flex items-center gap-1.5">
               {aiTip.action} <ArrowRight className="w-3 h-3" />
             </button>
           </div>
