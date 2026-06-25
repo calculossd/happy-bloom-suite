@@ -1390,7 +1390,7 @@ export function Print3DPanel({
             <div className="md:col-span-2 xl:col-span-1 h-full [&>*]:h-full"><StlGallery orders={orders} clients={clients} /></div>
             <Hygrometers devices={tuyaDevices} onSelectTab={onSelectTab} />
             <FilamentQuotes onSelectTab={onSelectTab} />
-            <AiPricing />
+            <AiPricing onSelectTab={onSelectTab} />
           </div>
 
           {/* Row 4: Categorias | Hora | Resumo Financeiro */}
