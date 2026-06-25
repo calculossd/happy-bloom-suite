@@ -3846,21 +3846,44 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
       {activeSubTab === 'SHOP' && (
         <div className="space-y-6 animate-fade-in" id="shopping-tab-panel">
 
-          {/* Standardized subtab header */}
-          <div
-            className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 glow-card p-5 rounded-2xl shadow-sm"
-            style={{ '--tab-accent': '16, 185, 129' } as React.CSSProperties}
-          >
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <div className="text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans select-none leading-none">Gastos</div>
-                <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">
-                  R$ {(expenses.reduce((sum, e) => sum + (e.amount * e.qty), 0) + shoppingItems.reduce((sum, s) => sum + s.price, 0)).toFixed(2)}
-                </span>
-              </div>
-              <p className="text-xs text-[var(--brand-muted)]">Custos efetivados e carrinho de compras retroalimentam o Dashboard</p>
-            </div>
-          </div>
+          {/* Premium Dashboard Header — padrão oficial */}
+          {(() => {
+            const totalPago = expenses.reduce((sum, e) => sum + (e.amount * e.qty), 0);
+            const totalCarrinho = shoppingItems.reduce((sum, s) => sum + s.price, 0);
+            const adquirido = shoppingItems.filter(s => s.isChecked).reduce((sum, s) => sum + s.price, 0);
+            const pendente = totalCarrinho - adquirido;
+            const lancamentos = expenses.length;
+            const itensCarrinho = shoppingItems.length;
+            const maiorCat = (() => {
+              const map: Record<string, number> = {};
+              expenses.forEach(e => { map[e.category] = (map[e.category] || 0) + e.amount * e.qty; });
+              const top = Object.entries(map).sort((a, b) => b[1] - a[1])[0];
+              return top ? top[0] : '—';
+            })();
+            return (
+              <>
+                <AiRecommendation
+                  title={pendente > 0 ? `Você tem R$ ${pendente.toFixed(2)} pendentes no carrinho` : 'Carteira saudável — sem pendências no carrinho'}
+                  body={pendente > 0
+                    ? `Conclua as compras pendentes para liberar o caixa e atualizar o custo médio do estoque. Categoria com maior gasto: ${maiorCat}.`
+                    : `Todos os itens do carrinho foram adquiridos. Categoria com maior gasto acumulado: ${maiorCat}.`}
+                  savings={`R$ ${pendente.toFixed(2)}`}
+                  action={pendente > 0 ? 'Revisar' : undefined}
+                />
+                <div className="flex items-center justify-between">
+                  <SectionTitle icon={Wallet} title="Dashboard — Gastos / Carteira" status="Operacional" />
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
+                  <Kpi icon={DollarSign} label="Total Pago" value={`R$ ${totalPago.toFixed(2)}`} sub="Caixa" tone="emerald" />
+                  <Kpi icon={ShoppingCart} label="Carrinho" value={`R$ ${totalCarrinho.toFixed(2)}`} sub="Planejado" tone="orange" />
+                  <Kpi icon={CheckCircle} label="Adquirido" value={`R$ ${adquirido.toFixed(2)}`} sub="Concluído" tone="lime" />
+                  <Kpi icon={TrendingDown} label="Pendente" value={`R$ ${pendente.toFixed(2)}`} sub="A pagar" tone={pendente > 0 ? 'gold' : 'emerald'} />
+                  <Kpi icon={Receipt} label="Lançamentos" value={lancamentos} sub="Notas" tone="blue" />
+                  <Kpi icon={Package} label="Itens Carrinho" value={itensCarrinho} sub="Linhas" tone="purple" />
+                </div>
+              </>
+            );
+          })()}
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             
