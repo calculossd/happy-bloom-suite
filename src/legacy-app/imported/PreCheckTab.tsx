@@ -245,56 +245,123 @@ function CalibrationPage() {
   return (
     <AppShell>
       <div className="mx-auto max-w-6xl px-6 pt-20 pb-12">
-        <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <div className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-white/40">
-              <ClipboardCheck className="h-3.5 w-3.5" /> Calibração da Impressora
+        {/* Premium Header — Obsidian Glass */}
+        <div
+          className="relative mb-6 overflow-hidden rounded-2xl border border-white/10 p-6 animate-fade-in"
+          style={{
+            background: 'linear-gradient(135deg, rgba(12,16,14,0.92) 0%, rgba(10,12,18,0.88) 100%)',
+            backdropFilter: 'blur(24px) saturate(140%)',
+            boxShadow: '0 20px 60px -20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05)',
+          }}
+        >
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{ background: 'radial-gradient(600px circle at 0% 0%, rgba(103,232,249,0.10), transparent 50%)' }}
+          />
+          <div className="relative flex flex-wrap items-end justify-between gap-4">
+            <div className="flex items-start gap-4">
+              <div
+                className="flex h-12 w-12 items-center justify-center rounded-xl border border-white/10"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(103,232,249,0.18), rgba(59,130,246,0.10))',
+                  boxShadow: '0 8px 24px -8px rgba(103,232,249,0.35), inset 0 1px 0 rgba(255,255,255,0.08)',
+                }}
+              >
+                <ClipboardCheck className="h-5 w-5 text-cyan-200" />
+              </div>
+              <div>
+                <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.25em] text-white/40">
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-300 shadow-[0_0_8px_rgba(103,232,249,0.8)]" />
+                  Calibração da Impressora
+                </div>
+                <h1
+                  className="mt-1.5 text-3xl font-bold text-white"
+                  style={{ fontFamily: "'Sora', sans-serif", textShadow: '0 2px 12px rgba(103,232,249,0.18)' }}
+                >
+                  {printer ? `Calibrando: ${printer.name}` : "Pré-check de Calibração"}
+                </h1>
+                <p className="mt-1 text-xs text-white/50">Checklist editorial guiado — do frame ao primeiro layer impecável.</p>
+              </div>
             </div>
-            <h1 className="mt-1 text-3xl font-bold text-white" style={{ fontFamily: "'Sora', sans-serif" }}>
-              {printer ? `Calibrando: ${printer.name}` : "Calibração Completa"}
-            </h1>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <select
-              value={printerId}
-              onChange={(e) => setPrinterId(e.target.value)}
-              className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white"
-            >
-              <option value="" className="bg-[#0b0b14]">— escolher impressora —</option>
-              {printers.map((p) => (
-                <option key={p.id} value={p.id} className="bg-[#0b0b14]">{p.name}</option>
-              ))}
-            </select>
-            <button onClick={() => setShowHistory((v) => !v)} className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/80 hover:bg-white/10">
-              <History className="h-4 w-4" /> Histórico
-            </button>
-            <button onClick={reset} className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/80 hover:bg-white/10">
-              <RotateCcw className="h-4 w-4" /> Resetar
-            </button>
+            <div className="flex flex-wrap gap-2">
+              <select
+                value={printerId}
+                onChange={(e) => setPrinterId(e.target.value)}
+                className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white/90 backdrop-blur transition hover:bg-white/[0.07]"
+              >
+                <option value="" className="bg-[#0b0b14]">— escolher impressora —</option>
+                {printers.map((p) => (
+                  <option key={p.id} value={p.id} className="bg-[#0b0b14]">{p.name}</option>
+                ))}
+              </select>
+              <button onClick={() => setShowHistory((v) => !v)} className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white/80 backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/[0.08]">
+                <History className="h-4 w-4" /> Histórico
+              </button>
+              <button onClick={reset} className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white/80 backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/[0.08]">
+                <RotateCcw className="h-4 w-4" /> Resetar
+              </button>
+            </div>
           </div>
         </div>
 
         {printers.length === 0 && (
-          <div className="mb-6 rounded-xl border border-amber-400/30 bg-amber-500/5 p-4 text-sm text-amber-200">
+          <div
+            className="relative mb-6 overflow-hidden rounded-xl border border-amber-400/25 p-4 text-sm text-amber-100 backdrop-blur-xl"
+            style={{ background: 'linear-gradient(135deg, rgba(245,158,11,0.10), rgba(12,16,14,0.85))' }}
+          >
             Nenhuma impressora cadastrada.{" "}
             <span className="underline opacity-60">Cadastrar agora</span> para enviar G-code direto pelo app.
           </div>
         )}
 
-        {/* Progress */}
-        <div className="mb-6 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-          <div className="flex items-center justify-between text-sm text-white/80">
-            <span>{doneTasks} de {totalTasks} checks</span>
-            <span className="font-mono text-cyan-300">{pct}%</span>
+        {/* Progress — Glass card */}
+        <div
+          className="relative mb-6 overflow-hidden rounded-2xl border border-white/10 p-5 animate-fade-in"
+          style={{
+            background: 'linear-gradient(135deg, rgba(12,16,14,0.9), rgba(10,12,18,0.85))',
+            backdropFilter: 'blur(20px) saturate(140%)',
+            boxShadow: '0 16px 40px -20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)',
+          }}
+        >
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{ background: 'radial-gradient(500px circle at 100% 0%, rgba(103,232,249,0.10), transparent 55%)' }}
+          />
+          <div className="relative">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-[10px] uppercase tracking-[0.25em] text-white/50">
+                {doneTasks} de {totalTasks} checks
+              </span>
+              <span
+                className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-2.5 py-0.5 font-mono text-xs text-cyan-200"
+                style={{ textShadow: '0 0 8px rgba(103,232,249,0.5)' }}
+              >
+                {pct}%
+              </span>
+            </div>
+            <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/[0.06] ring-1 ring-inset ring-white/5">
+              <div
+                className="h-full rounded-full transition-all duration-700"
+                style={{
+                  width: `${pct}%`,
+                  background: 'linear-gradient(90deg, #67e8f9, #3b82f6)',
+                  boxShadow: '0 0 16px rgba(103,232,249,0.6)',
+                }}
+              />
+            </div>
+            {pct === 100 && (
+              <button
+                onClick={finish}
+                className="mt-4 inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium text-white transition hover:-translate-y-0.5"
+                style={{
+                  background: 'linear-gradient(135deg, #10b981, #06b6d4)',
+                  boxShadow: '0 10px 30px -10px rgba(16,185,129,0.55), inset 0 1px 0 rgba(255,255,255,0.15)',
+                }}
+              >
+                <Save className="h-4 w-4" /> Concluir calibração
+              </button>
+            )}
           </div>
-          <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
-            <div className="h-full bg-gradient-to-r from-cyan-400 to-blue-500 transition-all" style={{ width: `${pct}%` }} />
-          </div>
-          {pct === 100 && (
-            <button onClick={finish} className="mt-4 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-emerald-500/20">
-              <Save className="h-4 w-4" /> Concluir calibração
-            </button>
-          )}
         </div>
 
         {showHistory && <HistoryPanel />}
@@ -302,25 +369,50 @@ function CalibrationPage() {
         <div className="grid gap-4 lg:grid-cols-[1.5fr_1fr]">
           {/* Steps */}
           <div className="space-y-3">
-            {STEPS.map((s) => {
+            {STEPS.map((s, idx) => {
               const isOpen = openStep === s.id;
               const isSkipped = skipped.includes(s.id);
               const done = stepDone(s);
               const Icon = s.icon;
               return (
-                <div key={s.id} className={`rounded-2xl border ${done ? "border-emerald-500/40 bg-emerald-500/[0.04]" : "border-white/10 bg-white/[0.03]"}`}>
+                <div
+                  key={s.id}
+                  className="group relative overflow-hidden rounded-2xl border animate-fade-in transition-all duration-300 hover:-translate-y-0.5"
+                  style={{
+                    animationDelay: `${idx * 60}ms`,
+                    borderColor: done ? 'rgba(16,185,129,0.35)' : 'rgba(255,255,255,0.08)',
+                    background: done
+                      ? 'linear-gradient(135deg, rgba(16,185,129,0.08), rgba(12,16,14,0.9))'
+                      : 'linear-gradient(135deg, rgba(12,16,14,0.9), rgba(10,12,18,0.85))',
+                    backdropFilter: 'blur(18px) saturate(140%)',
+                    boxShadow: done
+                      ? '0 12px 32px -16px rgba(16,185,129,0.4), inset 0 1px 0 rgba(255,255,255,0.04)'
+                      : '0 10px 28px -16px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)',
+                  }}
+                >
                   <button
                     onClick={() => setOpenStep(isOpen ? "" : s.id)}
-                    className="flex w-full items-center gap-3 p-4 text-left"
+                    className="relative flex w-full items-center gap-3 p-4 text-left"
                   >
-                    <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${done ? "bg-emerald-500/20 text-emerald-300" : "bg-white/5 text-white/70"}`}>
+                    <div
+                      className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10"
+                      style={{
+                        background: done
+                          ? 'linear-gradient(135deg, rgba(16,185,129,0.25), rgba(16,185,129,0.05))'
+                          : 'linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))',
+                        boxShadow: done
+                          ? '0 6px 16px -6px rgba(16,185,129,0.5), inset 0 1px 0 rgba(255,255,255,0.08)'
+                          : 'inset 0 1px 0 rgba(255,255,255,0.05)',
+                        color: done ? '#6ee7b7' : 'rgba(255,255,255,0.75)',
+                      }}
+                    >
                       {done ? <Check className="h-4 w-4" /> : <Icon className="h-4 w-4" />}
                     </div>
                     <div className="flex-1">
-                      <div className="font-medium text-white">{s.title}</div>
-                      <div className="text-xs text-white/50">{s.desc}</div>
+                      <div className="font-medium text-white" style={{ textShadow: '0 1px 8px rgba(0,0,0,0.4)' }}>{s.title}</div>
+                      <div className="text-xs text-white/50 tracking-wide">{s.desc}</div>
                     </div>
-                    {isSkipped && <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] uppercase tracking-wide text-white/60">N/A</span>}
+                    {isSkipped && <span className="rounded-full border border-white/10 bg-white/[0.06] px-2 py-0.5 text-[10px] uppercase tracking-[0.2em] text-white/60">N/A</span>}
                     <ChevronRight className={`h-4 w-4 text-white/40 transition-transform ${isOpen ? "rotate-90" : ""}`} />
                   </button>
 
