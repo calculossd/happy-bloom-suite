@@ -3152,7 +3152,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                 <p className="text-[11px] mt-1 text-[#8BA58D]/75">Clique em Novo Produto para cadastrar os produtos do portfólio.</p>
               </div>
             ) : (
-              <div className="relative grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3" id="product-stock-listing">
+              <div className="relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3" id="product-stock-listing">
                 {[...catalogItems].sort((a, b) => {
                   const lowA = Number(a.stockCount || 0) < Number(a.minStockCount || 0);
                   const lowB = Number(b.stockCount || 0) < Number(b.minStockCount || 0);
