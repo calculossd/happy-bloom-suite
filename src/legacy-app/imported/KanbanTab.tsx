@@ -233,7 +233,7 @@ function KanbanPage() {
           <div className="absolute bottom-0 left-1/3 h-[440px] w-[440px] rounded-full bg-emerald-500/10 blur-[150px]" />
         </div>
 
-        <div className="mx-auto w-full max-w-[1300px] 2xl:max-w-[1700px] px-6 py-10 md:px-10">
+        <div className="w-full py-6">
           {/* Premium dashboard header */}
           <div className="mb-6 space-y-5">
             <AiRecommendation
