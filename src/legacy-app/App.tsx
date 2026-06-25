@@ -1744,7 +1744,7 @@ export default function App() {
         <nav className="relative flex items-center gap-0.5 overflow-x-auto no-scrollbar rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl px-1.5 py-1.5">
           {[
             { id: 0, label: 'Painel', icon: Home },
-            { id: 1, label: 'Produção', icon: Activity },
+            { id: 1, label: 'Produção', icon: Activity, badge: awaitingAcceptCount, blink: awaitingAcceptCount > 0 },
             { id: 6, label: 'Histórico', icon: ShoppingBag },
             { id: 2, label: 'Clientes', icon: Users },
             { id: 15, label: 'Prospecção', icon: Radar },
