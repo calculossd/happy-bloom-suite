@@ -2016,16 +2016,16 @@ export default function App() {
                   boxShadow: '0 0 32px -12px rgba(239,68,68,0.55), inset 0 1px 0 rgba(239,68,68,0.18)',
                 }}
               >
-                <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-5">
+                <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-1.5 sm:px-5">
                   <div className="flex min-w-0 items-center gap-3">
-                    <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-red-500/10 ring-1 ring-inset ring-red-400/25 text-red-300">
-                      <AlertTriangle className="h-4 w-4 animate-pulse" />
+                    <div className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-red-500/10 ring-1 ring-inset ring-red-400/25 text-red-300">
+                      <AlertTriangle className="h-3.5 w-3.5 animate-pulse" />
                     </div>
-                    <div className="min-w-0 flex flex-col">
-                      <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-red-300/90">
+                    <div className="min-w-0 flex items-baseline gap-2.5 truncate">
+                      <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-red-300/90 shrink-0">
                         Estoque Baixo
                       </span>
-                      <span className="truncate text-[13px] font-semibold tracking-[-0.005em] text-zinc-50">
+                      <span className="truncate text-[12px] font-semibold tracking-[-0.005em] text-zinc-50">
                         {lowFilaments.length} {lowFilaments.length === 1 ? 'bobina' : 'bobinas'} abaixo do mínimo
                       </span>
                     </div>
@@ -2036,7 +2036,7 @@ export default function App() {
                         localStorage.setItem('bambuzau_costs_subtab_override', 'STOCK');
                         setCurrentTab(4);
                       }}
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-red-400/30 bg-red-500/15 px-3.5 py-2 text-[10px] font-bold uppercase tracking-[0.14em] text-red-100 transition-all duration-300 hover:border-red-300/50 hover:bg-red-500/25 hover:shadow-[0_8px_24px_-8px_rgba(239,68,68,0.6)] active:scale-[0.97]"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-red-400/30 bg-red-500/15 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-red-100 transition-all duration-300 hover:border-red-300/50 hover:bg-red-500/25 hover:shadow-[0_8px_24px_-8px_rgba(239,68,68,0.6)] active:scale-[0.97]"
                     >
                       Estoque
                       <span aria-hidden>🧵</span>
