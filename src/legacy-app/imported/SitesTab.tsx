@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Globe, Sparkles } from "lucide-react";
 
 type Link = { id: string; name: string; url: string; category: string; desc?: string };
 
@@ -85,41 +85,136 @@ function SitesPage() {
     <div className="relative min-h-screen w-full overflow-hidden bg-[#050507] text-white">
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute -top-40 left-1/3 h-[420px] w-[420px] rounded-full bg-[#b7ff00]/10 blur-[140px]" />
+        <div className="absolute top-1/3 right-0 h-[360px] w-[360px] rounded-full bg-cyan-500/[0.06] blur-[140px]" />
       </div>
       <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1600px] px-6 py-12 md:px-10">
+        {/* Premium Header — Obsidian Glass */}
+        <div
+          className="relative mb-8 overflow-hidden rounded-3xl border border-white/10 p-6 md:p-8 animate-fade-in"
+          style={{
+            background: 'linear-gradient(135deg, rgba(12,16,14,0.92) 0%, rgba(10,12,18,0.88) 100%)',
+            backdropFilter: 'blur(24px) saturate(140%)',
+            boxShadow: '0 24px 60px -24px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.05)',
+          }}
+        >
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{ background: 'radial-gradient(700px circle at 0% 0%, rgba(183,255,0,0.10), transparent 55%)' }}
+          />
+          <div className="relative flex flex-wrap items-end justify-between gap-6">
+            <div className="flex items-start gap-4">
+              <div
+                className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(183,255,0,0.18), rgba(16,185,129,0.08))',
+                  boxShadow: '0 8px 24px -8px rgba(183,255,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08)',
+                }}
+              >
+                <Globe className="h-5 w-5 text-lime-200" />
+              </div>
+              <div>
+                <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.28em] text-white/40">
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#b7ff00] shadow-[0_0_8px_rgba(183,255,0,0.9)]" />
+                  Diretório curado
+                </div>
+                <h1
+                  className="mt-1.5 text-3xl font-bold leading-tight text-white md:text-4xl"
+                  style={{ fontFamily: "'Sora', sans-serif", textShadow: '0 2px 16px rgba(183,255,0,0.18)' }}
+                >
+                  Sites & Ferramentas
+                </h1>
+                <p className="mt-1 max-w-xl text-sm text-white/55">
+                  Coleção editorial de marketplaces, fatiadores e modeladores que alimentam o ateliê.
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <div
+                className="rounded-2xl border border-white/10 px-4 py-2.5"
+                style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01))' }}
+              >
+                <div className="text-[9px] uppercase tracking-[0.24em] text-white/40">Total</div>
+                <div className="font-mono text-xl text-white" style={{ textShadow: '0 0 12px rgba(183,255,0,0.35)' }}>{filtered.length}</div>
+              </div>
+              <div
+                className="rounded-2xl border border-white/10 px-4 py-2.5"
+                style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01))' }}
+              >
+                <div className="text-[9px] uppercase tracking-[0.24em] text-white/40">Categorias</div>
+                <div className="font-mono text-xl text-white" style={{ textShadow: '0 0 12px rgba(103,232,249,0.35)' }}>{grouped.length}</div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowAdd((v) => !v)}
+                className="inline-flex items-center gap-2 rounded-2xl px-4 py-2.5 text-sm font-semibold text-black transition hover:-translate-y-0.5"
+                style={{
+                  background: 'linear-gradient(135deg, #b7ff00, #84cc16)',
+                  boxShadow: '0 12px 30px -10px rgba(183,255,0,0.55), inset 0 1px 0 rgba(255,255,255,0.25)',
+                }}
+              >
+                <Sparkles className="h-4 w-4" /> Adicionar site
+              </button>
+            </div>
+          </div>
+        </div>
+
         {showAdd && (
-          <form onSubmit={add} className="mb-6 grid grid-cols-1 gap-2 rounded-3xl border border-white/10 bg-white/[0.02] p-4 md:grid-cols-[1fr_1fr_160px_auto] backdrop-blur-xl">
-            <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nome do site" className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:border-[#b7ff00]/50 focus:outline-none" />
-            <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://..." className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:border-[#b7ff00]/50 focus:outline-none" />
-            <select value={cat} onChange={(e) => setCat(e.target.value)} className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm focus:border-[#b7ff00]/50 focus:outline-none">
+          <form
+            onSubmit={add}
+            className="relative mb-6 grid grid-cols-1 gap-2 overflow-hidden rounded-3xl border border-white/10 p-4 md:grid-cols-[1fr_1fr_160px_auto] animate-fade-in"
+            style={{
+              background: 'linear-gradient(135deg, rgba(12,16,14,0.9), rgba(10,12,18,0.85))',
+              backdropFilter: 'blur(20px) saturate(140%)',
+              boxShadow: '0 16px 40px -20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04)',
+            }}
+          >
+            <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nome do site" className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm transition focus:-translate-y-px focus:border-[#b7ff00]/50 focus:bg-white/[0.07] focus:outline-none" />
+            <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://..." className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm transition focus:-translate-y-px focus:border-[#b7ff00]/50 focus:bg-white/[0.07] focus:outline-none" />
+            <select value={cat} onChange={(e) => setCat(e.target.value)} className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm focus:border-[#b7ff00]/50 focus:outline-none">
               {["Modelos","Modelagem","Software","Outros"].map((c) => <option key={c} value={c} className="bg-[#0a0a0f]">{c}</option>)}
             </select>
-            <button type="submit" className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#b7ff00] px-4 py-2 text-sm font-bold text-black hover:brightness-110 active:scale-95 shadow-[0_0_18px_-6px_rgba(183,255,0,0.7)]">
+            <button type="submit" className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#b7ff00] px-4 py-2 text-sm font-bold text-black transition hover:-translate-y-0.5 hover:brightness-110 active:scale-95 shadow-[0_10px_24px_-8px_rgba(183,255,0,0.7)]">
               <Plus className="h-4 w-4" /> Salvar
             </button>
           </form>
         )}
 
         {/* Sections by category — logo-only tiles */}
-        <div className="space-y-8">
-          {grouped.map(([category, items]) => (
-            <section key={category}>
-              <div className="mb-3 flex items-center gap-3">
-                <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#b7ff00]">{category}</span>
-                <span className="h-px flex-1 bg-gradient-to-r from-[#b7ff00]/30 to-transparent" />
-                <span className="text-[10px] text-white/40 font-mono">{items.length}</span>
+        <div className="space-y-10">
+          {grouped.map(([category, items], gIdx) => (
+            <section key={category} className="animate-fade-in" style={{ animationDelay: `${gIdx * 80}ms` }}>
+              <div className="mb-4 flex items-center gap-3">
+                <span
+                  className="rounded-full border border-[#b7ff00]/25 bg-[#b7ff00]/[0.06] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.24em] text-[#b7ff00]"
+                  style={{ textShadow: '0 0 12px rgba(183,255,0,0.45)' }}
+                >
+                  {category}
+                </span>
+                <span className="h-px flex-1 bg-gradient-to-r from-[#b7ff00]/30 via-white/10 to-transparent" />
+                <span className="rounded-full border border-white/10 bg-white/[0.03] px-2 py-0.5 font-mono text-[10px] text-white/50">{items.length}</span>
               </div>
               <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
-                {items.map((l) => (
-                  <div key={l.id} className="group relative">
+                {items.map((l, i) => (
+                  <div
+                    key={l.id}
+                    className="group relative animate-fade-in"
+                    style={{ animationDelay: `${gIdx * 80 + i * 30}ms` }}
+                  >
                     <a
                       href={l.url}
                       target="_blank"
                       rel="noreferrer noopener"
                       title={`${l.name} — ${hostname(l.url)}`}
-                      className="flex aspect-square flex-col items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] p-3 transition-all hover:-translate-y-0.5 hover:border-[#b7ff00]/50 hover:bg-white/[0.05] hover:shadow-[0_12px_40px_-12px_rgba(183,255,0,0.35)]"
+                      className="flex aspect-square flex-col items-center justify-center gap-2 rounded-2xl border border-white/10 p-3 backdrop-blur-xl transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:border-[#b7ff00]/50 hover:shadow-[0_18px_44px_-14px_rgba(183,255,0,0.4)]"
+                      style={{
+                        background: 'linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01))',
+                        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
+                      }}
                     >
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/95 p-1.5 shadow-inner">
+                      <div
+                        className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/95 p-1.5 transition-transform duration-300 group-hover:scale-110"
+                        style={{ boxShadow: '0 6px 18px -6px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.6)' }}
+                      >
                         <img
                           src={favicon(l.url)}
                           alt={l.name}
@@ -128,14 +223,14 @@ function SitesPage() {
                           onError={(e) => { (e.currentTarget as HTMLImageElement).style.opacity = "0.3"; }}
                         />
                       </div>
-                      <span className="block w-full truncate text-center text-[10px] font-semibold text-white/80 group-hover:text-[#b7ff00]">
+                      <span className="block w-full truncate text-center text-[10px] font-semibold tracking-wide text-white/80 transition group-hover:text-[#b7ff00]">
                         {l.name}
                       </span>
                     </a>
                     <button
                       onClick={() => remove(l.id)}
                       aria-label="Remover"
-                      className="absolute top-1 right-1 z-10 rounded-full bg-black/70 p-1 text-white/60 opacity-0 backdrop-blur transition-opacity hover:text-rose-400 group-hover:opacity-100"
+                      className="absolute top-1.5 right-1.5 z-10 rounded-full border border-white/10 bg-black/70 p-1 text-white/60 opacity-0 backdrop-blur transition hover:text-rose-400 group-hover:opacity-100"
                     >
                       <Trash2 className="h-3 w-3" />
                     </button>
@@ -147,7 +242,9 @@ function SitesPage() {
         </div>
 
         {filtered.length === 0 && (
-          <p className="mt-8 text-center text-sm text-white/40">Nenhum site encontrado.</p>
+          <div className="mt-10 rounded-2xl border border-dashed border-white/10 bg-white/[0.02] p-10 text-center text-sm text-white/40 backdrop-blur-xl">
+            Nenhum site encontrado.
+          </div>
         )}
 
         <button
@@ -155,7 +252,11 @@ function SitesPage() {
           onClick={() => setShowAdd((v) => !v)}
           aria-label="Adicionar site"
           title="Adicionar site"
-          className="fixed bottom-24 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#b7ff00] text-black shadow-[0_0_34px_-8px_rgba(183,255,0,0.95)] transition hover:brightness-110 active:scale-95"
+          className="fixed bottom-24 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full text-black transition hover:-translate-y-0.5 hover:brightness-110 active:scale-95"
+          style={{
+            background: 'linear-gradient(135deg, #b7ff00, #84cc16)',
+            boxShadow: '0 0 34px -6px rgba(183,255,0,0.95), inset 0 1px 0 rgba(255,255,255,0.25)',
+          }}
         >
           <Plus className="h-7 w-7 stroke-[3px]" />
         </button>
