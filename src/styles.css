@@ -954,19 +954,16 @@ input, select, textarea {
 [data-tab-category="financeiro"]  { --tab-accent: 16, 185, 129;  } /* esmeralda */
 [data-tab-category="estoque"]     { --tab-accent: 234, 179, 8;   } /* mesmo acento dos clientes */
 
-/* Header de cada página: mesmo estilo da notificação (borda + brilho, sem bloco) */
+/* Header de cada página: bloco com blur de volta, mantendo a cor por aba */
 .legacy-skin #view-page-header,
 #view-page-header {
-  background: transparent !important;
-  background-color: transparent !important;
-  background-image: none !important;
-  border-top: 1px solid rgba(var(--tab-accent), 0.28) !important;
-  border-bottom: 1px solid rgba(var(--tab-accent), 0.22) !important;
-  border-left: 0 !important;
-  border-right: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  backdrop-filter: none !important;
+  background-color: rgba(0, 0, 0, 0.52) !important;
+  background-image: linear-gradient(135deg, rgba(var(--tab-accent), 0.08), rgba(0, 0, 0, 0.38)) !important;
+  border: 1px solid rgba(var(--tab-accent), 0.28) !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 0 32px -12px rgba(var(--tab-accent), 0.55), inset 0 1px 0 rgba(var(--tab-accent), 0.14) !important;
+  backdrop-filter: blur(14px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
 }
 
 html[data-costs-subtab="CATALOG"] [data-tab-category="estoque"] #view-page-header,
