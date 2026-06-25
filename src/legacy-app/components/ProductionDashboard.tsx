@@ -106,12 +106,14 @@ export const ProductionDashboard: React.FC<Props> = ({ orders, printers }) => {
   }, [orders, printers]);
 
   const aiTip = useMemo(() => {
+    const fire = (name: string, detail?: any) => { try { window.dispatchEvent(new CustomEvent(name, { detail })); } catch {} };
     if (stats.activeCount === 0 && stats.printersTotal === 0) {
       return {
         title: 'Cadastre impressoras e pedidos para iniciar',
         body: 'Sem fila e sem impressoras a IA não consegue calcular ocupação, gargalo nem previsão de entrega. Comece adicionando ao menos 1 impressora e 1 pedido.',
         savings: '—',
         action: 'Cadastrar',
+        onAction: () => fire('request-new-order'),
       };
     }
     if (stats.late > 0) {
@@ -120,6 +122,7 @@ export const ProductionDashboard: React.FC<Props> = ({ orders, printers }) => {
         body: `Reorganize a fila para zerar atraso e proteger reputação no marketplace. Cada dia adicional reduz a chance de avaliação 5 estrelas.`,
         savings: `-${stats.late} atraso${stats.late > 1 ? 's' : ''}`,
         action: 'Ver atrasados',
+        onAction: () => fire('navigate-tab', 1),
       };
     }
     if (stats.utilization < 50 && stats.waiting > 0) {
@@ -128,6 +131,7 @@ export const ProductionDashboard: React.FC<Props> = ({ orders, printers }) => {
         body: `Utilização das impressoras está em ${stats.utilization}% e ${stats.waiting} pedidos aguardam. Aceite a fila para liberar produção e antecipar receita.`,
         savings: `+${stats.waiting} jobs`,
         action: 'Liberar fila',
+        onAction: () => fire('navigate-tab', 1),
       };
     }
     return {
@@ -135,6 +139,7 @@ export const ProductionDashboard: React.FC<Props> = ({ orders, printers }) => {
       body: `Utilização em ${stats.utilization}%, ${stats.printing} jobs ativos e ${stats.deliveredToday} entregue${stats.deliveredToday === 1 ? '' : 's'} hoje. Avalie escalonar uma impressora extra se a fila crescer.`,
       savings: `${stats.utilization}% uso`,
       action: 'Ver impressoras',
+      onAction: () => fire('navigate-tab', 16),
     };
   }, [stats]);
 
@@ -214,7 +219,7 @@ export const ProductionDashboard: React.FC<Props> = ({ orders, printers }) => {
           <div className="hidden md:flex flex-col items-end gap-2 shrink-0 pl-4 border-l border-white/10">
             <span className="text-[9px] font-bold uppercase tracking-widest text-zinc-500">Sinal</span>
             <span className="text-xl font-extrabold text-[#b7ff00] tabular-nums">{aiTip.savings}</span>
-            <button className="mt-1 px-3 py-1.5 bg-[#b7ff00] text-black text-[10px] font-extrabold uppercase tracking-widest rounded-lg hover:scale-105 active:scale-95 transition-transform shadow-[0_0_20px_rgba(183,255,0,0.3)] flex items-center gap-1.5">
+            <button onClick={(aiTip as any).onAction} className="mt-1 px-3 py-1.5 bg-[#b7ff00] text-black text-[10px] font-extrabold uppercase tracking-widest rounded-lg hover:scale-105 active:scale-95 transition-transform shadow-[0_0_20px_rgba(183,255,0,0.3)] flex items-center gap-1.5">
               {aiTip.action} <ArrowRight className="w-3 h-3" />
             </button>
           </div>
