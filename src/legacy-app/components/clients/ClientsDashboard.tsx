@@ -171,7 +171,7 @@ export const ClientsDashboard: React.FC<Props> = ({ clients, orders }) => {
 
       {/* AI Recommendation Card */}
       <div className="group relative p-[1px] rounded-2xl bg-gradient-to-br from-[#D4A017]/40 via-white/10 to-[#b7ff00]/30">
-        <div className="absolute -inset-6 rounded-2xl bg-gradient-radial from-[#D4A017]/10 via-[#b7ff00]/5 to-transparent blur-3xl opacity-70 pointer-events-none" />
+        <div className="absolute -inset-6 rounded-2xl bg-[radial-gradient(circle_at_center,_rgba(212,160,23,0.12),_transparent_70%)] via-[#b7ff00]/5 to-transparent blur-3xl opacity-70 pointer-events-none" />
         <div className="relative bg-[#0a0c0a]/80 backdrop-blur-2xl rounded-[15px] p-5 border border-white/10 flex items-start gap-5">
           {/* Robot avatar */}
           <div className="relative shrink-0">
