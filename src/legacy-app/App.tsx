@@ -2118,16 +2118,16 @@ export default function App() {
                   boxShadow: '0 0 32px -12px rgba(56,189,248,0.55), inset 0 1px 0 rgba(56,189,248,0.18)',
                 }}
               >
-                <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-5">
+                <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-1.5 sm:px-5">
                   <div className="flex min-w-0 items-center gap-3">
-                    <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-sky-500/10 ring-1 ring-inset ring-sky-400/25 text-sky-300">
-                      <span className="text-base leading-none">🔥</span>
+                    <div className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-sky-500/10 ring-1 ring-inset ring-sky-400/25 text-sky-300">
+                      <span className="text-sm leading-none">🔥</span>
                     </div>
-                    <div className="min-w-0 flex flex-col">
-                      <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-sky-300/90">
+                    <div className="min-w-0 flex items-baseline gap-2.5 truncate">
+                      <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-sky-300/90 shrink-0">
                         Oportunidade
                       </span>
-                      <span className="truncate text-[13px] font-semibold tracking-[-0.005em] text-zinc-50">
+                      <span className="truncate text-[12px] font-semibold tracking-[-0.005em] text-zinc-50">
                         {alertMsg}
                       </span>
                     </div>
@@ -2139,7 +2139,7 @@ export default function App() {
                         localStorage.setItem("bambuzau_costs_subtab_override", "QUOTE");
                         setCurrentTab(4);
                       }}
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-sky-400/30 bg-sky-500/15 px-3.5 py-2 text-[10px] font-bold uppercase tracking-[0.14em] text-sky-100 transition-all duration-300 hover:border-sky-300/50 hover:bg-sky-500/25 hover:shadow-[0_8px_24px_-8px_rgba(56,189,248,0.6)] active:scale-[0.97]"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-sky-400/30 bg-sky-500/15 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-sky-100 transition-all duration-300 hover:border-sky-300/50 hover:bg-sky-500/25 hover:shadow-[0_8px_24px_-8px_rgba(56,189,248,0.6)] active:scale-[0.97]"
                     >
                       Ver cotações
                       <span aria-hidden>↗</span>
