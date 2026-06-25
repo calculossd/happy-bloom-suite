@@ -1918,7 +1918,11 @@ export default function App() {
               : null;
           const titleColor =
             currentTab === 4
-              ? (costsSubTab === 'SHOP' || costsSubTab === 'QUOTE' || costsSubTab === 'CALC' ? '#22C55E' : '#D4A017')
+              ? (costsSubTab === 'SHOP' || costsSubTab === 'QUOTE' || costsSubTab === 'CALC'
+                  ? '#22C55E'
+                  : costsSubTab === 'AI' || costsSubTab === 'CATALOG'
+                    ? '#8B5CF6'
+                    : '#D4A017')
               : [1, 2, 3, 6].includes(currentTab) ? '#D4A017'
               : [12, 14, 16].includes(currentTab) ? '#3B82F6'
               : [7, 8, 9, 10, 11, 15].includes(currentTab) ? '#8B5CF6'
@@ -1932,8 +1936,8 @@ export default function App() {
               <div className="relative z-10 space-y-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <div
-                    className="text-sm font-bold uppercase tracking-[0.14em] font-sans select-none leading-none"
-                    style={{ color: titleColor, textShadow: `0 0 18px ${titleColor}55` }}
+                    className="text-base md:text-lg font-extrabold uppercase tracking-[0.16em] font-sans select-none leading-none"
+                    style={{ color: titleColor, textShadow: `0 0 22px ${titleColor}88, 0 0 6px ${titleColor}55` }}
                   >
                     {headerInfo.title}
                   </div>
