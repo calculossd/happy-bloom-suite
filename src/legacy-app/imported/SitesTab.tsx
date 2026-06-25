@@ -193,7 +193,7 @@ function SitesPage() {
                 <span className="h-px flex-1 bg-gradient-to-r from-[#b7ff00]/30 via-white/10 to-transparent" />
                 <span className="rounded-full border border-white/10 bg-white/[0.03] px-2 py-0.5 font-mono text-[10px] text-white/50">{items.length}</span>
               </div>
-              <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
+              <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12">
                 {items.map((l, i) => (
                   <div
                     key={l.id}
@@ -205,14 +205,14 @@ function SitesPage() {
                       target="_blank"
                       rel="noreferrer noopener"
                       title={`${l.name} — ${hostname(l.url)}`}
-                      className="flex aspect-square flex-col items-center justify-center gap-2 rounded-2xl border border-white/10 p-3 backdrop-blur-xl transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:border-[#b7ff00]/50 hover:shadow-[0_18px_44px_-14px_rgba(183,255,0,0.4)]"
+                      className="flex aspect-square flex-col items-center justify-center gap-1.5 rounded-xl border border-white/10 p-2 backdrop-blur-xl transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:border-[#b7ff00]/50 hover:shadow-[0_14px_32px_-14px_rgba(183,255,0,0.4)]"
                       style={{
                         background: 'linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01))',
                         boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
                       }}
                     >
                       <div
-                        className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/95 p-1.5 transition-transform duration-300 group-hover:scale-110"
+                        className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/95 p-1 transition-transform duration-300 group-hover:scale-110"
                         style={{ boxShadow: '0 6px 18px -6px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.6)' }}
                       >
                         <img
@@ -223,7 +223,7 @@ function SitesPage() {
                           onError={(e) => { (e.currentTarget as HTMLImageElement).style.opacity = "0.3"; }}
                         />
                       </div>
-                      <span className="block w-full truncate text-center text-[10px] font-semibold tracking-wide text-white/80 transition group-hover:text-[#b7ff00]">
+                      <span className="block w-full truncate text-center text-[9px] font-semibold tracking-wide text-white/80 transition group-hover:text-[#b7ff00]">
                         {l.name}
                       </span>
                     </a>
