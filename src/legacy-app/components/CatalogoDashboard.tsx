@@ -3,7 +3,7 @@ import type { CatalogItem } from '../types';
 import { BookOpen, Package, DollarSign, Boxes, TrendingUp, Sparkles, AlertTriangle, Bot, ArrowRight } from 'lucide-react';
 import {
   PieChart, Pie, Cell, Tooltip, ResponsiveContainer,
-  BarChart, Bar, XAxis, YAxis, CartesianGrid,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend,
 } from 'recharts';
 
 const fmtBRL = (v: number) =>
@@ -37,26 +37,47 @@ export const CatalogoDashboard: React.FC<Props> = ({ catalogItems }) => {
 
   const PIE = ['#b7ff00', '#D4A017', '#22D3EE', '#A78BFA', '#34D399', '#F472B6'];
 
-  const TONES: Record<string, { accent: string; ring: string; glow: string }> = {
-    gold:    { accent: 'text-[#D4A017]', ring: 'border-[#D4A017]/30', glow: 'bg-[#D4A017]/15' },
-    lime:    { accent: 'text-[#b7ff00]', ring: 'border-[#b7ff00]/25', glow: 'bg-[#b7ff00]/15' },
-    blue:    { accent: 'text-sky-300',   ring: 'border-sky-400/25',   glow: 'bg-sky-500/15' },
-    purple:  { accent: 'text-violet-300',ring: 'border-violet-400/25',glow: 'bg-violet-500/15' },
-    emerald: { accent: 'text-emerald-300',ring:'border-emerald-400/25',glow:'bg-emerald-500/15' },
-    orange:  { accent: 'text-orange-300',ring: 'border-orange-400/25',glow: 'bg-orange-500/15' },
+  const KPI_THEMES: Record<string, { bar: string; glow: string }> = {
+    gold:    { bar: 'bg-[#D4A017]',   glow: 'bg-[radial-gradient(circle_at_center,_rgba(212,160,23,0.18),_transparent_70%)]' },
+    lime:    { bar: 'bg-[#b7ff00]',   glow: 'bg-[radial-gradient(circle_at_center,_rgba(183,255,0,0.18),_transparent_70%)]' },
+    blue:    { bar: 'bg-blue-500',    glow: 'bg-[radial-gradient(circle_at_center,_rgba(59,130,246,0.18),_transparent_70%)]' },
+    purple:  { bar: 'bg-purple-500',  glow: 'bg-[radial-gradient(circle_at_center,_rgba(168,85,247,0.18),_transparent_70%)]' },
+    emerald: { bar: 'bg-emerald-500', glow: 'bg-[radial-gradient(circle_at_center,_rgba(16,185,129,0.18),_transparent_70%)]' },
+    orange:  { bar: 'bg-orange-500',  glow: 'bg-[radial-gradient(circle_at_center,_rgba(249,115,22,0.18),_transparent_70%)]' },
   };
 
-  const Kpi = ({ icon: Icon, label, value, sub, tone = 'gold' }: any) => {
-    const t = TONES[tone] || TONES.gold;
+  const Kpi = ({ icon: Icon, label, value, sub, tone = 'lime' }: any) => {
+    const t = KPI_THEMES[tone] ?? KPI_THEMES.lime;
     return (
-      <div className={`group relative overflow-hidden rounded-2xl border ${t.ring} bg-white/[0.02] backdrop-blur-xl p-3 transition-all hover:-translate-y-0.5`}>
-        <div className={`pointer-events-none absolute -top-10 -right-10 h-28 w-28 rounded-full ${t.glow} blur-3xl opacity-60`} />
-        <div className="relative flex items-center justify-between mb-1.5">
-          <span className="text-[9px] font-bold uppercase tracking-[0.22em] text-white/55">{label}</span>
-          <Icon className={`h-3.5 w-3.5 ${t.accent}`} />
+      <div className="group relative p-[1px] rounded-xl bg-white/10 transition-all duration-300 hover:scale-[1.03] hover:z-10">
+        <div className={`absolute inset-0 rounded-xl ${t.glow} blur-xl pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity`} />
+        <div className="relative bg-white/[0.03] backdrop-blur-xl p-3 rounded-[11px] overflow-hidden h-full border border-white/10">
+          <div className={`absolute top-0 left-0 w-[3px] h-full ${t.bar}`} />
+          <div className="flex items-center justify-between">
+            <span className="text-[9px] uppercase tracking-wider text-zinc-400 font-bold">{label}</span>
+            <Icon className="h-3.5 w-3.5 text-white/70" />
+          </div>
+          <div className="text-lg font-bold text-white mt-1">{value}</div>
+          {sub && <div className="text-[9px] text-zinc-500 uppercase tracking-wider mt-0.5">{sub}</div>}
         </div>
-        <div className={`relative text-lg font-extrabold tabular-nums ${t.accent}`}>{value}</div>
-        {sub && <div className="relative text-[9px] uppercase tracking-widest text-white/40 mt-0.5">{sub}</div>}
+      </div>
+    );
+  };
+
+  const PANEL_GLOWS = {
+    gold: 'bg-[radial-gradient(circle_at_center,_rgba(212,160,23,0.12),_transparent_70%)]',
+    lime: 'bg-[radial-gradient(circle_at_center,_rgba(183,255,0,0.12),_transparent_70%)]',
+    neutral: 'bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.06),_transparent_70%)]',
+  } as const;
+  const Panel: React.FC<{ tone?: 'gold' | 'lime' | 'neutral'; title: string; children: React.ReactNode }> = ({ tone = 'neutral', title, children }) => {
+    const glow = PANEL_GLOWS[tone];
+    return (
+      <div className="group relative p-[1px] rounded-2xl bg-white/5 transition-all duration-500 hover:scale-[1.005]">
+        <div className={`absolute -inset-4 rounded-2xl ${glow} blur-2xl pointer-events-none opacity-50 group-hover:opacity-90 transition-opacity duration-700`} />
+        <div className="relative bg-white/[0.02] backdrop-blur-2xl rounded-[15px] p-4 border border-white/10 shadow-2xl">
+          <h4 className="text-[10px] uppercase font-bold text-white/80 tracking-[0.2em] mb-3">{title}</h4>
+          {children}
+        </div>
       </div>
     );
   };
@@ -152,45 +173,66 @@ export const CatalogoDashboard: React.FC<Props> = ({ catalogItems }) => {
         <Kpi icon={AlertTriangle} label="Sem Estoque"       value={stats.noStock}                        tone={stats.noStock > 0 ? 'orange' : 'emerald'} />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 relative">
-        <div className="group relative p-[1px] rounded-2xl bg-white/5">
-          <div className="absolute -inset-4 rounded-2xl bg-violet-500/10 blur-2xl pointer-events-none opacity-50" />
-          <div className="relative bg-white/[0.02] backdrop-blur-2xl rounded-[15px] p-4 border border-white/10">
-            <h4 className="text-[10px] uppercase font-bold text-white/80 tracking-[0.2em] mb-3">Composição por Material</h4>
-            {stats.typeDist.length === 0 ? (
-              <div className="h-[200px] grid place-items-center text-[10px] font-bold uppercase tracking-widest text-zinc-600 border border-dashed border-white/10 rounded-xl bg-black/20">Sem dados</div>
-            ) : (
-              <ResponsiveContainer width="100%" height={200}>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 relative">
+        <Panel tone="gold" title="Top Preços do Catálogo">
+          {stats.topPriced.length === 0 ? (
+            <div className="flex items-center justify-center h-40 border border-dashed border-white/10 rounded-xl bg-black/20">
+              <span className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">Sem produtos cadastrados</span>
+            </div>
+          ) : (
+            <ul className="space-y-1.5">
+              {stats.topPriced.map((p, i) => (
+                <li key={p.name + i} className="flex items-center justify-between text-[11px] px-2 py-1.5 rounded-lg hover:bg-white/5 transition-colors">
+                  <span className="text-white/90 truncate flex items-center gap-2">
+                    <span className="inline-flex w-5 h-5 items-center justify-center rounded-md bg-[#D4A017]/15 text-[#D4A017] font-bold text-[10px] border border-[#D4A017]/30">{i + 1}</span>
+                    {p.name}
+                  </span>
+                  <span className="text-[#b7ff00] font-mono font-bold">{fmtBRL(p.price)}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Panel>
+
+        <Panel tone="lime" title="Composição por Material">
+          {stats.typeDist.length === 0 ? (
+            <div className="flex items-center justify-center h-40 border border-dashed border-white/10 rounded-xl bg-black/20">
+              <span className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">Aguardando métricas</span>
+            </div>
+          ) : (
+            <div style={{ width: '100%', height: 180 }}>
+              <ResponsiveContainer>
                 <PieChart>
-                  <Pie data={stats.typeDist} dataKey="value" nameKey="name" innerRadius={50} outerRadius={85} paddingAngle={2}>
+                  <Pie data={stats.typeDist} dataKey="value" nameKey="name" outerRadius={60} label={{ fontSize: 10 }}>
                     {stats.typeDist.map((_, i) => <Cell key={i} fill={PIE[i % PIE.length]} />)}
                   </Pie>
-                  <Tooltip contentStyle={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, fontSize: 11 }} />
+                  <Tooltip contentStyle={{ background: 'rgba(10,12,10,0.95)', border: '1px solid rgba(255,255,255,0.1)', fontSize: 11, backdropFilter: 'blur(8px)' }} />
+                  <Legend wrapperStyle={{ fontSize: 10 }} />
                 </PieChart>
               </ResponsiveContainer>
-            )}
-          </div>
-        </div>
+            </div>
+          )}
+        </Panel>
 
-        <div className="group relative p-[1px] rounded-2xl bg-white/5">
-          <div className="absolute -inset-4 rounded-2xl bg-[#b7ff00]/10 blur-2xl pointer-events-none opacity-50" />
-          <div className="relative bg-white/[0.02] backdrop-blur-2xl rounded-[15px] p-4 border border-white/10">
-            <h4 className="text-[10px] uppercase font-bold text-white/80 tracking-[0.2em] mb-3">Top Preços</h4>
-            {stats.topPriced.length === 0 ? (
-              <div className="h-[200px] grid place-items-center text-[10px] font-bold uppercase tracking-widest text-zinc-600 border border-dashed border-white/10 rounded-xl bg-black/20">Sem dados</div>
-            ) : (
-              <ResponsiveContainer width="100%" height={200}>
-                <BarChart data={stats.topPriced} margin={{ top: 8, right: 8, left: -10, bottom: 0 }}>
+        <Panel title="Preço por Produto">
+          {stats.topPriced.length === 0 ? (
+            <div className="flex items-center justify-center h-40 border border-dashed border-white/10 rounded-xl bg-black/20">
+              <span className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">Dados insuficientes</span>
+            </div>
+          ) : (
+            <div style={{ width: '100%', height: 180 }}>
+              <ResponsiveContainer>
+                <BarChart data={stats.topPriced} margin={{ top: 4, right: 4, left: -18, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-                  <XAxis dataKey="name" tick={{ fill: 'rgba(255,255,255,0.55)', fontSize: 10 }} />
-                  <YAxis tick={{ fill: 'rgba(255,255,255,0.55)', fontSize: 10 }} />
-                  <Tooltip contentStyle={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, fontSize: 11 }} formatter={(v: any) => fmtBRL(Number(v))} />
+                  <XAxis dataKey="name" tick={{ fill: 'rgba(255,255,255,0.55)', fontSize: 9 }} />
+                  <YAxis tick={{ fill: 'rgba(255,255,255,0.55)', fontSize: 9 }} />
+                  <Tooltip contentStyle={{ background: 'rgba(10,12,10,0.95)', border: '1px solid rgba(255,255,255,0.1)', fontSize: 11, backdropFilter: 'blur(8px)' }} formatter={(v: any) => fmtBRL(Number(v))} />
                   <Bar dataKey="price" fill="#b7ff00" radius={[6, 6, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
-            )}
-          </div>
-        </div>
+            </div>
+          )}
+        </Panel>
       </div>
     </div>
   );
