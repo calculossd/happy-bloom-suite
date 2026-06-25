@@ -629,10 +629,10 @@ function OrdersList({ orders = [], clients = [], onSelectTab }: { orders?: any[]
   const cityById: Record<number, string> = {};
   clients.forEach((c: any) => (cityById[c.id] = (c.address || "").split(",").pop()?.trim() || ""));
   return (
-    <Card className="flex flex-col overflow-hidden">
+    <Card className="flex flex-col overflow-hidden cursor-pointer hover:bg-white/[0.02] transition" onClick={() => onSelectTab?.(1)}>
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-[14px] font-semibold text-white">Pedidos a Serem Entregues</h3>
-        <button className="text-[11px] text-white/50 hover:text-white" onClick={() => onSelectTab?.(3)}>Ver todos</button>
+        <button className="text-[11px] text-white/50 hover:text-white" onClick={(e) => { e.stopPropagation(); onSelectTab?.(1); }}>Ver todos</button>
       </div>
       {rows.length === 0 && (
         <div className="text-[12px] text-white/40 py-6 text-center">Sem pedidos pendentes.</div>
