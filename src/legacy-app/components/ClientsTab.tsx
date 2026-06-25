@@ -410,6 +410,24 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
         {/* RIGHT COLUMN: 3D PRINTERS & HARDWARE CHECKLISTS */}
         {viewMode !== 'clients' && viewMode !== 'prospect' && (
         <div className="glow-card border border-[#b7ff00]/15 p-6 rounded-2xl space-y-5 animate-in fade-in duration-300" id="printers-catalog">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h3 className="text-sm font-bold text-[#F1F4EE]">Impressoras 3D</h3>
+              <p className="text-[11px] text-zinc-500">Gerencie suas máquinas físicas e checklists de manutenção.</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowAddPrinterForm(!showAddPrinterForm)}
+              className={`px-3 py-1.5 text-[11px] font-bold rounded-lg border transition ${
+                showAddPrinterForm
+                  ? 'bg-red-500/10 border-red-500/30 text-red-400 hover:bg-red-500/20'
+                  : 'bg-[#b7ff00]/10 border-[#b7ff00]/30 text-[#b7ff00] hover:bg-[#b7ff00]/20'
+              }`}
+              id="toggle-add-printer-form"
+            >
+              {showAddPrinterForm ? '× Cancelar' : '+ Cadastrar Impressora'}
+            </button>
+          </div>
           {/* Form to Register New Physical Printer */}
           {showAddPrinterForm && (
             <form onSubmit={handleCreatePrinter} className="p-4 bg-[#0C0E0D] border border-[#b7ff00]/25 rounded-xl space-y-3.5 animate-in slide-in-from-top-2 duration-200 shadow-[0_0_24px_-12px_rgba(183,255,0,0.35)]">
