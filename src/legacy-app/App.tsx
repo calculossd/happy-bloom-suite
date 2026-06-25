@@ -1702,7 +1702,7 @@ export default function App() {
               )}
               {group.items.map((item, ii) => {
                 const active = currentTab === item.id && !item.onClick;
-                const accent = sectionColor;
+                const accent = '#b7ff00';
                 return (
                   <button
                     key={`${item.id}-${item.label}-${ii}`}
@@ -1712,7 +1712,7 @@ export default function App() {
                         ? 'text-white bg-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_4px_16px_-6px_rgba(0,0,0,0.6)]'
                         : 'hover:bg-white/[0.04]'
                     }`}
-                    style={!active ? { color: `${accent}CC` } : undefined}
+                    style={!active ? { color: 'rgba(255,255,255,0.75)' } : undefined}
                   >
                     {active && (
                       <span
