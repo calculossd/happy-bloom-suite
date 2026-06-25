@@ -1021,10 +1021,10 @@ function TopProductsChart({
   onSelectTab?: (t: number) => void;
 }) {
   return (
-    <Card>
+    <Card className="cursor-pointer hover:bg-white/[0.02] transition" onClick={() => onSelectTab?.(6)}>
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-[14px] font-semibold text-white">Produtos Mais Vendidos</h3>
-        <button className="text-[11px] text-white/50 hover:text-white" onClick={() => onSelectTab?.(4)}>Ver todos</button>
+        <button className="text-[11px] text-white/50 hover:text-white" onClick={(e) => { e.stopPropagation(); onSelectTab?.(6); }}>Ver todos</button>
       </div>
       {data.length === 0 && <div className="text-[12px] text-white/40 py-6 text-center">Sem vendas neste mês.</div>}
       <ul className="divide-y divide-white/[0.04]">
