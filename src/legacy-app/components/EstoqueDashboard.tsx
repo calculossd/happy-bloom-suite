@@ -71,12 +71,15 @@ export const EstoqueDashboard: React.FC<Props> = ({ catalogItems, filamentStocks
   const totalLow = stats.lowProducts + stats.lowFilaments + stats.lowSupplies;
 
   const aiTip = useMemo(() => {
+    const fire = (name: string, detail?: any) => { try { window.dispatchEvent(new CustomEvent(name, { detail })); } catch {} };
+    const scrollTo = (id: string) => { try { document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch {} };
     if (stats.productsCount === 0 && stats.filamentsCount === 0 && stats.suppliesCount === 0) {
       return {
         title: 'Cadastre seu estoque para começar',
         body: 'Sem produtos, filamentos ou insumos não há como medir cobertura nem disparar alertas de reposição. Comece pelo carretel de filamento.',
         savings: '—',
         action: 'Cadastrar',
+        onAction: () => fire('request-new-product'),
       };
     }
     if (totalLow > 0) {
@@ -85,6 +88,7 @@ export const EstoqueDashboard: React.FC<Props> = ({ catalogItems, filamentStocks
         body: `Você tem ${stats.lowFilaments} filamento(s), ${stats.lowProducts} produto(s) e ${stats.lowSupplies} insumo(s) em estoque crítico. Comprar antes da ruptura evita parada de máquina e atraso de pedido.`,
         savings: `-${totalLow} ruptura${totalLow > 1 ? 's' : ''}`,
         action: 'Ver críticos',
+        onAction: () => scrollTo('estoque-criticos'),
       };
     }
     return {
@@ -92,6 +96,7 @@ export const EstoqueDashboard: React.FC<Props> = ({ catalogItems, filamentStocks
       body: `${stats.totalFilamentKg.toFixed(1)}kg de filamento, ${stats.totalSuppliesUnits} insumos e ${stats.totalProductsUnits} unidades prontas. Valor imobilizado em ${fmtBRL(stats.totalValue)}.`,
       savings: `${stats.filamentsCount + stats.suppliesCount + stats.productsCount} SKUs`,
       action: 'Auditar',
+      onAction: () => scrollTo('estoque-auditoria'),
     };
   }, [stats, totalLow]);
 
@@ -175,7 +180,7 @@ export const EstoqueDashboard: React.FC<Props> = ({ catalogItems, filamentStocks
           <div className="hidden md:flex flex-col items-end gap-2 shrink-0 pl-4 border-l border-white/10">
             <span className="text-[9px] font-bold uppercase tracking-widest text-zinc-500">Sinal</span>
             <span className="text-xl font-extrabold text-[#b7ff00] tabular-nums">{aiTip.savings}</span>
-            <button className="mt-1 px-3 py-1.5 bg-[#b7ff00] text-black text-[10px] font-extrabold uppercase tracking-widest rounded-lg hover:scale-105 active:scale-95 transition-transform shadow-[0_0_20px_rgba(183,255,0,0.3)] flex items-center gap-1.5">
+            <button onClick={(aiTip as any).onAction} className="mt-1 px-3 py-1.5 bg-[#b7ff00] text-black text-[10px] font-extrabold uppercase tracking-widest rounded-lg hover:scale-105 active:scale-95 transition-transform shadow-[0_0_20px_rgba(183,255,0,0.3)] flex items-center gap-1.5">
               {aiTip.action} <ArrowRight className="w-3 h-3" />
             </button>
           </div>
