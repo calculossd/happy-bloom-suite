@@ -669,11 +669,7 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
 
 
       {/* Search row */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-        <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-[0.14em] text-gradient-lime font-sans leading-none">
-          <span className="w-2 h-2 rounded-full bg-[#b7ff00] animate-pulse inline-block shadow-[0_0_10px_#b7ff00]" />
-          <span>Filas de Produção</span>
-        </div>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-end gap-2.5">
         <input
           type="text"
           placeholder="Buscar por peça, cliente..."
