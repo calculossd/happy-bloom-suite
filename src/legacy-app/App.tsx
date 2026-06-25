@@ -1336,6 +1336,7 @@ export default function App() {
   // Conta apenas pedidos realmente pendentes de ação (aguardando aprovação),
   // não tudo que não foi entregue — evita badge fantasma na aba Pedidos.
   const pendingOrdersCount = orders.filter(o => o.status === 'WAITING').length;
+  const awaitingAcceptCount = orders.filter(o => o.status === 'WAITING' || o.status === 'QUEUE').length;
 
   if (isShowcase) {
     return (
@@ -1638,7 +1639,7 @@ export default function App() {
               items: [
                 { id: 2, label: 'Clientes', icon: Users },
                 { id: 3, label: 'Pedidos', icon: GitPullRequest, badge: pendingOrdersCount },
-                { id: 1, label: 'Produção', icon: Activity },
+                { id: 1, label: 'Produção', icon: Activity, badge: awaitingAcceptCount, blink: awaitingAcceptCount > 0 },
                 { id: 4, label: 'Estoque', icon: Layers, onClick: () => openCostsSubtab('STOCK') },
                 { id: 6, label: 'Histórico', icon: ShoppingBag },
               ],
@@ -1679,7 +1680,7 @@ export default function App() {
                 { id: 5, label: 'Ajustes', icon: Settings },
               ],
             },
-          ] as Array<{ section: string | null; items: Array<{ id: number; label: string; icon: any; badge?: number; onClick?: () => void }> }>).map((group, gi) => (
+          ] as Array<{ section: string | null; items: Array<{ id: number; label: string; icon: any; badge?: number; blink?: boolean; onClick?: () => void }> }>).map((group, gi) => (
             <div key={gi} className="flex flex-col gap-0.5">
               {group.section && (
                 <div
@@ -1704,7 +1705,7 @@ export default function App() {
                   <button
                     key={`${item.id}-${item.label}-${ii}`}
                     onClick={() => (item.onClick ? item.onClick() : setCurrentTab(item.id))}
-                    className={`group relative flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12px] font-medium tracking-wide w-full text-left transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                    className={`group relative flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12px] font-medium tracking-wide w-full text-left transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${item.blink ? 'animate-[pulse_1.4s_ease-in-out_infinite]' : ''} ${
                       active
                         ? 'text-white bg-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_4px_16px_-6px_rgba(0,0,0,0.6)]'
                         : 'text-white/55 hover:text-white hover:bg-white/[0.04]'
@@ -1743,7 +1744,7 @@ export default function App() {
         <nav className="relative flex items-center gap-0.5 overflow-x-auto no-scrollbar rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl px-1.5 py-1.5">
           {[
             { id: 0, label: 'Painel', icon: Home },
-            { id: 1, label: 'Produção', icon: Activity },
+            { id: 1, label: 'Produção', icon: Activity, badge: awaitingAcceptCount, blink: awaitingAcceptCount > 0 },
             { id: 6, label: 'Histórico', icon: ShoppingBag },
             { id: 2, label: 'Clientes', icon: Users },
             { id: 15, label: 'Prospecção', icon: Radar },
@@ -1761,7 +1762,7 @@ export default function App() {
               <button
                 key={`${item.id}-${item.label}-${ii}`}
                 onClick={() => (item.onClick ? item.onClick() : setCurrentTab(item.id))}
-                className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-medium whitespace-nowrap shrink-0 transition-all ${
+                className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-medium whitespace-nowrap shrink-0 transition-all ${item.blink ? 'animate-[pulse_1.4s_ease-in-out_infinite]' : ''} ${
                   active ? 'text-white bg-white/[0.08]' : 'text-white/55 hover:text-white hover:bg-white/[0.04]'
                 }`}
               >
