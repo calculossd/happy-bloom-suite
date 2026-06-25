@@ -549,8 +549,8 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
     <div className="space-y-6" id="production-dashboard-container">
       {/* ONLINE PRINTER CONNECTIONS */}
       {viewMode !== 'orders' && (
-      <div className="bg-[#151917] border border-[#232B27] p-4 rounded-xl space-y-3 shadow" id="online-printers-tracker">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#232B27] pb-2">
+      <div className="space-y-3" id="online-printers-tracker">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2">
           <div>
             <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-[#b7ff00] font-sans flex items-center gap-1.5" id="active-printers-heading">
               <span className="w-2 h-2 rounded-full bg-[#b7ff00] animate-ping inline-block" />
