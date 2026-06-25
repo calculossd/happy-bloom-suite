@@ -1785,11 +1785,79 @@ export const CostsTab: React.FC<CostsTabProps> = ({
 2. **Utilize adesivos de auxílio**: Cola bastão escolar ou spray de fixação especial (temos no estoque de insumos).
 3. **Câmara selada**: Evite correntes de ar na sua impressora fechada ou feche a porta de vidro dela.
 4. **Brim de Contorno**: Adicione contorno brim de 8mm no fatiador para segurar cantos de peças extensas.`;
-      } else if (lower.includes('orçamento') || lower.includes('preço') || lower.includes('calcular') || lower.includes('taxa')) {
-        reply = `Sobre a Precificação do Fatiador Automatizado de Produtos do Ateliê:
-- A calculadora atual busca o filamento direto do seu estoque para pegar o custo exato.
-- Ela adiciona a perda por suportes e falhas (calculado em %) para você não pagar a perda do seu bolso.
-- O cálculo reitera suas taxas fixas (R$) e taxas percentuais (%) cobradas pelos canais Shopee, TikTok Shop ou Mercado Livre para dar o preço comercial perfeito reverso que garante o seu **Lucro Líquido desejado**!`;
+      } else if (
+        lower.includes('orçamento') || lower.includes('orcamento') ||
+        lower.includes('preço') || lower.includes('preco') ||
+        lower.includes('calcular') || lower.includes('taxa') ||
+        lower.includes('lucro') || lower.includes('ganho') || lower.includes('gasto') ||
+        lower.includes('custo') || lower.includes('saude') || lower.includes('saúde') ||
+        lower.includes('negocio') || lower.includes('negócio') ||
+        lower.includes('precifica') || lower.includes('imposto') ||
+        lower.includes('marketplace') || lower.includes('mkt')
+      ) {
+        const fmt = (n: number) => `R$ ${n.toFixed(2).replace('.', ',')}`;
+        const pct = (n: number) => `${(n * 100).toFixed(1).replace('.', ',')}%`;
+
+        // ----- P&L por peça (usa o estado atual da calculadora) -----
+        // Impostos estimados (Simples Nacional ~6%) sobre o preço final
+        const taxRate = 0.06;
+        const taxOnSale = finalPriceSuggested * taxRate;
+        // Transporte/embalagem médios pegos dos seus gastos cadastrados
+        const sumCat = (cats: string[]) =>
+          expenses.filter(e => cats.includes(e.category)).reduce((s, e) => s + (e.amount || 0), 0);
+        const totalPacking = sumCat(['EMBALAGEM']);
+        const totalShipping = sumCat(['SERVICOS']); // transporte/serviços
+        const packagingPerPiece = totalPacking > 0 ? totalPacking / Math.max(1, catalogItems.length * 10) : 0;
+        const shippingPerPiece = totalShipping > 0 ? totalShipping / Math.max(1, catalogItems.length * 10) : 0;
+
+        const totalCostPerPiece =
+          rawMaterialCost + electricityCost + laborCost + extraSuppliesCost +
+          calcAdsExpense + commissionPaidToMarketplace + taxOnSale +
+          packagingPerPiece + shippingPerPiece;
+
+        const netProfit = finalPriceSuggested - totalCostPerPiece;
+        const netMargin = finalPriceSuggested > 0 ? netProfit / finalPriceSuggested : 0;
+
+        // ----- Saúde do negócio (totais de despesas cadastradas) -----
+        const totalExpensesAll = expenses.reduce((s, e) => s + (e.amount || 0), 0);
+        const byCat = (c: string) => sumCat([c]);
+        const healthEmoji = netMargin >= 0.30 ? '🟢 Excelente'
+          : netMargin >= 0.15 ? '🟡 Saudável'
+          : netMargin >= 0.05 ? '🟠 Apertada'
+          : '🔴 Risco';
+
+        reply = `**Análise de Precificação por Peça** (produto: ${calcProdName || 'sem nome'} • ${calcMaterial})
+
+**Gastos por peça**
+- Filamento (${calcWeight}g + ${calcLossPercent}% perdas): ${fmt(rawMaterialCost)}
+- Energia (${electricityKwhUsed.toFixed(2)} kWh × ${calcTime}h): ${fmt(electricityCost)}
+- Mão de obra (${calcTime}h × ${fmt(calcLaborHour)}/h): ${fmt(laborCost)}
+- Insumos extras (embalagem/cola/parafusos): ${fmt(extraSuppliesCost)}
+- Embalagem rateada (dos gastos cadastrados): ${fmt(packagingPerPiece)}
+- Transporte/serviços rateado: ${fmt(shippingPerPiece)}
+- Anúncios / Ads: ${fmt(calcAdsExpense)}
+- Taxas do marketplace (${pct(safePercentRate)} + ${fmt(calcFixedFee)} fixa): ${fmt(commissionPaidToMarketplace)}
+- Impostos estimados (${pct(taxRate)} sobre venda): ${fmt(taxOnSale)}
+- **CUSTO TOTAL POR PEÇA: ${fmt(totalCostPerPiece)}**
+
+**Ganhos**
+- Preço de venda sugerido: ${fmt(finalPriceSuggested)}
+- **Lucro líquido por peça: ${fmt(netProfit)}**
+- Margem líquida: ${pct(netMargin)}
+
+**Saúde do Negócio** — ${healthEmoji}
+- Filamentos: ${fmt(byCat('FILAMENTO'))}
+- Equipamentos: ${fmt(byCat('EQUIPAMENTO'))}
+- Energia: ${fmt(byCat('ENERGIA'))}
+- Embalagens: ${fmt(byCat('EMBALAGEM'))}
+- Marketing: ${fmt(byCat('MARKETING'))}
+- Impostos: ${fmt(byCat('IMPOSTOS'))}
+- Serviços/Transporte: ${fmt(byCat('SERVICOS'))}
+- **Total de gastos cadastrados: ${fmt(totalExpensesAll)}**
+
+${netMargin < 0.15
+  ? '⚠️ Sua margem está baixa. Reveja taxas de marketplace, aumente preço ou reduza tempo de impressão.'
+  : '✅ Margem dentro do alvo. Mantenha o controle de estoque e atualize taxas/impostos sempre que mudarem.'}`;
       } else {
         reply = `Excelente pergunta! Como engenheiro especialista em manufatura aditiva 3D e impressão rápida 3D de alta performance, recomendo calibrar seu fatiador de acordo com as bobinas físicas reais do ateliê.
 Utilize a nossa nova calculadora de formação de preço de produtos para obter lucratividade líquida de pelo menos 50% em cada vaso, action figure ou protótipo, integrando seus insumos adicionais cadastrados no estoque!`;
