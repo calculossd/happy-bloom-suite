@@ -1949,6 +1949,7 @@ function WorkbenchPanel({
                     strokeWidth={2.5}
                     fillOpacity={1} 
                     fill="url(#colorGlowOrange)" 
+                    isAnimationActive={false}
                   />
                 </AreaChart>
               </ResponsiveContainer>

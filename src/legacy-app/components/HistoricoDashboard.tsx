@@ -243,7 +243,7 @@ export const HistoricoDashboard: React.FC<Props> = ({ orders }) => {
                   <YAxis tick={{ fontSize: 10, fill: '#94A3B8' }} axisLine={false} tickLine={false} width={36} />
                   <Tooltip formatter={(v: any) => fmtBRL(Number(v))}
                     contentStyle={{ background: 'rgba(10,12,10,0.95)', border: '1px solid rgba(255,255,255,0.1)', fontSize: 11, backdropFilter: 'blur(8px)' }} />
-                  <Bar dataKey="rev" fill="#b7ff00" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="rev" fill="#b7ff00" radius={[4, 4, 0, 0]} isAnimationActive={false} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -259,7 +259,7 @@ export const HistoricoDashboard: React.FC<Props> = ({ orders }) => {
             <div style={{ width: '100%', height: 200, minWidth: 0 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie data={stats.platformData} dataKey="value" nameKey="name" outerRadius={65} label={{ fontSize: 10 }}>
+                  <Pie data={stats.platformData} dataKey="value" nameKey="name" outerRadius={65} label={{ fontSize: 10 }} isAnimationActive={false}>
                     {stats.platformData.map((d, i) => (
                       <Cell key={i} fill={PLATFORM_COLORS[d.key] || '#94A3B8'} />
                     ))}
@@ -282,7 +282,7 @@ export const HistoricoDashboard: React.FC<Props> = ({ orders }) => {
             <div style={{ width: '100%', height: 200, minWidth: 0 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie data={stats.methodData} dataKey="value" nameKey="name" outerRadius={65} label={{ fontSize: 10 }}>
+                  <Pie data={stats.methodData} dataKey="value" nameKey="name" outerRadius={65} label={{ fontSize: 10 }} isAnimationActive={false}>
                     {stats.methodData.map((d, i) => (
                       <Cell key={i} fill={METHOD_COLORS[d.key] || '#94A3B8'} />
                     ))}

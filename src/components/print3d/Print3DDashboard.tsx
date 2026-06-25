@@ -1011,9 +1011,9 @@ function AiPricing() {
           <div className="text-[18px] font-bold tabular-nums" style={{ color: LIME }}>R$ 39,90</div>
         </div>
         <div className="relative size-[78px]">
-          <ResponsiveContainer>
+          <ResponsiveContainer width="100%" height="100%" debounce={80}>
             <PieChart>
-              <Pie data={data} dataKey="value" innerRadius={26} outerRadius={36} startAngle={90} endAngle={-270} stroke="none">
+              <Pie data={data} dataKey="value" innerRadius={26} outerRadius={36} startAngle={90} endAngle={-270} stroke="none" isAnimationActive={false}>
                 <Cell fill={LIME} />
                 <Cell fill="rgba(255,255,255,0.06)" />
               </Pie>
@@ -1100,8 +1100,8 @@ function HourlyChart({ data }: { data?: Array<{ h: string; v: number }> }) {
     <Card>
       <h3 className="text-[14px] font-semibold text-white">Faturamento por Dia da Semana</h3>
       <p className="text-[11px] text-white/45 mb-3">Receita acumulada por dia da semana no mês</p>
-      <div className="h-[180px] -mx-2">
-        <ResponsiveContainer>
+      <div className="h-[180px] -mx-2 min-w-0">
+        <ResponsiveContainer width="100%" height="100%" debounce={80}>
           <AreaChart data={chartData}>
             <defs>
               <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
@@ -1116,7 +1116,7 @@ function HourlyChart({ data }: { data?: Array<{ h: string; v: number }> }) {
               labelStyle={{ color: "#fff" }}
               formatter={(v: any) => [fmtBRL(Number(v) || 0), "Faturamento"]}
             />
-            <Area type="monotone" dataKey="v" stroke={LIME} strokeWidth={2} fill="url(#g1)" dot={{ r: 3, fill: LIME, stroke: "#0a0d0c", strokeWidth: 1 }}>
+            <Area type="monotone" dataKey="v" stroke={LIME} strokeWidth={2} fill="url(#g1)" dot={{ r: 3, fill: LIME, stroke: "#0a0d0c", strokeWidth: 1 }} isAnimationActive={false}>
               <LabelList
                 dataKey="v"
                 position="top"
@@ -1171,9 +1171,9 @@ function FinanceSummary({
           })}
         </ul>
         <div className="relative size-[110px]">
-          <ResponsiveContainer>
+          <ResponsiveContainer width="100%" height="100%" debounce={80}>
             <PieChart>
-              <Pie data={data} dataKey="v" innerRadius={38} outerRadius={52} startAngle={90} endAngle={-270} stroke="none">
+              <Pie data={data} dataKey="v" innerRadius={38} outerRadius={52} startAngle={90} endAngle={-270} stroke="none" isAnimationActive={false}>
                 <Cell fill={LIME} />
                 <Cell fill="rgba(255,255,255,0.06)" />
               </Pie>

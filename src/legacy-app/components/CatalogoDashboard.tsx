@@ -203,7 +203,7 @@ export const CatalogoDashboard: React.FC<Props> = ({ catalogItems }) => {
             <div style={{ width: '100%', height: 180, minWidth: 0 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie data={stats.typeDist} dataKey="value" nameKey="name" outerRadius={60} label={{ fontSize: 10 }}>
+                  <Pie data={stats.typeDist} dataKey="value" nameKey="name" outerRadius={60} label={{ fontSize: 10 }} isAnimationActive={false}>
                     {stats.typeDist.map((_, i) => <Cell key={i} fill={PIE[i % PIE.length]} />)}
                   </Pie>
                   <Tooltip contentStyle={{ background: 'rgba(10,12,10,0.95)', border: '1px solid rgba(255,255,255,0.1)', fontSize: 11, backdropFilter: 'blur(8px)' }} />
@@ -227,7 +227,7 @@ export const CatalogoDashboard: React.FC<Props> = ({ catalogItems }) => {
                   <XAxis dataKey="name" tick={{ fill: 'rgba(255,255,255,0.55)', fontSize: 9 }} />
                   <YAxis tick={{ fill: 'rgba(255,255,255,0.55)', fontSize: 9 }} />
                   <Tooltip contentStyle={{ background: 'rgba(10,12,10,0.95)', border: '1px solid rgba(255,255,255,0.1)', fontSize: 11, backdropFilter: 'blur(8px)' }} formatter={(v: any) => fmtBRL(Number(v))} />
-                  <Bar dataKey="price" fill="#b7ff00" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="price" fill="#b7ff00" radius={[6, 6, 0, 0]} isAnimationActive={false} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

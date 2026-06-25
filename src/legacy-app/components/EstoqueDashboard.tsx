@@ -225,7 +225,7 @@ export const EstoqueDashboard: React.FC<Props> = ({ catalogItems, filamentStocks
             <div style={{ width: '100%', height: 180, minWidth: 0 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie data={stats.filamentByType} dataKey="value" nameKey="name" outerRadius={60} label={{ fontSize: 10 }}>
+                  <Pie data={stats.filamentByType} dataKey="value" nameKey="name" outerRadius={60} label={{ fontSize: 10 }} isAnimationActive={false}>
                     {stats.filamentByType.map((_, i) => (
                       <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
                     ))}
@@ -278,7 +278,7 @@ export const EstoqueDashboard: React.FC<Props> = ({ catalogItems, filamentStocks
                   contentStyle={{ background: 'rgba(10,12,10,0.95)', border: '1px solid rgba(255,255,255,0.1)', fontSize: 11, backdropFilter: 'blur(8px)' }}
                   formatter={(v: any) => fmtBRL(Number(v))}
                 />
-                <Bar dataKey="valor" fill="#D4A017" radius={[0, 4, 4, 0]} />
+                <Bar dataKey="valor" fill="#D4A017" radius={[0, 4, 4, 0]} isAnimationActive={false} />
               </BarChart>
             </ResponsiveContainer>
           </div>

@@ -260,7 +260,7 @@ export const ClientsDashboard: React.FC<Props> = ({ clients, orders }) => {
             <div style={{ width: '100%', height: 180, minWidth: 0 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie data={stats.sourceData} dataKey="value" nameKey="name" outerRadius={60} label={{ fontSize: 10 }}>
+                  <Pie data={stats.sourceData} dataKey="value" nameKey="name" outerRadius={60} label={{ fontSize: 10 }} isAnimationActive={false}>
                     {stats.sourceData.map((_, i) => (
                       <Cell key={i} fill={SOURCE_COLORS[i % SOURCE_COLORS.length]} />
                     ))}
@@ -283,7 +283,7 @@ export const ClientsDashboard: React.FC<Props> = ({ clients, orders }) => {
             <div style={{ width: '100%', height: 180, minWidth: 0 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie data={stats.dealData} dataKey="value" nameKey="name" outerRadius={60} label={{ fontSize: 10 }}>
+                  <Pie data={stats.dealData} dataKey="value" nameKey="name" outerRadius={60} label={{ fontSize: 10 }} isAnimationActive={false}>
                     {stats.dealData.map((_, i) => (
                       <Cell key={i} fill={DEAL_COLORS[i % DEAL_COLORS.length]} />
                     ))}
