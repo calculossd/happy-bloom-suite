@@ -1348,11 +1348,11 @@ export function Print3DPanel({
 
           {/* KPIs (Row 1 — exatamente como o layout) */}
           <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
-            <Kpi label="Pedidos Hoje"        value={String(ordersToday.length)}              delta={`${activePrinters}/${printersTotal}`} Icon={ShoppingBag} />
-            <Kpi label="Faturamento Hoje"    value={fmtBRL(revenueToday)}                    delta="hoje" Icon={DollarSign} />
-            <Kpi label="Peças Impressas"     value={String(piecesToday)}                     delta="hoje" Icon={Package2} />
-            <Kpi label="Horas de Impressão"  value={hoursLabel}                              delta="hoje" Icon={Clock} />
-            <Kpi label="Clientes c/ Estoque" value={String(balcaoClientsCount)}              delta="balcão" Icon={Users} />
+            <Kpi tone={0} label="Pedidos Hoje"        value={String(ordersToday.length)}              delta={`${activePrinters}/${printersTotal}`} Icon={ShoppingBag} />
+            <Kpi tone={1} label="Faturamento Hoje"    value={fmtBRL(revenueToday)}                    delta="hoje" Icon={DollarSign} />
+            <Kpi tone={2} label="Peças Impressas"     value={String(piecesToday)}                     delta="hoje" Icon={Package2} />
+            <Kpi tone={3} label="Horas de Impressão"  value={hoursLabel}                              delta="hoje" Icon={Clock} />
+            <Kpi tone={4} label="Clientes c/ Estoque" value={String(balcaoClientsCount)}              delta="balcão" Icon={Users} />
           </div>
 
           {/* Row 2: Mapa | Impressão ao Vivo | Pedidos | Higrômetros */}
