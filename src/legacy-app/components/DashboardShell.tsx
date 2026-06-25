@@ -1,7 +1,6 @@
 import React from 'react';
 import { Sparkles, ArrowRight } from 'lucide-react';
-import robotMascotAsset from '@/assets/robot-mascot.png.asset.json';
-const robotMascot = robotMascotAsset.url;
+import { RobotMascot } from './RobotMascot';
 
 export type KpiTone = 'gold' | 'lime' | 'blue' | 'purple' | 'emerald' | 'orange' | 'fuchsia' | 'cyan';
 
@@ -52,7 +51,7 @@ export const AiRecommendation: React.FC<{
     <div className="relative bg-[#0a0c0a]/80 backdrop-blur-2xl rounded-[15px] p-5 border border-white/10 flex items-start gap-5">
       <div className="relative shrink-0 -mb-3 w-28 h-28">
         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#D4A017]/30 to-[#b7ff00]/20 blur-2xl animate-pulse" />
-        <img src={robotMascot} alt="Assistente" className="relative w-28 h-28 object-contain drop-shadow-[0_8px_20px_rgba(0,0,0,0.7)]" />
+        <RobotMascot className="relative w-28 h-28 object-contain drop-shadow-[0_8px_20px_rgba(0,0,0,0.7)]" />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
