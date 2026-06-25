@@ -170,11 +170,27 @@ function TopBar() {
   );
 }
 
-/* ---------- Card primitive ---------- */
-function Card({ children, className = "", onClick }: { children: React.ReactNode; className?: string; onClick?: () => void }) {
+/* ---------- Card primitive (Obsidian Glass) ---------- */
+function Card({ children, className = "", onClick, glow }: { children: React.ReactNode; className?: string; onClick?: () => void; glow?: string }) {
   return (
-    <div onClick={onClick} className={`rounded-2xl bg-[#0f1311] border border-white/[0.05] p-5 ${className}`} style={{ boxShadow: "0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px -24px rgba(0,0,0,0.7)" }}>
-      {children}
+    <div
+      onClick={onClick}
+      className={`group relative rounded-2xl border border-white/[0.06] p-5 backdrop-blur-xl transition-all duration-500 hover:border-white/[0.12] hover:-translate-y-[1px] ${className}`}
+      style={{
+        background:
+          "linear-gradient(180deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.012) 100%), #0c100e",
+        boxShadow:
+          "0 1px 0 rgba(255,255,255,0.04) inset, 0 30px 60px -30px rgba(0,0,0,0.85)",
+      }}
+    >
+      {glow && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-2xl opacity-60 transition-opacity duration-500 group-hover:opacity-100"
+          style={{ background: `radial-gradient(120% 80% at 0% 0%, ${glow}22 0%, transparent 55%)` }}
+        />
+      )}
+      <div className="relative">{children}</div>
     </div>
   );
 }
@@ -211,19 +227,35 @@ function ScrollHint({ children, className = "" }: { children: React.ReactNode; c
 }
 
 /* ---------- KPI ---------- */
-function Kpi({ label, value, delta, Icon }: { label: string; value: string; delta: string; Icon: any }) {
+const KPI_TONES = [
+  { c: "#a3e635", name: "lime" },
+  { c: "#f0c674", name: "gold" },
+  { c: "#60a5fa", name: "blue" },
+  { c: "#a78bfa", name: "purple" },
+  { c: "#34d399", name: "emerald" },
+  { c: "#fb923c", name: "orange" },
+];
+function Kpi({ label, value, delta, Icon, tone = 0 }: { label: string; value: string; delta: string; Icon: any; tone?: number }) {
+  const t = KPI_TONES[tone % KPI_TONES.length].c;
   return (
-    <Card className="hover:border-white/[0.1] transition">
+    <Card glow={t} className="overflow-hidden">
       <div className="flex items-start justify-between">
         <div>
-          <div className="text-[12px] text-white/50">{label}</div>
-          <div className="mt-3 text-[26px] font-bold tracking-tight text-white tabular-nums">{value}</div>
+          <div className="text-[11px] uppercase tracking-[0.14em] text-white/45 font-medium">{label}</div>
+          <div className="mt-3 text-[28px] font-bold tracking-tight text-white tabular-nums" style={{ textShadow: `0 0 24px ${t}33` }}>{value}</div>
         </div>
-        <div className="size-9 rounded-lg grid place-items-center bg-white/[0.04] border border-white/[0.05]">
-          <Icon className="size-[17px]" style={{ color: LIME }} />
+        <div
+          className="size-10 rounded-xl grid place-items-center border"
+          style={{
+            background: `radial-gradient(120% 120% at 0% 0%, ${t}30 0%, ${t}08 60%, transparent 100%)`,
+            borderColor: `${t}33`,
+            boxShadow: `0 8px 24px -10px ${t}55, inset 0 0 0 1px rgba(255,255,255,0.03)`,
+          }}
+        >
+          <Icon className="size-[18px]" style={{ color: t }} />
         </div>
       </div>
-      <div className="mt-3 text-[11px] flex items-center gap-1.5" style={{ color: LIME }}>
+      <div className="mt-4 pt-3 border-t border-white/[0.05] text-[11px] flex items-center gap-1.5" style={{ color: t }}>
         <TrendingUp className="size-3" />
         <span className="font-semibold">{delta}</span>
         <span className="text-white/40 font-normal">vs ontem</span>
