@@ -36,8 +36,8 @@ export const PrinterQueueList: React.FC<Props> = ({ printers, orders }) => {
   const activeOrders = orders.filter(o => o.status !== 'DELIVERED' && o.status !== 'READY');
 
   return (
-    <div className="bg-[#151917] border border-[#232B27] p-4 rounded-xl space-y-3 shadow">
-      <div className="flex items-center justify-between border-b border-[#232B27] pb-2">
+    <div className="space-y-3">
+      <div className="flex items-center justify-between pb-2">
         <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-[#b7ff00] font-sans flex items-center gap-1.5">
           <ListOrdered className="w-4 h-4" />
           Fila de Impressão por Impressora
