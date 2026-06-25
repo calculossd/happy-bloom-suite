@@ -269,23 +269,29 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
         {/* LEFT COLUMN: CLIENT CATALOG */}
         {viewMode !== 'printers' && viewMode !== 'prospect' && (
         <div className="space-y-4" id="clients-catalog">
-          <div className="flex items-center justify-between pb-2 border-b border-[#232B27]">
-            <div>
-              <h3 className="text-base font-semibold text-[#F1F4EE] flex items-center gap-2">
-                <User className="h-4 w-4 text-[#b7ff00]" />
-                Cadastro de Clientes ({clients.length})
-              </h3>
-              <p className="text-xs text-[#8BA58D]">Ficha cadastral de contato para envios directos</p>
+          <div className="flex items-center justify-between pb-3 border-b-2 border-white/10">
+            <div className="flex items-center gap-3">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-[#b7ff00] opacity-60 animate-ping" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#b7ff00] shadow-[0_0_10px_#b7ff00]" />
+              </span>
+              <div>
+                <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-white flex items-center gap-2">
+                  <User className="h-3.5 w-3.5 text-[#b7ff00]" />
+                  Cadastro de Clientes <span className="text-zinc-500 font-mono">({clients.length})</span>
+                </h3>
+                <p className="text-[10px] text-zinc-500 uppercase tracking-widest mt-0.5">Ficha cadastral de contato para envios diretos</p>
+              </div>
             </div>
             <button
               onClick={() => {
                 setEditingClientId(null);
                 setShowClientForm(!showClientForm);
               }}
-              className="px-3 py-1.5 bg-[#b7ff00]/10 hover:bg-[#b7ff00]/20 text-[#b7ff00] border border-[#b7ff00]/25 font-bold text-xs rounded-xl transition flex items-center gap-1"
+              className="px-5 py-2 bg-[#b7ff00] hover:bg-[#a3e600] text-black border border-[#b7ff00] font-extrabold text-[10px] uppercase tracking-widest rounded-lg transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(183,255,0,0.25)] flex items-center gap-1.5"
               id="add-client-toggle"
             >
-              <Plus className="h-3.5 w-3.5" />
+              <Plus className="h-3 w-3" />
               {showClientForm && editingClientId === null ? 'Fechar' : 'Novo Cliente'}
             </button>
           </div>
