@@ -685,7 +685,7 @@ export default function App() {
           <div className="flex flex-col max-h-[78vh]">
             {/* List scroll wrapper */}
             <div className="flex lg:flex-col overflow-x-auto lg:overflow-x-visible gap-2 pb-2.5 lg:pb-0 lg:overflow-y-auto scrollbar-thin scrollbar-thumb-[#151D2F] flex-grow pr-1">
-              {filteredCategories.map((cat) => {
+              {filteredCategories.map((cat, idx) => {
                 const isSelected = selectedCategoryId === cat.id;
                 const count = getCategoryCount(cat.id);
                 return (
@@ -699,48 +699,36 @@ export default function App() {
                         setReport(match);
                       }
                     }}
-                    className={`group relative overflow-hidden flex-shrink-0 lg:w-full flex items-center justify-between text-left rounded-xl cursor-pointer transition-all duration-300 border h-[52px] ${
+                    style={{ animationDelay: `${idx * 35}ms` }}
+                    className={`group relative overflow-hidden flex-shrink-0 lg:w-full flex items-center text-left rounded-xl cursor-pointer h-11 border backdrop-blur-md transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                       isSelected
-                        ? 'border-[#b7ff00]/60 shadow-[0_0_18px_-6px_rgba(183,255,0,0.55)] text-[#b7ff00] font-bold scale-[1.01]'
-                        : 'text-slate-400 hover:text-slate-100 border-white/10 shadow-sm'
+                        ? 'border-[#b7ff00]/50 bg-gradient-to-r from-[#b7ff00]/15 via-[#b7ff00]/5 to-transparent shadow-[0_8px_24px_-12px_rgba(183,255,0,0.55)]'
+                        : 'border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/15 hover:-translate-y-[1px]'
                     }`}
                   >
-                    {/* Background Image Layer with Zoom Effect */}
-                    {cat.imageUrl && (
-                      <div 
-                        className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                        style={{ backgroundImage: `url(${cat.imageUrl})` }}
-                      />
+                    {/* Lime active rail */}
+                    {isSelected && (
+                      <span className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r-full bg-gradient-to-b from-[#b7ff00] to-emerald-400 shadow-[0_0_10px_rgba(183,255,0,0.7)]" />
                     )}
-                    
-                    {/* Smooth Gradient Overlay Mask */}
-                    <div 
-                      className={`absolute inset-0 transition-opacity duration-300 ${
-                        isSelected 
-                          ? 'bg-gradient-to-r from-[#0b0f08]/98 via-[#0b0f08]/85 to-[#b7ff00]/10'
-                          : 'bg-gradient-to-r from-[#05080E]/98 via-[#05080E]/90 to-slate-900/30 group-hover:from-[#080C14]/96 group-hover:via-[#080C14]/85'
-                      }`}
-                    />
 
-                    {/* Button content (Elevated over absolute layers) */}
-                    <div className="relative z-10 flex items-center justify-between w-full px-3.5 h-full gap-2">
-                      <div className="flex items-center gap-2.5 truncate">
-                        <span className={`flex items-center justify-center shrink-0 w-7 h-7 rounded-lg transition-all duration-300 ${
-                          isSelected 
-                            ? 'bg-[#b7ff00]/15 text-[#b7ff00] border border-[#b7ff00]/30' 
-                            : 'bg-slate-900/80 text-slate-450 border border-slate-800/60 group-hover:text-slate-200'
+                    <div className="relative z-10 flex items-center justify-between w-full pl-3 pr-2.5 h-full gap-2">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <span className={`grid place-items-center shrink-0 w-7 h-7 rounded-lg transition-all duration-300 ${
+                          isSelected
+                            ? 'bg-[#b7ff00]/15 text-[#b7ff00] border border-[#b7ff00]/30 shadow-[0_0_12px_-4px_rgba(183,255,0,0.6)]'
+                            : 'bg-black/40 text-slate-400 border border-white/10 group-hover:text-white group-hover:border-white/20'
                         }`}>
-                          {renderIcon(cat.iconName, "w-4 h-4")}
+                          {renderIcon(cat.iconName, "w-3.5 h-3.5")}
                         </span>
-                        <span className={`truncate text-xs tracking-tight transition-colors duration-300 ${
-                          isSelected ? 'font-bold text-[#b7ff00]' : 'font-medium'
+                        <span className={`truncate text-[12px] tracking-tight transition-colors duration-300 ${
+                          isSelected ? 'font-bold text-white' : 'font-medium text-slate-300 group-hover:text-white'
                         }`}>{cat.name}</span>
                       </div>
-                      
-                      <span className={`text-[10px] font-mono font-bold py-0.5 px-2 rounded-md transition-all duration-300 ${
-                        isSelected 
-                          ? 'bg-[#b7ff00]/15 text-[#b7ff00] border border-[#b7ff00]/30' 
-                          : 'bg-[#05080D]/90 text-slate-500 border border-[#111A2E]/60 group-hover:text-slate-400'
+
+                      <span className={`text-[10px] font-mono font-bold tabular-nums py-0.5 px-1.5 rounded-md shrink-0 transition-all duration-300 ${
+                        isSelected
+                          ? 'bg-[#b7ff00]/20 text-[#b7ff00] border border-[#b7ff00]/30'
+                          : 'bg-black/40 text-slate-500 border border-white/10 group-hover:text-slate-300'
                       }`}>
                         {count}
                       </span>
