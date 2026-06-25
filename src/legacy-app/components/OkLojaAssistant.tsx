@@ -1135,25 +1135,46 @@ export function OkLojaAssistant({
               <div ref={chatEndRef} />
             </div>
 
-            {/* DIAGNOSTIC QUICK TRIGGER CHIPS */}
-            <div className="p-3 bg-zinc-900/60 border-t border-zinc-900 flex flex-wrap gap-2 overflow-x-auto select-none">
-              <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest w-full mb-1">
-                Sugestões rápidas:
-              </span>
-              {quickChips.map((chip, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => {
-                    setInputText(chip.prompt);
-                    handleSendMessage(chip.prompt);
-                  }}
-                  disabled={isLoading}
-                  className="flex items-center gap-1.5 px-3 py-2 bg-zinc-900 border border-zinc-800 hover:border-amber-500/40 rounded-xl text-[11px] font-bold text-zinc-300 hover:text-zinc-100 cursor-pointer active:scale-97 disabled:opacity-50 transition"
-                >
-                  {chip.icon}
-                  <span>{chip.label}</span>
-                </button>
-              ))}
+            {/* DIAGNOSTIC QUICK TRIGGER — Categorias de especialista 3D */}
+            <div className="bg-zinc-900/60 border-t border-zinc-900 select-none">
+              {/* Category tabs */}
+              <div className="px-3 pt-3 flex items-center gap-1.5 overflow-x-auto scrollbar-none">
+                <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest mr-1 shrink-0">
+                  Especialista 3D:
+                </span>
+                {diagnosticCategories.map(cat => {
+                  const active = cat.id === activeCategory;
+                  return (
+                    <button
+                      key={cat.id}
+                      onClick={() => setActiveCategory(cat.id)}
+                      className={`shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[10.5px] font-bold border transition ${
+                        active
+                          ? 'bg-amber-500/15 border-amber-400/50 text-amber-200'
+                          : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-zinc-200 hover:border-zinc-700'
+                      }`}
+                    >
+                      <span className={active ? 'text-amber-300' : cat.accent}>{cat.icon}</span>
+                      {cat.label}
+                    </button>
+                  );
+                })}
+              </div>
+              {/* Items grid */}
+              <div className="p-3 flex flex-wrap gap-2 max-h-32 overflow-y-auto">
+                {activeCat.items.map((it, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => handleSendMessage(it.prompt)}
+                    disabled={isLoading}
+                    title={it.prompt}
+                    className="flex items-center gap-1.5 px-2.5 py-1.5 bg-zinc-950 border border-zinc-800 hover:border-amber-500/40 hover:bg-zinc-900 rounded-lg text-[10.5px] font-semibold text-zinc-300 hover:text-zinc-100 cursor-pointer active:scale-95 disabled:opacity-50 transition"
+                  >
+                    <span className={activeCat.accent}>•</span>
+                    {it.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Error notifications safe banner */}
