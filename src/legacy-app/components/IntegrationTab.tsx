@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { ExternalPlatformOrder, PlatformConnection } from '../types';
 import { externalPlatformOrdersMock } from '../utils/initialData';
 import { ShoppingBag, RefreshCw, Layers, CheckCircle, Database, HelpCircle, X, Info, Trash2 } from 'lucide-react';
+import { PedidosDashboard } from './PedidosDashboard';
 
 const renderPlatformIcon = (name: string) => {
   if (name === 'Mercado Livre') {
@@ -358,6 +359,9 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({ onImportOrder, i
 
   return (
     <div className="space-y-6" id="integration_tab_container">
+      {/* Dashboard premium — mesma linguagem visual da aba Clientes */}
+      <PedidosDashboard orders={orders as any} />
+
       {/* Floating Auto-dismissing connection status success indicator */}
       {saveSuccessMessage && (
         <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-xl flex items-center justify-between text-xs animate-in slide-in-from-top-4 duration-300">
