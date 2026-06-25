@@ -984,46 +984,60 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
       {/* 📡 CRM RADAR GOOGLE MAPS - PROSPECÇÃO B2B & NOVO FILTRO DE CLIENTES LEADS */}
       {/* ========================================================================= */}
       {(viewMode === 'prospect' || viewMode === 'full') && (
-      <div className="bg-[#151917] border border-[#232B27] p-6 rounded-2xl space-y-6 mt-6 relative" id="crm-b2b-leads-section" style={{ borderColor: 'var(--brand-border)' }}>
-        
-        {/* Glow Header */}
-        <div className="absolute top-0 left-10 right-10 h-[1px] bg-gradient-to-r from-transparent via-[#b7ff00]/50 to-transparent" />
-        
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#232B27] pb-5">
-          <div>
-            <span className="px-2 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] border border-[#b7ff00]/25 text-[9px] font-mono font-bold uppercase rounded-md tracking-wider">
-              Mapeamento de Clientes & Vendas Ativas
-            </span>
-            <h3 className="text-lg font-bold text-[#F1F4EE] flex items-center gap-2 mt-1">
-              <Compass className="h-5 w-5 text-[#b7ff00] animate-spin-slow" />
-              Radar B2B Google Maps • Captador de Lojas & Leads
-            </h3>
-            <p className="text-xs text-[#8BA58D] mt-0.5">
-              Pesquise comércios físicos na sua região e extraia telefones (WhatsApp) para expandir sua revenda de peças 3D.
-            </p>
+      <div className="relative mt-6 animate-fade-in" id="crm-b2b-leads-section">
+        {/* Radial glows */}
+        <div className="absolute -top-20 -left-10 w-[420px] h-[420px] rounded-full bg-[#b7ff00]/10 blur-[120px] pointer-events-none" />
+        <div className="absolute -top-10 right-0 w-[340px] h-[340px] rounded-full bg-emerald-500/10 blur-[120px] pointer-events-none" />
+
+        <div className="relative rounded-3xl border border-white/10 bg-white/[0.025] backdrop-blur-2xl p-6 md:p-8 space-y-6 shadow-[0_30px_80px_-40px_rgba(183,255,0,0.35)] overflow-hidden">
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#b7ff00]/50 to-transparent" />
+
+          {/* Premium Header */}
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 pb-6 border-b border-white/[0.06]">
+            <div className="flex items-start gap-5">
+              <div className="relative shrink-0">
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#b7ff00]/40 to-emerald-500/30 blur-xl" />
+                <div className="relative h-14 w-14 rounded-2xl bg-gradient-to-br from-white/15 to-white/[0.03] border border-white/15 flex items-center justify-center shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]">
+                  <Compass className="h-6 w-6 text-[#b7ff00] animate-spin-slow" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.32em] text-[#b7ff00]/85 font-medium">
+                  <span className="h-1 w-1 rounded-full bg-[#b7ff00] animate-pulse" />
+                  Radar B2B • Google Maps
+                </div>
+                <h3
+                  className="text-[2rem] md:text-[2.5rem] leading-[1.05] font-semibold tracking-[-0.02em] bg-clip-text text-transparent bg-gradient-to-br from-white via-lime-100 to-emerald-200"
+                  style={{ fontFamily: "Sora, system-ui, sans-serif" }}
+                >
+                  Captador de Lojas &amp; Leads
+                </h3>
+                <p className="text-white/55 max-w-xl text-[14px] leading-relaxed">
+                  Pesquise comércios físicos na sua região e extraia telefones (WhatsApp) para expandir sua revenda de peças 3D.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2.5">
+              <button
+                type="button"
+                onClick={() => setShowNewLeadForm(!showNewLeadForm)}
+                className="group inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-semibold text-[#b7ff00] bg-[#b7ff00]/10 border border-[#b7ff00]/30 hover:border-[#b7ff00]/55 shadow-[0_12px_40px_-12px_rgba(183,255,0,0.55)] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-0.5"
+              >
+                <Plus className="h-4 w-4 transition-transform duration-300 group-hover:rotate-90" />
+                Cadastrar Loja
+              </button>
+              <a
+                href="https://maps.google.com"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-semibold text-white/70 hover:text-white bg-white/[0.04] border border-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-0.5"
+              >
+                Maps Oficial
+                <ExternalLink className="h-3 w-3" />
+              </a>
+            </div>
           </div>
-          
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setShowNewLeadForm(!showNewLeadForm)}
-              className="px-3.5 py-2 bg-[#1C2420] hover:bg-[#232F2A] border border-[#2F3D35] text-[#b7ff00] font-bold text-xs rounded-xl transition flex items-center gap-2 cursor-pointer shadow-md"
-            >
-              <Plus className="h-4 w-4" />
-              <span>Cadastrar Loja Manual</span>
-            </button>
-            
-            <a 
-              href="https://maps.google.com" 
-              target="_blank" 
-              rel="noreferrer"
-              className="px-3.5 py-2 bg-black/40 hover:bg-black/60 border border-[#232B27] text-zinc-350 hover:text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5"
-            >
-              <span>Abrir Maps Oficial</span>
-              <ExternalLink className="h-3 w-3" />
-            </a>
-          </div>
-        </div>
 
         {/* CADASTRAR MANUAL LEAD EXPANDABLE FORM */}
         {showNewLeadForm && (
