@@ -24,9 +24,9 @@ import { initialCatalogItems } from '../utils/initialData';
 const getStatusLabel = (status: string): string => {
   switch (status) {
     case 'WAITING': return "Ag. Arquivo";
-    case 'QUEUE': return "NaFila / Pagar";
+    case 'QUEUE': return "Aguardando Aceite";
     case 'PRINTING': return "Imprimindo";
-    case 'POST_PROCESS': return "Pós-Processo";
+    case 'POST_PROCESS': return "Acabamento";
     case 'READY': return "Pronto";
     case 'DELIVERED': return "Entregue";
     default: return status;
