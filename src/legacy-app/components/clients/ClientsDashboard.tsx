@@ -124,19 +124,19 @@ export const ClientsDashboard: React.FC<Props> = ({ clients, orders }) => {
   }, [clients.length, stats]);
 
   const KPI_THEMES: Record<string, { bar: string; glow: string }> = {
-    gold:    { bar: 'bg-[#D4A017]',   glow: 'from-[#D4A017]/15' },
-    lime:    { bar: 'bg-[#b7ff00]',   glow: 'from-[#b7ff00]/15' },
-    blue:    { bar: 'bg-blue-500',    glow: 'from-blue-500/15' },
-    purple:  { bar: 'bg-purple-500',  glow: 'from-purple-500/15' },
-    emerald: { bar: 'bg-emerald-500', glow: 'from-emerald-500/15' },
-    orange:  { bar: 'bg-orange-500',  glow: 'from-orange-500/15' },
+    gold:    { bar: 'bg-[#D4A017]',   glow: 'bg-[radial-gradient(circle_at_center,_rgba(212,160,23,0.18),_transparent_70%)]' },
+    lime:    { bar: 'bg-[#b7ff00]',   glow: 'bg-[radial-gradient(circle_at_center,_rgba(183,255,0,0.18),_transparent_70%)]' },
+    blue:    { bar: 'bg-blue-500',    glow: 'bg-[radial-gradient(circle_at_center,_rgba(59,130,246,0.18),_transparent_70%)]' },
+    purple:  { bar: 'bg-purple-500',  glow: 'bg-[radial-gradient(circle_at_center,_rgba(168,85,247,0.18),_transparent_70%)]' },
+    emerald: { bar: 'bg-emerald-500', glow: 'bg-[radial-gradient(circle_at_center,_rgba(16,185,129,0.18),_transparent_70%)]' },
+    orange:  { bar: 'bg-orange-500',  glow: 'bg-[radial-gradient(circle_at_center,_rgba(249,115,22,0.18),_transparent_70%)]' },
   };
 
   const Kpi = ({ icon: Icon, label, value, sub, tone = 'lime' }: any) => {
     const t = KPI_THEMES[tone] ?? KPI_THEMES.lime;
     return (
       <div className="group relative p-[1px] rounded-xl bg-white/10 transition-all duration-300 hover:scale-[1.03] hover:z-10">
-        <div className={`absolute inset-0 rounded-xl bg-gradient-radial ${t.glow} to-transparent blur-xl pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity`} />
+        <div className={`absolute inset-0 rounded-xl ${t.glow} blur-xl pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity`} />
         <div className="relative bg-white/[0.03] backdrop-blur-xl p-3 rounded-[11px] overflow-hidden h-full border border-white/10">
           <div className={`absolute top-0 left-0 w-[3px] h-full ${t.bar}`} />
           <div className="flex items-center justify-between">
@@ -150,11 +150,16 @@ export const ClientsDashboard: React.FC<Props> = ({ clients, orders }) => {
     );
   };
 
+  const PANEL_GLOWS = {
+    gold: 'bg-[radial-gradient(circle_at_center,_rgba(212,160,23,0.12),_transparent_70%)]',
+    lime: 'bg-[radial-gradient(circle_at_center,_rgba(183,255,0,0.12),_transparent_70%)]',
+    neutral: 'bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.06),_transparent_70%)]',
+  } as const;
   const Panel: React.FC<{ tone?: 'gold' | 'lime' | 'neutral'; title: string; children: React.ReactNode }> = ({ tone = 'neutral', title, children }) => {
-    const glow = tone === 'gold' ? 'from-[#D4A017]/10' : tone === 'lime' ? 'from-[#b7ff00]/10' : 'from-white/5';
+    const glow = PANEL_GLOWS[tone];
     return (
       <div className="group relative p-[1px] rounded-2xl bg-white/5 transition-all duration-500 hover:scale-[1.005]">
-        <div className={`absolute -inset-4 rounded-2xl bg-gradient-radial ${glow} to-transparent blur-2xl pointer-events-none opacity-40 group-hover:opacity-90 transition-opacity duration-700`} />
+        <div className={`absolute -inset-4 rounded-2xl ${glow} blur-2xl pointer-events-none opacity-50 group-hover:opacity-90 transition-opacity duration-700`} />
         <div className="relative bg-white/[0.02] backdrop-blur-2xl rounded-[15px] p-4 border border-white/10 shadow-2xl">
           <h4 className="text-[10px] uppercase font-bold text-white/80 tracking-[0.2em] mb-3">{title}</h4>
           {children}
@@ -171,7 +176,7 @@ export const ClientsDashboard: React.FC<Props> = ({ clients, orders }) => {
 
       {/* AI Recommendation Card */}
       <div className="group relative p-[1px] rounded-2xl bg-gradient-to-br from-[#D4A017]/40 via-white/10 to-[#b7ff00]/30">
-        <div className="absolute -inset-6 rounded-2xl bg-[radial-gradient(circle_at_center,_rgba(212,160,23,0.12),_transparent_70%)] via-[#b7ff00]/5 to-transparent blur-3xl opacity-70 pointer-events-none" />
+        <div className="absolute -inset-6 rounded-2xl bg-[radial-gradient(circle_at_center,_rgba(212,160,23,0.14),_rgba(183,255,0,0.06)_40%,_transparent_70%)] blur-3xl opacity-70 pointer-events-none" />
         <div className="relative bg-[#0a0c0a]/80 backdrop-blur-2xl rounded-[15px] p-5 border border-white/10 flex items-start gap-5">
           {/* Robot avatar */}
           <div className="relative shrink-0">
