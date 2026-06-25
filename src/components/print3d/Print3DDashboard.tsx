@@ -608,12 +608,13 @@ function StatusPill({ s }: { s: string }) {
   return <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${map[s] || ""}`}>{s}</span>;
 }
 const ORDER_STATUS_LABEL: Record<string, string> = {
-  WAITING: "Aguardando",
-  QUEUE: "Fila",
+  WAITING: "Ag. Arquivo",
+  QUEUE: "NaFila / Pagar",
   PRINTING: "Imprimindo",
-  POST_PROCESS: "Em trânsito",
+  POST_PROCESS: "Pós-Processo",
+  PACKING: "Embalando",
   READY: "Pronto",
-  DELIVERED: "Finalizado",
+  DELIVERED: "Entregue",
 };
 function OrdersList({ orders = [], clients = [], onSelectTab }: { orders?: any[]; clients?: any[]; onSelectTab?: (t: number) => void }) {
   const rows = orders
