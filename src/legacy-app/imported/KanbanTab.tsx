@@ -17,6 +17,7 @@ import {
   Upload,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
+import { AiRecommendation, SectionTitle, Kpi } from "@/legacy-app/components/DashboardShell";
 
 type Priority = "low" | "med" | "high";
 
@@ -233,6 +234,35 @@ function KanbanPage() {
         </div>
 
         <div className="mx-auto w-full max-w-[1300px] 2xl:max-w-[1700px] px-6 py-10 md:px-10">
+          {/* Premium dashboard header */}
+          <div className="mb-6 space-y-5">
+            <AiRecommendation
+              title={(() => {
+                const ideas = board.find(c => c.id === 'backlog')?.cards.length ?? 0;
+                const printing = board.find(c => c.id === 'review')?.cards.length ?? 0;
+                const done = board.find(c => c.id === 'done')?.cards.length ?? 0;
+                if (total === 0) return 'Comece capturando ideias no Kanban';
+                if (printing > 5) return `${printing} cards travados em Imprimindo — desbloqueie o fluxo`;
+                if (ideas > done * 3 && done > 0) return 'Backlog inchado — priorize execução para destravar caixa';
+                return `Pipeline saudável — ${total} cards em fluxo`;
+              })()}
+              body="O Kanban é o coração da execução criativa. Mova cards com drag-and-drop entre as fases e mantenha o WIP baixo para acelerar o time-to-market."
+              savings={`${total} cards`}
+              action="Novo Card"
+              onAction={() => {
+                const el = document.querySelector<HTMLInputElement>(`input[placeholder="Título do card"]`);
+                el?.focus();
+              }}
+            />
+            <SectionTitle icon={Layers} title="Dashboard — Kanban" />
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <Kpi icon={Lightbulb}    label="Ideias"      value={board.find(c=>c.id==='backlog')?.cards.length ?? 0} tone="fuchsia" />
+              <Kpi icon={Hammer}       label="Modelando"   value={board.find(c=>c.id==='doing')?.cards.length ?? 0}   tone="cyan" />
+              <Kpi icon={Printer}      label="Imprimindo"  value={board.find(c=>c.id==='review')?.cards.length ?? 0}  tone="orange" />
+              <Kpi icon={CheckCircle2} label="Pronto"      value={board.find(c=>c.id==='done')?.cards.length ?? 0}    tone="emerald" />
+            </div>
+          </div>
+
           {/* Header */}
           <header className="mb-6 flex justify-end">
             <div className="relative">
