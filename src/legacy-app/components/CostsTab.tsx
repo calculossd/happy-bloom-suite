@@ -7,6 +7,7 @@ import { safeStorage } from '../utils/storage';
 import { dedupeOffers, dedupeQuotationGroups } from '../utils/offerDedupe';
 import { FilamentSpool, materialColor } from './FilamentSpool';
 import { EstoqueDashboard } from './EstoqueDashboard';
+import { CatalogoDashboard } from './CatalogoDashboard';
 import { 
   Disc, 
   ShoppingCart, 
@@ -2476,111 +2477,93 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
 
       {/* SUBTAB 2: CATALOG PORTFOLIO & PDF DOWNLOAD */}
       {activeSubTab === 'CATALOG' && (
-        <div className="space-y-4 animate-fade-in" id="portfolio-catalog-panel">
-          {/* Standardized subtab header */}
-          <div
-            className="relative flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 px-5 py-4 border rounded-2xl overflow-hidden min-h-[78px]"
-            style={{
-              borderColor: '#A78BFA33',
-              background: 'linear-gradient(135deg, #A78BFA14, #A78BFA05)',
-              backdropFilter: 'blur(14px) saturate(140%)',
-              boxShadow: '0 0 32px -12px #A78BFA55, inset 0 1px 0 #A78BFA22',
-            }}
-          >
-            <div className="relative z-10 space-y-1 min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                <div
-                  className="text-sm font-bold uppercase tracking-[0.18em] select-none leading-none font-sans"
-                  style={{ color: '#A78BFA', textShadow: '0 0 18px #A78BFA55' }}
-                >
-                  Catálogo
-                </div>
-                <span className="px-2.5 py-0.5 bg-[#b7ff00]/10 text-[#b7ff00] text-xs font-bold font-sans rounded-full border border-[#b7ff00]/25 shadow-[0_0_18px_-6px_rgba(183,255,0,0.45)]">Portfólio</span>
+        <div className="space-y-6 animate-fade-in" id="portfolio-catalog-panel">
+          <CatalogoDashboard catalogItems={catalogItems} />
+
+          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-transparent p-5 md:p-6 backdrop-blur-xl flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div className="pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full bg-violet-500/15 blur-3xl" />
+            <div className="relative min-w-0">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-0.5 text-[9px] uppercase tracking-[0.28em] text-white/55">
+                <BookOpen className="h-3 w-3 text-violet-300" /> Vitrine
               </div>
-              <p className="text-xs text-[var(--brand-muted)]">Somente vitrine: os itens cadastrados no estoque de produtos aparecem aqui para compartilhar</p>
-            </div>
-          </div>
-
-          <div className="p-5 bg-[#151917] border border-[#232B27] rounded-2xl flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <h3 className="text-sm font-bold text-[#F1F4EE] flex items-center gap-2">
-                <BookOpen className="h-5 w-5 text-[#b7ff00]" />
-                Catálogo de Peças & Produtos Registrados
+              <h3 className="mt-2 text-lg font-semibold tracking-tight text-white" style={{ fontFamily: "'Sora', sans-serif" }}>
+                Catálogo de Peças & Produtos
               </h3>
-              <p className="text-xs text-[#8BA58D]">Visualize e compartilhe os produtos vindos do estoque. Cadastro e quantidade ficam na aba Estoque.</p>
+              <p className="text-xs text-white/50">Compartilhe sua vitrine — cadastro e quantidade na aba Estoque.</p>
             </div>
-
-            <div className="flex flex-wrap gap-2 shrink-0">
+            <div className="relative flex flex-wrap gap-2 shrink-0">
               <button
                 onClick={handleExportCatalogPDF}
-                className="px-4 py-2 bg-[#637E55] hover:bg-[#536B47] text-white text-xs font-bold rounded-xl transition flex items-center gap-2 cursor-pointer"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium text-white/80 backdrop-blur transition-all hover:-translate-y-0.5 hover:border-emerald-400/30 hover:bg-emerald-500/10 hover:text-emerald-100"
                 id="btn_export_catalog_pdf"
               >
-                <Download className="h-4 w-4" />
-                Baixar Catálogo PDF
+                <Download className="h-4 w-4" /> Baixar PDF
               </button>
-
               <button
                 onClick={handleCopyCatalogToClipboard}
-                className="px-4 py-2 bg-gradient-to-r from-purple-900/40 to-purple-850/40 hover:from-purple-900/50 hover:to-purple-850/50 border border-purple-500/20 text-purple-300 text-xs font-bold rounded-xl transition flex items-center gap-1.5 cursor-pointer"
+                className="inline-flex items-center gap-2 rounded-xl border border-violet-400/25 bg-gradient-to-br from-violet-500/15 to-fuchsia-500/5 px-4 py-2 text-xs font-medium text-violet-100 transition-all hover:-translate-y-0.5 hover:from-violet-500/25 hover:shadow-[0_0_24px_-8px_rgba(167,139,250,0.6)]"
                 id="btn_copy_catalog_text"
               >
-                <Sparkles className="h-4 w-4 text-purple-400" />
-                Copiar Catálogo p/ WhatsApp
+                <Sparkles className="h-4 w-4" /> Copiar p/ WhatsApp
               </button>
             </div>
           </div>
-
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="catalog-products-cards-grid">
             {catalogItems.length === 0 ? (
-              <div className="p-12 text-center text-[#8BA58D] col-span-full border border-dashed border-[#232B27] bg-[#151917]/20 rounded-2xl">
-                <BookOpen className="h-12 w-12 text-[#8BA58D]/30 mx-auto mb-3" />
-                <p className="text-xs font-bold">Nenhum produto no estoque de produtos.</p>
-                <p className="text-[11px] mt-1 text-[#8BA58D]/70">Cadastre produtos na aba Estoque para eles aparecerem aqui como catálogo.</p>
+              <div className="col-span-full p-12 text-center rounded-3xl border border-dashed border-white/10 bg-white/[0.02] backdrop-blur-xl">
+                <BookOpen className="h-12 w-12 text-white/20 mx-auto mb-3" />
+                <p className="text-sm font-medium text-white/70">Nenhum produto cadastrado</p>
+                <p className="text-[11px] mt-1 text-white/40">Cadastre produtos na aba Estoque para vê-los aqui.</p>
               </div>
             ) : (
-              catalogItems.map((item) => (
-                <div key={item.id} className="p-4 bg-[#151917] border border-[#232B27] rounded-2xl space-y-3 flex flex-col justify-between">
+              catalogItems.map((item, idx) => (
+                <div
+                  key={item.id}
+                  className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-transparent p-4 backdrop-blur-xl space-y-3 flex flex-col justify-between transition-all duration-300 hover:-translate-y-0.5 hover:border-violet-400/30 hover:shadow-[0_20px_60px_-20px_rgba(167,139,250,0.4)] animate-in fade-in slide-in-from-bottom-2"
+                  style={{ animationDelay: `${Math.min(idx, 12) * 40}ms` }}
+                >
+                  <div className="pointer-events-none absolute -top-16 -right-16 h-32 w-32 rounded-full bg-violet-500/10 blur-3xl opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                   <div className="space-y-2">
                     {/* Product picture */}
-                    <div className="h-28 w-full bg-[#0C0E0D] border border-[#232B27]/40 rounded-xl overflow-hidden relative flex items-center justify-center">
+                    <div className="h-32 w-full bg-black/40 border border-white/5 rounded-xl overflow-hidden relative flex items-center justify-center">
                       <img
                         src={item.imageUrl || 'https://images.unsplash.com/photo-1608156639585-b3a032ef9689?w=300&auto=format&fit=crop&q=60'}
                         alt={item.name}
                         referrerPolicy="no-referrer"
-                        className="w-full h-full object-cover transition duration-350 hover:scale-105"
+                        className="w-full h-full object-cover transition duration-500 group-hover:scale-110"
                       />
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                     </div>
 
                     <div className="flex items-center justify-between gap-4">
-                      <span className="text-[9px] font-mono font-black tracking-widest text-[#b7ff00] bg-[#b7ff00]/10 px-2 py-0.5 rounded border border-[#b7ff00]/20">
+                      <span className="text-[9px] font-mono font-bold tracking-widest text-violet-200 bg-violet-500/10 px-2 py-0.5 rounded-md border border-violet-400/20">
                         {item.productCode || 'PROD'}
                       </span>
                       {item.filamentType !== 'HARDWARE' && (
-                        <span className="text-[9px] font-bold text-[#b7ff00]">
-                          POLÍMERO: {item.filamentType}
+                        <span className="text-[9px] font-bold uppercase tracking-wider text-cyan-200/80">
+                          {item.filamentType}
                         </span>
                       )}
                     </div>
 
-                    <h4 className="text-sm font-bold text-[#F1F4EE] truncate">{item.name}</h4>
-                    <p className="text-[11px] text-[#8BA58D] leading-relaxed line-clamp-2">
+                    <h4 className="text-sm font-semibold tracking-tight text-white truncate">{item.name}</h4>
+                    <p className="text-[11px] text-white/45 leading-relaxed line-clamp-2">
                       {item.description || 'Nenhuma descrição declarada.'}
                     </p>
 
-                    <div className="grid grid-cols-3 gap-1 bg-[#0C0E0D]/40 p-2 border border-[#232B27]/40 rounded-xl text-center text-[10.5px]">
+                    <div className="grid grid-cols-3 gap-1 bg-black/30 p-2 border border-white/5 rounded-xl text-center text-[10.5px]">
                       <div className="flex flex-col justify-center">
-                        <span className="text-[8px] text-[#8BA58D] uppercase font-bold block">Peso</span>
-                        <span className="font-mono text-white font-medium">{item.weightGrams}g</span>
+                        <span className="text-[8px] text-white/40 uppercase tracking-wider block">Peso</span>
+                        <span className="font-mono text-white/90 font-medium">{item.weightGrams}g</span>
                       </div>
-                      <div className="flex flex-col justify-center">
-                        <span className="text-[8px] text-[#8BA58D] uppercase font-bold block">Tempo</span>
-                        <span className="font-mono text-white font-medium">{item.printTimeHours}h</span>
+                      <div className="flex flex-col justify-center border-x border-white/5">
+                        <span className="text-[8px] text-white/40 uppercase tracking-wider block">Tempo</span>
+                        <span className="font-mono text-white/90 font-medium">{item.printTimeHours}h</span>
                       </div>
                       <div className="flex flex-col items-center justify-center">
-                        <span className="text-[8px] text-[#8BA58D] uppercase font-bold block">Pronta Entr.</span>
-                        <span className="font-mono text-white font-bold px-0.5 mt-0.5">{item.stockCount}</span>
+                        <span className="text-[8px] text-white/40 uppercase tracking-wider block">Estoque</span>
+                        <span className={`font-mono font-semibold px-0.5 mt-0.5 ${(item.stockCount||0) === 0 ? 'text-rose-300' : 'text-emerald-200'}`}>{item.stockCount}</span>
                       </div>
                     </div>
 
@@ -2649,15 +2632,15 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                     )}
                   </div>
 
-                  <div className="border-t border-[#232B27]/40 pt-3 flex items-center justify-between gap-4">
-                    <span className="text-sm font-black text-[#b7ff00] font-mono">
+                  <div className="border-t border-white/5 pt-3 flex items-center justify-between gap-4">
+                    <span className="text-base font-semibold tabular-nums bg-gradient-to-r from-violet-200 to-fuchsia-200 bg-clip-text text-transparent">
                       R$ {item.defaultPrice.toFixed(2)}
                     </span>
 
                     <div className="flex items-center gap-1.5">
                       <button
                         onClick={() => handleEditCatalogProduct(item)}
-                        className="text-amber-400 hover:text-amber-500 hover:bg-amber-500/10 p-1.5 rounded-lg transition"
+                        className="text-amber-300/80 hover:text-amber-200 hover:bg-amber-500/10 p-1.5 rounded-lg transition border border-transparent hover:border-amber-400/30"
                         title="Editar Produto no Estoque"
                       >
                         <Edit3 className="h-4 w-4" />
@@ -2665,7 +2648,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
 
                       <button
                         onClick={() => handleDeleteCatalogProduct(item.id)}
-                        className="text-red-400 hover:text-red-500 hover:bg-red-500/10 p-1.5 rounded-lg transition"
+                        className="text-rose-300/80 hover:text-rose-200 hover:bg-rose-500/10 p-1.5 rounded-lg transition border border-transparent hover:border-rose-400/30"
                         title="Deletar Produto do Estoque"
                       >
                         <Trash2 className="h-4 w-4" />
