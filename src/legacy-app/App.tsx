@@ -1682,27 +1682,27 @@ export default function App() {
                 { id: 5, label: 'Ajustes', icon: Settings },
               ],
             },
-          ] as Array<{ section: string | null; items: Array<{ id: number; label: string; icon: any; badge?: number; blink?: boolean; onClick?: () => void }> }>).map((group, gi) => (
+          ] as Array<{ section: string | null; items: Array<{ id: number; label: string; icon: any; badge?: number; blink?: boolean; onClick?: () => void }> }>).map((group, gi) => {
+            const sectionColor =
+              group.section === 'Principal' ? '#D4A017' :
+              group.section === 'Operacional' ? '#3B82F6' :
+              group.section === 'Marketing' ? '#8B5CF6' :
+              group.section === 'Financeiro' ? '#22C55E' :
+              group.section === 'Configurações' ? '#b7ff00' :
+              '#D4A017';
+            return (
             <div key={gi} className="flex flex-col gap-0.5">
               {group.section && (
                 <div
                   className="px-3 mb-1 text-[9px] uppercase tracking-[0.22em] font-semibold"
-                  style={{
-                    color:
-                      group.section === 'Principal' ? '#D4A017' :
-                      group.section === 'Operacional' ? '#3B82F6' :
-                      group.section === 'Marketing' ? '#8B5CF6' :
-                      group.section === 'Financeiro' ? '#22C55E' :
-                      '#b7ff00',
-                  }}
+                  style={{ color: sectionColor }}
                 >
                   {group.section}
                 </div>
               )}
               {group.items.map((item, ii) => {
                 const active = currentTab === item.id && !item.onClick;
-                const isCoreGroup = [0, 1, 6, 2, 3, 4].includes(item.id);
-                const accent = isCoreGroup ? '#D4A017' : '#3B82F6';
+                const accent = sectionColor;
                 return (
                   <button
                     key={`${item.id}-${item.label}-${ii}`}
@@ -1710,8 +1710,9 @@ export default function App() {
                     className={`group relative flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12px] font-medium tracking-wide w-full text-left transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${item.blink ? 'nav-alert-blink' : ''} ${
                       active
                         ? 'text-white bg-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_4px_16px_-6px_rgba(0,0,0,0.6)]'
-                        : 'text-white/55 hover:text-white hover:bg-white/[0.04]'
+                        : 'hover:bg-white/[0.04]'
                     }`}
+                    style={!active ? { color: `${accent}CC` } : undefined}
                   >
                     {active && (
                       <span
@@ -1723,7 +1724,7 @@ export default function App() {
                     <item.icon
                       data-nav-icon={item.blink ? 'true' : undefined}
                       className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:scale-110"
-                      style={active ? { color: accent } : undefined}
+                      style={{ color: accent }}
                     />
                     <span className="flex-1 truncate">{item.label}</span>
                     {item.badge ? (
@@ -1739,7 +1740,8 @@ export default function App() {
                 );
               })}
             </div>
-          ))}
+            );
+          })}
         </nav>
       </aside>
 
