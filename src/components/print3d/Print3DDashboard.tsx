@@ -1367,7 +1367,7 @@ export function Print3DPanel({
           </div>
 
           {/* Row 3: STL | Estoque Crítico | Cotação | IA Precificação */}
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 [&>*]:h-[260px]">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 items-stretch [&>*]:min-h-[260px]">
             <div className="md:col-span-2 xl:col-span-1"><StlGallery orders={orders} clients={clients} /></div>
             <Hygrometers devices={tuyaDevices} onSelectTab={onSelectTab} />
             <FilamentQuotes onSelectTab={onSelectTab} />
