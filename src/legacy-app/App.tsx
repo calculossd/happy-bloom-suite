@@ -1943,7 +1943,7 @@ export default function App() {
                 <div className="flex items-center gap-2 flex-wrap">
                   <div
                     className="text-lg font-semibold uppercase tracking-[0.22em] select-none leading-none"
-                    style={{ color: titleColor, textShadow: `0 0 18px ${titleColor}55`, fontFamily: '"Playfair Display", "Cormorant Garamond", Georgia, ui-serif, serif' }}
+                    style={{ color: titleColor, textShadow: `0 0 18px ${titleColor}55`, fontFamily: '"Instrument Serif", Georgia, ui-serif, serif' }}
                   >
                     {headerInfo.title}
                   </div>
