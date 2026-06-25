@@ -1,3 +1,4 @@
+import robotMascot from '@/assets/robot-mascot.png.asset.json';
 import React, { useMemo } from 'react';
 import type { PrintOrder, Printer } from '../types';
 import {
@@ -198,7 +199,7 @@ export const PrintersDashboard: React.FC<Props> = ({ orders, printers }) => {
           <div className="relative shrink-0">
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-emerald-500/40 to-[#b7ff00]/30 blur-xl animate-pulse" />
             <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-[#1a1f1c] to-[#0a0c0a] border border-white/15 flex items-center justify-center shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
-              <Bot className="w-8 h-8 text-emerald-400" strokeWidth={1.6} />
+              <img src={robotMascot.url} alt="Assistente" className="w-14 h-14 object-contain" />
               <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-[#b7ff00] shadow-[0_0_10px_#b7ff00] animate-pulse" />
             </div>
           </div>

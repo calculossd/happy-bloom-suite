@@ -1,3 +1,4 @@
+import robotMascot from '@/assets/robot-mascot.png.asset.json';
 import React, { useMemo } from 'react';
 import type { CatalogItem, FilamentStock, SupplyStock } from '../types';
 import {
@@ -160,7 +161,7 @@ export const EstoqueDashboard: React.FC<Props> = ({ catalogItems, filamentStocks
           <div className="relative shrink-0">
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#b7ff00]/40 to-emerald-500/30 blur-xl animate-pulse" />
             <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-[#1a1f1c] to-[#0a0c0a] border border-white/15 flex items-center justify-center shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
-              <Bot className="w-8 h-8 text-[#b7ff00]" strokeWidth={1.6} />
+              <img src={robotMascot.url} alt="Assistente" className="w-14 h-14 object-contain" />
               <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-emerald-400 shadow-[0_0_10px_#10B981] animate-pulse" />
             </div>
           </div>
