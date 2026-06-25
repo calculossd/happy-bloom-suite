@@ -235,7 +235,7 @@ export const HistoricoDashboard: React.FC<Props> = ({ orders }) => {
               <span className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">Sem receita ainda</span>
             </div>
           ) : (
-            <div style={{ width: '100%', height: 200 }}>
+            <div style={{ width: '100%', height: 200, minWidth: 0 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={stats.days}>
                   <CartesianGrid stroke="rgba(255,255,255,0.05)" vertical={false} />
@@ -256,7 +256,7 @@ export const HistoricoDashboard: React.FC<Props> = ({ orders }) => {
               <span className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">Sem dados</span>
             </div>
           ) : (
-            <div style={{ width: '100%', height: 200 }}>
+            <div style={{ width: '100%', height: 200, minWidth: 0 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={stats.platformData} dataKey="value" nameKey="name" outerRadius={65} label={{ fontSize: 10 }}>
@@ -279,7 +279,7 @@ export const HistoricoDashboard: React.FC<Props> = ({ orders }) => {
               <span className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">Sem dados</span>
             </div>
           ) : (
-            <div style={{ width: '100%', height: 200 }}>
+            <div style={{ width: '100%', height: 200, minWidth: 0 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={stats.methodData} dataKey="value" nameKey="name" outerRadius={65} label={{ fontSize: 10 }}>
