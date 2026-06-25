@@ -1161,6 +1161,7 @@ export function OkLojaAssistant({
             </div>
 
           </div>
+          </div>
         </div>
       )}
     </>
