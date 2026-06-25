@@ -16,6 +16,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'rec
 import { PriceConfidence } from '@/components/PriceConfidence';
 import { searchImage } from './lib/searchImage';
 import { loadProductImages, loadQueryImages, persistProductImage, persistQueryImage } from './lib/imageCache';
+import { AiRecommendation, Kpi, SectionTitle } from '@/legacy-app/components/DashboardShell';
 
 export function getProductForSelectedPlatform(
   p: SellerReport, 
@@ -676,15 +677,45 @@ export default function App() {
   }, [selectedCategoryId, selectedPlatform, searchQuery]);
 
   return (
-    <div className="text-[#EDF2F7] font-sans selection:bg-orange-500/30 selection:text-orange-100 flex flex-col antialiased" id="intel-applet-root">
+    <div className="text-[#EDF2F7] font-sans selection:bg-[#b7ff00]/30 selection:text-[#f6ffe1] flex flex-col antialiased space-y-4" id="intel-applet-root">
+      <section className="space-y-4 animate-fade-in">
+        <AiRecommendation
+          title={`Radar de oportunidade: ${currentCategoryName}`}
+          body={`Foram analisados ${filteredProducts.length} modelos com ${totalMonthlySales.toLocaleString('pt-BR')} vendas/mês. Priorize itens com margem acima de 35%, baixa concorrência e imagem forte para transformar pesquisa em fila de produção lucrativa.`}
+          savings={`R$ ${(totalFaturamento / 1000).toFixed(0)}k`}
+          action="Ver líderes"
+          onAction={() => setViewMode('list')}
+        />
+
+        <SectionTitle icon={Search} title="Dashboard — Pesquisa de Preços" status="Mercado ativo" />
+
+        <div className="grid grid-cols-2 xl:grid-cols-4 gap-3">
+          <Kpi icon={Database} label="Modelos no nicho" value={filteredProducts.length} sub={currentCategoryName} tone="gold" />
+          <Kpi icon={TrendingUp} label="Vendas mensais" value={totalMonthlySales.toLocaleString('pt-BR')} sub="Demanda estimada" tone="lime" />
+          <Kpi icon={Award} label="Margem média" value={`${avgMargin}%`} sub="Potencial líquido" tone={avgMargin >= 35 ? 'emerald' : 'orange'} />
+          <Kpi icon={Activity} label="Concorrência" value={avgCompetitors.toLocaleString('pt-BR')} sub="Anúncios ativos" tone="blue" />
+        </div>
+      </section>
+
       {/* TRIPLE COLUMN WORKSPACE GRID */}
-      <main className="w-full grid grid-cols-1 lg:grid-cols-12 gap-4 items-start flex-grow -mt-2">
+      <main className="w-full grid grid-cols-1 lg:grid-cols-12 gap-4 items-start flex-grow">
         
         {/* COLUMN 1: SIDEBAR CATEGORY NAVIGATION STATUS (SPAN 3) */}
         <aside className="col-span-12 lg:col-span-3">
-          <div className="flex flex-col max-h-[78vh]">
+          <div className="relative flex flex-col max-h-[78vh] rounded-2xl border border-white/10 bg-white/[0.025] p-3 backdrop-blur-2xl overflow-hidden shadow-[0_18px_60px_-36px_rgba(183,255,0,0.55)]">
+            <div className="pointer-events-none absolute -top-28 -left-24 h-56 w-56 rounded-full bg-[#D4A017]/10 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-28 -right-24 h-56 w-56 rounded-full bg-[#b7ff00]/10 blur-3xl" />
+            <div className="relative mb-3 flex items-center justify-between border-b border-white/10 pb-3">
+              <div>
+                <p className="text-[9px] font-extrabold uppercase tracking-[0.28em] text-[#D4A017]">Categorias</p>
+                <h3 className="text-sm font-black text-white tracking-tight">Núcleos de mercado</h3>
+              </div>
+              <span className="rounded-lg border border-[#b7ff00]/25 bg-[#b7ff00]/10 px-2 py-1 text-[10px] font-black text-[#b7ff00] tabular-nums">
+                {categories.length - 1}
+              </span>
+            </div>
             {/* List scroll wrapper */}
-            <div className="flex lg:flex-col overflow-x-auto lg:overflow-x-visible gap-2 pb-2.5 lg:pb-0 lg:overflow-y-auto scrollbar-thin scrollbar-thumb-[#151D2F] flex-grow pr-1">
+            <div className="relative flex lg:flex-col overflow-x-auto lg:overflow-x-visible gap-2 pb-2.5 lg:pb-0 lg:overflow-y-auto scrollbar-thin scrollbar-thumb-[#151D2F] flex-grow pr-1">
               {filteredCategories.map((cat, idx) => {
                 const isSelected = selectedCategoryId === cat.id;
                 const count = getCategoryCount(cat.id);
@@ -700,10 +731,10 @@ export default function App() {
                       }
                     }}
                     style={{ animationDelay: `${idx * 35}ms` }}
-                    className={`group relative overflow-hidden flex-shrink-0 lg:w-full flex items-center text-left rounded-xl cursor-pointer h-11 border backdrop-blur-md transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                    className={`group relative overflow-hidden flex-shrink-0 lg:w-full flex items-center text-left rounded-xl cursor-pointer h-11 border backdrop-blur-xl transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                       isSelected
-                        ? 'border-[#b7ff00]/50 bg-gradient-to-r from-[#b7ff00]/15 via-[#b7ff00]/5 to-transparent shadow-[0_8px_24px_-12px_rgba(183,255,0,0.55)]'
-                        : 'border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/15 hover:-translate-y-[1px]'
+                        ? 'border-[#b7ff00]/55 bg-gradient-to-r from-[#b7ff00]/18 via-[#D4A017]/8 to-white/[0.03] shadow-[0_12px_32px_-16px_rgba(183,255,0,0.75)]'
+                        : 'border-white/[0.08] bg-black/25 hover:bg-white/[0.055] hover:border-white/15 hover:-translate-y-[1px]'
                     }`}
                   >
                     {/* Lime active rail */}
@@ -720,7 +751,7 @@ export default function App() {
                         }`}>
                           {renderIcon(cat.iconName, "w-3.5 h-3.5")}
                         </span>
-                        <span className={`truncate text-[12px] tracking-tight transition-colors duration-300 ${
+                      <span className={`truncate text-[12px] tracking-tight transition-colors duration-300 ${
                           isSelected ? 'font-bold text-white' : 'font-medium text-slate-300 group-hover:text-white'
                         }`}>{cat.name}</span>
                       </div>
@@ -751,7 +782,9 @@ export default function App() {
         <section className="col-span-12 lg:col-span-9 space-y-4">
           
           {/* Compact toolbar */}
-          <div className="space-y-2 shrink-0">
+          <div className="relative space-y-3 shrink-0 rounded-2xl border border-white/10 bg-white/[0.025] p-3 backdrop-blur-2xl overflow-hidden shadow-[0_18px_60px_-40px_rgba(59,130,246,0.45)]">
+            <div className="pointer-events-none absolute -top-24 left-1/4 h-48 w-48 rounded-full bg-[#b7ff00]/10 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-28 right-0 h-52 w-52 rounded-full bg-blue-500/10 blur-3xl" />
             <div className="flex items-center gap-2 flex-wrap">
               <div className="relative flex-1 min-w-[200px]">
                 <Search className="absolute left-3 top-2.5 text-slate-500 w-4 h-4" />
@@ -761,7 +794,7 @@ export default function App() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => { if (e.key === 'Enter') handleLiveAnalysis(searchQuery); }}
                   placeholder="Pesquisar por modelo, fatiador ou tags..."
-                  className="w-full bg-[#05080E] hover:bg-[#080C16] focus:bg-[#05080E] text-slate-200 placeholder-slate-500 pl-9 pr-8 py-2 text-xs rounded-lg border border-[#141B2D] focus:outline-none focus:ring-1 focus:ring-orange-500/40 transition-all font-medium"
+                  className="w-full bg-black/35 hover:bg-black/45 focus:bg-black/50 text-slate-100 placeholder-slate-500 pl-9 pr-8 py-2.5 text-xs rounded-xl border border-white/10 focus:outline-none focus:ring-1 focus:ring-[#b7ff00]/45 focus:border-[#b7ff00]/35 transition-all font-semibold shadow-inner shadow-black/20"
                 />
                 {searchQuery && (
                   <button onClick={() => setSearchQuery('')} className="absolute right-2.5 top-2.5 text-slate-500 hover:text-white">
@@ -770,7 +803,7 @@ export default function App() {
                 )}
               </div>
               {/* Marketplace selector */}
-              <div className="flex items-center gap-1 bg-[#05080E] p-0.5 rounded-lg border border-[#121826]/60 shrink-0">
+               <div className="flex items-center gap-1 bg-black/35 p-1 rounded-xl border border-white/10 shrink-0 backdrop-blur-xl">
                   {(['shopee', 'mercadolivre', 'amazon'] as const).map((plat) => {
                     const active = selectedPlatform === plat;
                     const titles = { shopee: 'Shopee', mercadolivre: 'M. Livre', amazon: 'Amazon' };
@@ -783,7 +816,7 @@ export default function App() {
                       <button
                         key={plat}
                         onClick={() => setSelectedPlatform(plat)}
-                        className={`py-1 px-2.5 rounded-md text-[9px] font-bold uppercase tracking-wider transition-all duration-150 cursor-pointer ${colors[plat]}`}
+                        className={`py-1.5 px-2.5 rounded-lg text-[9px] font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer hover:-translate-y-0.5 ${colors[plat]}`}
                       >
                         {titles[plat]}
                       </button>
@@ -791,13 +824,13 @@ export default function App() {
                   })}
               </div>
               {/* VIEW MODE TOGGLE */}
-              <div className="flex items-center gap-1 bg-[#05080E] p-0.5 rounded-lg border border-[#121826]/60 shrink-0">
+              <div className="flex items-center gap-1 bg-black/35 p-1 rounded-xl border border-white/10 shrink-0 backdrop-blur-xl">
                 <button
                   type="button"
                   onClick={() => setViewMode('list')}
                   className={`py-1 px-2.5 rounded-md text-[9px] font-bold uppercase tracking-wider transition-all duration-150 cursor-pointer ${
                     viewMode === 'list' 
-                      ? 'bg-[#182033] text-orange-400 border border-orange-500/10' 
+                      ? 'bg-[#b7ff00]/15 text-[#b7ff00] border border-[#b7ff00]/25 shadow-[0_0_18px_rgba(183,255,0,0.12)]' 
                       : 'text-slate-450 hover:text-slate-300'
                   }`}
                   id="view-mode-list-btn"
@@ -809,7 +842,7 @@ export default function App() {
                   onClick={() => setViewMode('table')}
                   className={`py-1 px-2.5 rounded-md text-[9px] font-bold uppercase tracking-wider transition-all duration-150 cursor-pointer ${
                     viewMode === 'table' 
-                      ? 'bg-[#182033] text-orange-400 border border-orange-500/10' 
+                      ? 'bg-[#b7ff00]/15 text-[#b7ff00] border border-[#b7ff00]/25 shadow-[0_0_18px_rgba(183,255,0,0.12)]' 
                       : 'text-slate-450 hover:text-slate-300'
                   }`}
                   id="view-mode-table-btn"
