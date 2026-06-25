@@ -12,7 +12,7 @@ import {
   PieChart, Pie, Cell, LabelList,
 } from "recharts";
 import { FilamentSpool, materialColor } from "@/legacy-app/components/FilamentSpool";
-import { Kpi as PremiumKpi, SectionTitle } from "@/legacy-app/components/DashboardShell";
+import { Kpi as PremiumKpi } from "@/legacy-app/components/DashboardShell";
 
 // Color name → hex swatch for filament color chips
 const COLOR_HEX: Record<string, string> = {
