@@ -1913,7 +1913,7 @@ function WorkbenchPanel({
             </div>
 
             <div className="w-full h-44">
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" debounce={80}>
                 <AreaChart
                   data={report.historyData}
                   margin={{ top: 2, right: 2, left: -32, bottom: 0 }}

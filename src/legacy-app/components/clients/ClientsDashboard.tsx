@@ -258,7 +258,7 @@ export const ClientsDashboard: React.FC<Props> = ({ clients, orders }) => {
             </div>
           ) : (
             <div style={{ width: '100%', height: 180, minWidth: 0 }}>
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" debounce={80}>
                 <PieChart>
                   <Pie data={stats.sourceData} dataKey="value" nameKey="name" outerRadius={60} label={{ fontSize: 10 }} isAnimationActive={false}>
                     {stats.sourceData.map((_, i) => (
@@ -281,7 +281,7 @@ export const ClientsDashboard: React.FC<Props> = ({ clients, orders }) => {
             </div>
           ) : (
             <div style={{ width: '100%', height: 180, minWidth: 0 }}>
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" debounce={80}>
                 <PieChart>
                   <Pie data={stats.dealData} dataKey="value" nameKey="name" outerRadius={60} label={{ fontSize: 10 }} isAnimationActive={false}>
                     {stats.dealData.map((_, i) => (
