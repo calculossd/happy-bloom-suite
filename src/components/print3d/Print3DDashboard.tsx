@@ -543,7 +543,7 @@ function LivePrinters({ printers = [], orders = [], onSelectTab }: { printers?: 
     return { name: p.name || p.model, model: p.model || "", customUrl: p.customUrl, material, remaining, pct: Math.max(0, Math.min(100, pct)) };
   });
   return (
-    <Card>
+    <Card className="flex flex-col overflow-hidden">
       <div className="flex items-baseline justify-between mb-1">
         <h3 className="text-[14px] font-semibold text-white">Impressão ao Vivo</h3>
         <span className="text-[10px] text-white/45 tabular-nums">
@@ -554,6 +554,7 @@ function LivePrinters({ printers = [], orders = [], onSelectTab }: { printers?: 
       {rows.length === 0 && (
         <div className="text-[12px] text-white/40 py-6 text-center">Nenhuma impressora cadastrada.</div>
       )}
+      <ScrollHint>
       <ul className="space-y-3">
         {rows.map((p, i) => (
           <li
@@ -590,6 +591,7 @@ function LivePrinters({ printers = [], orders = [], onSelectTab }: { printers?: 
           </li>
         ))}
       </ul>
+      </ScrollHint>
     </Card>
   );
 }
@@ -622,7 +624,7 @@ function OrdersList({ orders = [], clients = [], onSelectTab }: { orders?: any[]
   const cityById: Record<number, string> = {};
   clients.forEach((c: any) => (cityById[c.id] = (c.address || "").split(",").pop()?.trim() || ""));
   return (
-    <Card>
+    <Card className="flex flex-col overflow-hidden">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-[14px] font-semibold text-white">Pedidos a Serem Entregues</h3>
         <button className="text-[11px] text-white/50 hover:text-white" onClick={() => onSelectTab?.(3)}>Ver todos</button>
@@ -630,6 +632,7 @@ function OrdersList({ orders = [], clients = [], onSelectTab }: { orders?: any[]
       {rows.length === 0 && (
         <div className="text-[12px] text-white/40 py-6 text-center">Sem pedidos pendentes.</div>
       )}
+      <ScrollHint>
       <ul className="divide-y divide-white/[0.04]">
         {rows.map((o: any) => {
           const isPrinting = o.status === "PRINTING";
@@ -665,6 +668,7 @@ function OrdersList({ orders = [], clients = [], onSelectTab }: { orders?: any[]
           );
         })}
       </ul>
+      </ScrollHint>
     </Card>
   );
 }
@@ -862,7 +866,7 @@ function StockOverview({ filaments = [], onSelectTab }: { filaments?: any[]; onS
       level: f.stockGrams < f.minStockGrams ? "Crítico" : "Atenção",
     }));
   return (
-    <Card className="relative overflow-hidden">
+    <Card className="relative overflow-hidden flex flex-col">
       <span aria-hidden className="absolute left-0 top-0 bottom-0 w-[3px] bg-rose-500 rounded-l-2xl" />
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-[14px] font-semibold text-white">Estoque Crítico</h3>
@@ -872,6 +876,7 @@ function StockOverview({ filaments = [], onSelectTab }: { filaments?: any[]; onS
       {items.length === 0 ? (
         <div className="text-[12px] text-white/40 py-3 text-center">Tudo em ordem.</div>
       ) : (
+        <ScrollHint>
         <ul className="space-y-2">
           {items.map((c, i) => (
             <li key={i} className={`flex items-center gap-3 p-2 rounded-lg border hover:bg-white/[0.03] transition ${c.level === "Crítico" ? "border-rose-500/60 bg-rose-500/[0.04]" : "border-white/10"}`}>
@@ -891,6 +896,7 @@ function StockOverview({ filaments = [], onSelectTab }: { filaments?: any[]; onS
             </li>
           ))}
         </ul>
+        </ScrollHint>
       )}
     </Card>
   );
