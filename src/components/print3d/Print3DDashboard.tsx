@@ -923,7 +923,7 @@ function useSerpQuotes() {
   }, []);
   return { groups, updatedAt };
 }
-function FilamentQuotes() {
+function FilamentQuotes({ onSelectTab }: { onSelectTab?: (t: number) => void } = {}) {
   const { groups, updatedAt } = useSerpQuotes();
   const rows = (groups || []).slice(0, 6).map((g: any) => {
     const offers = Array.isArray(g.offers) ? g.offers : [];
@@ -933,7 +933,7 @@ function FilamentQuotes() {
     return { name: g.type || "—", price: avg, min, count: offers.length };
   });
   return (
-    <Card>
+    <Card className="cursor-pointer hover:bg-white/[0.02] transition" onClick={() => onSelectTab?.(7)}>
       <div className="flex items-baseline justify-between mb-1">
         <h3 className="text-[14px] font-semibold text-white">Cotação de Filamentos</h3>
         <span className="text-[10px] text-white/40">SerpAPI</span>
