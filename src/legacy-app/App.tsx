@@ -414,9 +414,28 @@ export default function App() {
     const onNewProduct = () => openNewProductForm();
     window.addEventListener('request-new-order', onNewOrder);
     window.addEventListener('request-new-product', onNewProduct);
+    const onNavigateTab = (e: any) => {
+      const tab = Number(e?.detail);
+      if (!Number.isNaN(tab)) {
+        setCurrentTab(tab);
+        setSidebarOpen(false);
+      }
+    };
+    const onNavigateCostsSub = (e: any) => {
+      const sub = typeof e?.detail === 'string' ? e.detail : null;
+      if (!sub) return;
+      setCurrentTab(4);
+      setCostsSubTab(sub);
+      setSidebarOpen(false);
+      try { window.dispatchEvent(new CustomEvent('costs_set_subtab', { detail: sub })); } catch {}
+    };
+    window.addEventListener('navigate-tab', onNavigateTab);
+    window.addEventListener('navigate-costs-subtab', onNavigateCostsSub);
     return () => {
       window.removeEventListener('request-new-order', onNewOrder);
       window.removeEventListener('request-new-product', onNewProduct);
+      window.removeEventListener('navigate-tab', onNavigateTab);
+      window.removeEventListener('navigate-costs-subtab', onNavigateCostsSub);
     };
   }, []);
   const [dismissedPriceAlert, setDismissedPriceAlert] = useState(false);
