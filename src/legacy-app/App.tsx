@@ -2002,33 +2002,51 @@ export default function App() {
           const lowFilaments = filamentStocks.filter(f => f.stockGrams < f.minStockGrams);
           if (lowFilaments.length > 0) {
             return (
-              <div 
-                className="flex items-center justify-between p-3.5 bg-red-500/10 border border-red-500/20 text-[#FF6B6B] rounded-xl shadow transition duration-200 animate-fade-in mb-2"
+              <div
                 id="global-stock-warning-banner"
+                className="relative mb-2 overflow-visible rounded-2xl border border-red-400/30 animate-fade-in"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(239,68,68,0.14), rgba(239,68,68,0.04))',
+                  backdropFilter: 'blur(14px) saturate(140%)',
+                  boxShadow: '0 0 32px -12px rgba(239,68,68,0.55), inset 0 1px 0 rgba(239,68,68,0.18)',
+                }}
               >
-                <div className="flex items-center gap-2.5 min-w-0" id="low-stock-desc-container">
-                  <AlertTriangle className="h-4 w-4 text-red-500 animate-pulse shrink-0" />
-                  <span className="text-xs font-bold text-zinc-105" style={{ color: '#F1F4EE' }}>
-                    <strong className="text-red-400 font-extrabold">Estoque Baixo:</strong> {lowFilaments.length} {lowFilaments.length === 1 ? 'bobina' : 'bobinas'} abaixo do mínimo!
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <button 
-                    onClick={() => {
-                      localStorage.setItem('bambuzau_costs_subtab_override', 'STOCK');
-                      setCurrentTab(4);
-                    }}
-                    className="px-3 py-1.5 text-[10px] font-black bg-red-500 hover:bg-red-600 text-white rounded-lg transition shrink-0 active:scale-98 animate-pulse"
-                  >
-                    Estoque 🧵
-                  </button>
-                  <button 
-                    onClick={() => setDismissedStockAlert(true)}
-                    className="p-1 px-2 hover:bg-white/10 rounded-lg text-zinc-450 hover:text-white transition text-xs font-bold font-sans"
-                    title="Fechar alerta"
-                  >
-                    ✕
-                  </button>
+                <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-5">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-red-500/10 ring-1 ring-inset ring-red-400/25 text-red-300">
+                      <AlertTriangle className="h-4 w-4 animate-pulse" />
+                    </div>
+                    <div className="min-w-0 flex flex-col">
+                      <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-red-300/90">
+                        Estoque Baixo
+                      </span>
+                      <span className="truncate text-[13px] font-semibold tracking-[-0.005em] text-zinc-50">
+                        {lowFilaments.length} {lowFilaments.length === 1 ? 'bobina' : 'bobinas'} abaixo do mínimo
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <button
+                      onClick={() => {
+                        localStorage.setItem('bambuzau_costs_subtab_override', 'STOCK');
+                        setCurrentTab(4);
+                      }}
+                      className="inline-flex items-center gap-1.5 rounded-xl border border-red-400/30 bg-red-500/15 px-3.5 py-2 text-[10px] font-bold uppercase tracking-[0.14em] text-red-100 transition-all duration-300 hover:border-red-300/50 hover:bg-red-500/25 hover:shadow-[0_8px_24px_-8px_rgba(239,68,68,0.6)] active:scale-[0.97]"
+                    >
+                      Estoque
+                      <span aria-hidden>🧵</span>
+                    </button>
+                    <button
+                      onClick={() => setDismissedStockAlert(true)}
+                      title="Fechar alerta"
+                      aria-label="Fechar"
+                      className="grid h-8 w-8 place-items-center rounded-lg text-zinc-500 hover:text-white hover:bg-white/5 transition-all duration-200 active:scale-95"
+                    >
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round">
+                        <path d="M2 2l8 8M10 2l-8 8" />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               </div>
             );
@@ -2088,7 +2106,12 @@ export default function App() {
             return (
               <div
                 id="global-price-opportunity-banner"
-                className="relative mb-2 overflow-visible rounded-2xl bg-sky-600 border border-sky-400/60 shadow-[0_8px_24px_-8px_rgba(56,189,248,0.5)]"
+                className="relative mb-2 overflow-visible rounded-2xl border border-sky-400/30 animate-fade-in"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(56,189,248,0.14), rgba(56,189,248,0.04))',
+                  backdropFilter: 'blur(14px) saturate(140%)',
+                  boxShadow: '0 0 32px -12px rgba(56,189,248,0.55), inset 0 1px 0 rgba(56,189,248,0.18)',
+                }}
               >
                 <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-5">
                   <div className="flex min-w-0 items-center gap-3">
