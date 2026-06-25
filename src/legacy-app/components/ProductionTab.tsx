@@ -26,10 +26,10 @@ import { PrinterCameraModal } from './PrinterCameraModal';
 const getStatusLabel = (status: string): string => {
   switch (status) {
     case 'WAITING': return "Ag. Arquivo";
-    case 'QUEUE': return "NaFila / Pagar";
+    case 'QUEUE': return "Aguardando Aceite";
     case 'PRINTING': return "Imprimindo";
-    case 'POST_PROCESS': return "Pós-Processo";
-    case 'PACKING': return "Embalando";
+    case 'POST_PROCESS': return "Acabamento";
+    case 'PACKING': return "Pronto para Entrega";
     case 'READY': return "Pronto";
     case 'DELIVERED': return "Entregue";
     default: return status;
