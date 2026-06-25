@@ -1,6 +1,7 @@
 import React from 'react';
 import { Sparkles, ArrowRight } from 'lucide-react';
-import robotMascot from '@/assets/robot-mascot.png';
+import robotMascotAsset from '@/assets/robot-mascot.png.asset.json';
+const robotMascot = robotMascotAsset.url;
 
 export type KpiTone = 'gold' | 'lime' | 'blue' | 'purple' | 'emerald' | 'orange' | 'fuchsia' | 'cyan';
 
