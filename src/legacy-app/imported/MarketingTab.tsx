@@ -53,7 +53,7 @@ function MarketingPage() {
     <AppShell>
       <div className="relative min-h-screen overflow-hidden">
 
-        <div className="px-6 md:px-10 py-10 max-w-7xl 2xl:max-w-[1600px] mx-auto">
+        <div className="w-full py-6">
           {/* Premium Obsidian Glass Header */}
           <div className="relative mb-10 animate-fade-in">
             <div className="absolute -top-24 -left-10 w-[420px] h-[420px] rounded-full bg-cyan-500/10 blur-[120px] pointer-events-none" />

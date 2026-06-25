@@ -87,7 +87,7 @@ function SitesPage() {
         <div className="absolute -top-40 left-1/3 h-[420px] w-[420px] rounded-full bg-[#b7ff00]/10 blur-[140px]" />
         <div className="absolute top-1/3 right-0 h-[360px] w-[360px] rounded-full bg-cyan-500/[0.06] blur-[140px]" />
       </div>
-      <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1600px] px-6 py-12 md:px-10">
+      <div className="w-full py-6">
         {/* Premium Header — Obsidian Glass */}
         <div
           className="relative mb-8 overflow-hidden rounded-3xl border border-white/10 p-6 md:p-8 animate-fade-in"
