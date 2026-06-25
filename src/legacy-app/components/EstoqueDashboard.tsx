@@ -158,10 +158,10 @@ export const EstoqueDashboard: React.FC<Props> = ({ catalogItems, filamentStocks
       <div className="group relative p-[1px] rounded-2xl bg-gradient-to-br from-[#b7ff00]/40 via-white/10 to-emerald-500/30">
         <div className="absolute -inset-6 rounded-2xl bg-[radial-gradient(circle_at_center,_rgba(183,255,0,0.14),_rgba(16,185,129,0.06)_40%,_transparent_70%)] blur-3xl opacity-70 pointer-events-none" />
         <div className="relative bg-[#0a0c0a]/80 backdrop-blur-2xl rounded-[15px] p-5 border border-white/10 flex items-start gap-5">
-          <div className="relative shrink-0 overflow-hidden w-24 h-24">
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#b7ff00]/40 to-emerald-500/30 blur-xl animate-pulse" />
-            <div className="relative w-24 h-24 flex items-center justify-center overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
-              <RobotMascot className="relative w-24 h-24 translate-y-[-2px] scale-[1.08] drop-shadow-[0_6px_16px_rgba(0,0,0,0.6)]" />
+          <div className="relative shrink-0 w-20 h-20 flex items-center justify-center">
+            <div className="absolute inset-1 rounded-full bg-gradient-to-br from-[#b7ff00]/40 to-emerald-500/30 blur-xl animate-pulse" />
+            <div className="relative w-20 h-20 flex items-center justify-center">
+              <RobotMascot className="relative drop-shadow-[0_6px_16px_rgba(0,0,0,0.6)]" />
             </div>
           </div>
           <div className="flex-1 min-w-0">
