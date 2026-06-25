@@ -1337,6 +1337,8 @@ export default function App() {
   // não tudo que não foi entregue — evita badge fantasma na aba Pedidos.
   const pendingOrdersCount = orders.filter(o => o.status === 'WAITING').length;
   const awaitingAcceptCount = orders.filter(o => o.status === 'WAITING' || o.status === 'QUEUE').length;
+  const pendingOrdersBlink = pendingOrdersCount > 0;
+  const productionBlink = awaitingAcceptCount > 0;
 
   if (isShowcase) {
     return (
@@ -1638,8 +1640,8 @@ export default function App() {
               section: 'Principal',
               items: [
                 { id: 2, label: 'Clientes', icon: Users },
-                { id: 3, label: 'Pedidos', icon: GitPullRequest, badge: pendingOrdersCount },
-                { id: 1, label: 'Produção', icon: Activity, badge: awaitingAcceptCount, blink: awaitingAcceptCount > 0 },
+                { id: 3, label: 'Pedidos', icon: GitPullRequest, badge: pendingOrdersCount, blink: pendingOrdersBlink },
+                { id: 1, label: 'Produção', icon: Activity, badge: awaitingAcceptCount, blink: productionBlink },
                 { id: 4, label: 'Estoque', icon: Layers, onClick: () => openCostsSubtab('STOCK') },
                 { id: 6, label: 'Histórico', icon: ShoppingBag },
               ],
@@ -1705,7 +1707,7 @@ export default function App() {
                   <button
                     key={`${item.id}-${item.label}-${ii}`}
                     onClick={() => (item.onClick ? item.onClick() : setCurrentTab(item.id))}
-                    className={`group relative flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12px] font-medium tracking-wide w-full text-left transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${item.blink ? 'animate-tab-blink' : ''} ${
+                    className={`group relative flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12px] font-medium tracking-wide w-full text-left transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${item.blink ? 'nav-alert-blink' : ''} ${
                       active
                         ? 'text-white bg-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_4px_16px_-6px_rgba(0,0,0,0.6)]'
                         : 'text-white/55 hover:text-white hover:bg-white/[0.04]'
@@ -1719,13 +1721,15 @@ export default function App() {
                       />
                     )}
                     <item.icon
+                      data-nav-icon={item.blink ? 'true' : undefined}
                       className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:scale-110"
                       style={active ? { color: accent } : undefined}
                     />
                     <span className="flex-1 truncate">{item.label}</span>
                     {item.badge ? (
                       <span
-                        className="ml-auto min-w-[18px] h-[18px] px-1.5 inline-flex items-center justify-center rounded-full text-[9px] font-bold text-white"
+                         data-nav-badge={item.blink ? 'true' : undefined}
+                         className="ml-auto min-w-[18px] h-[18px] px-1.5 inline-flex items-center justify-center rounded-full text-[9px] font-bold text-white"
                         style={{ background: accent, boxShadow: `0 0 10px ${accent}66` }}
                       >
                         {item.badge}
@@ -1744,11 +1748,11 @@ export default function App() {
         <nav className="relative flex items-center gap-0.5 overflow-x-auto no-scrollbar rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl px-1.5 py-1.5">
           {[
             { id: 0, label: 'Painel', icon: Home },
-            { id: 1, label: 'Produção', icon: Activity, badge: awaitingAcceptCount, blink: awaitingAcceptCount > 0 },
+            { id: 1, label: 'Produção', icon: Activity, badge: awaitingAcceptCount, blink: productionBlink },
             { id: 6, label: 'Histórico', icon: ShoppingBag },
             { id: 2, label: 'Clientes', icon: Users },
             { id: 15, label: 'Prospecção', icon: Radar },
-            { id: 3, label: 'Pedidos', icon: GitPullRequest, badge: pendingOrdersCount },
+            { id: 3, label: 'Pedidos', icon: GitPullRequest, badge: pendingOrdersCount, blink: pendingOrdersBlink },
             { id: 4, label: 'Cálculo', icon: Calculator, onClick: () => openCostsSubtab('CALC') },
             { id: 4, label: 'Catálogo Inova', icon: BookOpen, onClick: () => openCostsSubtab('CATALOG') },
             { id: 4, label: 'Estoque', icon: Layers, onClick: () => openCostsSubtab('STOCK') },
@@ -1762,14 +1766,14 @@ export default function App() {
               <button
                 key={`${item.id}-${item.label}-${ii}`}
                 onClick={() => (item.onClick ? item.onClick() : setCurrentTab(item.id))}
-                className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-medium whitespace-nowrap shrink-0 transition-all ${item.blink ? 'animate-tab-blink' : ''} ${
+                className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-medium whitespace-nowrap shrink-0 transition-all ${item.blink ? 'nav-alert-blink' : ''} ${
                   active ? 'text-white bg-white/[0.08]' : 'text-white/55 hover:text-white hover:bg-white/[0.04]'
                 }`}
               >
-                <item.icon className="h-3.5 w-3.5" />
+                <item.icon data-nav-icon={item.blink ? 'true' : undefined} className="h-3.5 w-3.5" />
                 <span>{item.label}</span>
                 {item.badge ? (
-                  <span className="ml-0.5 min-w-[16px] h-[16px] px-1 inline-flex items-center justify-center rounded-full text-[9px] font-bold text-white bg-amber-500">
+                  <span data-nav-badge={item.blink ? 'true' : undefined} className="ml-0.5 min-w-[16px] h-[16px] px-1 inline-flex items-center justify-center rounded-full text-[9px] font-bold text-white bg-amber-500">
                     {item.badge}
                   </span>
                 ) : null}
