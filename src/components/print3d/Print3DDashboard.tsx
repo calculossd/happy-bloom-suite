@@ -12,6 +12,7 @@ import {
   PieChart, Pie, Cell, LabelList,
 } from "recharts";
 import { FilamentSpool, materialColor } from "@/legacy-app/components/FilamentSpool";
+import { Kpi as PremiumKpi, SectionTitle } from "@/legacy-app/components/DashboardShell";
 
 // Color name → hex swatch for filament color chips
 const COLOR_HEX: Record<string, string> = {
@@ -1346,13 +1347,15 @@ export function Print3DPanel({
             </div>
           </div>
 
-          {/* KPIs (Row 1 — exatamente como o layout) */}
-          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
-            <Kpi tone={0} label="Pedidos Hoje"        value={String(ordersToday.length)}              delta={`${activePrinters}/${printersTotal}`} Icon={ShoppingBag} />
-            <Kpi tone={1} label="Faturamento Hoje"    value={fmtBRL(revenueToday)}                    delta="hoje" Icon={DollarSign} />
-            <Kpi tone={2} label="Peças Impressas"     value={String(piecesToday)}                     delta="hoje" Icon={Package2} />
-            <Kpi tone={3} label="Horas de Impressão"  value={hoursLabel}                              delta="hoje" Icon={Clock} />
-            <Kpi tone={4} label="Clientes c/ Estoque" value={String(balcaoClientsCount)}              delta="balcão" Icon={Users} />
+          {/* Premium dashboard strip — Obsidian Glass */}
+          <SectionTitle icon={Activity} title="Dashboard — Painel de Controle" status="Operacional" />
+          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+            <PremiumKpi tone="lime"    icon={ShoppingBag} label="Pedidos Hoje"       value={String(ordersToday.length)} sub={`${activePrinters}/${printersTotal} impressoras`} />
+            <PremiumKpi tone="emerald" icon={DollarSign}  label="Faturamento Hoje"   value={fmtBRL(revenueToday)}       sub="receita do dia" />
+            <PremiumKpi tone="blue"    icon={Package2}    label="Peças Impressas"    value={String(piecesToday)}        sub="hoje" />
+            <PremiumKpi tone="purple"  icon={Clock}       label="Horas de Impressão" value={hoursLabel}                 sub="hoje" />
+            <PremiumKpi tone="cyan"    icon={Users}       label="Clientes c/ Estoque" value={String(balcaoClientsCount)} sub="balcão" />
+            <PremiumKpi tone="gold"    icon={TrendingUp}  label="Margem do Mês"      value={`${monthMargin.toFixed(1)}%`} sub={fmtBRL(monthProfit)} />
           </div>
 
           {/* Row 2: Mapa | Impressão ao Vivo | Pedidos | Higrômetros */}
