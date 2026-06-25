@@ -3,8 +3,9 @@ import { AppShell } from "@/components/AppShell";
 import {
   ClipboardCheck, Check, ChevronRight, Send, Terminal, Wrench, Layers, Thermometer,
   Move, Flame, Filter, Camera, Calculator, RotateCcw, History, Youtube, SkipForward,
-  Save, Settings2, Printer as PrinterIcon,
+  Save, Settings2, Printer as PrinterIcon, ListChecks, CheckCircle2, Percent, SkipForward as SkipIcon, Activity,
 } from "lucide-react";
+import { AiRecommendation, SectionTitle, Kpi } from "@/legacy-app/components/DashboardShell";
 import { listPrinters, type Printer } from "@/lib/printers-db";
 import { sendGcode } from "@/lib/octoprint";
 import {
@@ -245,63 +246,52 @@ function CalibrationPage() {
   return (
     <AppShell>
       <div className="w-full pt-6 pb-8">
-        {/* Premium Header — Obsidian Glass */}
-        <div
-          className="relative mb-6 overflow-hidden rounded-2xl border border-white/10 p-6 animate-fade-in"
-          style={{
-            background: 'linear-gradient(135deg, rgba(12,16,14,0.92) 0%, rgba(10,12,18,0.88) 100%)',
-            backdropFilter: 'blur(24px) saturate(140%)',
-            boxShadow: '0 20px 60px -20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05)',
-          }}
-        >
-          <div
-            className="pointer-events-none absolute inset-0"
-            style={{ background: 'radial-gradient(600px circle at 0% 0%, rgba(103,232,249,0.10), transparent 50%)' }}
+        {/* Official Dashboard Pattern */}
+        <div className="mb-6 animate-fade-in">
+          <AiRecommendation
+            title={printer ? `Calibrando: ${printer.name}` : "Pré-check de Calibração"}
+            body={
+              pct === 100
+                ? "Calibração 100% concluída. Salve o relatório para registrar no histórico da impressora."
+                : pct >= 60
+                ? `Você está em ${pct}%. Foque nas etapas restantes — priorize PID e Flow para ganho imediato de qualidade.`
+                : "Comece pela preparação física e nivelamento da mesa. Cada etapa libera ganhos compostos na primeira camada."
+            }
+            savings={`${pct}%`}
+            action={pct === 100 ? 'Concluir' : undefined}
+            onAction={pct === 100 ? finish : undefined}
           />
-          <div className="relative flex flex-wrap items-end justify-between gap-4">
-            <div className="flex items-start gap-4">
-              <div
-                className="flex h-12 w-12 items-center justify-center rounded-xl border border-white/10"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(103,232,249,0.18), rgba(59,130,246,0.10))',
-                  boxShadow: '0 8px 24px -8px rgba(103,232,249,0.35), inset 0 1px 0 rgba(255,255,255,0.08)',
-                }}
-              >
-                <ClipboardCheck className="h-5 w-5 text-cyan-200" />
-              </div>
-              <div>
-                <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.25em] text-white/40">
-                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-300 shadow-[0_0_8px_rgba(103,232,249,0.8)]" />
-                  Calibração da Impressora
-                </div>
-                <h1
-                  className="mt-1.5 text-3xl font-bold text-white"
-                  style={{ fontFamily: "'Sora', sans-serif", textShadow: '0 2px 12px rgba(103,232,249,0.18)' }}
-                >
-                  {printer ? `Calibrando: ${printer.name}` : "Pré-check de Calibração"}
-                </h1>
-                <p className="mt-1 text-xs text-white/50">Checklist editorial guiado — do frame ao primeiro layer impecável.</p>
-              </div>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <select
-                value={printerId}
-                onChange={(e) => setPrinterId(e.target.value)}
-                className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white/90 backdrop-blur transition hover:bg-white/[0.07]"
-              >
-                <option value="" className="bg-[#0b0b14]">— escolher impressora —</option>
-                {printers.map((p) => (
-                  <option key={p.id} value={p.id} className="bg-[#0b0b14]">{p.name}</option>
-                ))}
-              </select>
-              <button onClick={() => setShowHistory((v) => !v)} className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white/80 backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/[0.08]">
-                <History className="h-4 w-4" /> Histórico
-              </button>
-              <button onClick={reset} className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white/80 backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/[0.08]">
-                <RotateCcw className="h-4 w-4" /> Resetar
-              </button>
-            </div>
+        </div>
+
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <SectionTitle icon={ClipboardCheck} title="DASHBOARD — PRÉ-CHECK" status={printer ? 'Operacional' : 'Aguardando'} />
+          <div className="flex flex-wrap gap-2">
+            <select
+              value={printerId}
+              onChange={(e) => setPrinterId(e.target.value)}
+              className="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-white/90 backdrop-blur transition hover:bg-white/[0.07]"
+            >
+              <option value="" className="bg-[#0b0b14]">— escolher impressora —</option>
+              {printers.map((p) => (
+                <option key={p.id} value={p.id} className="bg-[#0b0b14]">{p.name}</option>
+              ))}
+            </select>
+            <button onClick={() => setShowHistory((v) => !v)} className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-white/80 backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/[0.08]">
+              <History className="h-3.5 w-3.5" /> Histórico
+            </button>
+            <button onClick={reset} className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-white/80 backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/[0.08]">
+              <RotateCcw className="h-3.5 w-3.5" /> Resetar
+            </button>
           </div>
+        </div>
+
+        <div className="mb-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
+          <Kpi icon={PrinterIcon} label="Impressora" value={printer?.name ?? '—'} sub={printer ? 'Selecionada' : 'Nenhuma'} tone="blue" />
+          <Kpi icon={ListChecks} label="Etapas" value={STEPS.length} sub="Checklist" tone="cyan" />
+          <Kpi icon={CheckCircle2} label="Checks OK" value={`${doneTasks}/${totalTasks}`} sub="Concluídos" tone="emerald" />
+          <Kpi icon={Percent} label="Progresso" value={`${pct}%`} sub={pct === 100 ? 'Pronto' : 'Em curso'} tone={pct === 100 ? 'lime' : 'gold'} />
+          <Kpi icon={SkipIcon} label="Puladas" value={skipped.length} sub="Etapas" tone="orange" />
+          <Kpi icon={Activity} label="Status" value={pct === 100 ? 'Calibrado' : pct > 0 ? 'Em curso' : 'A iniciar'} sub="Sessão" tone="purple" />
         </div>
 
         {printers.length === 0 && (
