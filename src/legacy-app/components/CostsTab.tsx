@@ -3201,21 +3201,28 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
               </div>
             );
           })()}
-          <div className="space-y-4" id="product-stock-section">
-            <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-3 border-b-2 border-white/25 pb-4">
-              <div className="flex min-w-0 items-center gap-3">
-                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#b7ff00]/10 ring-1 ring-inset ring-[#b7ff00]/25 text-[#b7ff00]">
+          <div className="space-y-4 animate-fade-in" id="product-stock-section">
+            <div
+              className="relative overflow-hidden flex flex-col md:flex-row md:items-center md:justify-between gap-3 rounded-2xl border border-white/[0.06] p-4 backdrop-blur-xl"
+              style={{
+                background: 'linear-gradient(180deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.01) 100%), #0c100e',
+                boxShadow: '0 1px 0 rgba(255,255,255,0.04) inset, 0 24px 50px -28px rgba(0,0,0,0.85)',
+              }}
+            >
+              <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(120% 100% at 0% 0%, rgba(183,255,0,0.12) 0%, transparent 55%)' }} />
+              <div className="relative flex min-w-0 items-center gap-3">
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#b7ff00]/10 ring-1 ring-inset ring-[#b7ff00]/25 text-[#b7ff00]" style={{ boxShadow: '0 6px 18px -6px rgba(183,255,0,0.45)' }}>
                   <Tag className="h-4 w-4" />
                 </div>
                 <div className="min-w-0">
                   <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-[#b7ff00]/80">Produtos</span>
-                  <h3 className="text-sm font-bold text-[#F1F4EE] truncate">Estoque de Produtos</h3>
+                  <h3 className="text-sm font-bold text-[#F1F4EE] truncate" style={{ textShadow: '0 0 18px rgba(183,255,0,0.30)' }}>Estoque de Produtos</h3>
                   <p className="text-[11px] text-zinc-500 truncate">Cadastro de produtos prontos do portfólio; o catálogo só exibe estes itens</p>
                 </div>
               </div>
               <button
                 onClick={openManualProductForm}
-                className="shrink-0 inline-flex items-center gap-1.5 rounded-xl border border-[#b7ff00]/30 bg-[#b7ff00]/15 px-3.5 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-[#b7ff00] transition-all duration-300 hover:border-[#b7ff00]/50 hover:bg-[#b7ff00]/25 active:scale-[0.97]"
+                className="relative shrink-0 inline-flex items-center gap-1.5 rounded-xl border border-[#b7ff00]/30 bg-[#b7ff00]/15 px-3.5 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-[#b7ff00] transition-all duration-300 hover:border-[#b7ff00]/50 hover:bg-[#b7ff00]/25 hover:shadow-[0_8px_24px_-8px_rgba(183,255,0,0.6)] active:scale-[0.97]"
                 id="btn-trigger-product-stock-form"
               >
                 <Plus className="h-3.5 w-3.5" />
