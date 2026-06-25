@@ -995,11 +995,30 @@ function FilamentQuotes({ onSelectTab }: { onSelectTab?: (t: number) => void } =
 }
 
 /* ---------- AI pricing ---------- */
-function AiPricing() {
+function AiPricing({ onSelectTab }: { onSelectTab?: (t: number) => void }) {
   const data = [{ name: "m", value: 69 }, { name: "r", value: 31 }];
   return (
-    <Card>
-      <h3 className="text-[14px] font-semibold text-white">IA de Precificação</h3>
+    <Card
+      glow={LIME}
+      className="cursor-pointer transition hover:border-white/[0.12]"
+      onClick={() => {
+        onSelectTab?.(4);
+        window.dispatchEvent(new CustomEvent("navigate-costs-subtab", { detail: "CALC" }));
+      }}
+    >
+      <div className="flex items-center justify-between mb-1">
+        <h3 className="text-[14px] font-semibold text-white">IA de Precificação</h3>
+        <button
+          className="text-[11px] text-white/50 hover:text-white"
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelectTab?.(4);
+            window.dispatchEvent(new CustomEvent("navigate-costs-subtab", { detail: "CALC" }));
+          }}
+        >
+          Abrir
+        </button>
+      </div>
       <p className="text-[11px] text-white/45 mb-4">Baseado no mercado e histórico</p>
       <div className="grid grid-cols-[1fr_1fr_auto] items-center gap-4">
         <div>
