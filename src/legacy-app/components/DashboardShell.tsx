@@ -49,9 +49,9 @@ export const AiRecommendation: React.FC<{
   <div className="group relative p-[1px] rounded-2xl bg-gradient-to-br from-[#D4A017]/40 via-white/10 to-[#b7ff00]/30">
     <div className="absolute -inset-6 rounded-2xl bg-[radial-gradient(circle_at_center,_rgba(212,160,23,0.14),_rgba(183,255,0,0.06)_40%,_transparent_70%)] blur-3xl opacity-70 pointer-events-none" />
     <div className="relative bg-[#0a0c0a]/80 backdrop-blur-2xl rounded-[15px] p-5 border border-white/10 flex items-start gap-5">
-      <div className="relative shrink-0 -mb-3 w-28 h-28">
-        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#D4A017]/30 to-[#b7ff00]/20 blur-2xl animate-pulse" />
-        <RobotMascot className="relative w-28 h-28 object-contain drop-shadow-[0_8px_20px_rgba(0,0,0,0.7)]" />
+      <div className="relative shrink-0 w-20 h-20 flex items-center justify-center">
+        <div className="absolute inset-1 rounded-full bg-gradient-to-br from-[#D4A017]/25 to-[#b7ff00]/15 blur-xl animate-pulse" />
+        <RobotMascot className="relative drop-shadow-[0_8px_20px_rgba(0,0,0,0.7)]" />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
