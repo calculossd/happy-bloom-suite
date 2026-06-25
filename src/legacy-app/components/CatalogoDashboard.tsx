@@ -84,12 +84,14 @@ export const CatalogoDashboard: React.FC<Props> = ({ catalogItems }) => {
   };
 
   const aiTip = useMemo(() => {
+    const fire = (name: string, detail?: any) => { try { window.dispatchEvent(new CustomEvent(name, { detail })); } catch {} };
     if (stats.total === 0) {
       return {
         title: 'Comece cadastrando seu primeiro produto',
         body: 'Sem catálogo a IA não consegue prever giro, ticket nem composição. Cadastre ao menos 5 produtos para destravar previsões.',
         savings: 'R$ 0',
         action: 'Cadastrar Produto',
+        onAction: () => fire('request-new-product'),
       };
     }
     if (stats.noStock > 0) {
@@ -98,6 +100,7 @@ export const CatalogoDashboard: React.FC<Props> = ({ catalogItems }) => {
         body: 'Produtos zerados perdem venda imediata. Priorize a fila de produção dos itens de maior ticket para repor antes do fim de semana.',
         savings: fmtBRL(stats.noStock * stats.avgPrice),
         action: 'Repor Estoque',
+        onAction: () => fire('navigate-costs-subtab', 'STOCK'),
       };
     }
     if (stats.withImage / Math.max(1, stats.total) < 0.7) {
@@ -106,6 +109,7 @@ export const CatalogoDashboard: React.FC<Props> = ({ catalogItems }) => {
         body: 'Itens sem foto convertem até 60% menos. Adicione imagens reais para subir o ticket médio e o CTR no WhatsApp.',
         savings: fmtBRL(stats.avgPrice * 3),
         action: 'Adicionar Fotos',
+        onAction: () => fire('navigate-costs-subtab', 'CATALOG'),
       };
     }
     return {
@@ -113,6 +117,7 @@ export const CatalogoDashboard: React.FC<Props> = ({ catalogItems }) => {
       body: `Você tem ${stats.total} produtos com ticket médio de ${fmtBRL(stats.avgPrice)}. Exporte o PDF e dispare no WhatsApp para acelerar o giro.`,
       savings: fmtBRL(stats.inventoryValue * 0.1),
       action: 'Exportar Catálogo',
+      onAction: () => fire('navigate-tab', 9),
     };
   }, [stats]);
 
@@ -142,7 +147,7 @@ export const CatalogoDashboard: React.FC<Props> = ({ catalogItems }) => {
           <div className="hidden md:flex flex-col items-end gap-2 shrink-0 pl-4 border-l border-white/10">
             <span className="text-[9px] font-bold uppercase tracking-widest text-zinc-500">Economia estimada</span>
             <span className="text-xl font-extrabold text-[#b7ff00] tabular-nums">{aiTip.savings}</span>
-            <button className="mt-1 px-3 py-1.5 bg-[#b7ff00] text-black text-[10px] font-extrabold uppercase tracking-widest rounded-lg hover:scale-105 active:scale-95 transition-transform shadow-[0_0_20px_rgba(183,255,0,0.3)] flex items-center gap-1.5">
+            <button onClick={(aiTip as any).onAction} className="mt-1 px-3 py-1.5 bg-[#b7ff00] text-black text-[10px] font-extrabold uppercase tracking-widest rounded-lg hover:scale-105 active:scale-95 transition-transform shadow-[0_0_20px_rgba(183,255,0,0.3)] flex items-center gap-1.5">
               {aiTip.action} <ArrowRight className="w-3 h-3" />
             </button>
           </div>
