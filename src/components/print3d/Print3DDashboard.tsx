@@ -179,6 +179,37 @@ function Card({ children, className = "" }: { children: React.ReactNode; classNa
   );
 }
 
+/* ---------- Scrollable list with chevron hint ---------- */
+function ScrollHint({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [hasMore, setHasMore] = useState(false);
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const check = () => setHasMore(el.scrollHeight - el.clientHeight - el.scrollTop > 4);
+    check();
+    el.addEventListener("scroll", check, { passive: true });
+    const ro = new ResizeObserver(check); ro.observe(el);
+    return () => { el.removeEventListener("scroll", check); ro.disconnect(); };
+  }, []);
+  return (
+    <div className={`relative flex-1 min-h-0 ${className}`}>
+      <div ref={ref} className="h-full overflow-y-auto pr-1" style={{ scrollbarWidth: "thin" }}>
+        {children}
+      </div>
+      {hasMore && (
+        <button
+          type="button"
+          onClick={() => ref.current?.scrollBy({ top: 120, behavior: "smooth" })}
+          className="absolute bottom-1 left-1/2 -translate-x-1/2 size-6 grid place-items-center rounded-full bg-white/[0.08] border border-white/15 text-white/75 hover:text-white hover:bg-white/[0.14] backdrop-blur transition"
+          aria-label="Mostrar mais"
+        >
+          <ChevronDown className="size-3.5" />
+        </button>
+      )}
+    </div>
+  );
+}
+
 /* ---------- KPI ---------- */
 function Kpi({ label, value, delta, Icon }: { label: string; value: string; delta: string; Icon: any }) {
   return (
