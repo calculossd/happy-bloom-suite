@@ -1679,7 +1679,7 @@ export default function App() {
                 { id: 2, label: 'Clientes', icon: Users },
                 { id: 3, label: 'Pedidos', icon: GitPullRequest, badge: pendingOrdersCount, blink: pendingOrdersBlink },
                 { id: 1, label: 'Produção', icon: Activity, badge: awaitingAcceptCount, blink: productionBlink },
-                { id: 4, label: 'Estoque', icon: Layers, onClick: () => openCostsSubtab('STOCK') },
+                { id: 4, label: 'Estoque', icon: Layers, sub: 'STOCK', onClick: () => openCostsSubtab('STOCK') },
                 { id: 6, label: 'Histórico', icon: ShoppingBag },
               ],
             },
@@ -1699,16 +1699,16 @@ export default function App() {
                 { id: 15, label: 'Prospecção', icon: Radar },
                 { id: 11, label: 'Modelos', icon: FileBox },
                 { id: 8, label: 'Stls', icon: Box },
-                { id: 4, label: 'Catálogo', icon: BookOpen, onClick: () => openCostsSubtab('CATALOG') },
+                { id: 4, label: 'Catálogo', icon: BookOpen, sub: 'CATALOG', onClick: () => openCostsSubtab('CATALOG') },
                 { id: 10, label: 'Kanban', icon: Columns3 },
               ],
             },
             {
               section: 'Financeiro',
               items: [
-                { id: 4, label: 'Gastos', icon: DollarSign, onClick: () => openCostsSubtab('SHOP') },
-                { id: 4, label: 'Cotação', icon: TrendingUp, onClick: () => openCostsSubtab('QUOTE') },
-                { id: 4, label: 'Calculadora', icon: Calculator, onClick: () => openCostsSubtab('CALC') },
+                { id: 4, label: 'Gastos', icon: DollarSign, sub: 'SHOP', onClick: () => openCostsSubtab('SHOP') },
+                { id: 4, label: 'Cotação', icon: TrendingUp, sub: 'QUOTE', onClick: () => openCostsSubtab('QUOTE') },
+                { id: 4, label: 'Calculadora', icon: Calculator, sub: 'CALC', onClick: () => openCostsSubtab('CALC') },
               ],
             },
             {
@@ -1718,7 +1718,7 @@ export default function App() {
                 { id: 5, label: 'Ajustes', icon: Settings },
               ],
             },
-          ] as Array<{ section: string | null; items: Array<{ id: number; label: string; icon: any; badge?: number; blink?: boolean; onClick?: () => void }> }>).map((group, gi) => {
+          ] as Array<{ section: string | null; items: Array<{ id: number; label: string; icon: any; badge?: number; blink?: boolean; sub?: string; onClick?: () => void }> }>).map((group, gi) => {
             const sectionColor =
               group.section === 'Principal' ? '#D4A017' :
               group.section === 'Operacional' ? '#3B82F6' :
@@ -1737,7 +1737,9 @@ export default function App() {
                 </div>
               )}
               {group.items.map((item, ii) => {
-                const active = currentTab === item.id && !item.onClick;
+                const active = item.sub
+                  ? currentTab === item.id && costsSubTab === item.sub
+                  : currentTab === item.id && !item.onClick;
                 const accent = '#b7ff00';
                 return (
                   <button
