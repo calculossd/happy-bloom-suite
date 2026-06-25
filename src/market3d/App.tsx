@@ -695,6 +695,64 @@ export default function App() {
           <Kpi icon={Award} label="Margem média" value={`${avgMargin}%`} sub="Potencial líquido" tone={avgMargin >= 35 ? 'emerald' : 'orange'} />
           <Kpi icon={Activity} label="Concorrência" value={avgCompetitors.toLocaleString('pt-BR')} sub="Anúncios ativos" tone="blue" />
         </div>
+
+        {/* Tendências de Modelos */}
+        {(() => {
+          const trending = [...filteredProducts]
+            .sort((a, b) => b.monthlySales - a.monthlySales)
+            .slice(0, 5);
+          if (trending.length === 0) return null;
+          const topSales = trending[0]?.monthlySales || 1;
+          const marketplaces = ['SHOPEE', 'ML', 'AMAZON', 'SHOPEE', 'ML'];
+          return (
+            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.025] p-5 backdrop-blur-2xl shadow-[0_18px_60px_-40px_rgba(16,185,129,0.45)]">
+              <div className="pointer-events-none absolute -top-24 -left-20 h-56 w-56 rounded-full bg-emerald-400/10 blur-3xl" />
+              <div className="pointer-events-none absolute -bottom-24 -right-20 h-56 w-56 rounded-full bg-[#b7ff00]/10 blur-3xl" />
+              <div className="relative flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2.5">
+                  <span className="grid place-items-center w-8 h-8 rounded-lg bg-orange-500/15 border border-orange-500/30 text-orange-400">
+                    <Flame className="w-4 h-4" />
+                  </span>
+                  <div>
+                    <h3 className="text-base font-black text-white tracking-tight">Tendências de Modelos</h3>
+                    <p className="text-[11px] text-slate-400">Crescimento semanal por categoria</p>
+                  </div>
+                </div>
+                <div className="hidden sm:flex items-center gap-1">
+                  <span className="h-1 w-6 rounded-full bg-emerald-400/70" />
+                  <span className="h-1 w-3 rounded-full bg-white/15" />
+                </div>
+              </div>
+              <div className="relative space-y-4">
+                {trending.map((p, i) => {
+                  const growth = Math.max(8, Math.round((p.monthlySales / topSales) * 42));
+                  const pct = Math.max(12, Math.round((p.monthlySales / topSales) * 100));
+                  return (
+                    <div key={p.id} className="group">
+                      <div className="flex items-end justify-between mb-1.5">
+                        <div className="min-w-0">
+                          <p className="text-[13px] font-semibold text-white truncate">{p.title}</p>
+                          <p className="text-[10px] font-bold tracking-[0.22em] text-slate-500 uppercase">
+                            {marketplaces[i % marketplaces.length]}
+                          </p>
+                        </div>
+                        <span className="text-[13px] font-black text-emerald-400 tabular-nums shrink-0 ml-3">
+                          +{growth}%
+                        </span>
+                      </div>
+                      <div className="h-[3px] w-full rounded-full bg-white/[0.06] overflow-hidden">
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-emerald-400 via-emerald-400 to-[#b7ff00] transition-all duration-700"
+                          style={{ width: `${pct}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })()}
       </section>
 
       {/* TRIPLE COLUMN WORKSPACE GRID */}
