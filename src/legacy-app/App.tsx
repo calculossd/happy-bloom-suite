@@ -1336,6 +1336,7 @@ export default function App() {
   // Conta apenas pedidos realmente pendentes de ação (aguardando aprovação),
   // não tudo que não foi entregue — evita badge fantasma na aba Pedidos.
   const pendingOrdersCount = orders.filter(o => o.status === 'WAITING').length;
+  const awaitingAcceptCount = orders.filter(o => o.status === 'WAITING' || o.status === 'QUEUE').length;
 
   if (isShowcase) {
     return (
