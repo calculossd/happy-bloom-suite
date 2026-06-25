@@ -401,6 +401,24 @@ export default function App() {
       } catch {}
     }, 80);
   };
+
+  // Global event listeners for dashboard action buttons (formerly in page header).
+  useEffect(() => {
+    const onNewOrder = () => {
+      (window as any).__pendingOpenNewOrder = true;
+      setCurrentTab(1);
+      window.setTimeout(() => {
+        try { window.dispatchEvent(new CustomEvent('open-new-order')); } catch {}
+      }, 250);
+    };
+    const onNewProduct = () => openNewProductForm();
+    window.addEventListener('request-new-order', onNewOrder);
+    window.addEventListener('request-new-product', onNewProduct);
+    return () => {
+      window.removeEventListener('request-new-order', onNewOrder);
+      window.removeEventListener('request-new-product', onNewProduct);
+    };
+  }, []);
   const [dismissedPriceAlert, setDismissedPriceAlert] = useState(false);
   const [dismissedStockAlert, setDismissedStockAlert] = useState(false);
 
