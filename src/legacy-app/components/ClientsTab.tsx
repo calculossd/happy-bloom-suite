@@ -25,7 +25,7 @@ import {
   buildRefinedText,
 } from '../lib/prospect-pitch-templates';
 import { AiRecommendation, SectionTitle, Kpi } from './DashboardShell';
-import { Radar, Phone, MessageSquare as MsgIcon, Target } from 'lucide-react';
+import { Radar, Phone, Target } from 'lucide-react';
 
 
 const streets = [
