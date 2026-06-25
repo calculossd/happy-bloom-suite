@@ -551,19 +551,53 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
       {/* ONLINE PRINTER CONNECTIONS */}
       {viewMode !== 'orders' && (
       <div className="space-y-3" id="online-printers-tracker">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2">
-          <div>
-            <h3 className="text-sm font-bold text-[#F1F4EE] flex items-center gap-1.5" id="active-printers-heading">
-              <span className="w-2 h-2 rounded-full bg-[#b7ff00] animate-ping inline-block" />
-              Impressoras Ativas ({printers.filter(p => p.status === 'PRINTING').length} em uso)
-            </h3>
+        <div
+          className="relative overflow-hidden rounded-2xl border border-white/[0.06] bg-gradient-to-br from-[#0c100e] via-[#0a0d0b] to-[#080a09] backdrop-blur-xl px-4 py-3 animate-fade-in"
+          id="active-printers-header"
+        >
+          <div
+            className="pointer-events-none absolute -top-16 -left-10 w-72 h-72 rounded-full blur-3xl opacity-70"
+            style={{ background: 'radial-gradient(circle, rgba(183,255,0,0.10) 0%, rgba(16,185,129,0.05) 45%, transparent 75%)' }}
+          />
+          <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div
+                className="flex items-center justify-center w-9 h-9 rounded-xl border border-[#b7ff00]/25 bg-gradient-to-br from-[#b7ff00]/15 to-emerald-500/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_0_18px_rgba(183,255,0,0.15)]"
+              >
+                <PrinterIcon className="w-4 h-4 text-[#b7ff00]" style={{ filter: 'drop-shadow(0 0 6px rgba(183,255,0,0.55))' }} />
+              </div>
+              <div className="flex flex-col">
+                <h3
+                  className="text-[15px] font-bold text-[#F1F4EE] tracking-tight leading-none"
+                  style={{ textShadow: '0 1px 12px rgba(183,255,0,0.18)' }}
+                  id="active-printers-heading"
+                >
+                  Impressoras Ativas
+                </h3>
+                <span className="mt-1 text-[10.5px] font-mono uppercase tracking-[0.18em] text-[#8BA58D]/80">
+                  Monitoramento em tempo real
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-[#b7ff00] opacity-70 animate-ping" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#b7ff00] shadow-[0_0_8px_rgba(183,255,0,0.8)]" />
+              </span>
+              <span className="px-2.5 py-1 rounded-full text-[10.5px] font-black uppercase tracking-wider border border-[#b7ff00]/25 bg-[#b7ff00]/10 text-[#b7ff00]">
+                {printers.filter(p => p.status === 'PRINTING').length} em uso
+              </span>
+              <span className="px-2.5 py-1 rounded-full text-[10.5px] font-mono font-bold text-zinc-300 border border-white/10 bg-white/[0.03]">
+                {printers.length} total
+              </span>
+            </div>
           </div>
         </div>
 
         {printers.length === 0 ? (
-          <div className="text-center py-6 bg-[#0C0E0D] border border-[#232B27] rounded-xl">
-            <p className="text-xs text-zinc-400 font-bold">Nenhuma impressora 3D cadastrada ainda.</p>
-            <p className="text-[10px] text-zinc-500 mt-1 font-mono">Cadastre suas impressoras e IPs na aba "Clientes & Impressoras" para sincronização.</p>
+          <div className="text-center py-8 rounded-2xl border border-dashed border-white/10 bg-gradient-to-br from-white/[0.02] to-transparent backdrop-blur-sm">
+            <p className="text-xs text-zinc-300 font-bold">Nenhuma impressora 3D cadastrada ainda.</p>
+            <p className="text-[10px] text-zinc-500 mt-1 font-mono tracking-wide">Cadastre suas impressoras e IPs na aba "Clientes & Impressoras" para sincronização.</p>
           </div>
         ) : (
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2.5">
