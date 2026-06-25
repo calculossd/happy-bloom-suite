@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import type { CatalogItem } from '../types';
-import { BookOpen, Package, DollarSign, Boxes, TrendingUp, Sparkles, Layers, AlertTriangle } from 'lucide-react';
+import { BookOpen, Package, DollarSign, Boxes, TrendingUp, Sparkles, AlertTriangle, Bot, ArrowRight } from 'lucide-react';
 import {
   PieChart, Pie, Cell, Tooltip, ResponsiveContainer,
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
@@ -19,7 +19,6 @@ export const CatalogoDashboard: React.FC<Props> = ({ catalogItems }) => {
     const avgPrice = total ? catalogItems.reduce((s, c) => s + (c.defaultPrice || 0), 0) / total : 0;
     const noStock = catalogItems.filter(c => (c.stockCount || 0) === 0).length;
     const withImage = catalogItems.filter(c => !!c.imageUrl).length;
-    const withSTL = catalogItems.filter(c => !!c.stlFileName).length;
 
     const byType = new Map<string, number>();
     for (const c of catalogItems) {
@@ -33,92 +32,164 @@ export const CatalogoDashboard: React.FC<Props> = ({ catalogItems }) => {
       .slice(0, 6)
       .map(c => ({ name: c.name.length > 18 ? c.name.slice(0, 16) + '…' : c.name, price: c.defaultPrice || 0 }));
 
-    return { total, totalUnits, inventoryValue, avgPrice, noStock, withImage, withSTL, typeDist, topPriced };
+    return { total, totalUnits, inventoryValue, avgPrice, noStock, withImage, typeDist, topPriced };
   }, [catalogItems]);
 
-  const PIE = ['#A78BFA', '#22D3EE', '#34D399', '#F59E0B', '#F472B6', '#60A5FA'];
+  const PIE = ['#b7ff00', '#D4A017', '#22D3EE', '#A78BFA', '#34D399', '#F472B6'];
 
-  const KPI = ({ icon: Icon, label, value, accent, glow }: any) => (
-    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-transparent p-4 backdrop-blur-xl">
-      <div className={`pointer-events-none absolute -top-12 -right-12 h-32 w-32 rounded-full ${glow} blur-3xl`} />
-      <div className="relative flex items-center gap-1.5 text-[9px] uppercase tracking-[0.26em] text-white/45">
-        <Icon className={`h-3 w-3 ${accent}`} /> {label}
+  const TONES: Record<string, { accent: string; ring: string; glow: string }> = {
+    gold:    { accent: 'text-[#D4A017]', ring: 'border-[#D4A017]/30', glow: 'bg-[#D4A017]/15' },
+    lime:    { accent: 'text-[#b7ff00]', ring: 'border-[#b7ff00]/25', glow: 'bg-[#b7ff00]/15' },
+    blue:    { accent: 'text-sky-300',   ring: 'border-sky-400/25',   glow: 'bg-sky-500/15' },
+    purple:  { accent: 'text-violet-300',ring: 'border-violet-400/25',glow: 'bg-violet-500/15' },
+    emerald: { accent: 'text-emerald-300',ring:'border-emerald-400/25',glow:'bg-emerald-500/15' },
+    orange:  { accent: 'text-orange-300',ring: 'border-orange-400/25',glow: 'bg-orange-500/15' },
+  };
+
+  const Kpi = ({ icon: Icon, label, value, sub, tone = 'gold' }: any) => {
+    const t = TONES[tone] || TONES.gold;
+    return (
+      <div className={`group relative overflow-hidden rounded-2xl border ${t.ring} bg-white/[0.02] backdrop-blur-xl p-3 transition-all hover:-translate-y-0.5`}>
+        <div className={`pointer-events-none absolute -top-10 -right-10 h-28 w-28 rounded-full ${t.glow} blur-3xl opacity-60`} />
+        <div className="relative flex items-center justify-between mb-1.5">
+          <span className="text-[9px] font-bold uppercase tracking-[0.22em] text-white/55">{label}</span>
+          <Icon className={`h-3.5 w-3.5 ${t.accent}`} />
+        </div>
+        <div className={`relative text-lg font-extrabold tabular-nums ${t.accent}`}>{value}</div>
+        {sub && <div className="relative text-[9px] uppercase tracking-widest text-white/40 mt-0.5">{sub}</div>}
       </div>
-      <div className={`relative mt-1.5 text-2xl font-semibold tabular-nums ${accent}`}>{value}</div>
-    </div>
-  );
+    );
+  };
+
+  const aiTip = useMemo(() => {
+    if (stats.total === 0) {
+      return {
+        title: 'Comece cadastrando seu primeiro produto',
+        body: 'Sem catálogo a IA não consegue prever giro, ticket nem composição. Cadastre ao menos 5 produtos para destravar previsões.',
+        savings: 'R$ 0',
+        action: 'Cadastrar Produto',
+      };
+    }
+    if (stats.noStock > 0) {
+      return {
+        title: `${stats.noStock} produto(s) sem estoque — risco de ruptura`,
+        body: 'Produtos zerados perdem venda imediata. Priorize a fila de produção dos itens de maior ticket para repor antes do fim de semana.',
+        savings: fmtBRL(stats.noStock * stats.avgPrice),
+        action: 'Repor Estoque',
+      };
+    }
+    if (stats.withImage / Math.max(1, stats.total) < 0.7) {
+      return {
+        title: 'Catálogo subaproveitado — faltam fotos reais',
+        body: 'Itens sem foto convertem até 60% menos. Adicione imagens reais para subir o ticket médio e o CTR no WhatsApp.',
+        savings: fmtBRL(stats.avgPrice * 3),
+        action: 'Adicionar Fotos',
+      };
+    }
+    return {
+      title: 'Catálogo saudável — hora de divulgar',
+      body: `Você tem ${stats.total} produtos com ticket médio de ${fmtBRL(stats.avgPrice)}. Exporte o PDF e dispare no WhatsApp para acelerar o giro.`,
+      savings: fmtBRL(stats.inventoryValue * 0.1),
+      action: 'Exportar Catálogo',
+    };
+  }, [stats]);
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-transparent p-6 md:p-8 backdrop-blur-xl animate-in fade-in slide-in-from-bottom-2">
-      <div className="pointer-events-none absolute -top-24 -right-24 h-[320px] w-[320px] rounded-full bg-violet-500/15 blur-[120px]" />
-      <div className="pointer-events-none absolute -bottom-24 -left-24 h-[280px] w-[280px] rounded-full bg-fuchsia-500/10 blur-[120px]" />
+    <div className="space-y-5 relative" id="catalog-dashboard">
+      <div className="pointer-events-none absolute -top-10 left-1/4 w-96 h-96 bg-[#D4A017]/[0.04] rounded-full blur-[120px]" />
+      <div className="pointer-events-none absolute top-40 right-1/4 w-[500px] h-[500px] bg-[#b7ff00]/[0.04] rounded-full blur-[150px]" />
 
-      <div className="relative flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
-        <div>
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[10px] uppercase tracking-[0.32em] text-white/60">
-            <Sparkles className="h-3 w-3 text-violet-300" /> Vitrine
+      {/* AI Recommendation */}
+      <div className="group relative p-[1px] rounded-2xl bg-gradient-to-br from-[#D4A017]/40 via-white/10 to-[#b7ff00]/30">
+        <div className="absolute -inset-6 rounded-2xl bg-[radial-gradient(circle_at_center,_rgba(212,160,23,0.14),_rgba(183,255,0,0.06)_40%,_transparent_70%)] blur-3xl opacity-70 pointer-events-none" />
+        <div className="relative bg-[#0a0c0a]/80 backdrop-blur-2xl rounded-[15px] p-5 border border-white/10 flex items-start gap-5">
+          <div className="relative shrink-0">
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#D4A017]/40 to-[#b7ff00]/30 blur-xl animate-pulse" />
+            <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-[#1a1f1c] to-[#0a0c0a] border border-white/15 flex items-center justify-center shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+              <Bot className="w-8 h-8 text-[#D4A017]" strokeWidth={1.6} />
+              <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-[#b7ff00] shadow-[0_0_10px_#b7ff00] animate-pulse" />
+            </div>
           </div>
-          <h2 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight text-white" style={{ fontFamily: "'Sora', sans-serif" }}>
-            Catálogo <span className="bg-gradient-to-r from-violet-300 via-fuchsia-200 to-white bg-clip-text text-transparent">Inteligente</span>
-          </h2>
-          <p className="mt-1.5 max-w-xl text-sm text-white/55">Saúde do portfólio comercial em tempo real — preço médio, cobertura e composição.</p>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <Sparkles className="w-3.5 h-3.5 text-[#D4A017]" />
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#D4A017]">Recomendação para hoje</span>
+            </div>
+            <h3 className="text-base lg:text-lg font-bold text-white tracking-tight mb-1">{aiTip.title}</h3>
+            <p className="text-xs text-zinc-400 leading-relaxed max-w-3xl">{aiTip.body}</p>
+          </div>
+          <div className="hidden md:flex flex-col items-end gap-2 shrink-0 pl-4 border-l border-white/10">
+            <span className="text-[9px] font-bold uppercase tracking-widest text-zinc-500">Economia estimada</span>
+            <span className="text-xl font-extrabold text-[#b7ff00] tabular-nums">{aiTip.savings}</span>
+            <button className="mt-1 px-3 py-1.5 bg-[#b7ff00] text-black text-[10px] font-extrabold uppercase tracking-widest rounded-lg hover:scale-105 active:scale-95 transition-transform shadow-[0_0_20px_rgba(183,255,0,0.3)] flex items-center gap-1.5">
+              {aiTip.action} <ArrowRight className="w-3 h-3" />
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="relative grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-        <KPI icon={BookOpen} label="Produtos" value={stats.total} accent="text-violet-200" glow="bg-violet-500/15" />
-        <KPI icon={Boxes} label="Unidades" value={stats.totalUnits} accent="text-cyan-200" glow="bg-cyan-500/15" />
-        <KPI icon={DollarSign} label="Valor em Estoque" value={fmtBRL(stats.inventoryValue)} accent="text-emerald-200" glow="bg-emerald-500/15" />
-        <KPI icon={TrendingUp} label="Ticket Médio" value={fmtBRL(stats.avgPrice)} accent="text-amber-200" glow="bg-amber-500/15" />
+      {/* Section title */}
+      <div className="flex items-center justify-between pb-2 border-b-2 border-white/10 relative">
+        <div className="flex items-center gap-2">
+          <BookOpen className="h-4 w-4 text-[#b7ff00]" />
+          <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-white">Dashboard — Catálogo</h3>
+        </div>
+        <span className="text-[#b7ff00] text-[10px] font-bold uppercase flex items-center gap-2">
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="absolute inline-flex h-full w-full rounded-full bg-[#b7ff00] opacity-60 animate-ping" />
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#b7ff00] shadow-[0_0_8px_#b7ff00]" />
+          </span>
+          Operacional
+        </span>
       </div>
 
-      <div className="relative grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
-        <div className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
-          <div className="text-[9px] uppercase tracking-[0.24em] text-white/45 flex items-center gap-1.5"><AlertTriangle className="h-3 w-3 text-rose-300" /> Sem estoque</div>
-          <div className={`mt-1 text-xl font-semibold tabular-nums ${stats.noStock > 0 ? 'text-rose-200' : 'text-emerald-200'}`}>{stats.noStock}</div>
-        </div>
-        <div className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
-          <div className="text-[9px] uppercase tracking-[0.24em] text-white/45 flex items-center gap-1.5"><Package className="h-3 w-3 text-sky-300" /> Com imagem</div>
-          <div className="mt-1 text-xl font-semibold tabular-nums text-sky-200">{stats.withImage}/{stats.total}</div>
-        </div>
-        <div className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
-          <div className="text-[9px] uppercase tracking-[0.24em] text-white/45 flex items-center gap-1.5"><Layers className="h-3 w-3 text-fuchsia-300" /> Com STL</div>
-          <div className="mt-1 text-xl font-semibold tabular-nums text-fuchsia-200">{stats.withSTL}/{stats.total}</div>
-        </div>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 relative">
+        <Kpi icon={BookOpen}      label="Produtos"          value={stats.total}                          tone="gold" />
+        <Kpi icon={Boxes}         label="Unidades"          value={stats.totalUnits}                     tone="lime" />
+        <Kpi icon={DollarSign}    label="Valor em Estoque"  value={fmtBRL(stats.inventoryValue)}         tone="blue"    sub="no catálogo" />
+        <Kpi icon={TrendingUp}    label="Ticket Médio"      value={fmtBRL(stats.avgPrice)}               tone="emerald" />
+        <Kpi icon={Package}       label="Com Imagem"        value={`${stats.withImage}/${stats.total}`}  tone="purple" />
+        <Kpi icon={AlertTriangle} label="Sem Estoque"       value={stats.noStock}                        tone={stats.noStock > 0 ? 'orange' : 'emerald'} />
       </div>
 
-      <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-          <div className="text-[10px] uppercase tracking-[0.28em] text-white/50 mb-3">Composição por Material</div>
-          {stats.typeDist.length === 0 ? (
-            <div className="h-[220px] grid place-items-center text-xs text-white/40">Sem dados</div>
-          ) : (
-            <ResponsiveContainer width="100%" height={220}>
-              <PieChart>
-                <Pie data={stats.typeDist} dataKey="value" nameKey="name" innerRadius={50} outerRadius={85} paddingAngle={2}>
-                  {stats.typeDist.map((_, i) => <Cell key={i} fill={PIE[i % PIE.length]} />)}
-                </Pie>
-                <Tooltip contentStyle={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, fontSize: 11 }} />
-              </PieChart>
-            </ResponsiveContainer>
-          )}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 relative">
+        <div className="group relative p-[1px] rounded-2xl bg-white/5">
+          <div className="absolute -inset-4 rounded-2xl bg-violet-500/10 blur-2xl pointer-events-none opacity-50" />
+          <div className="relative bg-white/[0.02] backdrop-blur-2xl rounded-[15px] p-4 border border-white/10">
+            <h4 className="text-[10px] uppercase font-bold text-white/80 tracking-[0.2em] mb-3">Composição por Material</h4>
+            {stats.typeDist.length === 0 ? (
+              <div className="h-[200px] grid place-items-center text-[10px] font-bold uppercase tracking-widest text-zinc-600 border border-dashed border-white/10 rounded-xl bg-black/20">Sem dados</div>
+            ) : (
+              <ResponsiveContainer width="100%" height={200}>
+                <PieChart>
+                  <Pie data={stats.typeDist} dataKey="value" nameKey="name" innerRadius={50} outerRadius={85} paddingAngle={2}>
+                    {stats.typeDist.map((_, i) => <Cell key={i} fill={PIE[i % PIE.length]} />)}
+                  </Pie>
+                  <Tooltip contentStyle={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, fontSize: 11 }} />
+                </PieChart>
+              </ResponsiveContainer>
+            )}
+          </div>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-          <div className="text-[10px] uppercase tracking-[0.28em] text-white/50 mb-3">Top Preços</div>
-          {stats.topPriced.length === 0 ? (
-            <div className="h-[220px] grid place-items-center text-xs text-white/40">Sem dados</div>
-          ) : (
-            <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={stats.topPriced} margin={{ top: 8, right: 8, left: -10, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-                <XAxis dataKey="name" tick={{ fill: 'rgba(255,255,255,0.55)', fontSize: 10 }} />
-                <YAxis tick={{ fill: 'rgba(255,255,255,0.55)', fontSize: 10 }} />
-                <Tooltip contentStyle={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, fontSize: 11 }} formatter={(v: any) => fmtBRL(Number(v))} />
-                <Bar dataKey="price" fill="#A78BFA" radius={[6, 6, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          )}
+        <div className="group relative p-[1px] rounded-2xl bg-white/5">
+          <div className="absolute -inset-4 rounded-2xl bg-[#b7ff00]/10 blur-2xl pointer-events-none opacity-50" />
+          <div className="relative bg-white/[0.02] backdrop-blur-2xl rounded-[15px] p-4 border border-white/10">
+            <h4 className="text-[10px] uppercase font-bold text-white/80 tracking-[0.2em] mb-3">Top Preços</h4>
+            {stats.topPriced.length === 0 ? (
+              <div className="h-[200px] grid place-items-center text-[10px] font-bold uppercase tracking-widest text-zinc-600 border border-dashed border-white/10 rounded-xl bg-black/20">Sem dados</div>
+            ) : (
+              <ResponsiveContainer width="100%" height={200}>
+                <BarChart data={stats.topPriced} margin={{ top: 8, right: 8, left: -10, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                  <XAxis dataKey="name" tick={{ fill: 'rgba(255,255,255,0.55)', fontSize: 10 }} />
+                  <YAxis tick={{ fill: 'rgba(255,255,255,0.55)', fontSize: 10 }} />
+                  <Tooltip contentStyle={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, fontSize: 11 }} formatter={(v: any) => fmtBRL(Number(v))} />
+                  <Bar dataKey="price" fill="#b7ff00" radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            )}
+          </div>
         </div>
       </div>
     </div>
