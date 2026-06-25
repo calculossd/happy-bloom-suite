@@ -1899,8 +1899,14 @@ export default function App() {
         {/* EXQUISITE NEW HEADER DE CADA PÁGINA (Título grande + Subtítulo curto + Relógio/Data ao vivo mounted) */}
         {(() => {
           if (currentTab === 0) return null;
-          if (currentTab === 4 && (costsSubTab === 'AI' || costsSubTab === 'CATALOG')) return null;
-          const headerInfo = getTabHeader(currentTab);
+          if (currentTab === 4 && costsSubTab === 'AI') return null;
+          let headerInfo = getTabHeader(currentTab);
+          if (currentTab === 4 && costsSubTab === 'CATALOG') {
+            headerInfo = {
+              title: 'Catálogo Inova',
+              subtitle: 'Vitrine inteligente — composição, ticket médio e saúde do portfólio',
+            };
+          }
           if (!headerInfo.title) return null;
           const formattedDate = currentTime.toLocaleDateString('pt-BR', { 
             weekday: 'short', 
