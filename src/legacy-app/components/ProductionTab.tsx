@@ -1092,6 +1092,11 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
           const elapsedH = Math.floor(elapsedMs / 3600000);
           const elapsedM = Math.floor((elapsedMs % 3600000) / 60000);
           const elapsedStr = elapsedH > 0 ? `${elapsedH}h${elapsedM}m` : `${elapsedM}m`;
+          const overdueMs = order.deadline ? Date.now() - order.deadline : 0;
+          const overdueH = Math.floor(overdueMs / 3600000);
+          const overdueM = Math.floor((overdueMs % 3600000) / 60000);
+          const overdueStr = overdueH > 0 ? `${overdueH}h${overdueM}m` : `${overdueM}m`;
+          const isOverdue = !!order.deadline && overdueMs > 0 && order.status !== 'DELIVERED' && order.status !== 'READY';
           const nextStatus = getNextStatusValue(order.status);
           const nextLabel = getNextStatusActionLabel(order.status);
           return (
@@ -1148,9 +1153,16 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
                 )}
               </div>
               <div className="flex flex-col items-end justify-between shrink-0 gap-1">
-                <span className={`text-[9.5px] font-mono tabular-nums flex items-center gap-1 ${isLate ? 'text-red-400' : 'text-[#8BA58D]'}`}>
-                  <Clock className="w-2.5 h-2.5" />{elapsedStr}
-                </span>
+                <div className="flex flex-col items-end gap-0.5">
+                  <span className={`text-[9.5px] font-mono tabular-nums flex items-center gap-1 ${isLate ? 'text-red-400' : 'text-[#8BA58D]'}`}>
+                    <Clock className="w-2.5 h-2.5" />{elapsedStr}
+                  </span>
+                  {isOverdue && (
+                    <span className={`text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-red-500/15 border border-red-500/40 text-red-400 ${isLate ? 'animate-[pulse_1s_infinite]' : ''}`}>
+                      Atraso {overdueStr}
+                    </span>
+                  )}
+                </div>
                 <div className="flex items-center gap-2">
                   <span className="text-[12px] font-bold text-[#F1F4EE] tabular-nums">R$ {order.priceCharged.toFixed(0)}</span>
                   <button
