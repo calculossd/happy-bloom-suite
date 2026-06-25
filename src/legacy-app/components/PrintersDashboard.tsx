@@ -237,7 +237,7 @@ export const PrintersDashboard: React.FC<Props> = ({ orders, printers }) => {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 relative">
         <Kpi icon={Activity} label="Imprimindo" value={stats.printing} sub={`${stats.total} máquinas`} tone="emerald" />
         <Kpi icon={PrinterIcon} label="Ociosas" value={stats.idle} tone="white" />
-        <Kpi icon={Wrench} label="Manutenção" value={stats.maint} sub={stats.maintDue > 0 ? `${stats.maintDue} em atraso` : 'em dia'} tone={stats.maintDue > 0 ? 'red' : 'amber'} />
+        <Kpi icon={Wrench} label="Manutenção a fazer" value={stats.maintDue} sub={stats.maintDue === 0 ? 'tudo em dia' : `${stats.maintDue} pendente${stats.maintDue > 1 ? 's' : ''}`} tone={stats.maintDue === 0 ? 'emerald' : 'red'} />
         <Kpi icon={Gauge} label="Utilização" value={`${stats.utilization}%`} tone="lime" />
         <Kpi icon={Wifi} label="Online" value={`${stats.online}/${stats.total}`} tone="blue" />
         <Kpi icon={Thermometer} label="Progresso médio" value={`${stats.avgProgress}%`} sub={stats.avgNozzle ? `bico ${stats.avgNozzle}°C` : 'sem leituras'} tone="purple" />
