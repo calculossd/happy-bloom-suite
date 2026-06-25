@@ -173,25 +173,26 @@ function TopBar() {
 
 /* ---------- Card primitive (Obsidian Glass) ---------- */
 function Card({ children, className = "", onClick, glow }: { children: React.ReactNode; className?: string; onClick?: () => void; glow?: string }) {
+  const tone = glow || LIME;
   return (
-    <div
-      onClick={onClick}
-      className={`group relative rounded-2xl border border-white/[0.06] p-5 backdrop-blur-xl transition-all duration-500 hover:border-white/[0.12] hover:-translate-y-[1px] ${className}`}
-      style={{
-        background:
-          "linear-gradient(180deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.012) 100%), #0c100e",
-        boxShadow:
-          "0 1px 0 rgba(255,255,255,0.04) inset, 0 30px 60px -30px rgba(0,0,0,0.85)",
-      }}
-    >
-      {glow && (
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-2xl opacity-60 transition-opacity duration-500 group-hover:opacity-100"
-          style={{ background: `radial-gradient(120% 80% at 0% 0%, ${glow}22 0%, transparent 55%)` }}
-        />
-      )}
-      <div className="relative">{children}</div>
+    <div className={`group relative p-[1px] rounded-2xl bg-white/10 transition-all duration-500 hover:scale-[1.005] ${className}`} onClick={onClick}>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -inset-3 rounded-2xl blur-2xl opacity-50 group-hover:opacity-90 transition-opacity duration-500"
+        style={{ background: `radial-gradient(circle at center, ${tone}33, transparent 70%)` }}
+      />
+      <div
+        className="relative overflow-hidden rounded-[15px] p-5 backdrop-blur-xl border border-white/10 h-full"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.012) 100%), #0a0d0c",
+          boxShadow:
+            "inset 0 1px 0 rgba(255,255,255,0.05), 0 30px 60px -30px rgba(0,0,0,0.85)",
+        }}
+      >
+        <span aria-hidden className="absolute left-0 top-0 bottom-0 w-[3px]" style={{ background: tone }} />
+        <div className="relative h-full">{children}</div>
+      </div>
     </div>
   );
 }
@@ -1348,7 +1349,6 @@ export function Print3DPanel({
           </div>
 
           {/* Premium dashboard strip — Obsidian Glass */}
-          <SectionTitle icon={Activity} title="Dashboard — Painel de Controle" status="Operacional" />
           <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
             <PremiumKpi tone="lime"    icon={ShoppingBag} label="Pedidos Hoje"       value={String(ordersToday.length)} sub={`${activePrinters}/${printersTotal} impressoras`} />
             <PremiumKpi tone="emerald" icon={DollarSign}  label="Faturamento Hoje"   value={fmtBRL(revenueToday)}       sub="receita do dia" />
