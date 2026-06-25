@@ -37,7 +37,10 @@ import {
   Wallet,
   Receipt,
   TrendingDown,
-  Package
+  Package,
+  Percent,
+  Zap,
+  Clock
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 
