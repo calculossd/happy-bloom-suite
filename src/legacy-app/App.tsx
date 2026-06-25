@@ -1930,7 +1930,7 @@ export default function App() {
               : '#D4A017';
           return (
             <div
-              className="relative flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 px-4 py-3 border rounded-2xl overflow-hidden"
+              className="relative flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 px-5 py-4 border rounded-2xl overflow-hidden min-h-[78px]"
               style={{
                 borderColor: `${titleColor}33`,
                 background: `linear-gradient(135deg, ${titleColor}14, ${titleColor}05)`,
@@ -1942,8 +1942,8 @@ export default function App() {
               <div className="relative z-10 space-y-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <div
-                    className="text-sm font-bold uppercase tracking-[0.14em] font-sans select-none leading-none"
-                    style={{ color: titleColor, textShadow: `0 0 18px ${titleColor}55` }}
+                    className="text-2xl font-normal tracking-tight select-none leading-none"
+                    style={{ color: titleColor, textShadow: `0 0 18px ${titleColor}55`, fontFamily: '"Instrument Serif", Georgia, ui-serif, serif' }}
                   >
                     {headerInfo.title}
                   </div>
