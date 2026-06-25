@@ -3123,8 +3123,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
               </div>
             );
           })()}
-          <div className="relative overflow-hidden bg-gradient-to-br from-[#0d0d0d] via-[#0a0a0a] to-[#050505] border border-[#232B27] p-5 rounded-2xl space-y-4 shadow-[0_24px_60px_-30px_rgba(149,187,162,0.25)]" id="product-stock-section">
-            <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-[#b7ff00]/10 blur-3xl opacity-100" />
+          <div className="space-y-4" id="product-stock-section">
             <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-3 border-b border-white/5 pb-4">
               <div className="flex min-w-0 items-center gap-3">
                 <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#b7ff00]/10 ring-1 ring-inset ring-[#b7ff00]/25 text-[#b7ff00]">
@@ -3243,8 +3242,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Filamentos Stocks */}
-          <div className="relative overflow-hidden bg-gradient-to-br from-[#0d0d0d] via-[#0a0a0a] to-[#050505] border border-[#232B27] p-5 rounded-2xl space-y-4 shadow-[0_24px_60px_-30px_rgba(149,187,162,0.25)]">
-            <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-white/[0.02] blur-3xl opacity-50" />
+          <div className="space-y-4">
             <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-white/5 pb-4">
               <div className="flex min-w-0 items-center gap-3">
                 <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-emerald-500/10 ring-1 ring-inset ring-emerald-400/20 text-emerald-300">
@@ -3529,8 +3527,7 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
           </div>
 
           {/* Consumable Supplies Stocks */}
-          <div className="relative overflow-hidden bg-gradient-to-br from-[#0d0d0d] via-[#0a0a0a] to-[#050505] border border-[#2B2620] p-5 rounded-2xl space-y-4 shadow-[0_24px_60px_-30px_rgba(229,178,66,0.25)]">
-            <div aria-hidden className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-white/[0.02] blur-3xl opacity-50" />
+          <div className="space-y-4">
             <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-white/5 pb-4">
               <div className="flex min-w-0 items-center gap-3">
                 <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-amber-500/10 ring-1 ring-inset ring-amber-400/20 text-amber-300">
