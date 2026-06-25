@@ -3,8 +3,9 @@ import { AppShell } from "@/components/AppShell";
 import {
   ClipboardCheck, Check, ChevronRight, Send, Terminal, Wrench, Layers, Thermometer,
   Move, Flame, Filter, Camera, Calculator, RotateCcw, History, Youtube, SkipForward,
-  Save, Settings2, Printer as PrinterIcon,
+  Save, Settings2, Printer as PrinterIcon, ListChecks, CheckCircle2, Percent, SkipForward as SkipIcon, Activity,
 } from "lucide-react";
+import { AiRecommendation, SectionTitle, Kpi } from "@/legacy-app/components/DashboardShell";
 import { listPrinters, type Printer } from "@/lib/printers-db";
 import { sendGcode } from "@/lib/octoprint";
 import {
