@@ -109,7 +109,7 @@ export const ClientsDashboard: React.FC<Props> = ({ clients, orders }) => {
   );
 
   return (
-    <div className="bg-[#151917] border border-[#232B27] p-5 rounded-2xl space-y-4" id="clients-dashboard">
+    <div className="space-y-4" id="clients-dashboard">
       <div className="flex items-center gap-2 pb-2 border-b border-[#232B27]">
         <Users className="h-4 w-4 text-[#b7ff00]" />
         <h3 className="text-sm font-bold text-[#F1F4EE]">Dashboard — Clientes</h3>

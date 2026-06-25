@@ -268,7 +268,7 @@ export const ClientsTab: React.FC<ClientsTabProps> = ({
         
         {/* LEFT COLUMN: CLIENT CATALOG */}
         {viewMode !== 'printers' && viewMode !== 'prospect' && (
-        <div className="bg-[#151917] border border-[#232B27] p-6 rounded-2xl space-y-4" id="clients-catalog">
+        <div className="space-y-4" id="clients-catalog">
           <div className="flex items-center justify-between pb-2 border-b border-[#232B27]">
             <div>
               <h3 className="text-base font-semibold text-[#F1F4EE] flex items-center gap-2">
