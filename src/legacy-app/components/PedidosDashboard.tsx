@@ -238,11 +238,7 @@ export const PedidosDashboard: React.FC<Props> = ({ orders }) => {
         </div>
         <div className="flex items-center gap-3">
           <button
-            onClick={() => {
-              (window as any).__pendingOpenNewOrder = true;
-              window.dispatchEvent(new CustomEvent('navigate-tab', { detail: 1 }));
-              setTimeout(() => window.dispatchEvent(new CustomEvent('open-new-order')), 250);
-            }}
+            onClick={() => window.dispatchEvent(new CustomEvent('request-new-order'))}
             className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-[#b7ff00]/30 bg-[#b7ff00]/15 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-[#b7ff00] transition hover:bg-[#b7ff00]/25 hover:border-[#b7ff00]/50"
             id="btn_cadastrar_pedido_dashboard"
           >
