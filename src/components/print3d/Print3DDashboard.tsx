@@ -676,14 +676,14 @@ function OrdersList({ orders = [], clients = [], onSelectTab }: { orders?: any[]
 }
 
 /* ---------- Hygrometers (replaces Sensors slot) ---------- */
-function Hygrometers({ devices = [] }: { devices?: any[] }) {
+function Hygrometers({ devices = [], onSelectTab }: { devices?: any[]; onSelectTab?: (t: number) => void }) {
   const tone = (h: number) => {
     if (h < 30) return { color: "#38bdf8", label: "Ideal", bg: "rgba(56,189,248,0.12)", border: "rgba(56,189,248,0.32)" };
     if (h <= 45) return { color: "#fbbf24", label: "Atenção", bg: "rgba(251,191,36,0.12)", border: "rgba(251,191,36,0.32)" };
     return { color: "#fb7185", label: "Crítico", bg: "rgba(251,113,133,0.12)", border: "rgba(251,113,133,0.32)" };
   };
   return (
-    <Card>
+    <Card className="cursor-pointer hover:bg-white/[0.02] transition" onClick={() => onSelectTab?.(5)}>
       <div className="flex items-center justify-between mb-1">
         <h3 className="text-[14px] font-semibold text-white">Higrômetros</h3>
         <span className="text-[10px] text-white/40 tabular-nums">{devices.length}</span>
