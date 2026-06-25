@@ -510,7 +510,7 @@ export function OkLojaAssistant({
         };
       }));
 
-      return "Você é o \"Ok Loja\", um assistente de voz e texto de inteligência artificial ultra inteligente, carismático e prestativo para um ateliê de impressão 3D premium. Sua personalidade é amigável, eficiente e focada em negócios.\n\n" +
+      return "Você é o \"Ok Loja\", um ESPECIALISTA SÊNIOR em IMPRESSÃO 3D FDM/FFF e RESINA (SLA/MSLA), além de assistente de gestão do ateliê. Você domina: nivelamento de mesa, calibração de E-steps, flow rate, PA/Linear Advance, pressure advance, retração, temperaturas por material (PLA, PETG, ABS, ASA, TPU, Nylon, PC, PA-CF), entupimento de bico (cold pull/atomic), heat creep, layer shift, ringing/ghosting, warping, elephant foot, stringing, oozing, blobs, zits, under-extrusion, over-extrusion, layer separation, delaminação, fuga térmica, problemas de cooling, bed adhesion (PEI, vidro, BuildTak, garolite), VFA, salmon skin em resina, falhas de cura, FEP perfurado, problemas mecânicos (eixos, polias GT2, rolamentos lineares, belt tension, V-rollers, leadscrew Z wobble), firmware Marlin/Klipper/RRF, input shaper, sensores BLTouch/CR-Touch/indutivos, MMU/AMS, slicers (Bambu Studio, Orca, Prusa, Cura) e acabamento (lixa, primer, alisamento com acetona, pintura). Sua personalidade é amigável, técnica e direta.\n\n" +
         "Você recebeu o status atual completo da oficina para responder perguntas com precisão e clareza.\n" +
         "Sempre se dirija ao usuário de forma cortês e animada. Responda de forma sucinta e direta (ideal para escutar ou ler rapidamente em um painel dinâmico, evitando textos gigantescos, mas sem perder detalhes importantes). Use emojis de maneira profissional.\n\n" +
         "HORA ATUAL DO SISTEMA: " + localTimeStr + "\n\n" +
@@ -527,7 +527,14 @@ export function OkLojaAssistant({
         "2. Se perguntado sobre \"Maiores atrasos\" ou \"Quem está atrasado\": Identifique pedidos onde 'atrasado' é true. Liste em ordem do pior atraso (mais dias atrasados), informando o nome do cliente, o item e há quantos dias já deveria ter sido entregue. Se não houver nenhum pedido atrasado, celebre felizmente!\n" +
         "3. Se perguntado sobre \"Manutenções\" ou \"Problemas\": Indique as impressoras que estão em status 'MAINTENANCE' ou Offline. Mencione cuidados rápidos (como lubrificação dos eixos lineares, conferência de bico entupido ou nivelamento de mesa).\n" +
         "4. Se perguntado sobre \"Clientes sem atendimento\", \"clientes sem atenção\" ou \"com quem falar\": Liste os clientes que estão com 'semAtendimentoRecente' como 'SIM' ou que nunca foram contatados, informando o nome e o telefone deles para que o usuário possa reativar ou cobrar com facilidade.\n" +
-        "5. Para outras dúvidas financeiras ou estoques baixos: Use os dados recebidos para somar valores, faturamento, filamentos críticos, etc.\n\n" +
+        "5. Para outras dúvidas financeiras ou estoques baixos: Use os dados recebidos para somar valores, faturamento, filamentos críticos, etc.\n" +
+        "6. Quando o usuário pedir DIAGNÓSTICO de um erro de impressora ou defeito de peça, RESPONDA SEMPRE neste formato Markdown:\n" +
+        "   **🔍 Diagnóstico:** explicação técnica curta da causa raiz mais provável (e 1-2 causas secundárias).\n" +
+        "   **🛠️ Ação Sugerida (passo a passo):** lista numerada e objetiva do que fazer agora, com valores quando aplicável (ex.: temperatura, retração em mm, velocidade em mm/s, corrente do driver, torque, etc.).\n" +
+        "   **🧪 Como Validar:** teste rápido para confirmar que o problema foi resolvido (ex.: temperature tower, retraction test, calibration cube, single wall vase).\n" +
+        "   **🛡️ Prevenção:** 2-3 hábitos para que o erro não volte.\n" +
+        "   **⚠️ Risco / Urgência:** classifique como Baixo, Médio ou Alto e diga se deve PARAR a impressão imediatamente.\n" +
+        "   Adapte recomendações ao material e impressora envolvidos quando o usuário citar.\n\n" +
         "ESCRITA DA RESPOSTA: Escreva de forma empolgante, clara, concisa, no idioma Português (Brasil). Separe os tópicos principais com marcadores (bullet points) limpos e elegantes. Mantenha as respostas objetivas para que o usuário consiga ler em menos de 15 segundos ou ouvir sem cansar.";
     };
 
@@ -635,14 +642,88 @@ export function OkLojaAssistant({
     }
   };
 
-  // Helper chips matching requested user queries
-  const quickChips = [
-    { label: "Status geral", icon: <Clock className="w-3.5 h-3.5 text-blue-400" />, prompt: "Como estão os pedidos do ateliê atualmente?" },
-    { label: "Maiores atrasos", icon: <AlertTriangle className="w-3.5 h-3.5 text-red-400" />, prompt: "Quais são as peças e clientes com maiores atrasos na produção?" },
-    { label: "Manutenções", icon: <Wrench className="w-3.5 h-3.5 text-amber-400" />, prompt: "Qual o status das impressoras e se há manutenções pendentes?" },
-    { label: "Clientes sem contato", icon: <Users className="w-3.5 h-3.5 text-indigo-400" />, prompt: "Quais clientes estão sem atendimento há mais de 15 dias ou sem contato?" },
-    { label: "Estoque crítico", icon: <Layers className="w-3.5 h-3.5 text-emerald-400" />, prompt: "Quais filamentos estão com quantidade crítica ou abaixo do estoque mínimo?" }
+  // Helper chips: gestão + biblioteca completa de erros de impressão 3D
+  const diagnosticCategories: Array<{
+    id: string;
+    label: string;
+    accent: string;
+    icon: any;
+    items: Array<{ label: string; prompt: string }>;
+  }> = [
+    {
+      id: 'gestao',
+      label: 'Gestão',
+      accent: 'text-blue-400',
+      icon: <Clock className="w-3.5 h-3.5" />,
+      items: [
+        { label: 'Status geral', prompt: 'Como estão os pedidos do ateliê atualmente?' },
+        { label: 'Maiores atrasos', prompt: 'Quais são as peças e clientes com maiores atrasos na produção?' },
+        { label: 'Manutenções pendentes', prompt: 'Qual o status das impressoras e se há manutenções pendentes?' },
+        { label: 'Clientes sem contato', prompt: 'Quais clientes estão sem atendimento há mais de 15 dias ou sem contato?' },
+        { label: 'Estoque crítico', prompt: 'Quais filamentos estão com quantidade crítica ou abaixo do estoque mínimo?' },
+      ],
+    },
+    {
+      id: 'impressora',
+      label: 'Erros de Impressora',
+      accent: 'text-amber-400',
+      icon: <Wrench className="w-3.5 h-3.5" />,
+      items: [
+        { label: 'Bico entupido', prompt: 'Diagnóstico de bico entupido (não extruda ou extruda fino). Liste causas, ação passo a passo (cold pull/atomic pull), validação e prevenção.' },
+        { label: 'Heat creep', prompt: 'Suspeito de heat creep no hotend (entupimento após algum tempo). Diagnostique e me dê ação corretiva detalhada.' },
+        { label: 'Mesa não nivela', prompt: 'Mesa fora de nível / primeira camada irregular. Faça o diagnóstico completo e me guie no nivelamento manual e auto (BLTouch/CR-Touch).' },
+        { label: 'Falha de adesão', prompt: 'Peça soltando da mesa durante a impressão. Diagnostique adesão (PEI, vidro, BuildTak) por material e me dê ações.' },
+        { label: 'Layer shift', prompt: 'Camadas deslocadas (layer shift) durante a impressão. Diagnostique mecânica (belt, polia, driver, corrente) e ações corretivas.' },
+        { label: 'Z-wobble / banding', prompt: 'Banding vertical / Z-wobble visível nas peças. Diagnostique leadscrew, acoplador, perpendicularidade e ações.' },
+        { label: 'Ringing / ghosting', prompt: 'Fantasmas (ringing/ghosting) ao lado de detalhes. Diagnostique e me ensine input shaper passo a passo.' },
+        { label: 'Thermal runaway', prompt: 'Erro de THERMAL RUNAWAY na impressora. Diagnostique segurança, termistor, aquecedor, PID tuning e ação imediata.' },
+        { label: 'Extrusor click/skip', prompt: 'Extrusor estalando (clicking) / pulando passos. Diagnostique tensão da mola, corrente do driver, temperatura, entupimento.' },
+        { label: 'Sensor de filamento', prompt: 'Falsos positivos ou negativos no sensor de filamento. Diagnostique e me dê ação corretiva.' },
+        { label: 'Eixos com folga', prompt: 'Folga nos eixos X/Y/Z (rolamentos lineares, V-rollers, polias GT2). Diagnostique e me ensine ajuste correto.' },
+        { label: 'Belt frouxa/apertada', prompt: 'Como saber se a correia GT2 está na tensão certa? Diagnostique sintomas e me dê o passo a passo.' },
+        { label: 'Mesa fria', prompt: 'Mesa aquecida não atinge a temperatura alvo. Diagnostique MOSFET, cabo, termistor, ambiente.' },
+        { label: 'Hotend frio', prompt: 'Hotend não atinge temperatura ou oscila. Diagnostique termistor, cartucho, isolamento, PID.' },
+      ],
+    },
+    {
+      id: 'peca',
+      label: 'Defeitos de Peça',
+      accent: 'text-rose-400',
+      icon: <AlertTriangle className="w-3.5 h-3.5" />,
+      items: [
+        { label: 'Stringing / fios', prompt: 'Peça com stringing (fios finos entre partes). Diagnostique retração, temperatura, secagem do filamento e ações.' },
+        { label: 'Warping', prompt: 'Cantos da peça empenando (warping). Diagnostique por material (ABS/ASA/PETG/PLA) e me dê ações de cura.' },
+        { label: 'Elephant foot', prompt: 'Base da peça com pé de elefante (elephant foot). Diagnostique mesa, temperatura, z-offset, compensação no slicer.' },
+        { label: 'Under-extrusion', prompt: 'Sub-extrusão (paredes com falhas e gaps). Diagnostique flow, E-steps, temperatura, bico parcialmente entupido.' },
+        { label: 'Over-extrusion', prompt: 'Sobre-extrusão (peça maior, blobs, paredes infladas). Diagnostique flow e calibração.' },
+        { label: 'Delaminação', prompt: 'Camadas separando (delaminação / layer separation). Diagnostique temperatura, cooling, material úmido.' },
+        { label: 'Blobs e zits', prompt: 'Blobs e zits no início/fim de cada camada (seams). Diagnostique coasting, wipe, pressure advance, retração.' },
+        { label: 'Overhang ruim', prompt: 'Overhangs e pontes ruins. Diagnostique cooling (% do fan), velocidade e orientação da peça.' },
+        { label: 'Salmon skin (resina)', prompt: 'Salmon skin / linhas horizontais em peças de resina. Diagnostique LCD, eixo Z, exposição.' },
+        { label: 'Falha de cura (resina)', prompt: 'Resina não cura ou descola da FEP. Diagnostique exposição, FEP, ambiente, suportes.' },
+        { label: 'Peça quebra fácil', prompt: 'Peça com baixa resistência mecânica. Diagnostique infill, perímetros, material úmido, temperatura.' },
+        { label: 'Dimensão fora', prompt: 'Peça fora de medida (XY/Z). Diagnostique steps/mm, shrinkage por material, compensação de horizontal expansion.' },
+        { label: 'Vibração / VFA', prompt: 'Padrão de vibração (VFA - Vertical Fine Artifacts). Diagnostique drivers, polia, microstep, input shaper.' },
+        { label: 'Spaghetti', prompt: 'Peça virou spaghetti (soltou e continuou imprimindo no ar). Diagnostique adesão e me ensine a detectar antes.' },
+      ],
+    },
+    {
+      id: 'material',
+      label: 'Filamento / Material',
+      accent: 'text-emerald-400',
+      icon: <Layers className="w-3.5 h-3.5" />,
+      items: [
+        { label: 'Filamento úmido', prompt: 'Como saber se meu filamento está úmido? Liste sintomas, teste e processo de secagem por material (PLA, PETG, ABS, Nylon, TPU).' },
+        { label: 'Temperaturas por material', prompt: 'Me dê tabela de temperaturas ideais de bico e mesa, velocidade e cooling para PLA, PETG, ABS, ASA, TPU, Nylon e PC.' },
+        { label: 'Retração ideal', prompt: 'Valores iniciais de retração (distância em mm e velocidade) para Bowden e Direct Drive por material.' },
+        { label: 'Trocar de cor/material', prompt: 'Procedimento correto para trocar de cor ou material sem contaminar a próxima impressão.' },
+        { label: 'Filamento quebradiço', prompt: 'Filamento quebrando no extrusor. Diagnostique umidade, idade, tensão da bobina e ações.' },
+      ],
+    },
   ];
+
+  const [activeCategory, setActiveCategory] = useState<string>('gestao');
+  const activeCat = diagnosticCategories.find(c => c.id === activeCategory) || diagnosticCategories[0];
 
   return (
     <>
@@ -1054,25 +1135,46 @@ export function OkLojaAssistant({
               <div ref={chatEndRef} />
             </div>
 
-            {/* DIAGNOSTIC QUICK TRIGGER CHIPS */}
-            <div className="p-3 bg-zinc-900/60 border-t border-zinc-900 flex flex-wrap gap-2 overflow-x-auto select-none">
-              <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest w-full mb-1">
-                Sugestões rápidas:
-              </span>
-              {quickChips.map((chip, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => {
-                    setInputText(chip.prompt);
-                    handleSendMessage(chip.prompt);
-                  }}
-                  disabled={isLoading}
-                  className="flex items-center gap-1.5 px-3 py-2 bg-zinc-900 border border-zinc-800 hover:border-amber-500/40 rounded-xl text-[11px] font-bold text-zinc-300 hover:text-zinc-100 cursor-pointer active:scale-97 disabled:opacity-50 transition"
-                >
-                  {chip.icon}
-                  <span>{chip.label}</span>
-                </button>
-              ))}
+            {/* DIAGNOSTIC QUICK TRIGGER — Categorias de especialista 3D */}
+            <div className="bg-zinc-900/60 border-t border-zinc-900 select-none">
+              {/* Category tabs */}
+              <div className="px-3 pt-3 flex items-center gap-1.5 overflow-x-auto scrollbar-none">
+                <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest mr-1 shrink-0">
+                  Especialista 3D:
+                </span>
+                {diagnosticCategories.map(cat => {
+                  const active = cat.id === activeCategory;
+                  return (
+                    <button
+                      key={cat.id}
+                      onClick={() => setActiveCategory(cat.id)}
+                      className={`shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[10.5px] font-bold border transition ${
+                        active
+                          ? 'bg-amber-500/15 border-amber-400/50 text-amber-200'
+                          : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-zinc-200 hover:border-zinc-700'
+                      }`}
+                    >
+                      <span className={active ? 'text-amber-300' : cat.accent}>{cat.icon}</span>
+                      {cat.label}
+                    </button>
+                  );
+                })}
+              </div>
+              {/* Items grid */}
+              <div className="p-3 flex flex-wrap gap-2 max-h-32 overflow-y-auto">
+                {activeCat.items.map((it, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => handleSendMessage(it.prompt)}
+                    disabled={isLoading}
+                    title={it.prompt}
+                    className="flex items-center gap-1.5 px-2.5 py-1.5 bg-zinc-950 border border-zinc-800 hover:border-amber-500/40 hover:bg-zinc-900 rounded-lg text-[10.5px] font-semibold text-zinc-300 hover:text-zinc-100 cursor-pointer active:scale-95 disabled:opacity-50 transition"
+                  >
+                    <span className={activeCat.accent}>•</span>
+                    {it.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Error notifications safe banner */}
