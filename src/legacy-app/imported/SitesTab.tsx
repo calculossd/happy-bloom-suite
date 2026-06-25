@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Plus, Trash2, Globe, Sparkles } from "lucide-react";
+import { Plus, Trash2, Globe, Sparkles, Pencil } from "lucide-react";
 
 type Link = { id: string; name: string; url: string; category: string; desc?: string };
 
@@ -49,6 +49,8 @@ const STORAGE_KEY = "sites-directory-v1";
 function SitesPage() {
   const [extra, setExtra] = useState<Link[]>([]);
   const [hidden, setHidden] = useState<string[]>([]);
+  const [overrides, setOverrides] = useState<Record<string, Partial<Link>>>({});
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
   const [cat, setCat] = useState("Modelos");
@@ -57,27 +59,53 @@ function SitesPage() {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) { const s = JSON.parse(raw); setExtra(s.extra || []); setHidden(s.hidden || []); }
+      if (raw) { const s = JSON.parse(raw); setExtra(s.extra || []); setHidden(s.hidden || []); setOverrides(s.overrides || {}); }
     } catch {}
   }, []);
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ extra, hidden }));
-  }, [extra, hidden]);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ extra, hidden, overrides }));
+  }, [extra, hidden, overrides]);
 
-  const all = useMemo(() => [...PRESETS.filter((p) => !hidden.includes(p.id)), ...extra], [extra, hidden]);
+  const all = useMemo(() => {
+    const apply = (l: Link): Link => overrides[l.id] ? { ...l, ...overrides[l.id] } : l;
+    return [
+      ...PRESETS.filter((p) => !hidden.includes(p.id)).map(apply),
+      ...extra.map(apply),
+    ];
+  }, [extra, hidden, overrides]);
   const filtered = all;
 
   const add = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !url.trim()) return;
     const full = url.startsWith("http") ? url : `https://${url}`;
-    setExtra((x) => [...x, { id: crypto.randomUUID(), name: name.trim(), url: full, category: cat }]);
+    if (editingId) {
+      const isPreset = PRESETS.some((p) => p.id === editingId);
+      const patch = { name: name.trim(), url: full, category: cat };
+      if (isPreset) {
+        setOverrides((o) => ({ ...o, [editingId]: { ...o[editingId], ...patch } }));
+      } else {
+        setExtra((x) => x.map((l) => l.id === editingId ? { ...l, ...patch } : l));
+      }
+      setEditingId(null);
+    } else {
+      setExtra((x) => [...x, { id: crypto.randomUUID(), name: name.trim(), url: full, category: cat }]);
+    }
     setName(""); setUrl(""); setShowAdd(false);
+  };
+
+  const startEdit = (l: Link) => {
+    setEditingId(l.id);
+    setName(l.name);
+    setUrl(l.url);
+    setCat(l.category);
+    setShowAdd(true);
   };
 
   const remove = (id: string) => {
     if (PRESETS.find((p) => p.id === id)) setHidden((h) => [...h, id]);
     else setExtra((x) => x.filter((l) => l.id !== id));
+    setOverrides((o) => { const n = { ...o }; delete n[id]; return n; });
   };
 
   const favicon = (u: string) => `https://www.google.com/s2/favicons?domain=${new URL(u).hostname}&sz=128`;
@@ -183,10 +211,10 @@ function SitesPage() {
             <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nome do site" className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm transition focus:-translate-y-px focus:border-[#b7ff00]/50 focus:bg-white/[0.07] focus:outline-none" />
             <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://..." className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm transition focus:-translate-y-px focus:border-[#b7ff00]/50 focus:bg-white/[0.07] focus:outline-none" />
             <select value={cat} onChange={(e) => setCat(e.target.value)} className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm focus:border-[#b7ff00]/50 focus:outline-none">
-              {["Modelos","Modelagem","Software","Outros"].map((c) => <option key={c} value={c} className="bg-[#0a0a0f]">{c}</option>)}
+              {["Modelos","Modelagem","Software","Marketplace","Outros"].map((c) => <option key={c} value={c} className="bg-[#0a0a0f]">{c}</option>)}
             </select>
             <button type="submit" className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#b7ff00] px-4 py-2 text-sm font-bold text-black transition hover:-translate-y-0.5 hover:brightness-110 active:scale-95 shadow-[0_10px_24px_-8px_rgba(183,255,0,0.7)]">
-              <Plus className="h-4 w-4" /> Salvar
+              {editingId ? <><Pencil className="h-4 w-4" /> Atualizar</> : <><Plus className="h-4 w-4" /> Salvar</>}
             </button>
           </form>
         )}
@@ -245,6 +273,13 @@ function SitesPage() {
                       className="absolute top-1.5 right-1.5 z-10 rounded-full border border-white/10 bg-black/70 p-1 text-white/60 opacity-0 backdrop-blur transition hover:text-rose-400 group-hover:opacity-100"
                     >
                       <Trash2 className="h-3 w-3" />
+                    </button>
+                    <button
+                      onClick={() => startEdit(l)}
+                      aria-label="Editar"
+                      className="absolute top-1.5 left-1.5 z-10 rounded-full border border-white/10 bg-black/70 p-1 text-white/60 opacity-0 backdrop-blur transition hover:text-[#b7ff00] group-hover:opacity-100"
+                    >
+                      <Pencil className="h-3 w-3" />
                     </button>
                   </div>
                 ))}
