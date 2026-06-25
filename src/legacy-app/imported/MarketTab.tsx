@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { RefreshCw, ExternalLink, Download, Heart, ImageOff, Lightbulb, Check, Search, X } from "lucide-react";
+import { RefreshCw, ExternalLink, Download, Heart, ImageOff, Lightbulb, Check, Search, X, Sparkles, FileBox, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
 import {
@@ -131,6 +131,13 @@ function MarketPage() {
 
   const filtered = useMemo(() => data?.items ?? [], [data]);
 
+  const stats = useMemo(() => {
+    const items = data?.items ?? [];
+    const totalLikes = items.reduce((a, b) => a + (b.stats?.likes ?? 0), 0);
+    const totalDl = items.reduce((a, b) => a + (b.stats?.downloads ?? 0), 0);
+    return { count: items.length, likes: totalLikes, downloads: totalDl };
+  }, [data]);
+
   const importItem = async (item: TrendItem) => {
     if (!item.download_url) {
       window.open(item.url, "_blank", "noopener,noreferrer");
@@ -190,43 +197,78 @@ function MarketPage() {
   return (
     <AppShell>
       <div className="relative min-h-screen w-full overflow-hidden">
-        {/* Ambient background glows — matching dashboard */}
+        {/* Ambient background glows */}
         <div className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute -top-40 left-1/3 h-[520px] w-[520px] rounded-full bg-cyan-500/10 blur-[140px]" />
-          <div className="absolute top-1/2 -right-32 h-[420px] w-[420px] rounded-full bg-violet-600/10 blur-[140px]" />
-          <div className="absolute bottom-0 left-0 h-[380px] w-[380px] rounded-full bg-blue-600/10 blur-[140px]" />
+          <div className="absolute -top-48 left-1/4 h-[620px] w-[620px] rounded-full bg-fuchsia-500/10 blur-[160px]" />
+          <div className="absolute top-1/3 -right-40 h-[480px] w-[480px] rounded-full bg-cyan-500/10 blur-[150px]" />
+          <div className="absolute -bottom-32 left-0 h-[420px] w-[420px] rounded-full bg-amber-500/[0.07] blur-[150px]" />
         </div>
 
-        <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1600px] px-6 py-12 md:px-10 md:py-16 space-y-8">
+        <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1600px] px-6 py-10 md:px-10 md:py-14 space-y-10">
+          {/* Editorial header */}
+          <header className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-transparent p-8 md:p-10 backdrop-blur-xl">
+            <div className="pointer-events-none absolute -top-24 -right-24 h-[320px] w-[320px] rounded-full bg-fuchsia-500/15 blur-[120px]" />
+            <div className="pointer-events-none absolute -bottom-20 -left-20 h-[260px] w-[260px] rounded-full bg-cyan-500/10 blur-[120px]" />
+            <div className="relative flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+              <div>
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[10px] uppercase tracking-[0.32em] text-white/60">
+                  <Sparkles className="h-3 w-3 text-fuchsia-300" /> Biblioteca de Modelos
+                </div>
+                <h1 className="mt-4 text-4xl md:text-5xl font-semibold tracking-tight text-white">
+                  Curadoria <span className="bg-gradient-to-r from-fuchsia-300 via-cyan-200 to-white bg-clip-text text-transparent">3D</span>
+                </h1>
+                <p className="mt-2 max-w-xl text-sm text-white/55">
+                  Explore tendências do MakerWorld, importe direto para seu catálogo ou envie ideias para o Kanban.
+                </p>
+              </div>
+              <div className="grid grid-cols-3 gap-3 md:gap-4">
+                {[
+                  { label: "Resultados", value: stats.count, icon: FileBox, color: "text-cyan-200", glow: "from-cyan-500/15" },
+                  { label: "Curtidas", value: stats.likes, icon: Heart, color: "text-fuchsia-200", glow: "from-fuchsia-500/15" },
+                  { label: "Downloads", value: stats.downloads, icon: TrendingUp, color: "text-amber-200", glow: "from-amber-500/15" },
+                ].map((k) => (
+                  <div key={k.label} className={`relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br ${k.glow} to-transparent px-4 py-3`}>
+                    <div className="flex items-center gap-1.5 text-[9px] uppercase tracking-[0.24em] text-white/45">
+                      <k.icon className={`h-3 w-3 ${k.color}`} />{k.label}
+                    </div>
+                    <div className={`mt-1 text-xl font-semibold tabular-nums ${k.color}`}>
+                      {k.value.toLocaleString("pt-BR")}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </header>
+
           {/* Search bar */}
-          <form onSubmit={submitSearch} className="flex items-center gap-2 rounded-3xl border border-white/10 bg-white/[0.03] px-4 py-3 backdrop-blur-xl transition-colors focus-within:border-cyan-400/40">
-            <Search className="h-4 w-4 text-cyan-400/70" />
+          <form onSubmit={submitSearch} className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-3.5 backdrop-blur-xl transition-all duration-300 focus-within:border-fuchsia-400/40 focus-within:bg-white/[0.05] focus-within:shadow-[0_0_40px_-12px_rgba(232,121,249,0.35)]">
+            <Search className="h-4 w-4 text-fuchsia-300/80" />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Buscar (palavra, link makerworld.com/… ou ID numérico)"
+              placeholder="Buscar por palavra, link makerworld.com/… ou ID numérico"
               className="flex-1 bg-transparent text-sm text-white placeholder:text-white/30 outline-none"
             />
             {search && (
-              <button type="button" onClick={clearSearch} className="text-white/40 hover:text-white" aria-label="Limpar">
+              <button type="button" onClick={clearSearch} className="rounded-full p-1 text-white/40 transition-colors hover:bg-white/10 hover:text-white" aria-label="Limpar">
                 <X className="h-4 w-4" />
               </button>
             )}
-            <button type="submit" className="rounded-full border border-cyan-400/30 bg-gradient-to-br from-cyan-500/20 to-blue-600/20 px-4 py-1.5 text-xs font-medium text-cyan-100 hover:from-cyan-500/30 hover:to-blue-600/30">
+            <button type="submit" className="rounded-full border border-fuchsia-400/30 bg-gradient-to-br from-fuchsia-500/25 to-cyan-500/20 px-5 py-1.5 text-xs font-medium tracking-wide text-white shadow-[0_0_20px_-6px_rgba(232,121,249,0.6)] transition-all hover:from-fuchsia-500/35 hover:to-cyan-500/30">
               Buscar
             </button>
           </form>
 
           {/* Categories */}
           <div>
-            <div className="mb-3 flex items-center justify-between gap-3">
-              <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-white/40">Categorias</p>
+            <div className="mb-4 flex items-center justify-between gap-3 border-b-2 border-white/15 pb-2">
+              <p className="text-[10px] font-medium uppercase tracking-[0.32em] text-white/50">Categorias</p>
               <button
                 onClick={() => load(true)}
                 disabled={loading}
                 title="Atualizar"
                 aria-label="Atualizar"
-                className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 p-1.5 text-white/70 hover:bg-white/10 hover:text-white disabled:opacity-50"
+                className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 p-1.5 text-white/70 transition-all hover:scale-105 hover:border-fuchsia-400/40 hover:bg-fuchsia-500/10 hover:text-fuchsia-200 disabled:opacity-50"
               >
                 <RefreshCw className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} />
               </button>
@@ -238,9 +280,9 @@ function MarketPage() {
                   <button
                     key={c}
                     onClick={() => pickCategory(c)}
-                    className={`rounded-full border px-3.5 py-1.5 text-xs font-medium capitalize transition-all ${
+                    className={`rounded-full border px-3.5 py-1.5 text-xs font-medium capitalize transition-all duration-300 hover:-translate-y-0.5 ${
                       active
-                        ? "border-cyan-400/50 bg-gradient-to-br from-cyan-500/20 to-blue-600/20 text-cyan-100 shadow-[0_0_24px_-8px_rgba(34,211,238,0.5)]"
+                        ? "border-fuchsia-400/50 bg-gradient-to-br from-fuchsia-500/25 to-cyan-500/20 text-white shadow-[0_0_28px_-8px_rgba(232,121,249,0.55)]"
                         : "border-white/10 bg-white/[0.03] text-white/60 hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
                     }`}
                   >
@@ -289,12 +331,16 @@ function MarketPage() {
 
         {/* MakerWorld grid */}
         {!loading && filtered.length > 0 && (
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-            {filtered.map((item) => (
+          <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
+            {filtered.map((item, idx) => (
               <article
                 key={item.id}
-                className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] transition-all duration-200 hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/[0.06]"
+                className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-white/[0.01] backdrop-blur-xl transition-all duration-500 hover:-translate-y-1 hover:border-fuchsia-400/30 hover:shadow-[0_20px_60px_-20px_rgba(232,121,249,0.35)] animate-in fade-in slide-in-from-bottom-2"
+                style={{ animationDelay: `${Math.min(idx * 40, 600)}ms`, animationFillMode: "both" }}
               >
+                <div className="pointer-events-none absolute inset-0 -z-10 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+                  <div className="absolute -top-10 -right-10 h-32 w-32 rounded-full bg-fuchsia-500/20 blur-2xl" />
+                </div>
                 <a
                   href={item.url}
                   target="_blank"
@@ -310,15 +356,16 @@ function MarketPage() {
                       onError={(e) => {
                         (e.currentTarget as HTMLImageElement).style.display = "none";
                       }}
-                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      className="h-full w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-110"
                     />
                   ) : (
                     <div className="flex h-full items-center justify-center text-white/30">
                       <ImageOff className="h-10 w-10" />
                     </div>
                   )}
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                   <span
-                    className={`absolute left-2 top-2 rounded-full border px-2 py-0.5 text-[10px] font-medium backdrop-blur ${
+                    className={`absolute left-2.5 top-2.5 rounded-full border px-2 py-0.5 text-[10px] font-medium tracking-wide backdrop-blur-md ${
                       SOURCE_COLORS[item.source] ||
                       "bg-white/10 text-white border-white/20"
                     }`}
@@ -326,32 +373,32 @@ function MarketPage() {
                     {item.source}
                   </span>
                 </a>
-                <div className="flex flex-1 flex-col p-3">
-                  <h3 className="line-clamp-2 min-h-[2.5rem] text-sm font-medium text-white">
+                <div className="flex flex-1 flex-col p-4">
+                  <h3 className="line-clamp-2 min-h-[2.5rem] text-sm font-medium leading-snug tracking-tight text-white">
                     {item.title}
                   </h3>
-                  <div className="mt-1 flex items-center justify-between text-[11px] text-white/50">
-                    <span className="truncate">{item.author || "—"}</span>
+                  <div className="mt-2 flex items-center justify-between text-[11px] text-white/50">
+                    <span className="truncate font-medium">{item.author || "—"}</span>
                     {item.stats && (item.stats.likes || item.stats.downloads) ? (
-                      <span className="flex items-center gap-2">
+                      <span className="flex items-center gap-2 tabular-nums">
                         {item.stats.likes ? (
-                          <span className="inline-flex items-center gap-0.5">
-                            <Heart className="h-3 w-3" /> {item.stats.likes}
+                          <span className="inline-flex items-center gap-1 text-fuchsia-200/70">
+                            <Heart className="h-3 w-3 fill-current" /> {item.stats.likes}
                           </span>
                         ) : null}
                         {item.stats.downloads ? (
-                          <span className="inline-flex items-center gap-0.5">
+                          <span className="inline-flex items-center gap-1 text-cyan-200/70">
                             <Download className="h-3 w-3" /> {item.stats.downloads}
                           </span>
                         ) : null}
                       </span>
                     ) : null}
                   </div>
-                  <div className="mt-3 flex gap-2">
+                  <div className="mt-4 flex gap-2">
                     <button
                       onClick={() => importItem(item)}
                       disabled={importing === item.id}
-                      className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border border-cyan-400/30 bg-cyan-500/10 py-1.5 text-xs font-medium text-cyan-200 transition-colors hover:bg-cyan-500/20 disabled:opacity-50"
+                      className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl border border-cyan-400/30 bg-gradient-to-br from-cyan-500/15 to-cyan-600/5 py-2 text-xs font-medium text-cyan-100 transition-all duration-300 hover:border-cyan-300/50 hover:from-cyan-500/25 hover:to-cyan-600/10 hover:shadow-[0_0_20px_-8px_rgba(34,211,238,0.6)] disabled:opacity-50"
                     >
                       {importing === item.id ? (
                         <><RefreshCw className="h-3.5 w-3.5 animate-spin" /> Importando…</>
@@ -364,10 +411,10 @@ function MarketPage() {
                     <button
                       onClick={() => toggleIdea(item)}
                       title={ideaUrls.has(item.url) ? "Remover das Ideias" : "Enviar para Ideias (Kanban)"}
-                      className={`inline-flex items-center justify-center gap-1 rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-colors ${
+                      className={`inline-flex items-center justify-center gap-1 rounded-xl border px-3 py-2 text-xs font-medium transition-all duration-300 ${
                         ideaUrls.has(item.url)
-                          ? "border-fuchsia-400/50 bg-fuchsia-500/20 text-fuchsia-100 hover:bg-fuchsia-500/30"
-                          : "border-white/15 bg-white/5 text-white/70 hover:bg-white/10 hover:text-fuchsia-200"
+                          ? "border-fuchsia-400/50 bg-gradient-to-br from-fuchsia-500/25 to-fuchsia-600/10 text-fuchsia-100 shadow-[0_0_20px_-8px_rgba(232,121,249,0.6)] hover:from-fuchsia-500/35"
+                          : "border-white/15 bg-white/5 text-white/70 hover:border-fuchsia-400/30 hover:bg-fuchsia-500/10 hover:text-fuchsia-200"
                       }`}
                     >
                       {ideaUrls.has(item.url) ? <Check className="h-3.5 w-3.5" /> : <Lightbulb className="h-3.5 w-3.5" />}
