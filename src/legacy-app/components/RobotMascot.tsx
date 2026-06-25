@@ -4,6 +4,9 @@ export const RobotMascot: React.FC<{ className?: string }> = ({ className }) => 
   <svg
     viewBox="0 0 128 128"
     className={className}
+    width="96"
+    height="96"
+    style={{ width: 96, height: 96, display: 'block' }}
     role="img"
     aria-label="Assistente"
     xmlns="http://www.w3.org/2000/svg"
