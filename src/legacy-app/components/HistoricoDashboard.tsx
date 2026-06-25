@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import type { PrintOrder } from '../types';
 import {
   Receipt, DollarSign, ShoppingBag, TrendingUp, Users, Clock,
-  Bot, Sparkles, ArrowRight, Package, CreditCard,
+  Bot, Sparkles, ArrowRight, Package, CreditCard, Download,
 } from 'lucide-react';
 import {
   PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer,
@@ -200,13 +200,23 @@ export const HistoricoDashboard: React.FC<Props> = ({ orders }) => {
           <Receipt className="h-4 w-4 text-[#D4A017]" />
           <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-white">Dashboard — Histórico de Vendas</h3>
         </div>
-        <span className="text-[#b7ff00] text-[10px] font-bold uppercase flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent('export-sales-report'))}
+            className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-[#b7ff00] to-[#7eff5a] text-black px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] transition hover:shadow-[0_0_24px_-4px_rgba(183,255,0,0.55)]"
+            id="btn_export_sales_dashboard"
+          >
+            <Download className="h-3.5 w-3.5" />
+            Exportar Relatório
+          </button>
+          <span className="text-[#b7ff00] text-[10px] font-bold uppercase flex items-center gap-2">
           <span className="relative flex h-1.5 w-1.5">
             <span className="absolute inline-flex h-full w-full rounded-full bg-[#b7ff00] opacity-60 animate-ping" />
             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#b7ff00] shadow-[0_0_8px_#b7ff00]" />
           </span>
           Atualizado
-        </span>
+          </span>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 relative">
