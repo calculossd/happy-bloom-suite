@@ -642,14 +642,88 @@ export function OkLojaAssistant({
     }
   };
 
-  // Helper chips matching requested user queries
-  const quickChips = [
-    { label: "Status geral", icon: <Clock className="w-3.5 h-3.5 text-blue-400" />, prompt: "Como estão os pedidos do ateliê atualmente?" },
-    { label: "Maiores atrasos", icon: <AlertTriangle className="w-3.5 h-3.5 text-red-400" />, prompt: "Quais são as peças e clientes com maiores atrasos na produção?" },
-    { label: "Manutenções", icon: <Wrench className="w-3.5 h-3.5 text-amber-400" />, prompt: "Qual o status das impressoras e se há manutenções pendentes?" },
-    { label: "Clientes sem contato", icon: <Users className="w-3.5 h-3.5 text-indigo-400" />, prompt: "Quais clientes estão sem atendimento há mais de 15 dias ou sem contato?" },
-    { label: "Estoque crítico", icon: <Layers className="w-3.5 h-3.5 text-emerald-400" />, prompt: "Quais filamentos estão com quantidade crítica ou abaixo do estoque mínimo?" }
+  // Helper chips: gestão + biblioteca completa de erros de impressão 3D
+  const diagnosticCategories: Array<{
+    id: string;
+    label: string;
+    accent: string;
+    icon: any;
+    items: Array<{ label: string; prompt: string }>;
+  }> = [
+    {
+      id: 'gestao',
+      label: 'Gestão',
+      accent: 'text-blue-400',
+      icon: <Clock className="w-3.5 h-3.5" />,
+      items: [
+        { label: 'Status geral', prompt: 'Como estão os pedidos do ateliê atualmente?' },
+        { label: 'Maiores atrasos', prompt: 'Quais são as peças e clientes com maiores atrasos na produção?' },
+        { label: 'Manutenções pendentes', prompt: 'Qual o status das impressoras e se há manutenções pendentes?' },
+        { label: 'Clientes sem contato', prompt: 'Quais clientes estão sem atendimento há mais de 15 dias ou sem contato?' },
+        { label: 'Estoque crítico', prompt: 'Quais filamentos estão com quantidade crítica ou abaixo do estoque mínimo?' },
+      ],
+    },
+    {
+      id: 'impressora',
+      label: 'Erros de Impressora',
+      accent: 'text-amber-400',
+      icon: <Wrench className="w-3.5 h-3.5" />,
+      items: [
+        { label: 'Bico entupido', prompt: 'Diagnóstico de bico entupido (não extruda ou extruda fino). Liste causas, ação passo a passo (cold pull/atomic pull), validação e prevenção.' },
+        { label: 'Heat creep', prompt: 'Suspeito de heat creep no hotend (entupimento após algum tempo). Diagnostique e me dê ação corretiva detalhada.' },
+        { label: 'Mesa não nivela', prompt: 'Mesa fora de nível / primeira camada irregular. Faça o diagnóstico completo e me guie no nivelamento manual e auto (BLTouch/CR-Touch).' },
+        { label: 'Falha de adesão', prompt: 'Peça soltando da mesa durante a impressão. Diagnostique adesão (PEI, vidro, BuildTak) por material e me dê ações.' },
+        { label: 'Layer shift', prompt: 'Camadas deslocadas (layer shift) durante a impressão. Diagnostique mecânica (belt, polia, driver, corrente) e ações corretivas.' },
+        { label: 'Z-wobble / banding', prompt: 'Banding vertical / Z-wobble visível nas peças. Diagnostique leadscrew, acoplador, perpendicularidade e ações.' },
+        { label: 'Ringing / ghosting', prompt: 'Fantasmas (ringing/ghosting) ao lado de detalhes. Diagnostique e me ensine input shaper passo a passo.' },
+        { label: 'Thermal runaway', prompt: 'Erro de THERMAL RUNAWAY na impressora. Diagnostique segurança, termistor, aquecedor, PID tuning e ação imediata.' },
+        { label: 'Extrusor click/skip', prompt: 'Extrusor estalando (clicking) / pulando passos. Diagnostique tensão da mola, corrente do driver, temperatura, entupimento.' },
+        { label: 'Sensor de filamento', prompt: 'Falsos positivos ou negativos no sensor de filamento. Diagnostique e me dê ação corretiva.' },
+        { label: 'Eixos com folga', prompt: 'Folga nos eixos X/Y/Z (rolamentos lineares, V-rollers, polias GT2). Diagnostique e me ensine ajuste correto.' },
+        { label: 'Belt frouxa/apertada', prompt: 'Como saber se a correia GT2 está na tensão certa? Diagnostique sintomas e me dê o passo a passo.' },
+        { label: 'Mesa fria', prompt: 'Mesa aquecida não atinge a temperatura alvo. Diagnostique MOSFET, cabo, termistor, ambiente.' },
+        { label: 'Hotend frio', prompt: 'Hotend não atinge temperatura ou oscila. Diagnostique termistor, cartucho, isolamento, PID.' },
+      ],
+    },
+    {
+      id: 'peca',
+      label: 'Defeitos de Peça',
+      accent: 'text-rose-400',
+      icon: <AlertTriangle className="w-3.5 h-3.5" />,
+      items: [
+        { label: 'Stringing / fios', prompt: 'Peça com stringing (fios finos entre partes). Diagnostique retração, temperatura, secagem do filamento e ações.' },
+        { label: 'Warping', prompt: 'Cantos da peça empenando (warping). Diagnostique por material (ABS/ASA/PETG/PLA) e me dê ações de cura.' },
+        { label: 'Elephant foot', prompt: 'Base da peça com pé de elefante (elephant foot). Diagnostique mesa, temperatura, z-offset, compensação no slicer.' },
+        { label: 'Under-extrusion', prompt: 'Sub-extrusão (paredes com falhas e gaps). Diagnostique flow, E-steps, temperatura, bico parcialmente entupido.' },
+        { label: 'Over-extrusion', prompt: 'Sobre-extrusão (peça maior, blobs, paredes infladas). Diagnostique flow e calibração.' },
+        { label: 'Delaminação', prompt: 'Camadas separando (delaminação / layer separation). Diagnostique temperatura, cooling, material úmido.' },
+        { label: 'Blobs e zits', prompt: 'Blobs e zits no início/fim de cada camada (seams). Diagnostique coasting, wipe, pressure advance, retração.' },
+        { label: 'Overhang ruim', prompt: 'Overhangs e pontes ruins. Diagnostique cooling (% do fan), velocidade e orientação da peça.' },
+        { label: 'Salmon skin (resina)', prompt: 'Salmon skin / linhas horizontais em peças de resina. Diagnostique LCD, eixo Z, exposição.' },
+        { label: 'Falha de cura (resina)', prompt: 'Resina não cura ou descola da FEP. Diagnostique exposição, FEP, ambiente, suportes.' },
+        { label: 'Peça quebra fácil', prompt: 'Peça com baixa resistência mecânica. Diagnostique infill, perímetros, material úmido, temperatura.' },
+        { label: 'Dimensão fora', prompt: 'Peça fora de medida (XY/Z). Diagnostique steps/mm, shrinkage por material, compensação de horizontal expansion.' },
+        { label: 'Vibração / VFA', prompt: 'Padrão de vibração (VFA - Vertical Fine Artifacts). Diagnostique drivers, polia, microstep, input shaper.' },
+        { label: 'Spaghetti', prompt: 'Peça virou spaghetti (soltou e continuou imprimindo no ar). Diagnostique adesão e me ensine a detectar antes.' },
+      ],
+    },
+    {
+      id: 'material',
+      label: 'Filamento / Material',
+      accent: 'text-emerald-400',
+      icon: <Layers className="w-3.5 h-3.5" />,
+      items: [
+        { label: 'Filamento úmido', prompt: 'Como saber se meu filamento está úmido? Liste sintomas, teste e processo de secagem por material (PLA, PETG, ABS, Nylon, TPU).' },
+        { label: 'Temperaturas por material', prompt: 'Me dê tabela de temperaturas ideais de bico e mesa, velocidade e cooling para PLA, PETG, ABS, ASA, TPU, Nylon e PC.' },
+        { label: 'Retração ideal', prompt: 'Valores iniciais de retração (distância em mm e velocidade) para Bowden e Direct Drive por material.' },
+        { label: 'Trocar de cor/material', prompt: 'Procedimento correto para trocar de cor ou material sem contaminar a próxima impressão.' },
+        { label: 'Filamento quebradiço', prompt: 'Filamento quebrando no extrusor. Diagnostique umidade, idade, tensão da bobina e ações.' },
+      ],
+    },
   ];
+
+  const [activeCategory, setActiveCategory] = useState<string>('gestao');
+  const activeCat = diagnosticCategories.find(c => c.id === activeCategory) || diagnosticCategories[0];
 
   return (
     <>
