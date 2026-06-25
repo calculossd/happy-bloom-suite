@@ -2252,21 +2252,6 @@ export default function App() {
             )}
             {currentTab === 16 && (
               <div className="space-y-4">
-                <ProductionTab
-                  orders={orders}
-                  printers={printers}
-                  filamentStocks={filamentStocks}
-                  clients={clients}
-                  onAddOrder={handleAddOrder}
-                  onAddClient={handleAddClient}
-                  onUpdateOrder={handleUpdateOrder}
-                  onDeleteOrder={handleDeleteOrder}
-                  onSimulateTick={handleSimulateTick}
-                  onUpdateFilament={handleUpdateFilamentStock}
-                  onUpdatePrinter={handleUpdatePrinter}
-                  viewMode="monitor"
-                />
-                <PrinterQueueList printers={printers} orders={orders} />
                 <ClientsTab
                   clients={clients}
                   printers={printers}
