@@ -3190,10 +3190,28 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                           Calculado a partir dos filamentos/insumos cadastrados acima usando o preço atual do estoque (filamento: R$/spool ÷ 1000g; insumos: custo unitário).
                         </p>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                          <CostBox label="Material" value={matCost} accent="#3b82f6" />
-                          <CostBox label="Insumos extras" value={supCost} accent="#8b5cf6" />
-                          <CostBox label="Adicionais" value={extra} accent="#eab308" />
-                          <CostBox label="Custo total" value={total} accent="#b7ff00" emphasis />
+                          {[
+                            { label: 'Material', value: matCost, accent: '#3b82f6', emphasis: false },
+                            { label: 'Insumos extras', value: supCost, accent: '#8b5cf6', emphasis: false },
+                            { label: 'Adicionais', value: extra, accent: '#eab308', emphasis: false },
+                            { label: 'Custo total', value: total, accent: '#b7ff00', emphasis: true },
+                          ].map((b) => (
+                            <div
+                              key={b.label}
+                              className="rounded-lg p-2.5 border"
+                              style={{
+                                borderColor: `${b.accent}33`,
+                                background: b.emphasis ? `${b.accent}14` : 'rgba(255,255,255,0.02)',
+                              }}
+                            >
+                              <div className="text-[9px] uppercase tracking-wider font-bold" style={{ color: b.accent }}>
+                                {b.label}
+                              </div>
+                              <div className={`text-${b.emphasis ? 'lg' : 'sm'} font-${b.emphasis ? 'black' : 'bold'} text-white mt-0.5`}>
+                                R$ {b.value.toFixed(2)}
+                              </div>
+                            </div>
+                          ))}
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">
                           <div className="md:col-span-1">
