@@ -1391,7 +1391,7 @@ export function Print3DPanel({
         </div>
       </div>
 
-      {/* Full-width 16:5 hero banner — clean image, no overlays */}
+      {/* Hero banner 16:5 with KPI strip overlaid on top — clean image, no blur */}
       <div
         className="relative w-full overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0a0d0c] shadow-[0_24px_60px_-30px_rgba(163,230,53,0.35)]"
         style={{ aspectRatio: "16 / 5" }}
@@ -1403,9 +1403,8 @@ export function Print3DPanel({
           loading="lazy"
           decoding="async"
         />
-      </div>
-
-          {/* Premium dashboard strip — Obsidian Glass */}
+        {/* KPI strip overlay */}
+        <div className="absolute inset-x-0 bottom-0 p-3 md:p-4">
           <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
             <PremiumKpi tone="lime"    icon={ShoppingBag} label="Pedidos Hoje"       value={String(ordersToday.length)} sub={`${activePrinters}/${printersTotal} impressoras`} />
             <PremiumKpi tone="emerald" icon={DollarSign}  label="Faturamento Hoje"   value={fmtBRL(revenueToday)}       sub="receita do dia" />
@@ -1414,6 +1413,8 @@ export function Print3DPanel({
             <PremiumKpi tone="cyan"    icon={Users}       label="Clientes c/ Estoque" value={String(balcaoClientsCount)} sub="balcão" />
             <PremiumKpi tone="gold"    icon={TrendingUp}  label="Margem do Mês"      value={`${monthMargin.toFixed(1)}%`} sub={fmtBRL(monthProfit)} />
           </div>
+        </div>
+      </div>
 
           {/* Row 2: Mapa | Impressão ao Vivo | Pedidos | Higrômetros */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 [&>*]:h-[260px]">
