@@ -1379,7 +1379,7 @@ export function Print3DPanel({
           {/* Left fade for title legibility */}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#050908] via-[#050908]/55 to-transparent" />
           {/* Bottom fade — image dissolves into solid black */}
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[70%] bg-gradient-to-b from-transparent via-[#050908]/90 to-[#050908]" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[30%] bg-gradient-to-b from-transparent to-[#050908]" />
 
         {/* Hero band */}
         <div className="relative z-10 flex flex-col justify-between gap-5 p-5 lg:p-7 h-full">
