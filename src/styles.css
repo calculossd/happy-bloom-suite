@@ -714,6 +714,13 @@ input, select, textarea {
   background-color: rgba(22,25,34,0.85) !important;
 }
 
+.legacy-skin #global-price-opportunity-banner {
+  background: #0284c7 !important;
+  background-color: #0284c7 !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+}
+
 /* 3. Recolor accent text/borders/dots → lime (primary) or teal (secondary) */
 .legacy-skin .text-emerald-300, .legacy-skin .text-emerald-400, .legacy-skin .text-emerald-500,
 .legacy-skin .text-green-300, .legacy-skin .text-green-400, .legacy-skin .text-green-500,
