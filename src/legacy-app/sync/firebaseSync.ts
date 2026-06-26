@@ -76,18 +76,10 @@ export function buildSyncPayload(slices: SyncSlices) {
     catalogItems: readLocalCatalog(),
     brandConfig: slices.brandConfig,
     tuyaDevices: slices.tuyaDevices || [],
-    customKeys: {
-      geminiKey: safeStorage.getItem('bambuzau_custom_gemini_key', ''),
-      groqKey: safeStorage.getItem('bambuzau_custom_groq_key', ''),
-      serpKey: safeStorage.getItem('bambuzau_custom_serp_key', ''),
-      tavilyKey: safeStorage.getItem('bambuzau_custom_tavily_key', ''),
-      jinaKey: safeStorage.getItem('bambuzau_custom_jina_key', ''),
-      aiProvider: safeStorage.getItem('bambuzau_ai_provider', 'gemini'),
-      webOrigin: safeStorage.getItem(
-        'bambuzau_web_origin',
-        typeof window !== 'undefined' ? window.location.origin : '',
-      ),
-    },
+    // SECURITY: API keys (Gemini, Groq, SerpApi, Tavily, Jina) are intentionally
+    // NOT synced to Firebase. The previous unauthenticated PUT/GET to the
+    // Realtime Database exposed plaintext credentials to anyone who could guess
+    // the workspace code. Keys now stay local-only.
   };
 }
 
