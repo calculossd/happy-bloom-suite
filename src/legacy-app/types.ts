@@ -96,6 +96,7 @@ export interface CatalogItem {
   suppliesUsed?: { supplyStockId: number; quantity: number }[];
   stlFileName?: string;
   stlFileData?: string;
+  extraCostPerUnit?: number;
 }
 
 export interface FilamentStock {
