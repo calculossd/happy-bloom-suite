@@ -9,7 +9,6 @@ const HANDLE_KEY = 'backupDir';
 const DROPBOX_TOKEN_KEY = 'lov_dropbox_token';
 const DROPBOX_FOLDER_KEY = 'lov_dropbox_folder';
 const DBX_APP_KEY = 'lov_dropbox_app_key';
-const DBX_APP_SECRET = 'lov_dropbox_app_secret';
 const DBX_REFRESH = 'lov_dropbox_refresh_token';
 const DBX_ACCESS = 'lov_dropbox_access_token';
 const DBX_EXPIRES = 'lov_dropbox_access_expires';
@@ -75,21 +74,27 @@ export function getDropboxOAuth() {
   try {
     return {
       appKey: localStorage.getItem(DBX_APP_KEY) || '',
-      appSecret: localStorage.getItem(DBX_APP_SECRET) || '',
       refreshToken: localStorage.getItem(DBX_REFRESH) || '',
       accessToken: localStorage.getItem(DBX_ACCESS) || '',
       expiresAt: Number(localStorage.getItem(DBX_EXPIRES) || '0'),
     };
-  } catch { return { appKey: '', appSecret: '', refreshToken: '', accessToken: '', expiresAt: 0 }; }
+  } catch { return { appKey: '', refreshToken: '', accessToken: '', expiresAt: 0 }; }
 }
-export function setDropboxOAuthApp(appKey: string, appSecret: string) {
+export function setDropboxOAuthApp(appKey: string) {
   try {
     localStorage.setItem(DBX_APP_KEY, (appKey || '').trim());
-    localStorage.setItem(DBX_APP_SECRET, (appSecret || '').trim());
   } catch {}
 }
-export function buildDropboxAuthUrl(): string {
-  const { appKey } = getDropboxOAuth();
+export async function buildDropboxAuthUrl(): Promise<string> {
+  let { appKey } = getDropboxOAuth();
+  if (!appKey) {
+    try {
+      const { getDropboxAppKey } = await import('@/lib/dropbox-oauth.functions');
+      const r = await getDropboxAppKey();
+      appKey = r.appKey || '';
+      if (appKey) setDropboxOAuthApp(appKey);
+    } catch {}
+  }
   const params = new URLSearchParams({
     client_id: appKey,
     response_type: 'code',
@@ -98,35 +103,21 @@ export function buildDropboxAuthUrl(): string {
   return `https://www.dropbox.com/oauth2/authorize?${params.toString()}`;
 }
 export async function exchangeDropboxCode(code: string): Promise<{ ok: boolean; message: string }> {
-  const { appKey, appSecret } = getDropboxOAuth();
-  if (!appKey || !appSecret) return { ok: false, message: 'Preencha App key e App secret.' };
   if (!code) return { ok: false, message: 'Cole o código de autorização.' };
   try {
-    const body = new URLSearchParams({
-      code: code.trim(),
-      grant_type: 'authorization_code',
-      client_id: appKey,
-      client_secret: appSecret,
-    });
-    const res = await fetch('https://api.dropboxapi.com/oauth2/token', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body,
-    });
-    const data = await res.json().catch(() => ({} as any));
-    if (!res.ok) return { ok: false, message: `Falhou: ${data?.error_description || data?.error || res.status}` };
-    const access = data.access_token as string;
-    const refresh = data.refresh_token as string;
-    const expiresIn = Number(data.expires_in || 14400);
+    const { exchangeDropboxCodeFn } = await import('@/lib/dropbox-oauth.functions');
+    const data = await exchangeDropboxCodeFn({ data: { code: code.trim() } });
+    const access = data.accessToken;
+    const refresh = data.refreshToken;
+    const expiresIn = Number(data.expiresIn || 14400);
     if (!access || !refresh) return { ok: false, message: 'Resposta inválida do Dropbox.' };
     localStorage.setItem(DBX_REFRESH, refresh);
     localStorage.setItem(DBX_ACCESS, access);
     localStorage.setItem(DBX_EXPIRES, String(Date.now() + (expiresIn - 60) * 1000));
-    // Também salva como token "ativo" para o caminho legado
     localStorage.setItem(DROPBOX_TOKEN_KEY, access);
     return { ok: true, message: 'Conectado! Token de renovação automática salvo.' };
   } catch (e: any) {
-    return { ok: false, message: 'Erro: ' + (e?.message || e) };
+    return { ok: false, message: 'Erro: ' + (e?.message || String(e)) };
   }
 }
 export function disconnectDropboxOAuth() {
@@ -137,24 +128,13 @@ export function disconnectDropboxOAuth() {
   } catch {}
 }
 async function refreshDropboxAccess(): Promise<string | null> {
-  const { appKey, appSecret, refreshToken } = getDropboxOAuth();
-  if (!appKey || !appSecret || !refreshToken) return null;
+  const { refreshToken } = getDropboxOAuth();
+  if (!refreshToken) return null;
   try {
-    const body = new URLSearchParams({
-      grant_type: 'refresh_token',
-      refresh_token: refreshToken,
-      client_id: appKey,
-      client_secret: appSecret,
-    });
-    const res = await fetch('https://api.dropboxapi.com/oauth2/token', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body,
-    });
-    if (!res.ok) return null;
-    const data = await res.json();
-    const access = data.access_token as string;
-    const expiresIn = Number(data.expires_in || 14400);
+    const { refreshDropboxAccessFn } = await import('@/lib/dropbox-oauth.functions');
+    const data = await refreshDropboxAccessFn({ data: { refreshToken } });
+    const access = data.accessToken;
+    const expiresIn = Number(data.expiresIn || 14400);
     if (!access) return null;
     localStorage.setItem(DBX_ACCESS, access);
     localStorage.setItem(DBX_EXPIRES, String(Date.now() + (expiresIn - 60) * 1000));
