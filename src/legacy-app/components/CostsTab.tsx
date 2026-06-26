@@ -3147,6 +3147,92 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                 </div>
               </div>
 
+              {/* CUSTOS — cálculo automático a partir dos insumos */}
+              {(() => {
+                const matCost = manualProdFilaments.reduce((sum, f) => {
+                  const st = filamentStocks.find((x: any) => x.id === f.filamentStockId);
+                  const perGram = st ? (Number(st.priceRoll) || 0) / 1000 : 0;
+                  return sum + (Number(f.weightGrams) || 0) * perGram;
+                }, 0);
+                const supCost = manualProdSupplies.reduce((sum, s) => {
+                  const st = (suppliesStocks || []).find((x: any) => x.id === s.supplyStockId);
+                  const unit = st ? Number(st.unitCost) || 0 : 0;
+                  return sum + (Number(s.quantity) || 0) * unit;
+                }, 0);
+                const extra = Number(manualProdExtraCost) || 0;
+                const total = matCost + supCost + extra;
+                const price = Number(manualProdPrice) || 0;
+                const profit = price - total;
+                const margin = price > 0 ? (profit / price) * 100 : 0;
+                const marginColor = margin < 0 ? '#ef4444' : margin < 20 ? '#eab308' : '#22c55e';
+                const marginLabel = margin < 0 ? 'Prejuízo' : margin < 20 ? 'Baixa' : margin < 40 ? 'Saudável' : 'Excelente';
+                return (
+                  <div className="rounded-2xl border border-[#232B27] bg-gradient-to-br from-[#0F1311] to-[#0C0E0D] overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => setShowCustosPanel(v => !v)}
+                      className="w-full px-4 py-3 flex items-center justify-between hover:bg-white/[0.02] transition"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Calculator className="h-4 w-4 text-[#b7ff00]" />
+                        <span className="text-xs font-black uppercase tracking-wider text-white">Custos & Margem de Lucro</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: marginColor }}>
+                          {marginLabel} · {margin.toFixed(1)}%
+                        </span>
+                        <span className="text-white/40 text-xs">{showCustosPanel ? '▾' : '▸'}</span>
+                      </div>
+                    </button>
+                    {showCustosPanel && (
+                      <div className="px-4 pb-4 pt-1 space-y-3 border-t border-[#232B27]">
+                        <p className="text-[10px] text-[#8BA58D]">
+                          Calculado a partir dos filamentos/insumos cadastrados acima usando o preço atual do estoque (filamento: R$/spool ÷ 1000g; insumos: custo unitário).
+                        </p>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                          <CostBox label="Material" value={matCost} accent="#3b82f6" />
+                          <CostBox label="Insumos extras" value={supCost} accent="#8b5cf6" />
+                          <CostBox label="Adicionais" value={extra} accent="#eab308" />
+                          <CostBox label="Custo total" value={total} accent="#b7ff00" emphasis />
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">
+                          <div className="md:col-span-1">
+                            <label className="block text-[10px] uppercase tracking-wider font-bold text-[#8BA58D] mb-1">
+                              Custos adicionais por unidade (R$)
+                            </label>
+                            <input
+                              type="number"
+                              step="0.01"
+                              min="0"
+                              value={manualProdExtraCost}
+                              onChange={e => setManualProdExtraCost(parseFloat(e.target.value) || 0)}
+                              placeholder="Energia, embalagem, mão-de-obra..."
+                              className="w-full px-3 py-2 rounded-lg bg-black/40 border border-[#232B27] text-white text-sm focus:border-[#b7ff00]"
+                            />
+                          </div>
+                          <div className="md:col-span-1">
+                            <div className="text-[10px] uppercase tracking-wider font-bold text-[#8BA58D] mb-1">Preço de venda</div>
+                            <div className="px-3 py-2 rounded-lg bg-black/30 border border-[#232B27] text-white text-sm font-bold">
+                              R$ {price.toFixed(2)}
+                            </div>
+                          </div>
+                          <div className="md:col-span-1">
+                            <div className="text-[10px] uppercase tracking-wider font-bold text-[#8BA58D] mb-1">Lucro por unidade</div>
+                            <div
+                              className="px-3 py-2 rounded-lg border text-sm font-black flex items-center justify-between"
+                              style={{ borderColor: `${marginColor}55`, background: `${marginColor}12`, color: marginColor }}
+                            >
+                              <span>R$ {profit.toFixed(2)}</span>
+                              <span className="text-xs font-bold">{margin.toFixed(1)}%</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
+
               <div className="pt-2 flex justify-end gap-2">
                 {editingProduct && (
                   <button
