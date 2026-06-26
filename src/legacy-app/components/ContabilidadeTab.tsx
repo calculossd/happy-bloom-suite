@@ -910,44 +910,105 @@ const DespesasSub: React.FC<{ state: State; update: (fn: (s: State) => State) =>
 };
 
 /* ---------- DASN ---------- */
-const DasnSub: React.FC<{ state: State }> = ({ state }) => {
-  const [year, setYear] = useState(new Date().getFullYear() - 1);
+const DasnSub: React.FC<{ state: State; update: (fn: (s: State) => State) => void }> = ({ state, update }) => {
+  const currentYear = new Date().getFullYear();
+  const [year, setYear] = useState(currentYear - 1);
+  const [showReport, setShowReport] = useState(false);
   const totals = monthTotals(state, year);
   const total = totals.reduce((s, t) => s + t.total, 0);
   const over = total > ANNUAL_LIMIT;
+  const pct = Math.min(100, (total / ANNUAL_LIMIT) * 100);
+  const empresa = state.empresa;
 
-  const exportTxt = () => {
-    const lines = [`Declaração Anual MEI - ${year}`, '', ...totals.map(t => `${MESES[t.month - 1]}: ${brl(t.total)}`), '', `TOTAL: ${brl(total)}`];
-    const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `DASN_${year}.txt`; a.click();
+  const setSem = (month: number, val: number) => {
+    update(s => {
+      const i = s.receitas.findIndex(r => r.year === year && r.month === month);
+      if (i >= 0) s.receitas[i].total_sem_nota = val;
+      else s.receitas.push({ year, month, total_sem_nota: val });
+      return s;
+    });
   };
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      {/* Header */}
+      <div className="flex items-center justify-between flex-wrap gap-3">
         <Select value={year} onChange={(e: any) => setYear(Number(e.target.value))} className="w-32">
-          {[year - 1, year, year + 1, year + 2].map(y => <option key={y} value={y}>{y}</option>)}
+          {[currentYear - 2, currentYear - 1, currentYear].map(y => <option key={y} value={y}>{y}</option>)}
         </Select>
-        <Btn tone="gold" onClick={exportTxt}><Download className="inline w-3 h-3 mr-1" /> Exportar Resumo DASN</Btn>
+        <div className="flex gap-2 flex-wrap">
+          <a
+            href="https://www.gov.br/mei/pt-br/servicos/declaracao-anual"
+            target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-zinc-200 hover:bg-white/10"
+          >
+            <ExternalLink className="w-3 h-3" /> Portal DASN-SIMEI
+          </a>
+          <Btn tone="gold" onClick={() => setShowReport(true)}>
+            <Download className="inline w-3 h-3 mr-1" /> Exportar Resumo DASN
+          </Btn>
+        </div>
       </div>
 
+      {/* Deadline banner */}
+      <Card className="border-[#b7ff00]/30 bg-[#b7ff00]/[0.04]">
+        <div className="flex items-start gap-3">
+          <Calendar className="w-5 h-5 text-[#b7ff00] mt-0.5" />
+          <div>
+            <h4 className="text-sm font-bold text-white">Prazo da Declaração Anual (DASN-SIMEI)</h4>
+            <p className="text-xs text-zinc-400 mt-1">
+              A entrega vai de <strong className="text-zinc-200">1º de janeiro até 31 de maio</strong> do ano seguinte ao exercício declarado.
+              Declare a receita bruta de <strong className="text-zinc-200">{year}</strong> até <strong className="text-zinc-200">31/05/{year + 1}</strong>.
+            </p>
+          </div>
+        </div>
+      </Card>
+
+      {/* Over-limit warning */}
       {over && (
-        <Card className="border-orange-500/40">
+        <Card className="border-orange-500/40 bg-orange-500/[0.05]">
           <div className="flex items-start gap-3">
             <AlertTriangle className="w-5 h-5 text-orange-400 mt-0.5" />
-            <div>
-              <h4 className="text-sm font-bold text-orange-300">Limite anual ultrapassado</h4>
-              <p className="text-xs text-zinc-400 mt-1">Faturamento de {brl(total)} excede R$ 81.000. Considere migrar para Microempresa (ME) e consulte um contador.</p>
+            <div className="flex-1">
+              <h4 className="text-sm font-bold text-orange-300">Atenção: Faturamento excedeu o limite do MEI</h4>
+              <p className="text-xs text-zinc-400 mt-1">
+                Total de {brl(total)} ultrapassa o limite anual de {brl(ANNUAL_LIMIT)}. Você pode precisar migrar para ME (Microempresa).
+              </p>
+              <a
+                href="https://www.gov.br/empresas-e-negocios/pt-br/empreendedor/quero-ser-mei/posso-ser-mei"
+                target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-xs text-orange-300 hover:underline mt-2"
+              >
+                Saiba mais sobre a migração <ExternalLink className="w-3 h-3" />
+              </a>
             </div>
           </div>
         </Card>
       )}
 
+      {/* Limit progress */}
+      <Card>
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[10px] uppercase tracking-widest text-zinc-400">Uso do Limite Anual MEI</span>
+          <span className="text-xs font-bold text-white tabular-nums">{pct.toFixed(1)}%</span>
+        </div>
+        <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+          <div className={`h-full ${over ? 'bg-orange-400' : 'bg-[#b7ff00]'}`} style={{ width: `${pct}%` }} />
+        </div>
+        <div className="flex justify-between text-[10px] text-zinc-500 mt-1 tabular-nums">
+          <span>{brl(total)}</span>
+          <span>{brl(ANNUAL_LIMIT)}</span>
+        </div>
+      </Card>
+
+      {/* Monthly table with inline edit */}
       <Card className="p-0 overflow-hidden">
         <table className="w-full text-sm">
           <thead className="bg-white/[0.03] text-[10px] uppercase tracking-widest text-zinc-400">
             <tr>
               <th className="text-left p-3">Mês</th>
+              <th className="text-right p-3">Notas Emitidas</th>
+              <th className="text-right p-3">Vendas s/ Nota</th>
               <th className="text-right p-3">Receita Bruta</th>
             </tr>
           </thead>
@@ -955,16 +1016,122 @@ const DasnSub: React.FC<{ state: State }> = ({ state }) => {
             {totals.map(t => (
               <tr key={t.month} className="border-t border-white/5">
                 <td className="p-3 text-white">{MESES[t.month - 1]}</td>
-                <td className="p-3 text-right text-[#b7ff00] font-bold tabular-nums">{brl(t.total)}</td>
+                <td className="p-3 text-right text-zinc-300 tabular-nums">{brl(t.notas)}</td>
+                <td className="p-3 text-right">
+                  <input
+                    type="number" step="0.01" defaultValue={t.sem || ''}
+                    placeholder="0,00"
+                    onBlur={(e) => setSem(t.month, Number(e.target.value) || 0)}
+                    className="w-28 bg-white/[0.04] border border-white/10 rounded px-2 py-1 text-xs text-right text-white tabular-nums"
+                  />
+                </td>
+                <td className={`p-3 text-right font-bold tabular-nums ${t.total > 0 ? 'text-[#b7ff00]' : 'text-zinc-600'}`}>{brl(t.total)}</td>
               </tr>
             ))}
             <tr className="border-t-2 border-white/20 bg-white/[0.03]">
-              <td className="p-3 text-white font-bold uppercase tracking-widest text-xs">Total Anual</td>
+              <td className="p-3 text-white font-bold uppercase tracking-widest text-xs" colSpan={3}>Total Anual</td>
               <td className={`p-3 text-right font-extrabold text-lg tabular-nums ${over ? 'text-orange-300' : 'text-[#b7ff00]'}`}>{brl(total)}</td>
             </tr>
           </tbody>
         </table>
       </Card>
+
+      <p className="text-[10px] text-zinc-500">
+        Meses sem registro aparecem como R$ 0,00 — preencha o valor diretamente na coluna "Vendas s/ Nota".
+      </p>
+
+      {showReport && (
+        <DasnReportModal
+          year={year}
+          totals={totals}
+          total={total}
+          empresa={empresa}
+          onClose={() => setShowReport(false)}
+        />
+      )}
+    </div>
+  );
+};
+
+/* ---------- DASN Printable Report ---------- */
+const DasnReportModal: React.FC<{
+  year: number;
+  totals: { month: number; notas: number; sem: number; total: number }[];
+  total: number;
+  empresa?: Empresa;
+  onClose: () => void;
+}> = ({ year, totals, total, empresa, onClose }) => {
+  const print = () => window.print();
+  const MESES_FULL = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  return (
+    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 print:bg-white print:p-0 print:static" onClick={onClose}>
+      <style>{`@media print { body * { visibility: hidden; } .dasn-print, .dasn-print * { visibility: visible; } .dasn-print { position: absolute; left: 0; top: 0; width: 100%; } }`}</style>
+      <div
+        className="dasn-print bg-zinc-950 print:bg-white border border-white/10 print:border-0 rounded-2xl print:rounded-none max-w-3xl w-full max-h-[90vh] overflow-auto p-8 print:text-black"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between mb-6 print:hidden">
+          <h3 className="text-lg font-bold text-white">Resumo DASN-SIMEI {year}</h3>
+          <div className="flex gap-2">
+            <button onClick={print} className="text-xs px-3 py-1.5 rounded bg-[#b7ff00] text-black font-bold">Imprimir / Salvar PDF</button>
+            <button onClick={onClose} className="text-xs px-3 py-1.5 rounded bg-white/10 text-white border border-white/10">Fechar</button>
+          </div>
+        </div>
+
+        <div className="space-y-5 text-sm text-zinc-200 print:text-black">
+          <div className="text-center border-b border-white/10 print:border-zinc-300 pb-4">
+            <h1 className="text-xl font-extrabold text-white print:text-black">DECLARAÇÃO ANUAL DO SIMPLES NACIONAL – MEI</h1>
+            <p className="text-xs text-zinc-400 print:text-zinc-700 mt-1">Exercício {year} · DASN-SIMEI</p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 text-xs">
+            <div><strong>Razão Social:</strong> {empresa?.razao_social || '—'}</div>
+            <div><strong>Nome Fantasia:</strong> {empresa?.nome_fantasia || '—'}</div>
+            <div><strong>CNPJ:</strong> {empresa?.cnpj || '—'}</div>
+            <div><strong>Atividade:</strong> {empresa?.atividade_principal || '—'}</div>
+            <div className="col-span-2"><strong>Endereço:</strong> {empresa?.endereco || '—'} – {empresa?.cidade || ''}/{empresa?.uf || ''} {empresa?.cep ? `· CEP ${empresa.cep}` : ''}</div>
+          </div>
+
+          <table className="w-full text-sm border-t border-white/10 print:border-zinc-300">
+            <thead>
+              <tr className="text-[10px] uppercase tracking-widest text-zinc-400 print:text-zinc-700">
+                <th className="text-left py-2">Mês</th>
+                <th className="text-right py-2">Notas Emitidas</th>
+                <th className="text-right py-2">Sem Nota</th>
+                <th className="text-right py-2">Receita Bruta</th>
+              </tr>
+            </thead>
+            <tbody>
+              {totals.map(t => (
+                <tr key={t.month} className="border-t border-white/5 print:border-zinc-200">
+                  <td className="py-1.5">{MESES_FULL[t.month - 1]}</td>
+                  <td className="py-1.5 text-right tabular-nums">{brl(t.notas)}</td>
+                  <td className="py-1.5 text-right tabular-nums">{brl(t.sem)}</td>
+                  <td className="py-1.5 text-right tabular-nums font-bold">{brl(t.total)}</td>
+                </tr>
+              ))}
+              <tr className="border-t-2 border-white/30 print:border-zinc-500 font-extrabold">
+                <td className="py-2" colSpan={3}>TOTAL ANUAL</td>
+                <td className="py-2 text-right tabular-nums text-[#b7ff00] print:text-black">{brl(total)}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div className="text-xs leading-relaxed border-t border-white/10 print:border-zinc-300 pt-4">
+            Declaro, sob as penas da lei, que as informações acima refletem a receita bruta apurada no exercício de <strong>{year}</strong>,
+            no valor total de <strong>{brl(total)}</strong>, em conformidade com a Resolução CGSN nº 140/2018, para fins de entrega da Declaração Anual do Simples Nacional para o Microempreendedor Individual (DASN-SIMEI).
+          </div>
+
+          <div className="grid grid-cols-2 gap-8 pt-10 text-xs">
+            <div className="text-center">
+              <div className="border-t border-zinc-500 pt-1">Local e Data</div>
+            </div>
+            <div className="text-center">
+              <div className="border-t border-zinc-500 pt-1">{empresa?.razao_social || 'Assinatura do Titular MEI'}</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
