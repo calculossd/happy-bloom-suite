@@ -19,6 +19,7 @@ import { OkLojaAssistant } from './components/OkLojaAssistant';
 import { ShowcaseView } from './components/ShowcaseView';
 import { PrintFlowTab } from './components/PrintFlowTab';
 import { PrinterQueueList } from './components/PrinterQueueList';
+import { ManutencaoTab } from './components/ManutencaoTab';
 import { OrcamentosTab } from './components/OrcamentosTab';
 import {
   PriceResearchTab, PreCheckTab, AgendaTab, ToolsTab, ModelsTab
