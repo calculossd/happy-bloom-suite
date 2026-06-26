@@ -855,7 +855,8 @@ export const CostsTab: React.FC<CostsTabProps> = ({
         filamentsUsed: manualProdFilaments.length > 0 ? manualProdFilaments : undefined,
         suppliesUsed: manualProdSupplies.length > 0 ? manualProdSupplies : undefined,
         stlFileName: manualStlFileName || undefined,
-        stlFileData: manualStlFileData || undefined
+        stlFileData: manualStlFileData || undefined,
+        extraCostPerUnit: Number(manualProdExtraCost) || 0,
       };
       setCatalogItems(prev => prev.map(c => c.id === editingProduct.id ? updatedProg : c));
       setEditingProduct(null);
@@ -877,7 +878,8 @@ export const CostsTab: React.FC<CostsTabProps> = ({
         filamentsUsed: manualProdFilaments.length > 0 ? manualProdFilaments : undefined,
         suppliesUsed: manualProdSupplies.length > 0 ? manualProdSupplies : undefined,
         stlFileName: manualStlFileName || undefined,
-        stlFileData: manualStlFileData || undefined
+        stlFileData: manualStlFileData || undefined,
+        extraCostPerUnit: Number(manualProdExtraCost) || 0,
       };
       setCatalogItems(prev => [newProg, ...prev]);
       triggerFeedback(`Produto comercial "${newProg.name}" cadastrado no estoque de produtos! Ele aparecerá no catálogo automaticamente.`);
