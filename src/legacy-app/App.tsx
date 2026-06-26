@@ -2085,9 +2085,8 @@ export default function App() {
             return (
               <div
                 id="global-price-opportunity-banner"
-                className="relative mb-2 overflow-visible rounded-2xl border border-sky-300 animate-fade-in"
+                className="relative mb-2 overflow-visible rounded-2xl border border-sky-300 bg-sky-600 animate-fade-in"
                 style={{
-                  background: '#0284c7',
                   backgroundColor: '#0284c7',
                   opacity: 1,
                   boxShadow: '0 18px 34px -18px #0284c7, inset 0 1px 0 #7dd3fc',
