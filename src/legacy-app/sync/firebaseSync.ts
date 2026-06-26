@@ -1,5 +1,4 @@
 // @ts-nocheck
-import { safeStorage } from '../utils/storage';
 
 export class FirebaseSyncError extends Error {
   constructor(message: string) {
