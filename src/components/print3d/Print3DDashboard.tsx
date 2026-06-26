@@ -1364,25 +1364,24 @@ export function Print3DPanel({
 
   return (
     <div className="space-y-5 text-white">
-      {/* Hero banner 16:5 — title + actions overlaid with gradient shadow */}
-      <div
-        className="relative w-full overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0a0d0c] shadow-[0_24px_60px_-30px_rgba(163,230,53,0.35)]"
-        style={{ aspectRatio: "32 / 5" }}
-      >
+      {/* Hero + KPI strip — image fades down into dashboard */}
+      <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#050908]">
+        {/* Background image stretches behind hero + KPIs */}
         <img
           src={dashboardHero.url}
           alt="Ateliê 3D em produção"
-          className="absolute inset-0 h-full w-full object-cover"
+          className="pointer-events-none absolute inset-x-0 top-0 w-full h-full object-cover"
           style={{ objectPosition: "center 78%" }}
           loading="lazy"
           decoding="async"
         />
-        {/* Tonal gradients for legibility */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050908] via-[#050908]/55 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#050908]/80 via-transparent to-transparent" />
+        {/* Left fade for title legibility */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#050908] via-[#050908]/55 to-transparent" />
+        {/* Bottom fade — image dissolves into dashboard */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-b from-transparent via-[#050908]/85 to-[#050908]" />
 
-        {/* Welcome + actions overlay */}
-        <div className="relative z-10 h-full flex flex-col justify-between p-5 lg:p-7">
+        {/* Hero band */}
+        <div className="relative z-10 flex flex-col justify-between gap-5 p-5 lg:p-7" style={{ minHeight: "clamp(180px, 22vw, 280px)" }}>
           <div>
             <h1 className="text-[22px] lg:text-[26px] font-bold tracking-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
               Bem-vindo de volta, Inova Mundo! <span className="inline-block">👋</span>
@@ -1390,12 +1389,12 @@ export function Print3DPanel({
             <p className="text-[12.5px] lg:text-[13px] text-white/70">Aqui está o resumo da sua produção hoje.</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <button className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-black/40 border border-white/[0.1] text-[12px] text-white/85 hover:bg-black/60">
+            <button className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-black/40 border border-white/[0.1] text-[12px] text-white/85 hover:bg-black/60 backdrop-blur-sm">
               <Calendar className="size-3.5" />{" "}
               {today.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })}{" "}
               <ChevronDown className="size-3" />
             </button>
-            <button className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-black/40 border border-white/[0.1] text-[12px] text-white/85 hover:bg-black/60">
+            <button className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-black/40 border border-white/[0.1] text-[12px] text-white/85 hover:bg-black/60 backdrop-blur-sm">
               <Filter className="size-3.5" /> Filtros <ChevronDown className="size-3" />
             </button>
             <button
@@ -1407,16 +1406,16 @@ export function Print3DPanel({
             </button>
           </div>
         </div>
-      </div>
 
-      {/* Premium dashboard strip — Obsidian Glass */}
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+        {/* KPI strip — sits over the faded bottom of the image */}
+        <div className="relative z-10 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 p-4 pt-0">
         <PremiumKpi tone="lime"    icon={ShoppingBag} label="Pedidos Hoje"       value={String(ordersToday.length)} sub={`${activePrinters}/${printersTotal} impressoras`} />
         <PremiumKpi tone="emerald" icon={DollarSign}  label="Faturamento Hoje"   value={fmtBRL(revenueToday)}       sub="receita do dia" />
         <PremiumKpi tone="blue"    icon={Package2}    label="Peças Impressas"    value={String(piecesToday)}        sub="hoje" />
         <PremiumKpi tone="purple"  icon={Clock}       label="Horas de Impressão" value={hoursLabel}                 sub="hoje" />
         <PremiumKpi tone="cyan"    icon={Users}       label="Clientes c/ Estoque" value={String(balcaoClientsCount)} sub="balcão" />
         <PremiumKpi tone="gold"    icon={TrendingUp}  label="Margem do Mês"      value={`${monthMargin.toFixed(1)}%`} sub={fmtBRL(monthProfit)} />
+      </div>
       </div>
 
           {/* Row 2: Mapa | Impressão ao Vivo | Pedidos | Higrômetros */}
