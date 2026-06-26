@@ -1667,8 +1667,29 @@ export default function App() {
       <>
       {/* PREMIUM SIDE NAV — vertical, fixed left */}
       <aside className="hidden md:flex fixed left-0 top-0 bottom-0 z-50 w-[168px] flex-col bg-[#0a0d0c]/95 backdrop-blur-2xl border-r border-white/[0.06] shadow-[8px_0_32px_-12px_rgba(0,0,0,0.8)]">
-        <div className="px-3 py-4 border-b border-white/[0.05]">
-          <div className="text-[10px] uppercase tracking-[0.2em] text-white/40 font-semibold">Navegação</div>
+        {/* BRAND / LOGO — alinhado ao topo, sem moldura */}
+        <div className="px-3 pt-5 pb-4 flex flex-col items-center gap-2">
+          <div className="relative w-16 h-16 flex items-center justify-center">
+            <div className="absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_center,_rgba(163,230,53,0.18),_transparent_70%)] blur-xl" />
+            {brandConfig.customLogo ? (
+              <img
+                src={brandConfig.customLogo}
+                alt={brandConfig.name || 'Logo'}
+                className="relative w-full h-full object-contain drop-shadow-[0_4px_14px_rgba(0,0,0,0.6)]"
+                referrerPolicy="no-referrer"
+              />
+            ) : (
+              <Atelier3DLogo className="relative h-14 w-14" />
+            )}
+          </div>
+          <div className="text-center leading-tight">
+            <div className="text-[11px] font-semibold text-white/90 truncate max-w-[140px]">{brandConfig.name}</div>
+            <div className="text-[8px] uppercase tracking-[0.22em] text-white/35 font-semibold mt-0.5">Ateliê 3D</div>
+          </div>
+        </div>
+        {/* Spacer para descer a navegação até a altura do "Bem-vindo de volta" */}
+        <div className="px-3 pt-2 pb-2 border-t border-white/[0.05] mt-1">
+          <div className="text-[9px] uppercase tracking-[0.24em] text-white/35 font-bold">Navegação</div>
         </div>
         <nav
           className="flex-1 flex flex-col gap-4 overflow-y-auto no-scrollbar px-2 py-3"
