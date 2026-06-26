@@ -2270,6 +2270,7 @@ export default function App() {
                 />
               </div>
             )}
+            {currentTab === 17 && <ContabilidadeTab />}
           </Suspense>
         )}
           </div>
