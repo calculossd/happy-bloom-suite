@@ -2442,13 +2442,17 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                                  const img = new Image();
                                  img.crossOrigin = 'anonymous';
                                  img.onload = () => {
-                                   const W = img.naturalWidth;
-                                   const H = img.naturalHeight;
+                                   // Redimensiona para no máx 256px (mantém aspect) para caber no localStorage
+                                   const MAX = 256;
+                                   const scale = Math.min(1, MAX / Math.max(img.naturalWidth, img.naturalHeight));
+                                   const W = Math.round(img.naturalWidth * scale);
+                                   const H = Math.round(img.naturalHeight * scale);
                                    const c = document.createElement('canvas');
                                    c.width = W; c.height = H;
                                    const ctx = c.getContext('2d');
                                    if (!ctx) return resolve(raw);
-                                   ctx.drawImage(img, 0, 0);
+                                   ctx.clearRect(0, 0, W, H);
+                                   ctx.drawImage(img, 0, 0, W, H);
                                    try {
                                      const data = ctx.getImageData(0, 0, W, H);
                                      const p = data.data;
@@ -2459,7 +2463,8 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                                        if (transparentPixels > (W * H) * 0.02) break;
                                      }
                                      if (transparentPixels > (W * H) * 0.02) {
-                                       return resolve(raw);
+                                       // Já é transparente — só devolve a versão reduzida
+                                       return resolve(c.toDataURL('image/png'));
                                      }
                                      // Cor de referência: média dos 4 cantos
                                      const corners = [
