@@ -190,9 +190,9 @@ export const InsumosTab: React.FC = () => {
 
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        <Kpi label="Insumos Cadastrados" value={String(kpis.total)} tone="default" />
-        <Kpi label="Abaixo do Mínimo" value={String(kpis.baixo)} tone={kpis.baixo > 0 ? 'danger' : 'success'} />
-        <Kpi label="Valor em Estoque" value={brl(kpis.valor)} tone="success" />
+        <Kpi icon={Package} label="Insumos Cadastrados" value={String(kpis.total)} tone="lime" />
+        <Kpi icon={AlertTriangle} label="Abaixo do Mínimo" value={String(kpis.baixo)} tone={kpis.baixo > 0 ? 'orange' : 'emerald'} />
+        <Kpi icon={ArrowUpCircle} label="Valor em Estoque" value={brl(kpis.valor)} tone="emerald" />
       </div>
 
       {/* Toolbar */}
