@@ -1393,7 +1393,7 @@ export function Print3DPanel({
         </div>
 
         {/* KPI strip — fully on solid black, abaixo da imagem */}
-        <div className="relative z-10 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4 px-0 pt-2 pb-1 bg-black items-stretch [&>*]:h-full">
+        <div className="relative z-10 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4 px-0 pt-2 pb-1 bg-black items-stretch">
         <PremiumKpi tone="lime"    icon={ShoppingBag} label="Pedidos Hoje"       value={String(ordersToday.length)} sub={`${activePrinters}/${printersTotal} impressoras`} />
         <PremiumKpi tone="emerald" icon={DollarSign}  label="Faturamento Hoje"   value={fmtBRL(revenueToday)}       sub="receita do dia" />
         <PremiumKpi tone="blue"    icon={Package2}    label="Peças Impressas"    value={String(piecesToday)}        sub="hoje" />
