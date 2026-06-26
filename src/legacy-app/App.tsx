@@ -2085,19 +2085,21 @@ export default function App() {
             return (
               <div
                 id="global-price-opportunity-banner"
-                className="relative mb-2 overflow-visible rounded-2xl border border-sky-400/30 animate-fade-in"
+                className="relative mb-2 overflow-visible rounded-2xl border border-sky-300 animate-fade-in"
                 style={{
-                  background: 'linear-gradient(135deg, #0284c7, #0369a1)',
-                  boxShadow: '0 0 32px -12px rgba(56,189,248,0.6), inset 0 1px 0 rgba(125,211,252,0.35)',
+                  background: '#0284c7',
+                  backgroundColor: '#0284c7',
+                  opacity: 1,
+                  boxShadow: '0 18px 34px -18px #0284c7, inset 0 1px 0 #7dd3fc',
                 }}
               >
                 <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-1.5 sm:px-5">
                   <div className="flex min-w-0 items-center gap-3">
-                    <div className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-sky-500/10 ring-1 ring-inset ring-sky-400/25 text-sky-300">
+                    <div className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-sky-900 ring-1 ring-inset ring-sky-100 text-sky-50">
                       <span className="text-sm leading-none">🔥</span>
                     </div>
                     <div className="min-w-0 flex items-baseline gap-2.5 truncate">
-                      <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-sky-300/90 shrink-0">
+                      <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-sky-50 shrink-0">
                         Oportunidade
                       </span>
                       <span className="truncate text-[12px] font-semibold tracking-[-0.005em] text-zinc-50">
@@ -2112,7 +2114,7 @@ export default function App() {
                         localStorage.setItem("bambuzau_costs_subtab_override", "QUOTE");
                         setCurrentTab(4);
                       }}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-sky-400/30 bg-sky-500/15 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-sky-100 transition-all duration-300 hover:border-sky-300/50 hover:bg-sky-500/25 hover:shadow-[0_8px_24px_-8px_rgba(56,189,248,0.6)] active:scale-[0.97]"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-sky-100 bg-sky-900 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-sky-50 transition-all duration-300 hover:bg-sky-800 hover:shadow-[0_8px_24px_-8px_#38bdf8] active:scale-[0.97]"
                     >
                       Ver cotações
                       <span aria-hidden>↗</span>
@@ -2121,7 +2123,7 @@ export default function App() {
                       onClick={() => setDismissedPriceAlert(true)}
                       title="Fechar oportunidade"
                       aria-label="Fechar"
-                      className="grid h-8 w-8 place-items-center rounded-lg text-zinc-500 hover:text-white hover:bg-white/5 transition-all duration-200 active:scale-95"
+                      className="grid h-8 w-8 place-items-center rounded-lg bg-sky-900 text-sky-50 hover:bg-sky-800 transition-all duration-200 active:scale-95"
                     >
                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round">
                         <path d="M2 2l8 8M10 2l-8 8" />
