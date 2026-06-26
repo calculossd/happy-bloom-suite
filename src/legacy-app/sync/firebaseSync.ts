@@ -146,7 +146,9 @@ export async function downloadWorkspace(target: SyncTarget): Promise<{ data: any
   }
 
   persistSyncTarget(url, workspace);
-  restoreCustomKeys(data.customKeys);
+  // SECURITY: Do NOT restore customKeys from Firebase. Legacy payloads may
+  // still contain them; ignore so that compromised remote data cannot inject
+  // attacker-controlled API keys into the local workspace.
   if (data.catalogItems) {
     try {
       localStorage.setItem('bambuzau_local_catalog_production', JSON.stringify(data.catalogItems));
@@ -156,20 +158,4 @@ export async function downloadWorkspace(target: SyncTarget): Promise<{ data: any
   }
 
   return { data, syncedAt: persistSyncTimestamp() };
-}
-
-function restoreCustomKeys(customKeys: any) {
-  if (!customKeys) return;
-  const mapping: Array<[string, string]> = [
-    ['geminiKey', 'bambuzau_custom_gemini_key'],
-    ['groqKey', 'bambuzau_custom_groq_key'],
-    ['serpKey', 'bambuzau_custom_serp_key'],
-    ['tavilyKey', 'bambuzau_custom_tavily_key'],
-    ['jinaKey', 'bambuzau_custom_jina_key'],
-    ['aiProvider', 'bambuzau_ai_provider'],
-    ['webOrigin', 'bambuzau_web_origin'],
-  ];
-  for (const [src, storageKey] of mapping) {
-    if (customKeys[src]) safeStorage.setItem(storageKey, customKeys[src]);
-  }
 }
