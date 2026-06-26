@@ -1364,34 +1364,7 @@ export function Print3DPanel({
 
   return (
     <div className="space-y-5 text-white">
-      {/* Welcome + actions (moved above the hero image) */}
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-[22px] font-bold tracking-tight text-white">
-            Bem-vindo de volta, Inova Mundo! <span className="inline-block">👋</span>
-          </h1>
-          <p className="text-[12.5px] text-white/45">Aqui está o resumo da sua produção hoje.</p>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <button className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white/[0.03] border border-white/[0.06] text-[12px] text-white/75 hover:bg-white/[0.06]">
-            <Calendar className="size-3.5" />{" "}
-            {today.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })}{" "}
-            <ChevronDown className="size-3" />
-          </button>
-          <button className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white/[0.03] border border-white/[0.06] text-[12px] text-white/75 hover:bg-white/[0.06]">
-            <Filter className="size-3.5" /> Filtros <ChevronDown className="size-3" />
-          </button>
-          <button
-            onClick={() => onSelectTab?.(3)}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-lg text-[12px] font-bold text-black hover:brightness-110 transition"
-            style={{ background: LIME, boxShadow: `0 6px 18px -6px ${LIME}aa` }}
-          >
-            <Plus className="size-3.5" strokeWidth={2.8} /> Novo Pedido
-          </button>
-        </div>
-      </div>
-
-      {/* Hero banner 16:5 with KPI strip overlaid on top — clean image, no blur */}
+      {/* Hero banner 16:5 — title + actions overlaid with gradient shadow */}
       <div
         className="relative w-full overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0a0d0c] shadow-[0_24px_60px_-30px_rgba(163,230,53,0.35)]"
         style={{ aspectRatio: "16 / 5" }}
@@ -1403,17 +1376,46 @@ export function Print3DPanel({
           loading="lazy"
           decoding="async"
         />
-        {/* KPI strip overlay */}
-        <div className="absolute inset-x-0 bottom-0 p-3 md:p-4">
-          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
-            <PremiumKpi tone="lime"    icon={ShoppingBag} label="Pedidos Hoje"       value={String(ordersToday.length)} sub={`${activePrinters}/${printersTotal} impressoras`} />
-            <PremiumKpi tone="emerald" icon={DollarSign}  label="Faturamento Hoje"   value={fmtBRL(revenueToday)}       sub="receita do dia" />
-            <PremiumKpi tone="blue"    icon={Package2}    label="Peças Impressas"    value={String(piecesToday)}        sub="hoje" />
-            <PremiumKpi tone="purple"  icon={Clock}       label="Horas de Impressão" value={hoursLabel}                 sub="hoje" />
-            <PremiumKpi tone="cyan"    icon={Users}       label="Clientes c/ Estoque" value={String(balcaoClientsCount)} sub="balcão" />
-            <PremiumKpi tone="gold"    icon={TrendingUp}  label="Margem do Mês"      value={`${monthMargin.toFixed(1)}%`} sub={fmtBRL(monthProfit)} />
+        {/* Tonal gradients for legibility */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050908] via-[#050908]/55 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050908]/80 via-transparent to-transparent" />
+
+        {/* Welcome + actions overlay */}
+        <div className="relative z-10 h-full flex flex-col justify-between p-5 lg:p-7">
+          <div>
+            <h1 className="text-[22px] lg:text-[26px] font-bold tracking-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
+              Bem-vindo de volta, Inova Mundo! <span className="inline-block">👋</span>
+            </h1>
+            <p className="text-[12.5px] lg:text-[13px] text-white/70">Aqui está o resumo da sua produção hoje.</p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <button className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-black/40 border border-white/[0.1] text-[12px] text-white/85 hover:bg-black/60">
+              <Calendar className="size-3.5" />{" "}
+              {today.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })}{" "}
+              <ChevronDown className="size-3" />
+            </button>
+            <button className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-black/40 border border-white/[0.1] text-[12px] text-white/85 hover:bg-black/60">
+              <Filter className="size-3.5" /> Filtros <ChevronDown className="size-3" />
+            </button>
+            <button
+              onClick={() => onSelectTab?.(3)}
+              className="flex items-center gap-2 px-3.5 py-2 rounded-lg text-[12px] font-bold text-black hover:brightness-110 transition"
+              style={{ background: LIME, boxShadow: `0 6px 18px -6px ${LIME}aa` }}
+            >
+              <Plus className="size-3.5" strokeWidth={2.8} /> Novo Pedido
+            </button>
           </div>
         </div>
+      </div>
+
+      {/* Premium dashboard strip — Obsidian Glass */}
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+        <PremiumKpi tone="lime"    icon={ShoppingBag} label="Pedidos Hoje"       value={String(ordersToday.length)} sub={`${activePrinters}/${printersTotal} impressoras`} />
+        <PremiumKpi tone="emerald" icon={DollarSign}  label="Faturamento Hoje"   value={fmtBRL(revenueToday)}       sub="receita do dia" />
+        <PremiumKpi tone="blue"    icon={Package2}    label="Peças Impressas"    value={String(piecesToday)}        sub="hoje" />
+        <PremiumKpi tone="purple"  icon={Clock}       label="Horas de Impressão" value={hoursLabel}                 sub="hoje" />
+        <PremiumKpi tone="cyan"    icon={Users}       label="Clientes c/ Estoque" value={String(balcaoClientsCount)} sub="balcão" />
+        <PremiumKpi tone="gold"    icon={TrendingUp}  label="Margem do Mês"      value={`${monthMargin.toFixed(1)}%`} sub={fmtBRL(monthProfit)} />
       </div>
 
           {/* Row 2: Mapa | Impressão ao Vivo | Pedidos | Higrômetros */}
