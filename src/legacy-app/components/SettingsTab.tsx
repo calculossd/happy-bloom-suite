@@ -2432,57 +2432,99 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                       onChange={(e) => {
                         const file = e.target.files?.[0];
                         if (file) {
-                          const reader = new FileReader();
-                          reader.onload = async (event) => {
-                            const raw = event.target?.result as string;
-                            // Remove fundo branco/claro via canvas (chroma-key)
-                            const processed = await new Promise<string>((resolve) => {
-                              try {
-                                const img = new Image();
-                                img.crossOrigin = 'anonymous';
-                                img.onload = () => {
-                                  const c = document.createElement('canvas');
-                                  c.width = img.naturalWidth;
-                                  c.height = img.naturalHeight;
-                                  const ctx = c.getContext('2d');
-                                  if (!ctx) return resolve(raw);
-                                  ctx.drawImage(img, 0, 0);
-                                  try {
-                                    const data = ctx.getImageData(0, 0, c.width, c.height);
-                                    const p = data.data;
-                                    for (let i = 0; i < p.length; i += 4) {
-                                      const r = p[i], g = p[i + 1], b = p[i + 2];
-                                      const max = Math.max(r, g, b);
-                                      const min = Math.min(r, g, b);
-                                      const sat = max - min;
-                                      // pixel "quase branco" / fundo claro neutro → transparente
-                                      if (max > 235 && sat < 18) {
-                                        p[i + 3] = 0;
-                                      } else if (max > 215 && sat < 14) {
-                                        // borda suave
-                                        p[i + 3] = Math.round(((max - 215) / 20) * 255 * 0.4);
-                                      }
-                                    }
-                                    ctx.putImageData(data, 0, 0);
-                                    resolve(c.toDataURL('image/png'));
-                                  } catch {
-                                    resolve(raw);
-                                  }
-                                };
-                                img.onerror = () => resolve(raw);
-                                img.src = raw;
-                              } catch {
-                                resolve(raw);
-                              }
-                            });
-                            setLocalCustomLogo(processed);
-                            onUpdateBrandConfig({
-                              ...brandConfig,
-                              customLogo: processed
-                            });
-                            showSuccess('Logotipo aplicado sem fundo! ✓');
-                          };
-                          reader.readAsDataURL(file);
+                           const reader = new FileReader();
+                           reader.onload = async (event) => {
+                             const raw = event.target?.result as string;
+                             // Remove SOMENTE o fundo (flood-fill a partir das bordas),
+                             // preservando branco/claro DENTRO do logo.
+                             const processed = await new Promise<string>((resolve) => {
+                               try {
+                                 const img = new Image();
+                                 img.crossOrigin = 'anonymous';
+                                 img.onload = () => {
+                                   const W = img.naturalWidth;
+                                   const H = img.naturalHeight;
+                                   const c = document.createElement('canvas');
+                                   c.width = W; c.height = H;
+                                   const ctx = c.getContext('2d');
+                                   if (!ctx) return resolve(raw);
+                                   ctx.drawImage(img, 0, 0);
+                                   try {
+                                     const data = ctx.getImageData(0, 0, W, H);
+                                     const p = data.data;
+                                     // Se imagem já tem transparência significativa, não mexer
+                                     let transparentPixels = 0;
+                                     for (let i = 3; i < p.length; i += 4) {
+                                       if (p[i] < 250) transparentPixels++;
+                                       if (transparentPixels > (W * H) * 0.02) break;
+                                     }
+                                     if (transparentPixels > (W * H) * 0.02) {
+                                       return resolve(raw);
+                                     }
+                                     // Cor de referência: média dos 4 cantos
+                                     const corners = [
+                                       0, (W - 1) * 4,
+                                       (H - 1) * W * 4, ((H - 1) * W + (W - 1)) * 4,
+                                     ];
+                                     let rr = 0, gg = 0, bb = 0;
+                                     for (const c0 of corners) {
+                                       rr += p[c0]; gg += p[c0 + 1]; bb += p[c0 + 2];
+                                     }
+                                     rr = rr / 4; gg = gg / 4; bb = bb / 4;
+                                     const TOL = 32;          // dura: pertence ao fundo
+                                     const TOL_SOFT = 56;     // suave: borda
+                                     const visited = new Uint8Array(W * H);
+                                     const stack: number[] = [];
+                                     // Sementes: todos os pixels da borda
+                                     for (let x = 0; x < W; x++) {
+                                       stack.push(x); stack.push((H - 1) * W + x);
+                                     }
+                                     for (let y = 0; y < H; y++) {
+                                       stack.push(y * W); stack.push(y * W + (W - 1));
+                                     }
+                                     while (stack.length) {
+                                       const idx = stack.pop()!;
+                                       if (visited[idx]) continue;
+                                       const i4 = idx * 4;
+                                       const dr = p[i4] - rr;
+                                       const dg = p[i4 + 1] - gg;
+                                       const db = p[i4 + 2] - bb;
+                                       const dist = Math.sqrt(dr * dr + dg * dg + db * db);
+                                       if (dist > TOL_SOFT) continue;
+                                       visited[idx] = 1;
+                                       if (dist <= TOL) {
+                                         p[i4 + 3] = 0;
+                                       } else {
+                                         // anti-alias na borda
+                                         const t = (dist - TOL) / (TOL_SOFT - TOL);
+                                         p[i4 + 3] = Math.round(p[i4 + 3] * t);
+                                       }
+                                       const x = idx % W, y = (idx / W) | 0;
+                                       if (x > 0) stack.push(idx - 1);
+                                       if (x < W - 1) stack.push(idx + 1);
+                                       if (y > 0) stack.push(idx - W);
+                                       if (y < H - 1) stack.push(idx + W);
+                                     }
+                                     ctx.putImageData(data, 0, 0);
+                                     resolve(c.toDataURL('image/png'));
+                                   } catch {
+                                     resolve(raw);
+                                   }
+                                 };
+                                 img.onerror = () => resolve(raw);
+                                 img.src = raw;
+                               } catch {
+                                 resolve(raw);
+                               }
+                             });
+                             setLocalCustomLogo(processed);
+                             onUpdateBrandConfig({
+                               ...brandConfig,
+                               customLogo: processed
+                             });
+                             showSuccess('Logotipo aplicado sem fundo! ✓');
+                           };
+                           reader.readAsDataURL(file);
                         }
                       }}
                       className="hidden" 

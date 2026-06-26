@@ -1682,9 +1682,11 @@ export default function App() {
               <Atelier3DLogo className="relative h-14 w-14" />
             )}
           </div>
-          <div className="text-center leading-tight">
-            <div className="text-[11px] font-semibold text-white/90 truncate max-w-[140px]">{brandConfig.name}</div>
-            <div className="text-[8px] uppercase tracking-[0.22em] text-white/35 font-semibold mt-0.5">Ateliê 3D</div>
+          <div className="text-center leading-tight w-full px-1">
+            <div className="brand-shine text-[18px] font-extrabold tracking-tight truncate max-w-[150px] mx-auto">
+              {brandConfig.name}
+            </div>
+            <div className="text-[8px] uppercase tracking-[0.28em] text-white/35 font-semibold mt-1">Ateliê 3D</div>
           </div>
         </div>
         {/* Spacer para descer a navegação até a altura do "Bem-vindo de volta" */}

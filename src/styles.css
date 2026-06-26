@@ -1035,3 +1035,26 @@ html[data-costs-subtab="CALC"] [data-tab-category="estoque"] #view-page-header {
 .nav-alert-blink [data-nav-badge="true"] {
   animation: navAlertBadgeBlink 0.82s ease-in-out infinite !important;
 }
+
+/* Brand name animated shine */
+.brand-shine {
+  background: linear-gradient(
+    100deg,
+    #e8ffd1 0%,
+    #ffffff 35%,
+    #a3e635 50%,
+    #ffffff 65%,
+    #e8ffd1 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: brandShine 3.6s linear infinite;
+  filter: drop-shadow(0 0 8px rgba(163, 230, 53, 0.25));
+}
+@keyframes brandShine {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
