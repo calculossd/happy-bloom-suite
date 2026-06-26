@@ -1364,29 +1364,48 @@ export function Print3DPanel({
   return (
     <div className="space-y-5 text-white">
       {/* Page header */}
-      <div className="flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <h1 className="text-[22px] font-bold tracking-tight text-white">Bem-vindo de volta, Inova Mundo! <span className="inline-block">👋</span></h1>
-              <p className="text-[12.5px] text-white/45">Aqui está o resumo da sua produção hoje.</p>
-            </div>
-            <div className="flex items-center gap-2">
-              <button className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white/[0.03] border border-white/[0.06] text-[12px] text-white/75 hover:bg-white/[0.06]">
-                <Calendar className="size-3.5" />{" "}
-                {today.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })}{" "}
-                <ChevronDown className="size-3" />
-              </button>
-              <button className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white/[0.03] border border-white/[0.06] text-[12px] text-white/75 hover:bg-white/[0.06]">
-                <Filter className="size-3.5" /> Filtros <ChevronDown className="size-3" />
-              </button>
-              <button
-                onClick={() => onSelectTab?.(3)}
-                className="flex items-center gap-2 px-3.5 py-2 rounded-lg text-[12px] font-bold text-black hover:brightness-110 transition"
-                style={{ background: LIME, boxShadow: `0 6px 18px -6px ${LIME}aa` }}
-              >
-                <Plus className="size-3.5" strokeWidth={2.8} /> Novo Pedido
-              </button>
-            </div>
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_minmax(320px,42%)] gap-4 items-stretch">
+        {/* Left: welcome + actions stacked */}
+        <div className="flex flex-col justify-between gap-4 min-w-0">
+          <div>
+            <h1 className="text-[22px] font-bold tracking-tight text-white">Bem-vindo de volta, Inova Mundo! <span className="inline-block">👋</span></h1>
+            <p className="text-[12.5px] text-white/45">Aqui está o resumo da sua produção hoje.</p>
           </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <button className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white/[0.03] border border-white/[0.06] text-[12px] text-white/75 hover:bg-white/[0.06]">
+              <Calendar className="size-3.5" />{" "}
+              {today.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })}{" "}
+              <ChevronDown className="size-3" />
+            </button>
+            <button className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white/[0.03] border border-white/[0.06] text-[12px] text-white/75 hover:bg-white/[0.06]">
+              <Filter className="size-3.5" /> Filtros <ChevronDown className="size-3" />
+            </button>
+            <button
+              onClick={() => onSelectTab?.(3)}
+              className="flex items-center gap-2 px-3.5 py-2 rounded-lg text-[12px] font-bold text-black hover:brightness-110 transition"
+              style={{ background: LIME, boxShadow: `0 6px 18px -6px ${LIME}aa` }}
+            >
+              <Plus className="size-3.5" strokeWidth={2.8} /> Novo Pedido
+            </button>
+          </div>
+        </div>
+        {/* Right: hero image */}
+        <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0a0d0c] min-h-[180px] lg:min-h-[200px] shadow-[0_24px_60px_-30px_rgba(163,230,53,0.35)]">
+          <img
+            src={dashboardHero.url}
+            alt="Ateliê 3D em produção"
+            className="absolute inset-0 h-full w-full object-cover opacity-90"
+            loading="lazy"
+            decoding="async"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#050908] via-[#050908]/30 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#050908]/80 via-transparent to-transparent" />
+          <div className="absolute bottom-3 right-4 text-right">
+            <div className="text-[9px] font-bold uppercase tracking-[0.22em]" style={{ color: LIME }}>Studio</div>
+            <div className="text-[13px] font-bold text-white/90">Produção ao vivo</div>
+          </div>
+        </div>
+      </div>
 
           {/* Premium dashboard strip — Obsidian Glass */}
           <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
