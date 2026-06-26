@@ -54,7 +54,6 @@ const AgendaTabNew    = lazyWithReload(() => import('./imported/AgendaTab'));
 const SitesTab        = lazyWithReload(() => import('./imported/SitesTab'));
 const PreCheckTabNew  = lazyWithReload(() => import('./imported/PreCheckTab'));
 const ContabilidadeTab = lazyWithReload(() => import('./components/ContabilidadeTab'));
-const InsumosTab = lazyWithReload(() => import('./components/InsumosTab'));
 
 const TabFallback = () => (
   <div className="flex items-center justify-center py-20 text-[var(--brand-text-muted)] text-sm gap-2">
@@ -98,7 +97,6 @@ import {
   Download,
   Printer as PrinterNavIcon,
   FileBarChart2
-  ,Package
 } from 'lucide-react';
 
 // STUNNING 3D CUBE & PRINTER EXTENSION GEOMETRIC LOGO
@@ -1693,7 +1691,6 @@ export default function App() {
                 { id: 16, label: 'Impressoras', icon: PrinterNavIcon },
                 { id: 12, label: 'Pré-check', icon: ClipboardCheck },
                 { id: 14, label: 'Sites', icon: Globe },
-                { id: 18, label: 'Estoque Insumos', icon: Package },
               ],
             },
             {
@@ -2274,7 +2271,6 @@ export default function App() {
               </div>
             )}
             {currentTab === 17 && <ContabilidadeTab />}
-            {currentTab === 18 && <InsumosTab />}
           </Suspense>
         )}
           </div>
