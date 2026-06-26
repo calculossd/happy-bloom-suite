@@ -2389,48 +2389,6 @@ export default function App() {
                 </p>
               </div>
 
-              {/* COLORS/THEMES GRID */}
-              <div className="flex flex-col gap-2">
-                <label className="text-xs font-bold uppercase tracking-wider text-[var(--brand-muted)]">
-                  Escolha o Estilo de Cores (Paleta Visual)
-                </label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                  {[
-                    { key: 'dark-organic', name: 'Natural Sálvia', desc: 'Sálvia Orgânico & Ouro', primary: '#637E55', accent: '#E2B144' },
-                    { key: 'light-bambu', name: 'Areia Natural', desc: 'Areia Suave & Cedro', primary: '#4F6744', accent: '#C6942C' },
-                    { key: 'dark-slate', name: 'Tech Slate', desc: 'Cobalto & Chumbo', primary: '#4A85D2', accent: '#A2ACB9' },
-                    { key: 'gold-royal', name: 'Luxo Imperial', desc: 'Preto & Ouro Real', primary: '#D59A30', accent: '#B27C17' },
-                    { key: 'cyber-neon', name: 'Cyberpunk', desc: 'Neon Roxo & Rosa', primary: '#A855F7', accent: '#F43F5E' },
-                    { key: 'lava-orange', name: 'Lava Sunset', desc: 'Solar Laranja', primary: '#F97316', accent: '#FACC15' },
-                    { key: 'mint-forest', name: 'Mint Green', desc: 'Menta & Petróleo', primary: '#14B8A6', accent: '#34D399' },
-                    { key: 'obsidian-crimson', name: 'Forja Escura', desc: 'Matte Preto & Vermelho', primary: '#EF4444', accent: '#B91C1C' },
-                    { key: 'cool-ocean', name: 'Cool Ocean', desc: 'Ciano & Azul Mar', primary: '#06B6D4', accent: '#3B82F6' },
-                    { key: 'royal-amethyst', name: 'Imperial Violet', desc: 'Ametista & Rosa', primary: '#A855F7', accent: '#EC4899' },
-                    { key: 'desert-sand', name: 'Dunas de Areia', desc: 'Terracota Solar', primary: '#C2410C', accent: '#F59E0B' },
-                    { key: 'sakura-cherry', name: 'Sakura Blossom', desc: 'Cerejeira & Magma', primary: '#EC4899', accent: '#F472B6' }
-                  ].map((t) => (
-                    <button
-                      key={t.key}
-                      onClick={() => setBrandConfig(prev => ({ ...prev, theme: t.key }))}
-                      className={`p-3 rounded-xl border text-left flex flex-col gap-2 justify-between cursor-pointer transition-all ${
-                        brandConfig.theme === t.key
-                          ? 'border-[var(--brand-primary)] bg-[var(--brand-primary)]/10 ring-2 ring-[var(--brand-primary)] shadow-md translate-y-[-1px]'
-                          : 'border-white/10 bg-black/40 hover:border-white/20'
-                      }`}
-                    >
-                      <div className="space-y-0.5">
-                        <p className="text-[10.5px] font-extrabold leading-tight text-[var(--brand-text)]">{t.name}</p>
-                        <p className="text-[8.5px] text-[var(--brand-muted)] opacity-80">{t.desc}</p>
-                      </div>
-                      <div className="flex items-center gap-1.5 mt-1">
-                        <span className="w-3 h-3 rounded-full inline-block border border-white/20" style={{ backgroundColor: t.primary }} />
-                        <span className="w-3 h-3 rounded-full inline-block border border-white/20" style={{ backgroundColor: t.accent }} />
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
               {/* APP SYMBOL / LOGOTIPO CHOICES */}
               <div className="flex flex-col gap-2">
                 <label className="text-xs font-bold uppercase tracking-wider text-[var(--brand-muted)]">
