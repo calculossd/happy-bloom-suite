@@ -21,6 +21,7 @@ export const sendStlToTelegram = async (
   fileName: string,
   caption = "",
   chatId?: string,
+  thumbnail?: string | Blob | null,
 ): Promise<SendStlResult> => {
   const chat = (chatId || getTelegramChatId()).trim();
   if (!chat) return { ok: false, error: "chat_id do Telegram não configurado." };
@@ -29,6 +30,20 @@ export const sendStlToTelegram = async (
   if (caption) fd.append("caption", caption);
   const f = file instanceof File ? file : new File([file], fileName);
   fd.append("file", f, fileName);
+  if (thumbnail) {
+    try {
+      let blob: Blob | null = null;
+      if (typeof thumbnail === "string") {
+        if (thumbnail.startsWith("data:")) {
+          const res = await fetch(thumbnail);
+          blob = await res.blob();
+        }
+      } else {
+        blob = thumbnail;
+      }
+      if (blob) fd.append("thumbnail", new File([blob], "preview.png", { type: blob.type || "image/png" }));
+    } catch {}
+  }
   try {
     const res = await fetch("/api/telegram/send-stl", { method: "POST", body: fd });
     const data = await res.json().catch(() => ({}));

@@ -123,6 +123,8 @@ function CatalogPage() {
             file,
             file.name,
             `📦 Novo ${type.toUpperCase()} no Vault: ${rec.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`,
+            undefined,
+            thumb,
           ).then((r) => {
             if (!r.ok) console.warn("[telegram] send failed:", r.error);
           });

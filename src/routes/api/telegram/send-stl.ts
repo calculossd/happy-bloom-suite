@@ -30,6 +30,7 @@ export const Route = createFileRoute("/api/telegram/send-stl")({
         const chatId = String(form.get("chat_id") || "").trim();
         const caption = String(form.get("caption") || "").slice(0, 1024);
         const file = form.get("file");
+        const thumbnail = form.get("thumbnail");
 
         if (!chatId) return Response.json({ ok: false, error: "chat_id ausente." }, { status: 400 });
         if (!(file instanceof File)) {
@@ -40,6 +41,26 @@ export const Route = createFileRoute("/api/telegram/send-stl")({
             { ok: false, error: `Arquivo acima do limite do Telegram (50 MB). Atual: ${(file.size / 1024 / 1024).toFixed(1)} MB.` },
             { status: 413 },
           );
+        }
+
+        // Optional: send the preview image first as a photo so the user sees the model thumbnail in Telegram.
+        if (thumbnail instanceof File && thumbnail.size > 0 && thumbnail.size <= 10 * 1024 * 1024) {
+          try {
+            const photoForm = new FormData();
+            photoForm.append("chat_id", chatId);
+            if (caption) photoForm.append("caption", caption);
+            photoForm.append("photo", thumbnail, thumbnail.name || "preview.png");
+            await fetch(`${GATEWAY_URL}/sendPhoto`, {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${LOVABLE_API_KEY}`,
+                "X-Connection-Api-Key": TELEGRAM_API_KEY,
+              },
+              body: photoForm,
+            });
+          } catch {
+            // non-fatal; continue to document upload
+          }
         }
 
         const upstream = new FormData();
