@@ -2363,7 +2363,7 @@ export default function App() {
               </h2>
               <p className="text-xs text-[var(--brand-text-muted)] leading-relaxed">
                 Este aplicativo completo gerencia a sua produção de peças, fila de impressão, estoque de filamentos e cálculo de despesas. 
-                Configure o nome da sua marca e a paleta inicial abaixo. <strong className="text-[var(--cat-lime)]">Você poderá mudar tudo depois em Ajustes.</strong>
+                Configure o nome da sua marca abaixo. <strong className="text-[var(--cat-lime)]">Você poderá mudar tudo depois em Ajustes.</strong>
               </p>
             </div>
 
