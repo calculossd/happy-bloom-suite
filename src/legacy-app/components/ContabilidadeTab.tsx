@@ -491,6 +491,8 @@ const ReceitasSub: React.FC<{ state: State; update: (fn: (s: State) => State) =>
   const totals = monthTotals(state, year);
   const totalAno = totals.reduce((s, t) => s + t.total, 0);
   const monthlyLimit = 6750;
+  const [reportMonth, setReportMonth] = useState<number | null>(null);
+  const annualPct = Math.min(100, (totalAno / ANNUAL_LIMIT) * 100);
 
   const setSem = (month: number, val: number) => {
     update(s => {
@@ -499,17 +501,42 @@ const ReceitasSub: React.FC<{ state: State; update: (fn: (s: State) => State) =>
       else s.receitas.push({ year, month, total_sem_nota: val });
       return s;
     });
+    toast.success(`${MESES[month - 1]}/${year} atualizado`);
   };
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-3">
         <Select value={year} onChange={(e: any) => setYear(Number(e.target.value))} className="w-32">
           {[year - 1, year, year + 1].map(y => <option key={y} value={y}>{y}</option>)}
         </Select>
         <div className="text-sm text-white">
           Total {year}: <span className="font-bold text-[#b7ff00] tabular-nums">{brl(totalAno)}</span>
         </div>
+      </div>
+
+      {/* Summary */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <Card>
+          <div className="text-[10px] uppercase tracking-widest text-zinc-400">Receita Bruta Anual</div>
+          <div className="text-2xl font-extrabold text-[#b7ff00] tabular-nums mt-1">{brl(totalAno)}</div>
+          <div className="h-1.5 mt-3 rounded-full bg-white/10 overflow-hidden">
+            <div className="h-full bg-[#b7ff00]" style={{ width: `${annualPct}%` }} />
+          </div>
+          <div className="text-[10px] text-zinc-500 mt-1">{annualPct.toFixed(1)}% do limite MEI ({brl(ANNUAL_LIMIT)})</div>
+        </Card>
+        <Card>
+          <div className="text-[10px] uppercase tracking-widest text-zinc-400">Meses Saudáveis</div>
+          <div className="text-2xl font-extrabold text-emerald-400 tabular-nums mt-1">
+            {totals.filter(t => t.total > 0 && t.total <= monthlyLimit).length}<span className="text-sm text-zinc-500">/12</span>
+          </div>
+        </Card>
+        <Card>
+          <div className="text-[10px] uppercase tracking-widest text-zinc-400">Meses Acima do Limite</div>
+          <div className="text-2xl font-extrabold text-amber-300 tabular-nums mt-1">
+            {totals.filter(t => t.total > monthlyLimit).length}
+          </div>
+        </Card>
       </div>
 
       <Card className="p-0 overflow-hidden">
@@ -520,15 +547,19 @@ const ReceitasSub: React.FC<{ state: State; update: (fn: (s: State) => State) =>
               <th className="text-right p-3">Notas Emitidas</th>
               <th className="text-right p-3">Vendas s/ Nota</th>
               <th className="text-right p-3">Receita Bruta</th>
-              <th className="p-3" />
+              <th className="p-3 text-right">Ações</th>
             </tr>
           </thead>
           <tbody>
             {totals.map(t => {
               const over = t.total > monthlyLimit;
+              const healthy = t.total > 0 && !over;
               return (
-                <tr key={t.month} className="border-t border-white/5">
-                  <td className="p-3 text-white font-bold">{MESES[t.month - 1]}</td>
+                <tr key={t.month} className={`border-t border-white/5 transition-colors ${over ? 'bg-amber-500/10' : healthy ? 'bg-emerald-500/[0.04]' : ''}`}>
+                  <td className="p-3 text-white font-bold flex items-center gap-2">
+                    {over && <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />}
+                    {MESES[t.month - 1]}
+                  </td>
                   <td className="p-3 text-right text-zinc-300 tabular-nums">{brl(t.notas)}</td>
                   <td className="p-3 text-right">
                     <input
@@ -537,15 +568,109 @@ const ReceitasSub: React.FC<{ state: State; update: (fn: (s: State) => State) =>
                       className="w-28 bg-white/[0.04] border border-white/10 rounded px-2 py-1 text-xs text-right text-white tabular-nums"
                     />
                   </td>
-                  <td className={`p-3 text-right font-bold tabular-nums ${over ? 'text-orange-300' : 'text-[#b7ff00]'}`}>{brl(t.total)}</td>
-                  <td className="p-3 text-right">{over && <AlertTriangle className="w-3.5 h-3.5 text-orange-400 inline" />}</td>
+                  <td className={`p-3 text-right font-bold tabular-nums ${over ? 'text-amber-300' : healthy ? 'text-emerald-300' : 'text-zinc-500'}`}>{brl(t.total)}</td>
+                  <td className="p-3 text-right">
+                    <button
+                      onClick={() => setReportMonth(t.month)}
+                      className="text-[10px] uppercase tracking-widest px-2 py-1 rounded bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-200"
+                    >
+                      Relatório
+                    </button>
+                  </td>
                 </tr>
               );
             })}
           </tbody>
         </table>
       </Card>
-      <p className="text-[10px] text-zinc-500">Alerta laranja: mês acima de R$ 6.750 (limite proporcional MEI).</p>
+      <p className="text-[10px] text-zinc-500">Linhas em amarelo: mês acima de R$ 6.750 (limite proporcional MEI).</p>
+
+      {reportMonth !== null && (
+        <RelatorioMensalModal
+          year={year}
+          month={reportMonth}
+          totals={totals.find(t => t.month === reportMonth)!}
+          empresa={state.empresa}
+          notas={state.notas.filter(n => n.type === 'emitida' && new Date(n.issue_date).getFullYear() === year && new Date(n.issue_date).getMonth() + 1 === reportMonth)}
+          onClose={() => setReportMonth(null)}
+        />
+      )}
+    </div>
+  );
+};
+
+/* ---------- Monthly Report Modal ---------- */
+const RelatorioMensalModal: React.FC<{
+  year: number; month: number;
+  totals: { notas: number; sem: number; total: number };
+  empresa?: Empresa;
+  notas: Nota[];
+  onClose: () => void;
+}> = ({ year, month, totals, empresa, notas, onClose }) => {
+  const monthName = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'][month - 1];
+  const print = () => window.print();
+  return (
+    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 print:bg-white print:p-0" onClick={onClose}>
+      <div
+        className="bg-zinc-950 print:bg-white border border-white/10 print:border-0 rounded-2xl print:rounded-none max-w-2xl w-full max-h-[90vh] overflow-auto p-8 print:text-black"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between mb-6 print:hidden">
+          <h3 className="text-lg font-bold text-white">Relatório Mensal</h3>
+          <div className="flex gap-2">
+            <button onClick={print} className="text-xs px-3 py-1.5 rounded bg-[#b7ff00] text-black font-bold">Imprimir</button>
+            <button onClick={onClose} className="text-xs px-3 py-1.5 rounded bg-white/10 text-white border border-white/10">Fechar</button>
+          </div>
+        </div>
+
+        <div className="space-y-4 text-sm print:text-black text-zinc-200">
+          <div className="text-center border-b border-white/10 print:border-zinc-300 pb-4">
+            <h1 className="text-xl font-extrabold print:text-black text-white">DECLARAÇÃO DE RECEITA BRUTA – MEI</h1>
+            <p className="text-xs text-zinc-400 print:text-zinc-700 mt-1">{monthName} / {year}</p>
+          </div>
+
+          <div>
+            <h4 className="font-bold uppercase text-[10px] tracking-widest text-zinc-400 print:text-zinc-600 mb-1">Empresa</h4>
+            <p><strong>Razão Social:</strong> {empresa?.razao_social || '—'}</p>
+            <p><strong>Nome Fantasia:</strong> {empresa?.nome_fantasia || '—'}</p>
+            <p><strong>CNPJ:</strong> {empresa?.cnpj || '—'}</p>
+            <p><strong>Endereço:</strong> {empresa?.endereco || '—'} – {empresa?.cidade || ''}/{empresa?.uf || ''}</p>
+          </div>
+
+          <div>
+            <h4 className="font-bold uppercase text-[10px] tracking-widest text-zinc-400 print:text-zinc-600 mb-1">Receitas do Mês</h4>
+            <table className="w-full text-sm">
+              <tbody>
+                <tr className="border-b border-white/10 print:border-zinc-300"><td className="py-1">Receita com Notas Fiscais</td><td className="py-1 text-right tabular-nums">{brl(totals.notas)}</td></tr>
+                <tr className="border-b border-white/10 print:border-zinc-300"><td className="py-1">Receita sem Nota Fiscal</td><td className="py-1 text-right tabular-nums">{brl(totals.sem)}</td></tr>
+                <tr className="font-bold"><td className="py-2">Receita Bruta Total</td><td className="py-2 text-right tabular-nums text-[#b7ff00] print:text-black">{brl(totals.total)}</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          {notas.length > 0 && (
+            <div>
+              <h4 className="font-bold uppercase text-[10px] tracking-widest text-zinc-400 print:text-zinc-600 mb-1">Notas Emitidas ({notas.length})</h4>
+              <ul className="text-xs space-y-1">
+                {notas.map(n => (
+                  <li key={n.id} className="flex justify-between border-b border-white/5 print:border-zinc-200 py-1">
+                    <span>Nº {n.number} – {n.party}</span>
+                    <span className="tabular-nums">{brl(n.value)}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <div className="border-t border-white/10 print:border-zinc-300 pt-4 text-xs leading-relaxed">
+            Declaro, para os devidos fins, que a receita bruta apurada no mês de <strong>{monthName} de {year}</strong> totaliza <strong>{brl(totals.total)}</strong>, conforme registros do Microempreendedor Individual, em cumprimento ao Art. 1° da Resolução CGSN nº 140/2018.
+          </div>
+
+          <div className="pt-8 text-center text-xs">
+            <div className="border-t border-zinc-500 inline-block px-12 pt-1">{empresa?.razao_social || 'Titular MEI'}</div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
