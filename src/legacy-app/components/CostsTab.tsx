@@ -752,14 +752,12 @@ export const CostsTab: React.FC<CostsTabProps> = ({
   const [manualProdExtraCost, setManualProdExtraCost] = useState<number>(0);
   const [showCustosPanel, setShowCustosPanel] = useState(true);
   // Calculadora detalhada de custos extras (taxa fixa, marketplaces, energia, mão-de-obra, impostos)
-  const [calcFixedFee, setCalcFixedFee] = useState<number>(0);
   const [calcMktShopee, setCalcMktShopee] = useState<number>(20);
   const [calcMktML, setCalcMktML] = useState<number>(17);
   const [calcMktAmazon, setCalcMktAmazon] = useState<number>(16);
   const [calcMktTikTok, setCalcMktTikTok] = useState<number>(8);
   const [calcEnergyKwh, setCalcEnergyKwh] = useState<number>(0.95);
   const [calcPrinterW, setCalcPrinterW] = useState<number>(150);
-  const [calcLaborHour, setCalcLaborHour] = useState<number>(15);
   const [calcTaxesPct, setCalcTaxesPct] = useState<number>(6);
 
   const openManualProductForm = React.useCallback(() => {
