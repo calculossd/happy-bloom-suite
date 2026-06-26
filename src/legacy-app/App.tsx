@@ -1693,6 +1693,7 @@ export default function App() {
                 { id: 16, label: 'Impressoras', icon: PrinterNavIcon },
                 { id: 12, label: 'Pré-check', icon: ClipboardCheck },
                 { id: 14, label: 'Sites', icon: Globe },
+                { id: 18, label: 'Estoque Insumos', icon: Package },
               ],
             },
             {
@@ -1705,7 +1706,6 @@ export default function App() {
                 { id: 8, label: 'Stls', icon: Box },
                 { id: 4, label: 'Catálogo', icon: BookOpen, sub: 'CATALOG', onClick: () => openCostsSubtab('CATALOG') },
                 { id: 10, label: 'Kanban', icon: Columns3 },
-                { id: 18, label: 'Estoque Insumos', icon: Package },
               ],
             },
             {
