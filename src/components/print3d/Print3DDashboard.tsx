@@ -12,6 +12,7 @@ import {
   PieChart, Pie, Cell, LabelList,
 } from "recharts";
 import { FilamentSpool, materialColor } from "@/legacy-app/components/FilamentSpool";
+import dashboardHero from "@/assets/dashboard-hero.png.asset.json";
 import { Kpi as PremiumKpi } from "@/legacy-app/components/DashboardShell";
 
 // Color name → hex swatch for filament color chips
