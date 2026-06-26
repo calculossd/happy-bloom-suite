@@ -175,7 +175,7 @@ export const ContabilidadeTab: React.FC = () => {
       {sub === 'rec' && <ReceitasSub state={state} update={update} />}
       {sub === 'das' && <DasSub state={state} update={update} />}
       {sub === 'desp' && <DespesasSub state={state} update={update} />}
-      {sub === 'dasn' && <DasnSub state={state} />}
+       {sub === 'dasn' && <DasnSub state={state} update={update} />}
     </div>
   );
 };
