@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { assertInternalCaller } from "./_auth";
 
 const TIMEOUT_MS = 15000;
 
