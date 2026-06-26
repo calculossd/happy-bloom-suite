@@ -2087,9 +2087,8 @@ export default function App() {
                 id="global-price-opportunity-banner"
                 className="relative mb-2 overflow-visible rounded-2xl border border-sky-400/30 animate-fade-in"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(56,189,248,0.14), rgba(56,189,248,0.04))',
-                  backdropFilter: 'blur(14px) saturate(140%)',
-                  boxShadow: '0 0 32px -12px rgba(56,189,248,0.55), inset 0 1px 0 rgba(56,189,248,0.18)',
+                  background: 'linear-gradient(135deg, #0c4a6e, #082f49)',
+                  boxShadow: '0 0 32px -12px rgba(56,189,248,0.55), inset 0 1px 0 rgba(56,189,248,0.25)',
                 }}
               >
                 <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-1.5 sm:px-5">
