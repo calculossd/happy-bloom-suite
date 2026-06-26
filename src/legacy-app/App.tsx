@@ -361,6 +361,7 @@ export function safeGetLocalStorageItem(key: string, defaultValue: string = ''):
 export default function App() {
   const [currentTab, setCurrentTab] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [printersSubTab, setPrintersSubTab] = useState<'GERAL' | 'MANUT'>('GERAL');
   const [costsSubTab, setCostsSubTab] = useState<string>(() => {
     try {
       const saved = localStorage.getItem('bambuzau_costs_subtab_override');
