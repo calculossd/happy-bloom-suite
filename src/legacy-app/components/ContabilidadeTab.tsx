@@ -5,6 +5,7 @@ import {
   Plus, Trash2, CheckCircle2, AlertTriangle, Download, Upload, Search, ArrowRight,
   Building2, Banknote, ExternalLink, Landmark, ScrollText, Globe,
 } from 'lucide-react';
+import { toast } from 'sonner';
 import { Kpi, SectionTitle } from './DashboardShell';
 
 /* ---------- storage helpers ---------- */
@@ -16,6 +17,7 @@ const ANNUAL_LIMIT = 81000;
 type Nota = {
   id: string; type: 'emitida' | 'recebida'; number: string; issue_date: string;
   party: string; description: string; value: number; access_key?: string; file_url?: string;
+  is_service?: boolean; municipio_prestador?: string;
 };
 type Receita = { year: number; month: number; total_sem_nota: number };
 type DasPag = {
@@ -335,24 +337,34 @@ const NotasSub: React.FC<{ state: State; update: (fn: (s: State) => State) => vo
   const [type, setType] = useState<'emitida' | 'recebida'>('emitida');
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState('');
-  const [form, setForm] = useState<any>({ number: '', issue_date: new Date().toISOString().slice(0, 10), party: '', description: '', value: '', access_key: '' });
+  const defaultForm = () => ({
+    number: '', issue_date: new Date().toISOString().slice(0, 10),
+    party: '', description: '', value: '', access_key: '',
+    is_service: false, municipio_prestador: state.empresa?.cidade || 'Sorocaba',
+  });
+  const [form, setForm] = useState<any>(defaultForm);
 
   const list = state.notas.filter(n => n.type === type && (q === '' || n.party.toLowerCase().includes(q.toLowerCase()) || n.number.includes(q)));
 
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.party.trim()) { toast.error('Informe o cliente/fornecedor'); return; }
+    const val = Number(form.value);
+    if (!val || val <= 0) { toast.error('Valor inválido'); return; }
     const fileInput = (e.target as HTMLFormElement).elements.namedItem('file') as HTMLInputElement;
     let file_url: string | undefined;
     if (fileInput?.files?.[0]) file_url = await fileToDataUrl(fileInput.files[0]);
-    const nota: Nota = { id: uid(), type, ...form, value: Number(form.value) || 0, file_url };
+    const nota: Nota = { id: uid(), type, ...form, value: val, file_url };
     update(s => ({ ...s, notas: [nota, ...s.notas] }));
     setOpen(false);
-    setForm({ number: '', issue_date: new Date().toISOString().slice(0, 10), party: '', description: '', value: '', access_key: '' });
+    setForm(defaultForm());
+    toast.success(`Nota ${type === 'emitida' ? 'emitida' : 'recebida'} salva`);
   };
 
   const remove = (id: string) => {
     if (!confirm('Excluir esta nota fiscal?')) return;
     update(s => ({ ...s, notas: s.notas.filter(n => n.id !== id) }));
+    toast.success('Nota excluída — receita do mês recalculada');
   };
 
   return (
@@ -415,6 +427,35 @@ const NotasSub: React.FC<{ state: State; update: (fn: (s: State) => State) => vo
 
       <Modal open={open} onClose={() => setOpen(false)} title={`Nova Nota ${type === 'emitida' ? 'Emitida' : 'Recebida'}`}>
         <form onSubmit={save} className="space-y-3">
+          {type === 'emitida' && (
+            <div className="rounded-lg border border-[#D4A017]/30 bg-[#D4A017]/10 p-3 text-[11px] text-[#f3d77a] leading-relaxed">
+              <div className="flex items-start gap-2">
+                <Receipt className="w-4 h-4 mt-0.5 shrink-0" />
+                <div className="flex-1">
+                  <strong className="text-white">Serviços (ISS):</strong> emita a NFS-e no portal da Prefeitura de Sorocaba e cole a chave aqui.
+                </div>
+              </div>
+              <a
+                href="https://nfse.sorocaba.sp.gov.br/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#D4A017] text-black text-[10px] font-bold uppercase tracking-widest hover:scale-[1.03] transition"
+              >
+                <ExternalLink className="w-3 h-3" /> Emitir NFS-e Sorocaba
+              </a>
+            </div>
+          )}
+          {type === 'emitida' && (
+            <label className="flex items-center gap-2 text-[11px] text-zinc-300">
+              <input
+                type="checkbox"
+                checked={!!form.is_service}
+                onChange={(e) => setForm({ ...form, is_service: e.target.checked })}
+                className="accent-[#b7ff00]"
+              />
+              Nota de <strong className="text-white">serviço</strong> (NFS-e) — não de produto
+            </label>
+          )}
           <div className="grid grid-cols-2 gap-3">
             {type === 'emitida' && <Input placeholder="Número" value={form.number} onChange={(e: any) => setForm({ ...form, number: e.target.value })} />}
             <Input type="date" value={form.issue_date} onChange={(e: any) => setForm({ ...form, issue_date: e.target.value })} className={type === 'recebida' ? 'col-span-2' : ''} />
@@ -423,6 +464,13 @@ const NotasSub: React.FC<{ state: State; update: (fn: (s: State) => State) => vo
           <Input placeholder="Descrição" value={form.description} onChange={(e: any) => setForm({ ...form, description: e.target.value })} />
           <Input type="number" step="0.01" placeholder="Valor (R$)" required value={form.value} onChange={(e: any) => setForm({ ...form, value: e.target.value })} />
           {type === 'emitida' && <Input placeholder="Chave de acesso (opcional)" value={form.access_key} onChange={(e: any) => setForm({ ...form, access_key: e.target.value })} />}
+          {type === 'emitida' && form.is_service && (
+            <Input
+              placeholder="Município prestador"
+              value={form.municipio_prestador}
+              onChange={(e: any) => setForm({ ...form, municipio_prestador: e.target.value })}
+            />
+          )}
           <div>
             <label className="text-[10px] uppercase tracking-widest text-zinc-400 font-bold flex items-center gap-1 mb-1"><Upload className="w-3 h-3" /> Arquivo PDF/XML</label>
             <input name="file" type="file" accept=".pdf,.xml,image/*" className="text-xs text-zinc-300 w-full" />
