@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { assertInternalCaller } from "./_auth";
 
 const GATEWAY_URL = "https://connector-gateway.lovable.dev/google_maps";
 
