@@ -1040,19 +1040,22 @@ html[data-costs-subtab="CALC"] [data-tab-category="estoque"] #view-page-header {
 .brand-shine {
   background: linear-gradient(
     100deg,
-    #e8ffd1 0%,
-    #ffffff 35%,
+    #9be7ff 0%,
+    #f8ffeb 22%,
+    #ffffff 38%,
     #a3e635 50%,
-    #ffffff 65%,
+    #ffffff 62%,
+    #67e8f9 78%,
     #e8ffd1 100%
   );
-  background-size: 250% 100%;
+  display: inline-block;
+  background-size: 320% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
-  animation: brandShine 3.6s linear infinite;
-  filter: drop-shadow(0 0 8px rgba(163, 230, 53, 0.25));
+  animation: brandShine 2.2s linear infinite;
+  filter: drop-shadow(0 0 10px rgba(163, 230, 53, 0.42)) drop-shadow(0 0 18px rgba(103, 232, 249, 0.18));
 }
 @keyframes brandShine {
   0%   { background-position: 200% 0; }

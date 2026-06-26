@@ -2433,101 +2433,42 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                         const file = e.target.files?.[0];
                         if (file) {
                            const reader = new FileReader();
-                           reader.onload = async (event) => {
-                             const raw = event.target?.result as string;
-                             // Remove SOMENTE o fundo (flood-fill a partir das bordas),
-                             // preservando branco/claro DENTRO do logo.
-                             const processed = await new Promise<string>((resolve) => {
-                               try {
-                                 const img = new Image();
-                                 img.crossOrigin = 'anonymous';
-                                 img.onload = () => {
-                                   // Redimensiona para no máx 256px (mantém aspect) para caber no localStorage
-                                   const MAX = 256;
-                                   const scale = Math.min(1, MAX / Math.max(img.naturalWidth, img.naturalHeight));
-                                   const W = Math.round(img.naturalWidth * scale);
-                                   const H = Math.round(img.naturalHeight * scale);
-                                   const c = document.createElement('canvas');
-                                   c.width = W; c.height = H;
-                                   const ctx = c.getContext('2d');
-                                   if (!ctx) return resolve(raw);
-                                   ctx.clearRect(0, 0, W, H);
-                                   ctx.drawImage(img, 0, 0, W, H);
-                                   try {
-                                     const data = ctx.getImageData(0, 0, W, H);
-                                     const p = data.data;
-                                     // Se imagem já tem transparência significativa, não mexer
-                                     let transparentPixels = 0;
-                                     for (let i = 3; i < p.length; i += 4) {
-                                       if (p[i] < 250) transparentPixels++;
-                                       if (transparentPixels > (W * H) * 0.02) break;
-                                     }
-                                     if (transparentPixels > (W * H) * 0.02) {
-                                       // Já é transparente — só devolve a versão reduzida
-                                       return resolve(c.toDataURL('image/png'));
-                                     }
-                                     // Cor de referência: média dos 4 cantos
-                                     const corners = [
-                                       0, (W - 1) * 4,
-                                       (H - 1) * W * 4, ((H - 1) * W + (W - 1)) * 4,
-                                     ];
-                                     let rr = 0, gg = 0, bb = 0;
-                                     for (const c0 of corners) {
-                                       rr += p[c0]; gg += p[c0 + 1]; bb += p[c0 + 2];
-                                     }
-                                     rr = rr / 4; gg = gg / 4; bb = bb / 4;
-                                     const TOL = 32;          // dura: pertence ao fundo
-                                     const TOL_SOFT = 56;     // suave: borda
-                                     const visited = new Uint8Array(W * H);
-                                     const stack: number[] = [];
-                                     // Sementes: todos os pixels da borda
-                                     for (let x = 0; x < W; x++) {
-                                       stack.push(x); stack.push((H - 1) * W + x);
-                                     }
-                                     for (let y = 0; y < H; y++) {
-                                       stack.push(y * W); stack.push(y * W + (W - 1));
-                                     }
-                                     while (stack.length) {
-                                       const idx = stack.pop()!;
-                                       if (visited[idx]) continue;
-                                       const i4 = idx * 4;
-                                       const dr = p[i4] - rr;
-                                       const dg = p[i4 + 1] - gg;
-                                       const db = p[i4 + 2] - bb;
-                                       const dist = Math.sqrt(dr * dr + dg * dg + db * db);
-                                       if (dist > TOL_SOFT) continue;
-                                       visited[idx] = 1;
-                                       if (dist <= TOL) {
-                                         p[i4 + 3] = 0;
-                                       } else {
-                                         // anti-alias na borda
-                                         const t = (dist - TOL) / (TOL_SOFT - TOL);
-                                         p[i4 + 3] = Math.round(p[i4 + 3] * t);
-                                       }
-                                       const x = idx % W, y = (idx / W) | 0;
-                                       if (x > 0) stack.push(idx - 1);
-                                       if (x < W - 1) stack.push(idx + 1);
-                                       if (y > 0) stack.push(idx - W);
-                                       if (y < H - 1) stack.push(idx + W);
-                                     }
-                                     ctx.putImageData(data, 0, 0);
-                                     resolve(c.toDataURL('image/png'));
-                                   } catch {
-                                     resolve(raw);
-                                   }
-                                 };
-                                 img.onerror = () => resolve(raw);
-                                 img.src = raw;
-                               } catch {
-                                 resolve(raw);
-                               }
-                             });
+                            reader.onload = async (event) => {
+                              const raw = event.target?.result as string;
+                              // Não removemos mais o fundo automaticamente: isso estava deformando logos.
+                              // Apenas reduzimos para caber bem no app e preservamos a transparência real do PNG/SVG.
+                              const processed = await new Promise<string>((resolve) => {
+                                try {
+                                  if (file.type === 'image/svg+xml') return resolve(raw);
+                                  const img = new Image();
+                                  img.onload = () => {
+                                    const MAX = 512;
+                                    const scale = Math.min(1, MAX / Math.max(img.naturalWidth, img.naturalHeight));
+                                    const W = Math.round(img.naturalWidth * scale);
+                                    const H = Math.round(img.naturalHeight * scale);
+                                    const c = document.createElement('canvas');
+                                    c.width = W;
+                                    c.height = H;
+                                    const ctx = c.getContext('2d');
+                                    if (!ctx) return resolve(raw);
+                                    ctx.clearRect(0, 0, W, H);
+                                    ctx.imageSmoothingEnabled = true;
+                                    ctx.imageSmoothingQuality = 'high';
+                                    ctx.drawImage(img, 0, 0, W, H);
+                                    resolve(c.toDataURL('image/png'));
+                                  };
+                                  img.onerror = () => resolve(raw);
+                                  img.src = raw;
+                                } catch {
+                                  resolve(raw);
+                                }
+                              });
                              setLocalCustomLogo(processed);
                              onUpdateBrandConfig({
                                ...brandConfig,
                                customLogo: processed
                              });
-                             showSuccess('Logotipo aplicado sem fundo! ✓');
+                              showSuccess('Logotipo aplicado preservando a imagem original! ✓');
                            };
                            reader.readAsDataURL(file);
                         }
@@ -2565,7 +2506,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                       </div>
                     )}
                   </div>
-                  <p className="text-[10px] text-[#8BA58D]">O logotipo personalizado será salvo localmente e substituirá a logo padrão do topo automaticamente ao clicar em Aplicar!</p>
+                  <p className="text-[10px] text-[#8BA58D]">Use PNG/SVG já sem fundo para melhor resultado. O app agora preserva a logo original e não remove fundo automaticamente.</p>
                 </div>
               </div>
             </div>

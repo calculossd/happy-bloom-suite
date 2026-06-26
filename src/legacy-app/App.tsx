@@ -1385,7 +1385,7 @@ export default function App() {
 
   return (
     <div
-      className="min-h-screen flex flex-col font-sans transition-colors duration-300 tt-shell md:pl-[168px]"
+      className="min-h-screen flex flex-col font-sans transition-colors duration-300 tt-shell md:pl-[200px]"
       data-tab-category={
         [1, 2, 3, 6].includes(currentTab) ? 'principal'
         : [12, 14, 16].includes(currentTab) ? 'operacional'
@@ -1666,31 +1666,31 @@ export default function App() {
 
       <>
       {/* PREMIUM SIDE NAV — vertical, fixed left */}
-      <aside className="hidden md:flex fixed left-0 top-0 bottom-0 z-50 w-[168px] flex-col bg-[#0a0d0c]/95 backdrop-blur-2xl border-r border-white/[0.06] shadow-[8px_0_32px_-12px_rgba(0,0,0,0.8)]">
+      <aside className="hidden md:flex fixed left-0 top-0 bottom-0 z-50 w-[200px] flex-col bg-[#0a0d0c]/95 backdrop-blur-2xl border-r border-white/[0.06] shadow-[8px_0_32px_-12px_rgba(0,0,0,0.8)]">
         {/* BRAND / LOGO — alinhado ao topo, sem moldura */}
-        <div className="px-3 pt-5 pb-4 flex flex-col items-center gap-2">
-          <div className="relative w-16 h-16 flex items-center justify-center">
-            <div className="absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_center,_rgba(163,230,53,0.18),_transparent_70%)] blur-xl" />
+        <div className="px-4 pt-6 pb-5 flex flex-col items-center gap-3">
+          <div className="relative w-20 h-20 flex items-center justify-center">
+            <div className="absolute inset-[-10px] rounded-[28px] bg-[radial-gradient(circle_at_center,_rgba(163,230,53,0.32),_rgba(94,234,212,0.12)_38%,_transparent_72%)] blur-2xl" />
             {brandConfig.customLogo ? (
               <img
                 src={brandConfig.customLogo}
                 alt={brandConfig.name || 'Logo'}
-                className="relative w-full h-full object-contain drop-shadow-[0_4px_14px_rgba(0,0,0,0.6)]"
+                className="relative w-full h-full object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.72)]"
                 referrerPolicy="no-referrer"
               />
             ) : (
-              <Atelier3DLogo className="relative h-14 w-14" />
+              <Atelier3DLogo className="relative h-[72px] w-[72px]" />
             )}
           </div>
           <div className="text-center leading-tight w-full px-1">
-            <div className="brand-shine text-[18px] font-extrabold tracking-tight truncate max-w-[150px] mx-auto">
+            <div className="brand-shine text-[24px] font-black tracking-normal truncate max-w-[184px] mx-auto uppercase">
               {brandConfig.name}
             </div>
-            <div className="text-[8px] uppercase tracking-[0.28em] text-white/35 font-semibold mt-1">Ateliê 3D</div>
+            <div className="text-[9px] uppercase tracking-[0.22em] text-white/40 font-bold mt-1.5">Ateliê 3D</div>
           </div>
         </div>
         {/* Spacer para descer a navegação até a altura do "Bem-vindo de volta" */}
-        <div className="px-3 pt-2 pb-2 border-t border-white/[0.05] mt-1">
+        <div className="px-4 pt-5 pb-2 border-t border-white/[0.05] mt-1">
           <div className="text-[9px] uppercase tracking-[0.24em] text-white/35 font-bold">Navegação</div>
         </div>
         <nav
@@ -1891,7 +1891,9 @@ export default function App() {
             <div className="flex items-center gap-2.5 flex-wrap">
               <h1 className="text-[22px] md:text-[26px] font-semibold tracking-[-0.02em] text-white flex items-center gap-2.5 font-sans select-none leading-none">
                 <span className="bg-gradient-to-b from-white to-white/70 bg-clip-text text-transparent">
-                  {brandConfig.name}
+                  <span className="brand-shine text-[28px] md:text-[32px] font-black tracking-normal uppercase">
+                    {brandConfig.name}
+                  </span>
                 </span>
               </h1>
               <span className="text-[9.5px] tracking-[0.08em] bg-emerald-400/10 border border-emerald-400/25 text-emerald-300 font-semibold px-2 py-0.5 rounded-full shrink-0 transition-all duration-300 select-none backdrop-blur-sm">
