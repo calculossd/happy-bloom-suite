@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import {
   Receipt, FileText, Calendar, DollarSign, Wallet, FileBarChart2,
   Plus, Trash2, CheckCircle2, AlertTriangle, Download, Upload, Search, ArrowRight,
+  Building2, Banknote, ExternalLink, Landmark, ScrollText, Globe,
 } from 'lucide-react';
 import { Kpi, SectionTitle } from './DashboardShell';
 
@@ -31,7 +32,30 @@ type State = {
   receitas: Receita[];
   das: DasPag[];
   despesas: Despesa[];
+  empresa?: Empresa;
 };
+
+export type Empresa = {
+  cnpj: string; nome_fantasia: string; razao_social: string;
+  atividade_principal: string; endereco: string; cidade: string; uf: string;
+  cep: string; telefone: string; email: string; data_abertura: string;
+  updated_at?: string;
+};
+const defaultEmpresa = (): Empresa => ({
+  cnpj: '', nome_fantasia: '', razao_social: '', atividade_principal: '',
+  endereco: '', cidade: 'Sorocaba', uf: 'SP', cep: '', telefone: '', email: '', data_abertura: '',
+});
+
+const LINKS_GOVERNO: { descricao: string; url: string; icone: React.ComponentType<{ className?: string }> }[] = [
+  { descricao: 'Portal do Empreendedor MEI', url: 'https://www.gov.br/mei/pt-br', icone: Building2 },
+  { descricao: 'PGMEI (Declaração Anual)', url: 'https://www.gov.br/empresas-e-negocios/pt-br/empreendedor/servicos-para-mei/declaracao-anual-do-mei', icone: FileText },
+  { descricao: 'Pagar DAS (Simples Nacional)', url: 'https://www8.receita.fazenda.gov.br/SimplesNacional/Aplicacoes/ATSPO/pgmei.app/', icone: Banknote },
+  { descricao: 'Emitir NFS-e (Nota Sorocaba)', url: 'https://nfse.sorocaba.sp.gov.br/', icone: Receipt },
+  { descricao: 'Prefeitura de Sorocaba – MEI', url: 'https://www.sorocaba.sp.gov.br/', icone: Landmark },
+  { descricao: 'SEFAZ SP – Consulta CNPJ', url: 'https://www.sefaz.sp.gov.br/', icone: ScrollText },
+  { descricao: 'Receita Federal – e-CAC', url: 'https://cav.receita.fazenda.gov.br/', icone: Globe },
+  { descricao: 'INSS – Consulta Débitos', url: 'https://www.gov.br/inss/pt-br', icone: Landmark },
+];
 
 const defaultState = (): State => ({
   config: { activity: 'comercio', das_value: DAS_2026.comercio },
@@ -103,6 +127,7 @@ const Modal: React.FC<{ open: boolean; onClose: () => void; title: string; child
 /* ---------- main ---------- */
 const SUBS = [
   { id: 'dash',   label: 'Dashboard',         icon: FileBarChart2 },
+  { id: 'empresa',label: 'Empresa',           icon: Building2 },
   { id: 'notas',  label: 'Notas Fiscais',     icon: Receipt },
   { id: 'rec',    label: 'Receitas Mensais',  icon: Calendar },
   { id: 'das',    label: 'DAS',               icon: DollarSign },
@@ -143,6 +168,7 @@ export const ContabilidadeTab: React.FC = () => {
       </div>
 
       {sub === 'dash' && <DashboardSub state={state} setSub={setSub} />}
+      {sub === 'empresa' && <EmpresaSub state={state} update={update} />}
       {sub === 'notas' && <NotasSub state={state} update={update} />}
       {sub === 'rec' && <ReceitasSub state={state} update={update} />}
       {sub === 'das' && <DasSub state={state} update={update} />}
