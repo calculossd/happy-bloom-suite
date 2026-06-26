@@ -749,6 +749,8 @@ export const CostsTab: React.FC<CostsTabProps> = ({
   const [manualProdSupplies, setManualProdSupplies] = useState<{ supplyStockId: number, quantity: number }[]>([]);
   const [manualStlFileName, setManualStlFileName] = useState('');
   const [manualStlFileData, setManualStlFileData] = useState('');
+  const [manualProdExtraCost, setManualProdExtraCost] = useState<number>(0);
+  const [showCustosPanel, setShowCustosPanel] = useState(true);
 
   const openManualProductForm = React.useCallback(() => {
     try {
