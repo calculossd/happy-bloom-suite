@@ -1693,7 +1693,6 @@ export default function App() {
                 { id: 16, label: 'Impressoras', icon: PrinterNavIcon },
                 { id: 12, label: 'Pré-check', icon: ClipboardCheck },
                 { id: 14, label: 'Sites', icon: Globe },
-                { id: 18, label: 'Estoque Insumos', icon: Package },
               ],
             },
             {
@@ -2274,7 +2273,6 @@ export default function App() {
               </div>
             )}
             {currentTab === 17 && <ContabilidadeTab />}
-            {currentTab === 18 && <InsumosTab />}
           </Suspense>
         )}
           </div>
