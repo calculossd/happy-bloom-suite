@@ -725,3 +725,135 @@ const DasnSub: React.FC<{ state: State }> = ({ state }) => {
     </div>
   );
 };
+
+/* ---------- EMPRESA ---------- */
+const maskCnpj = (v: string) => {
+  const d = v.replace(/\D/g, '').slice(0, 14);
+  return d
+    .replace(/^(\d{2})(\d)/, '$1.$2')
+    .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+    .replace(/\.(\d{3})(\d)/, '.$1/$2')
+    .replace(/(\d{4})(\d)/, '$1-$2');
+};
+const maskCep = (v: string) => v.replace(/\D/g, '').slice(0, 8).replace(/(\d{5})(\d)/, '$1-$2');
+
+const EmpresaSub: React.FC<{ state: State; update: (fn: (s: State) => State) => void }> = ({ state, update }) => {
+  const [form, setForm] = useState<Empresa>(() => state.empresa ?? defaultEmpresa());
+  const [saved, setSaved] = useState(false);
+  const set = (k: keyof Empresa, v: string) => setForm(f => ({ ...f, [k]: v }));
+
+  const cnpjDigits = form.cnpj.replace(/\D/g, '').length;
+  const cnpjOk = cnpjDigits === 14;
+  const emailOk = !form.email || /^\S+@\S+\.\S+$/.test(form.email);
+  const canSave = cnpjOk && emailOk && form.razao_social.trim().length > 0;
+
+  const save = () => {
+    if (!canSave) return;
+    update(s => ({ ...s, empresa: { ...form, updated_at: new Date().toISOString() } }));
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  };
+
+  const Field: React.FC<{ label: string; children: React.ReactNode; hint?: string; full?: boolean }> = ({ label, children, hint, full }) => (
+    <label className={`block space-y-1 ${full ? 'md:col-span-2' : ''}`}>
+      <span className="text-[10px] uppercase tracking-widest text-zinc-400 font-bold">{label}</span>
+      {children}
+      {hint && <span className="text-[10px] text-red-400">{hint}</span>}
+    </label>
+  );
+
+  return (
+    <div className="space-y-5">
+      <Card>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <Building2 className="w-4 h-4 text-[#b7ff00]" />
+            <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-white">Dados da Empresa</h3>
+          </div>
+          {state.empresa?.updated_at && (
+            <span className="text-[10px] text-zinc-500 uppercase tracking-widest">
+              Atualizado {new Date(state.empresa.updated_at).toLocaleDateString('pt-BR')}
+            </span>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <Field label="CNPJ *" hint={form.cnpj && !cnpjOk ? 'CNPJ deve ter 14 dígitos' : undefined}>
+            <Input value={form.cnpj} onChange={(e: any) => set('cnpj', maskCnpj(e.target.value))} placeholder="00.000.000/0000-00" />
+          </Field>
+          <Field label="Data de Abertura">
+            <Input type="date" value={form.data_abertura} onChange={(e: any) => set('data_abertura', e.target.value)} />
+          </Field>
+          <Field label="Razão Social *">
+            <Input value={form.razao_social} onChange={(e: any) => set('razao_social', e.target.value)} placeholder="Nome registrado" />
+          </Field>
+          <Field label="Nome Fantasia">
+            <Input value={form.nome_fantasia} onChange={(e: any) => set('nome_fantasia', e.target.value)} placeholder="Nome comercial" />
+          </Field>
+          <Field label="Atividade Principal (CNAE/MEI)" full>
+            <Input value={form.atividade_principal} onChange={(e: any) => set('atividade_principal', e.target.value)} placeholder="Ex: Serviços de impressão 3D" />
+          </Field>
+          <Field label="Endereço" full>
+            <Input value={form.endereco} onChange={(e: any) => set('endereco', e.target.value)} placeholder="Rua, número, bairro" />
+          </Field>
+          <Field label="Cidade">
+            <Input value={form.cidade} onChange={(e: any) => set('cidade', e.target.value)} />
+          </Field>
+          <Field label="UF">
+            <Input value={form.uf} onChange={(e: any) => set('uf', e.target.value.toUpperCase().slice(0, 2))} maxLength={2} />
+          </Field>
+          <Field label="CEP">
+            <Input value={form.cep} onChange={(e: any) => set('cep', maskCep(e.target.value))} placeholder="00000-000" />
+          </Field>
+          <Field label="Telefone">
+            <Input value={form.telefone} onChange={(e: any) => set('telefone', e.target.value)} placeholder="(00) 00000-0000" />
+          </Field>
+          <Field label="E-mail" hint={!emailOk ? 'E-mail inválido' : undefined} full>
+            <Input type="email" value={form.email} onChange={(e: any) => set('email', e.target.value)} placeholder="contato@empresa.com" />
+          </Field>
+        </div>
+
+        <div className="flex items-center justify-end gap-2 mt-5">
+          {saved && (
+            <span className="text-[11px] text-[#b7ff00] font-bold uppercase tracking-widest flex items-center gap-1">
+              <CheckCircle2 className="w-3.5 h-3.5" /> Salvo
+            </span>
+          )}
+          <Btn tone="lime" disabled={!canSave} onClick={save} className={!canSave ? 'opacity-50 cursor-not-allowed' : ''}>
+            Salvar Dados
+          </Btn>
+        </div>
+      </Card>
+
+      <Card>
+        <div className="flex items-center gap-2 mb-4">
+          <Globe className="w-4 h-4 text-[#D4A017]" />
+          <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-white">Links do Governo</h3>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {LINKS_GOVERNO.map((l, i) => {
+            const Icon = l.icone;
+            return (
+              <a
+                key={i}
+                href={l.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-3 p-3 rounded-xl bg-white/[0.04] border border-white/10 hover:border-[#b7ff00]/40 hover:bg-white/[0.07] transition"
+              >
+                <div className="shrink-0 w-9 h-9 rounded-lg bg-[#D4A017]/15 border border-[#D4A017]/30 flex items-center justify-center">
+                  <Icon className="w-4 h-4 text-[#D4A017]" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-bold text-white truncate">{l.descricao}</div>
+                  <div className="text-[10px] text-zinc-500 truncate">{l.url.replace(/^https?:\/\//, '')}</div>
+                </div>
+                <ExternalLink className="w-4 h-4 text-zinc-500 group-hover:text-[#b7ff00] transition" />
+              </a>
+            );
+          })}
+        </div>
+      </Card>
+    </div>
+  );
+};
