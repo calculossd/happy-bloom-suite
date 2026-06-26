@@ -751,6 +751,16 @@ export const CostsTab: React.FC<CostsTabProps> = ({
   const [manualStlFileData, setManualStlFileData] = useState('');
   const [manualProdExtraCost, setManualProdExtraCost] = useState<number>(0);
   const [showCustosPanel, setShowCustosPanel] = useState(true);
+  // Calculadora detalhada de custos extras (taxa fixa, marketplaces, energia, mão-de-obra, impostos)
+  const [calcFixedFee, setCalcFixedFee] = useState<number>(0);
+  const [calcMktShopee, setCalcMktShopee] = useState<number>(20);
+  const [calcMktML, setCalcMktML] = useState<number>(17);
+  const [calcMktAmazon, setCalcMktAmazon] = useState<number>(16);
+  const [calcMktTikTok, setCalcMktTikTok] = useState<number>(8);
+  const [calcEnergyKwh, setCalcEnergyKwh] = useState<number>(0.95);
+  const [calcPrinterW, setCalcPrinterW] = useState<number>(150);
+  const [calcLaborHour, setCalcLaborHour] = useState<number>(15);
+  const [calcTaxesPct, setCalcTaxesPct] = useState<number>(6);
 
   const openManualProductForm = React.useCallback(() => {
     try {
@@ -3159,9 +3169,25 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                   const unit = st ? Number(st.unitCost) || 0 : 0;
                   return sum + (Number(s.quantity) || 0) * unit;
                 }, 0);
-                const extra = Number(manualProdExtraCost) || 0;
-                const total = matCost + supCost + extra;
                 const price = Number(manualProdPrice) || 0;
+                const hours = Number(manualProdTime) || 0;
+                const energy = ((Number(calcPrinterW) || 0) / 1000) * hours * (Number(calcEnergyKwh) || 0);
+                const labor = (Number(calcLaborHour) || 0) * hours;
+                const fixedFee = Number(calcFixedFee) || 0;
+                const mktAvgPct = (
+                  (Number(calcMktShopee) || 0) +
+                  (Number(calcMktML) || 0) +
+                  (Number(calcMktAmazon) || 0) +
+                  (Number(calcMktTikTok) || 0)
+                ) / 4;
+                const mktFee = price * (mktAvgPct / 100);
+                const taxes = price * ((Number(calcTaxesPct) || 0) / 100);
+                const extra = fixedFee + energy + labor + mktFee + taxes;
+                // mantém manualProdExtraCost sincronizado para persistir no produto
+                if (Math.abs((Number(manualProdExtraCost) || 0) - extra) > 0.005) {
+                  setTimeout(() => setManualProdExtraCost(Number(extra.toFixed(2))), 0);
+                }
+                const total = matCost + supCost + extra;
                 const profit = price - total;
                 const margin = price > 0 ? (profit / price) * 100 : 0;
                 const marginColor = margin < 0 ? '#ef4444' : margin < 20 ? '#eab308' : '#22c55e';
@@ -3187,13 +3213,13 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                     {showCustosPanel && (
                       <div className="px-4 pb-4 pt-1 space-y-3 border-t border-[#232B27]">
                         <p className="text-[10px] text-[#8BA58D]">
-                          Calculado a partir dos filamentos/insumos cadastrados acima usando o preço atual do estoque (filamento: R$/spool ÷ 1000g; insumos: custo unitário).
+                          Material e insumos puxam o preço atual do estoque. Energia, mão-de-obra, taxas de marketplace e impostos são calculados a partir dos parâmetros abaixo.
                         </p>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                           {[
                             { label: 'Material', value: matCost, accent: '#3b82f6', emphasis: false },
                             { label: 'Insumos extras', value: supCost, accent: '#8b5cf6', emphasis: false },
-                            { label: 'Adicionais', value: extra, accent: '#eab308', emphasis: false },
+                            { label: 'Extras (calc.)', value: extra, accent: '#eab308', emphasis: false },
                             { label: 'Custo total', value: total, accent: '#b7ff00', emphasis: true },
                           ].map((b) => (
                             <div
@@ -3213,28 +3239,81 @@ Utilize a nossa nova calculadora de formação de preço de produtos para obter 
                             </div>
                           ))}
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">
-                          <div className="md:col-span-1">
-                            <label className="block text-[10px] uppercase tracking-wider font-bold text-[#8BA58D] mb-1">
-                              Custos adicionais por unidade (R$)
-                            </label>
-                            <input
-                              type="number"
-                              step="0.01"
-                              min="0"
-                              value={manualProdExtraCost}
-                              onChange={e => setManualProdExtraCost(parseFloat(e.target.value) || 0)}
-                              placeholder="Energia, embalagem, mão-de-obra..."
-                              className="w-full px-3 py-2 rounded-lg bg-black/40 border border-[#232B27] text-white text-sm focus:border-[#b7ff00]"
-                            />
+                        {/* Calculadora detalhada */}
+                        <div className="rounded-xl border border-[#232B27] bg-black/30 p-3 space-y-3">
+                          <div className="text-[10px] uppercase tracking-wider font-bold text-[#b7ff00]">Calculadora de custos extras</div>
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                            {[
+                              { label: 'Taxa fixa (R$)', val: calcFixedFee, set: setCalcFixedFee, step: '0.01', hint: 'Embalagem, frete fixo…' },
+                              { label: 'Energia (R$/kWh)', val: calcEnergyKwh, set: setCalcEnergyKwh, step: '0.01', hint: 'Tarifa local' },
+                              { label: 'Potência impr. (W)', val: calcPrinterW, set: setCalcPrinterW, step: '1', hint: 'Watts médios' },
+                              { label: 'Mão-de-obra (R$/h)', val: calcLaborHour, set: setCalcLaborHour, step: '0.5', hint: 'Por hora de produção' },
+                              { label: 'Impostos (%)', val: calcTaxesPct, set: setCalcTaxesPct, step: '0.1', hint: 'DAS / Simples' },
+                            ].map((f, i) => (
+                              <div key={i}>
+                                <label className="block text-[9px] uppercase tracking-wider font-bold text-[#8BA58D] mb-1">{f.label}</label>
+                                <input
+                                  type="number"
+                                  step={f.step}
+                                  min="0"
+                                  value={f.val}
+                                  onChange={e => f.set(parseFloat(e.target.value) || 0)}
+                                  className="w-full px-2 py-1.5 rounded-lg bg-black/40 border border-[#232B27] text-white text-xs focus:border-[#b7ff00]"
+                                />
+                                <div className="text-[9px] text-white/30 mt-0.5">{f.hint}</div>
+                              </div>
+                            ))}
                           </div>
-                          <div className="md:col-span-1">
+                          <div>
+                            <div className="flex items-center justify-between mb-1">
+                              <div className="text-[10px] uppercase tracking-wider font-bold text-[#8BA58D]">Taxas dos marketplaces (%)</div>
+                              <div className="text-[10px] font-bold text-[#b7ff00]">Média: {mktAvgPct.toFixed(2)}%</div>
+                            </div>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                              {[
+                                { label: 'Shopee', val: calcMktShopee, set: setCalcMktShopee, color: '#ee4d2d' },
+                                { label: 'Mercado Livre', val: calcMktML, set: setCalcMktML, color: '#fff159' },
+                                { label: 'Amazon', val: calcMktAmazon, set: setCalcMktAmazon, color: '#ff9900' },
+                                { label: 'TikTok Shop', val: calcMktTikTok, set: setCalcMktTikTok, color: '#25f4ee' },
+                              ].map(m => (
+                                <div key={m.label}>
+                                  <label className="block text-[9px] uppercase tracking-wider font-bold mb-1" style={{ color: m.color }}>{m.label}</label>
+                                  <input
+                                    type="number"
+                                    step="0.1"
+                                    min="0"
+                                    value={m.val}
+                                    onChange={e => m.set(parseFloat(e.target.value) || 0)}
+                                    className="w-full px-2 py-1.5 rounded-lg bg-black/40 border text-white text-xs focus:border-[#b7ff00]"
+                                    style={{ borderColor: `${m.color}33` }}
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-2 md:grid-cols-5 gap-2 pt-2 border-t border-[#232B27]">
+                            {[
+                              { l: 'Taxa fixa', v: fixedFee },
+                              { l: 'Energia', v: energy },
+                              { l: 'Mão-de-obra', v: labor },
+                              { l: `Marketplace (${mktAvgPct.toFixed(1)}%)`, v: mktFee },
+                              { l: `Impostos (${(Number(calcTaxesPct)||0).toFixed(1)}%)`, v: taxes },
+                            ].map((b, i) => (
+                              <div key={i} className="rounded-lg bg-white/[0.02] border border-[#232B27] px-2 py-1.5">
+                                <div className="text-[9px] uppercase tracking-wider text-[#8BA58D] font-bold">{b.l}</div>
+                                <div className="text-xs font-mono font-bold text-white mt-0.5">R$ {b.v.toFixed(2)}</div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-end">
+                          <div>
                             <div className="text-[10px] uppercase tracking-wider font-bold text-[#8BA58D] mb-1">Preço de venda</div>
                             <div className="px-3 py-2 rounded-lg bg-black/30 border border-[#232B27] text-white text-sm font-bold">
                               R$ {price.toFixed(2)}
                             </div>
                           </div>
-                          <div className="md:col-span-1">
+                          <div>
                             <div className="text-[10px] uppercase tracking-wider font-bold text-[#8BA58D] mb-1">Lucro por unidade</div>
                             <div
                               className="px-3 py-2 rounded-lg border text-sm font-black flex items-center justify-between"
