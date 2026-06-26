@@ -1693,6 +1693,7 @@ export default function App() {
               section: 'Operacional',
               items: [
                 { id: 16, label: 'Impressoras', icon: PrinterNavIcon },
+                { id: 16, label: 'Manutenção', icon: Wrench, sub: 'MANUT', onClick: () => { setCurrentTab(16); setPrintersSubTab('MANUT'); } },
                 { id: 12, label: 'Pré-check', icon: ClipboardCheck },
                 { id: 14, label: 'Sites', icon: Globe },
               ],
