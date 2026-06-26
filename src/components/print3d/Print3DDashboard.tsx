@@ -1373,6 +1373,7 @@ export function Print3DPanel({
           src={dashboardHero.url}
           alt="Ateliê 3D em produção"
           className="absolute inset-0 h-full w-full object-cover"
+          style={{ objectPosition: "center 78%" }}
           loading="lazy"
           decoding="async"
         />
