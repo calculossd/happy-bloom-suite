@@ -2433,14 +2433,54 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                         const file = e.target.files?.[0];
                         if (file) {
                           const reader = new FileReader();
-                          reader.onload = (event) => {
-                            const result = event.target?.result as string;
-                            setLocalCustomLogo(result);
+                          reader.onload = async (event) => {
+                            const raw = event.target?.result as string;
+                            // Remove fundo branco/claro via canvas (chroma-key)
+                            const processed = await new Promise<string>((resolve) => {
+                              try {
+                                const img = new Image();
+                                img.crossOrigin = 'anonymous';
+                                img.onload = () => {
+                                  const c = document.createElement('canvas');
+                                  c.width = img.naturalWidth;
+                                  c.height = img.naturalHeight;
+                                  const ctx = c.getContext('2d');
+                                  if (!ctx) return resolve(raw);
+                                  ctx.drawImage(img, 0, 0);
+                                  try {
+                                    const data = ctx.getImageData(0, 0, c.width, c.height);
+                                    const p = data.data;
+                                    for (let i = 0; i < p.length; i += 4) {
+                                      const r = p[i], g = p[i + 1], b = p[i + 2];
+                                      const max = Math.max(r, g, b);
+                                      const min = Math.min(r, g, b);
+                                      const sat = max - min;
+                                      // pixel "quase branco" / fundo claro neutro → transparente
+                                      if (max > 235 && sat < 18) {
+                                        p[i + 3] = 0;
+                                      } else if (max > 215 && sat < 14) {
+                                        // borda suave
+                                        p[i + 3] = Math.round(((max - 215) / 20) * 255 * 0.4);
+                                      }
+                                    }
+                                    ctx.putImageData(data, 0, 0);
+                                    resolve(c.toDataURL('image/png'));
+                                  } catch {
+                                    resolve(raw);
+                                  }
+                                };
+                                img.onerror = () => resolve(raw);
+                                img.src = raw;
+                              } catch {
+                                resolve(raw);
+                              }
+                            });
+                            setLocalCustomLogo(processed);
                             onUpdateBrandConfig({
                               ...brandConfig,
-                              customLogo: result
+                              customLogo: processed
                             });
-                            showSuccess('Logotipo personalizado alterado e aplicado com absoluto sucesso! ✓');
+                            showSuccess('Logotipo aplicado sem fundo! ✓');
                           };
                           reader.readAsDataURL(file);
                         }
