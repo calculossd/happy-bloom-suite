@@ -19,6 +19,7 @@ import { OkLojaAssistant } from './components/OkLojaAssistant';
 import { ShowcaseView } from './components/ShowcaseView';
 import { PrintFlowTab } from './components/PrintFlowTab';
 import { PrinterQueueList } from './components/PrinterQueueList';
+import { OrcamentosTab } from './components/OrcamentosTab';
 import {
   PriceResearchTab, PreCheckTab, AgendaTab, ToolsTab, ModelsTab
 } from './components/NewTabs';
@@ -96,7 +97,8 @@ import {
   Radar,
   Download,
   Printer as PrinterNavIcon,
-  FileBarChart2
+  FileBarChart2,
+  FileEdit
 } from 'lucide-react';
 
 // STUNNING 3D CUBE & PRINTER EXTENSION GEOMETRIC LOGO
@@ -1681,6 +1683,7 @@ export default function App() {
                 { id: 2, label: 'Clientes', icon: Users },
                 { id: 3, label: 'Pedidos', icon: GitPullRequest, badge: pendingOrdersCount, blink: pendingOrdersBlink },
                 { id: 1, label: 'Produção', icon: Activity, badge: awaitingAcceptCount, blink: productionBlink },
+                { id: 19, label: 'Orçamentos', icon: FileEdit },
                 { id: 4, label: 'Estoque', icon: Layers, sub: 'STOCK', onClick: () => openCostsSubtab('STOCK') },
                 { id: 6, label: 'Histórico', icon: ShoppingBag },
               ],
@@ -2271,6 +2274,9 @@ export default function App() {
               </div>
             )}
             {currentTab === 17 && <ContabilidadeTab />}
+            {currentTab === 19 && (
+              <OrcamentosTab clients={clients} orders={orders} setOrders={setOrders} />
+            )}
           </Suspense>
         )}
           </div>
