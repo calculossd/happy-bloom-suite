@@ -31,6 +31,7 @@ import { renderStlThumbnail } from "@/lib/stl-thumbnail";
 import { SendToPrinterDialog } from "@/components/SendToPrinterDialog";
 import { Model3DViewer } from "@/components/Model3DViewer";
 import JSZip from "jszip";
+import { getTelegramAutoSend, sendStlToTelegram } from "@/legacy-app/lib/telegram";
 
 type UploadProgress = { name: string; pct: number; status: "uploading" | "done" | "dup" | "error"; message?: string };
 
@@ -117,6 +118,15 @@ function CatalogPage() {
         };
         await saveModel(rec, file);
         setUploads((u) => u.map((x, j) => (j === idx ? { ...x, pct: 100, status: "done" } : x)));
+        if (getTelegramAutoSend()) {
+          sendStlToTelegram(
+            file,
+            file.name,
+            `📦 Novo ${type.toUpperCase()} no Vault: ${rec.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`,
+          ).then((r) => {
+            if (!r.ok) console.warn("[telegram] send failed:", r.error);
+          });
+        }
       } catch (e: any) {
         setUploads((u) => u.map((x, j) => (j === idx ? { ...x, pct: 100, status: "error", message: e?.message } : x)));
       }
