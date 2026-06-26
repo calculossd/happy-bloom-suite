@@ -2243,6 +2243,28 @@ export default function App() {
             )}
             {currentTab === 16 && (
               <div className="space-y-4">
+                {/* Sub-abas Impressoras */}
+                <div className="flex items-center gap-2 border-b border-white/10 pb-2">
+                  {[
+                    { id: 'GERAL', label: 'Visão Geral' },
+                    { id: 'MANUT', label: 'Manutenção' },
+                  ].map(t => (
+                    <button
+                      key={t.id}
+                      onClick={() => setPrintersSubTab(t.id as 'GERAL' | 'MANUT')}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                        printersSubTab === t.id
+                          ? 'bg-[#b7ff00] text-black'
+                          : 'text-white/60 hover:text-white hover:bg-white/5'
+                      }`}
+                    >
+                      {t.label}
+                    </button>
+                  ))}
+                </div>
+                {printersSubTab === 'MANUT' ? (
+                  <ManutencaoTab printers={printers} onUpdatePrinter={handleUpdatePrinter} />
+                ) : (<>
                 <ProductionTab
                   orders={orders}
                   printers={printers}
@@ -2273,6 +2295,7 @@ export default function App() {
                   showAddPrinterForm={showAddPrinterFormTab16}
                   onToggleAddPrinterForm={() => setShowAddPrinterFormTab16(v => !v)}
                 />
+                </>)}
               </div>
             )}
             {currentTab === 17 && <ContabilidadeTab />}
