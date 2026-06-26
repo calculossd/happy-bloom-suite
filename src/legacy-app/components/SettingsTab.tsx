@@ -41,7 +41,63 @@ import { safeStorage } from '../utils/storage';
 import { uploadWorkspace, downloadWorkspace, FirebaseSyncError } from '../sync/firebaseSync';
 import { useCustomKeys } from '../hooks/useCustomKeys';
 import { ApiKeyField } from './ApiKeyField';
-import { pickBackupFolder, getBackupFolderName, clearBackupFolder, runBackupNow } from '../hooks/useAutoBackup';
+import { pickBackupFolder, getBackupFolderName, clearBackupFolder, runBackupNow, getDropboxConfig, setDropboxConfig, testDropbox } from '../hooks/useAutoBackup';
+
+function DropboxBackupControl() {
+  const initial = React.useMemo(() => getDropboxConfig(), []);
+  const [token, setToken] = React.useState(initial.token);
+  const [folder, setFolder] = React.useState(initial.folder);
+  const [status, setStatus] = React.useState<string>('');
+  const [busy, setBusy] = React.useState(false);
+  const save = () => { setDropboxConfig(token, folder); setStatus('Salvo.'); };
+  const test = async () => {
+    setBusy(true); setStatus('Testando...');
+    setDropboxConfig(token, folder);
+    const r = await testDropbox();
+    setStatus(r.message);
+    setBusy(false);
+  };
+  const clear = () => { setToken(''); setDropboxConfig('', folder); setStatus('Token removido.'); };
+  return (
+    <div className="mt-3 p-3 rounded-xl bg-[#0C0E0D] border border-[#232B27]/60 space-y-2">
+      <div className="text-[11px] font-bold text-[#4FA3E3] uppercase tracking-wide">Backup no Dropbox (a cada 6h)</div>
+      <div className="text-[10px] text-[#8BA58D] leading-relaxed">
+        Funciona enquanto o app estiver aberto. Cole o <span className="text-[#F1F4EE] font-semibold">Access Token</span> gerado no Dropbox App Console (veja passo a passo abaixo).
+      </div>
+      <input
+        type="password"
+        value={token}
+        onChange={(e) => setToken(e.target.value)}
+        placeholder="Dropbox Access Token (sl.xxx...)"
+        className="w-full px-3 py-1.5 rounded-lg bg-[#111613] border border-[#2F3D35] text-[#F1F4EE] text-[11px]"
+      />
+      <input
+        type="text"
+        value={folder}
+        onChange={(e) => setFolder(e.target.value)}
+        placeholder="/Imprimetrics"
+        className="w-full px-3 py-1.5 rounded-lg bg-[#111613] border border-[#2F3D35] text-[#F1F4EE] text-[11px]"
+      />
+      <div className="flex gap-2 flex-wrap">
+        <button type="button" onClick={save} className="px-3 py-1.5 rounded-lg bg-[#1C2420] hover:bg-[#232F2A] border border-[#2F3D35] text-[#F1F4EE] text-[11px] font-semibold">Salvar</button>
+        <button type="button" disabled={busy || !token} onClick={test} className="px-3 py-1.5 rounded-lg bg-[#1C2420] hover:bg-[#232F2A] border border-[#2F3D35] text-[#4FA3E3] text-[11px] font-semibold disabled:opacity-50">Testar conexão</button>
+        {token && <button type="button" onClick={clear} className="px-3 py-1.5 rounded-lg bg-transparent hover:bg-[#1C2420] border border-[#2F3D35] text-[#8BA58D] text-[11px]">Remover token</button>}
+      </div>
+      {status && <div className="text-[10px] text-[#8BA58D]">{status}</div>}
+      <details className="text-[10px] text-[#8BA58D] mt-1">
+        <summary className="cursor-pointer text-[#4FA3E3] font-semibold">Como gerar o token do Dropbox (5 min)</summary>
+        <ol className="list-decimal ml-4 mt-1 space-y-1">
+          <li>Acesse <a className="underline text-[#4FA3E3]" href="https://www.dropbox.com/developers/apps" target="_blank" rel="noreferrer">dropbox.com/developers/apps</a> e clique em <b>Create app</b>.</li>
+          <li>Escolha: <b>Scoped access</b> → <b>App folder</b> (mais seguro) → dê um nome (ex.: Imprimetrics Backup) → <b>Create app</b>.</li>
+          <li>Na aba <b>Permissions</b>, marque <b>files.content.write</b> e <b>files.content.read</b> e clique em <b>Submit</b>.</li>
+          <li>Volte na aba <b>Settings</b>, role até <b>OAuth 2 → Generated access token</b> e clique em <b>Generate</b>.</li>
+          <li>Copie o token (começa com <code>sl.</code>) e cole acima. Clique em <b>Testar conexão</b>.</li>
+        </ol>
+        <div className="mt-2 text-[#E2B144]">⚠️ Tokens gerados manualmente expiram em ~4h. Para token longo, use o fluxo OAuth (refresh token) — me avise se quiser ativar.</div>
+      </details>
+    </div>
+  );
+}
 
 function AutoBackupFolderControl() {
   const [folder, setFolder] = React.useState<string | null>(null);
@@ -2023,6 +2079,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
               {showClipboardBackup ? 'Ocultar Backup por Texto' : 'Backup por Texto (Área de Transferência / Sem Arquivo) ✨'}
             </button>
             <AutoBackupFolderControl />
+            <DropboxBackupControl />
 
             {showClipboardBackup && (
               <div className="mt-3 bg-[#0C0E0D] border border-purple-500/10 p-3.5 rounded-xl space-y-3 animate-fade-in">
