@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { assertInternalCaller } from "./_auth";
 
 function isValidKey(k: string | null | undefined): boolean {
   if (!k) return false;
