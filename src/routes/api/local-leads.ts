@@ -64,6 +64,8 @@ export const Route = createFileRoute("/api/local-leads")({
   server: {
     handlers: {
       GET: async ({ request }) => {
+        const blocked = assertInternalCaller(request);
+        if (blocked) return blocked;
         const url = new URL(request.url);
         const query = (url.searchParams.get("q") || "").trim();
         const region = (url.searchParams.get("region") || "").trim();
