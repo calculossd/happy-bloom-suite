@@ -41,7 +41,74 @@ import { safeStorage } from '../utils/storage';
 import { uploadWorkspace, downloadWorkspace, FirebaseSyncError } from '../sync/firebaseSync';
 import { useCustomKeys } from '../hooks/useCustomKeys';
 import { ApiKeyField } from './ApiKeyField';
-import { pickBackupFolder, getBackupFolderName, clearBackupFolder, runBackupNow, getDropboxConfig, setDropboxConfig, testDropbox } from '../hooks/useAutoBackup';
+import { pickBackupFolder, getBackupFolderName, clearBackupFolder, runBackupNow, getDropboxConfig, setDropboxConfig, testDropbox, getDropboxOAuth, setDropboxOAuthApp, buildDropboxAuthUrl, exchangeDropboxCode, disconnectDropboxOAuth } from '../hooks/useAutoBackup';
+
+function DropboxOAuthControl() {
+  const initial = React.useMemo(() => getDropboxOAuth(), []);
+  const [appKey, setAppKey] = React.useState(initial.appKey);
+  const [appSecret, setAppSecret] = React.useState(initial.appSecret);
+  const [code, setCode] = React.useState('');
+  const [connected, setConnected] = React.useState(!!initial.refreshToken);
+  const [status, setStatus] = React.useState('');
+  const [busy, setBusy] = React.useState(false);
+
+  const openAuth = () => {
+    if (!appKey || !appSecret) { setStatus('Preencha App key e App secret primeiro.'); return; }
+    setDropboxOAuthApp(appKey, appSecret);
+    window.open(buildDropboxAuthUrl(), '_blank', 'noopener,noreferrer');
+    setStatus('Autorize no Dropbox e cole o código que aparecer abaixo.');
+  };
+  const connect = async () => {
+    setBusy(true); setStatus('Conectando...');
+    setDropboxOAuthApp(appKey, appSecret);
+    const r = await exchangeDropboxCode(code);
+    setStatus(r.message);
+    if (r.ok) { setConnected(true); setCode(''); }
+    setBusy(false);
+  };
+  const disconnect = () => {
+    disconnectDropboxOAuth();
+    setConnected(false);
+    setStatus('Desconectado.');
+  };
+
+  return (
+    <div className="mt-3 p-3 rounded-xl bg-[#0C0E0D] border border-[#4FA3E3]/30 space-y-2">
+      <div className="text-[11px] font-bold text-[#4FA3E3] uppercase tracking-wide">Dropbox OAuth (token permanente) ⭐</div>
+      <div className="text-[10px] text-[#8BA58D] leading-relaxed">
+        Renovação automática — você autoriza uma vez e nunca mais precisa colar token. Use os campos <b>App key</b> e <b>App secret</b> do seu app Dropbox.
+      </div>
+      {connected ? (
+        <div className="flex items-center gap-2">
+          <span className="text-[11px] text-[#7FE2B0] font-semibold">✓ Conectado (renovação automática ativa)</span>
+          <button type="button" onClick={disconnect} className="ml-auto px-3 py-1.5 rounded-lg bg-transparent hover:bg-[#1C2420] border border-[#2F3D35] text-[#8BA58D] text-[11px]">Desconectar</button>
+        </div>
+      ) : (
+        <>
+          <input type="text" value={appKey} onChange={(e) => setAppKey(e.target.value)} placeholder="App key (ex.: j2jh6gxa1xnooli)" className="w-full px-3 py-1.5 rounded-lg bg-[#111613] border border-[#2F3D35] text-[#F1F4EE] text-[11px]" />
+          <input type="password" value={appSecret} onChange={(e) => setAppSecret(e.target.value)} placeholder="App secret" className="w-full px-3 py-1.5 rounded-lg bg-[#111613] border border-[#2F3D35] text-[#F1F4EE] text-[11px]" />
+          <div className="flex gap-2 flex-wrap">
+            <button type="button" onClick={openAuth} className="px-3 py-1.5 rounded-lg bg-[#4FA3E3]/15 hover:bg-[#4FA3E3]/25 border border-[#4FA3E3]/40 text-[#4FA3E3] text-[11px] font-semibold">1. Autorizar no Dropbox</button>
+          </div>
+          <input type="text" value={code} onChange={(e) => setCode(e.target.value)} placeholder="2. Cole aqui o código de autorização" className="w-full px-3 py-1.5 rounded-lg bg-[#111613] border border-[#2F3D35] text-[#F1F4EE] text-[11px]" />
+          <div className="flex gap-2 flex-wrap">
+            <button type="button" disabled={busy || !code || !appKey || !appSecret} onClick={connect} className="px-3 py-1.5 rounded-lg bg-[#4FA3E3] hover:bg-[#3F93D3] text-[#0F1411] text-[11px] font-bold disabled:opacity-50">3. Conectar</button>
+          </div>
+        </>
+      )}
+      {status && <div className="text-[10px] text-[#8BA58D]">{status}</div>}
+      <details className="text-[10px] text-[#8BA58D] mt-1">
+        <summary className="cursor-pointer text-[#4FA3E3] font-semibold">Passo a passo OAuth (1 vez só)</summary>
+        <ol className="list-decimal ml-4 mt-1 space-y-1">
+          <li>Em <a className="underline text-[#4FA3E3]" href="https://www.dropbox.com/developers/apps" target="_blank" rel="noreferrer">dropbox.com/developers/apps</a>, abra seu app.</li>
+          <li>Na aba <b>Settings</b>, copie <b>App key</b> e <b>App secret</b> e cole acima.</li>
+          <li>Clique em <b>1. Autorizar no Dropbox</b> → faça login → clique <b>Allow</b> → o Dropbox mostrará um <b>código</b>.</li>
+          <li>Copie o código, cole no campo <b>2</b> e clique em <b>3. Conectar</b>. Pronto — token renova sozinho para sempre.</li>
+        </ol>
+      </details>
+    </div>
+  );
+}
 
 function DropboxBackupControl() {
   const initial = React.useMemo(() => getDropboxConfig(), []);
@@ -2080,6 +2147,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
             </button>
             <AutoBackupFolderControl />
             <DropboxBackupControl />
+           <DropboxOAuthControl />
 
             {showClipboardBackup && (
               <div className="mt-3 bg-[#0C0E0D] border border-purple-500/10 p-3.5 rounded-xl space-y-3 animate-fade-in">
