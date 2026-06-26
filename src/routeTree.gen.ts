@@ -17,6 +17,7 @@ import { Route as ApiPlacesLeadsRouteImport } from './routes/api/places-leads'
 import { Route as ApiLocalLeadsRouteImport } from './routes/api/local-leads'
 import { Route as ApiKeysStatusRouteImport } from './routes/api/keys-status'
 import { Route as Api3dTrendsRouteImport } from './routes/api/3d-trends'
+import { Route as ApiTelegramSendStlRouteImport } from './routes/api/telegram/send-stl'
 import { Route as ApiSerpapiStatusRouteImport } from './routes/api/serpapi.status'
 
 const StoriesRoute = StoriesRouteImport.update({
@@ -59,6 +60,11 @@ const Api3dTrendsRoute = Api3dTrendsRouteImport.update({
   path: '/api/3d-trends',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiTelegramSendStlRoute = ApiTelegramSendStlRouteImport.update({
+  id: '/api/telegram/send-stl',
+  path: '/api/telegram/send-stl',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiSerpapiStatusRoute = ApiSerpapiStatusRouteImport.update({
   id: '/api/serpapi/status',
   path: '/api/serpapi/status',
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/api/quotations': typeof ApiQuotationsRoute
   '/api/search-image': typeof ApiSearchImageRoute
   '/api/serpapi/status': typeof ApiSerpapiStatusRoute
+  '/api/telegram/send-stl': typeof ApiTelegramSendStlRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByTo {
   '/api/quotations': typeof ApiQuotationsRoute
   '/api/search-image': typeof ApiSearchImageRoute
   '/api/serpapi/status': typeof ApiSerpapiStatusRoute
+  '/api/telegram/send-stl': typeof ApiTelegramSendStlRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -98,6 +106,7 @@ export interface FileRoutesById {
   '/api/quotations': typeof ApiQuotationsRoute
   '/api/search-image': typeof ApiSearchImageRoute
   '/api/serpapi/status': typeof ApiSerpapiStatusRoute
+  '/api/telegram/send-stl': typeof ApiTelegramSendStlRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -111,6 +120,7 @@ export interface FileRouteTypes {
     | '/api/quotations'
     | '/api/search-image'
     | '/api/serpapi/status'
+    | '/api/telegram/send-stl'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -122,6 +132,7 @@ export interface FileRouteTypes {
     | '/api/quotations'
     | '/api/search-image'
     | '/api/serpapi/status'
+    | '/api/telegram/send-stl'
   id:
     | '__root__'
     | '/'
@@ -133,6 +144,7 @@ export interface FileRouteTypes {
     | '/api/quotations'
     | '/api/search-image'
     | '/api/serpapi/status'
+    | '/api/telegram/send-stl'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -145,6 +157,7 @@ export interface RootRouteChildren {
   ApiQuotationsRoute: typeof ApiQuotationsRoute
   ApiSearchImageRoute: typeof ApiSearchImageRoute
   ApiSerpapiStatusRoute: typeof ApiSerpapiStatusRoute
+  ApiTelegramSendStlRoute: typeof ApiTelegramSendStlRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -205,6 +218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Api3dTrendsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/telegram/send-stl': {
+      id: '/api/telegram/send-stl'
+      path: '/api/telegram/send-stl'
+      fullPath: '/api/telegram/send-stl'
+      preLoaderRoute: typeof ApiTelegramSendStlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/serpapi/status': {
       id: '/api/serpapi/status'
       path: '/api/serpapi/status'
@@ -225,6 +245,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiQuotationsRoute: ApiQuotationsRoute,
   ApiSearchImageRoute: ApiSearchImageRoute,
   ApiSerpapiStatusRoute: ApiSerpapiStatusRoute,
+  ApiTelegramSendStlRoute: ApiTelegramSendStlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
