@@ -1363,7 +1363,7 @@ export function Print3DPanel({
   });
 
   return (
-    <div className="space-y-5 text-white">
+    <div className="space-y-3 text-white">
       {/* Hero + KPI strip — image fades down into dashboard */}
       <div className="relative overflow-hidden rounded-2xl bg-black">
         {/* Hero image — only covers the title band, then fades to solid black */}
@@ -1393,7 +1393,7 @@ export function Print3DPanel({
         </div>
 
         {/* KPI strip — fully on solid black, abaixo da imagem */}
-        <div className="relative z-10 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 p-4 bg-black">
+        <div className="relative z-10 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 px-4 pt-2 pb-4 bg-black items-stretch [&>*]:h-full">
         <PremiumKpi tone="lime"    icon={ShoppingBag} label="Pedidos Hoje"       value={String(ordersToday.length)} sub={`${activePrinters}/${printersTotal} impressoras`} />
         <PremiumKpi tone="emerald" icon={DollarSign}  label="Faturamento Hoje"   value={fmtBRL(revenueToday)}       sub="receita do dia" />
         <PremiumKpi tone="blue"    icon={Package2}    label="Peças Impressas"    value={String(piecesToday)}        sub="hoje" />
