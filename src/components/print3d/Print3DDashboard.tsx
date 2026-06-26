@@ -1389,23 +1389,6 @@ export function Print3DPanel({
             </h1>
             <p className="text-[12.5px] lg:text-[13px] text-white/70">Aqui está o resumo da sua produção hoje.</p>
           </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <button className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-black/40 border border-white/[0.1] text-[12px] text-white/85 hover:bg-black/60 backdrop-blur-sm">
-              <Calendar className="size-3.5" />{" "}
-              {today.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })}{" "}
-              <ChevronDown className="size-3" />
-            </button>
-            <button className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-black/40 border border-white/[0.1] text-[12px] text-white/85 hover:bg-black/60 backdrop-blur-sm">
-              <Filter className="size-3.5" /> Filtros <ChevronDown className="size-3" />
-            </button>
-            <button
-              onClick={() => onSelectTab?.(3)}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-lg text-[12px] font-bold text-black hover:brightness-110 transition"
-              style={{ background: LIME, boxShadow: `0 6px 18px -6px ${LIME}aa` }}
-            >
-              <Plus className="size-3.5" strokeWidth={2.8} /> Novo Pedido
-            </button>
-          </div>
         </div>
         </div>
 
