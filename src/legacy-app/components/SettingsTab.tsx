@@ -2551,6 +2551,25 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                           <Sparkles className="h-3 w-3 animate-pulse" />
                           {isGeneratingPalette ? 'IA Analisando...' : 'Gerar Paleta por IA'}
                         </button>
+                        {(localTheme === 'custom' || aiColors) && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setAiColors(null);
+                              setLocalTheme('dark-organic');
+                              onUpdateBrandConfig({
+                                ...brandConfig,
+                                theme: 'dark-organic',
+                                customThemeColors: undefined,
+                              });
+                              showSuccess('Tema clássico restaurado (Natural Escuro). ✓');
+                            }}
+                            className="px-3 py-2 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/20 text-xs font-bold rounded-lg transition flex items-center gap-1 cursor-pointer"
+                            id="branding_restore_classic_btn"
+                          >
+                            ↺ Voltar ao Tema Clássico
+                          </button>
+                        )}
                       </div>
                     )}
                   </div>
