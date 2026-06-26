@@ -2435,8 +2435,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                            const reader = new FileReader();
                             reader.onload = async (event) => {
                               const raw = event.target?.result as string;
-                              // Não removemos mais o fundo automaticamente: isso estava deformando logos.
-                              // Apenas reduzimos para caber bem no app e preservamos a transparência real do PNG/SVG.
+                              // Reduz, e remove fundo sólido (branco/cinza) via flood-fill a partir das bordas.
                               const processed = await new Promise<string>((resolve) => {
                                 try {
                                   if (file.type === 'image/svg+xml') return resolve(raw);
@@ -2455,6 +2454,55 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                                     ctx.imageSmoothingEnabled = true;
                                     ctx.imageSmoothingQuality = 'high';
                                     ctx.drawImage(img, 0, 0, W, H);
+                                    try {
+                                      const imgData = ctx.getImageData(0, 0, W, H);
+                                      const d = imgData.data;
+                                      // Cor de referência: média dos 4 cantos
+                                      const corners = [0, (W-1)*4, (H-1)*W*4, ((H-1)*W + (W-1))*4];
+                                      let r=0,g=0,b=0;
+                                      corners.forEach(i => { r+=d[i]; g+=d[i+1]; b+=d[i+2]; });
+                                      r/=4; g/=4; b/=4;
+                                      const TOL = 38; // tolerância
+                                      const within = (i: number) => {
+                                        const dr = d[i]-r, dg = d[i+1]-g, db = d[i+2]-b;
+                                        return Math.sqrt(dr*dr+dg*dg+db*db) < TOL;
+                                      };
+                                      // Flood-fill BFS a partir das bordas
+                                      const visited = new Uint8Array(W*H);
+                                      const stack: number[] = [];
+                                      for (let x=0; x<W; x++) { stack.push(x, (H-1)*W + x); }
+                                      for (let y=0; y<H; y++) { stack.push(y*W, y*W + W-1); }
+                                      while (stack.length) {
+                                        const p = stack.pop()!;
+                                        if (visited[p]) continue;
+                                        const i = p*4;
+                                        if (!within(i)) continue;
+                                        visited[p] = 1;
+                                        d[i+3] = 0;
+                                        const x = p % W, y = (p - x) / W;
+                                        if (x > 0) stack.push(p - 1);
+                                        if (x < W-1) stack.push(p + 1);
+                                        if (y > 0) stack.push(p - W);
+                                        if (y < H-1) stack.push(p + W);
+                                      }
+                                      // Anti-alias: pixels vizinhos transparentes ficam semi-transparentes
+                                      for (let y=1; y<H-1; y++) {
+                                        for (let x=1; x<W-1; x++) {
+                                          const p = y*W + x;
+                                          if (visited[p]) continue;
+                                          const i = p*4;
+                                          if (d[i+3] < 255) continue;
+                                          let edge = 0;
+                                          if (visited[p-1]) edge++;
+                                          if (visited[p+1]) edge++;
+                                          if (visited[p-W]) edge++;
+                                          if (visited[p+W]) edge++;
+                                          if (edge >= 2) d[i+3] = 140;
+                                          else if (edge === 1) d[i+3] = 200;
+                                        }
+                                      }
+                                      ctx.putImageData(imgData, 0, 0);
+                                    } catch {}
                                     resolve(c.toDataURL('image/png'));
                                   };
                                   img.onerror = () => resolve(raw);
