@@ -1668,25 +1668,25 @@ export default function App() {
       {/* PREMIUM SIDE NAV — vertical, fixed left */}
       <aside className="hidden md:flex fixed left-0 top-0 bottom-0 z-50 w-[200px] flex-col bg-[#0a0d0c]/95 backdrop-blur-2xl border-r border-white/[0.06] shadow-[8px_0_32px_-12px_rgba(0,0,0,0.8)]">
         {/* BRAND / LOGO — alinhado ao topo, sem moldura */}
-        <div className="px-4 pt-6 pb-5 flex flex-col items-center gap-3">
-          <div className="relative w-20 h-20 flex items-center justify-center">
-            <div className="absolute inset-[-10px] rounded-[28px] bg-[radial-gradient(circle_at_center,_rgba(163,230,53,0.32),_rgba(94,234,212,0.12)_38%,_transparent_72%)] blur-2xl" />
+        <div className="px-3 pt-5 pb-4 flex flex-col items-center gap-2">
+          <div className="relative w-32 h-32 flex items-center justify-center">
+            <div className="absolute inset-[-14px] rounded-[36px] bg-[radial-gradient(circle_at_center,_rgba(163,230,53,0.34),_rgba(94,234,212,0.14)_40%,_transparent_74%)] blur-2xl" />
             {brandConfig.customLogo ? (
               <img
                 src={brandConfig.customLogo}
                 alt={brandConfig.name || 'Logo'}
-                className="relative w-full h-full object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.72)]"
+                className="relative w-full h-full object-contain drop-shadow-[0_10px_22px_rgba(0,0,0,0.72)]"
                 referrerPolicy="no-referrer"
               />
             ) : (
-              <Atelier3DLogo className="relative h-[72px] w-[72px]" />
+              <Atelier3DLogo className="relative h-[112px] w-[112px]" />
             )}
           </div>
           <div className="text-center leading-tight w-full px-1">
-            <div className="brand-shine text-[24px] font-black tracking-normal truncate max-w-[184px] mx-auto uppercase">
+            <div className="brand-shine text-[13px] font-bold tracking-wide truncate max-w-[184px] mx-auto uppercase">
               {brandConfig.name}
             </div>
-            <div className="text-[9px] uppercase tracking-[0.22em] text-white/40 font-bold mt-1.5">Ateliê 3D</div>
+            <div className="text-[8px] uppercase tracking-[0.24em] text-white/40 font-semibold mt-1">Ateliê 3D</div>
           </div>
         </div>
         {/* Spacer para descer a navegação até a altura do "Bem-vindo de volta" */}
