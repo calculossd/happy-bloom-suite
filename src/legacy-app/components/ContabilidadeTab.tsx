@@ -207,13 +207,52 @@ const DashboardSub: React.FC<{ state: State; setSub: (s: any) => void }> = ({ st
 
   const max = Math.max(1, ...totals.map(t => t.total));
 
+  const notasMes = state.notas.filter(n => n.type === 'emitida' && new Date(n.issue_date).getFullYear() === year && new Date(n.issue_date).getMonth() + 1 === month);
+  const notasMesValor = notasMes.reduce((s, n) => s + Number(n.value || 0), 0);
+
+  const empresa = state.empresa;
+  const empresaIncompleta = !empresa || !empresa.cnpj || empresa.cnpj.replace(/\D/g, '').length !== 14 || !empresa.razao_social;
+  const nomeFantasia = empresa?.nome_fantasia?.trim() || empresa?.razao_social?.trim() || 'Empresa MEI';
+
   return (
     <div className="space-y-5">
+      {/* Welcome */}
+      <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#0f1a10] via-[#0a0c0a] to-[#0a0c0a] p-5">
+        <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-[#b7ff00]/10 blur-3xl pointer-events-none" />
+        <div className="relative flex items-center justify-between flex-wrap gap-3">
+          <div>
+            <span className="text-[10px] uppercase tracking-[0.3em] text-[#b7ff00] font-bold">Bem-vindo</span>
+            <h2 className="text-xl lg:text-2xl font-extrabold text-white tracking-tight mt-1">{nomeFantasia}</h2>
+            <p className="text-xs text-zinc-400 mt-0.5">Painel contábil · {MESES[month - 1]} / {year}</p>
+          </div>
+          {empresa?.cnpj && (
+            <div className="text-right">
+              <span className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold">CNPJ</span>
+              <div className="text-sm text-white font-bold tabular-nums">{empresa.cnpj}</div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {empresaIncompleta && (
+        <button
+          onClick={() => setSub('empresa')}
+          className="w-full flex items-center gap-3 p-4 rounded-2xl border border-orange-500/40 bg-orange-500/10 hover:bg-orange-500/15 transition text-left"
+        >
+          <AlertTriangle className="w-5 h-5 text-orange-400 shrink-0" />
+          <div className="flex-1">
+            <div className="text-sm font-bold text-orange-200">Complete os dados da empresa</div>
+            <div className="text-[11px] text-orange-200/70">CNPJ e razão social são necessários para emitir notas e gerar a DASN.</div>
+          </div>
+          <ArrowRight className="w-4 h-4 text-orange-300" />
+        </button>
+      )}
+
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <Kpi icon={DollarSign} label="DAS Mensal" value={brl(state.config.das_value)} sub={state.config.activity.toUpperCase()} tone="gold" />
         <Kpi icon={Calendar} label="Próximo DAS" value={nextDas ? nextDas.reference : '—'} sub={nextDas ? `Venc. ${new Date(nextDas.due_date).toLocaleDateString('pt-BR')}` : 'Sem pendência'} tone="orange" />
         <Kpi icon={FileBarChart2} label="Faturamento Ano" value={brl(accum)} sub={`${pct.toFixed(1)}% do limite`} tone={pct > 80 ? 'orange' : 'lime'} />
-        <Kpi icon={Wallet} label="Despesas Mês" value={brl(despMes)} sub={MESES[month - 1]} tone="purple" />
+        <Kpi icon={Receipt} label="Notas no Mês" value={`${notasMes.length}`} sub={brl(notasMesValor)} tone="emerald" />
       </div>
 
       <Card>
@@ -252,10 +291,41 @@ const DashboardSub: React.FC<{ state: State; setSub: (s: any) => void }> = ({ st
             <Btn onClick={() => setSub('notas')}><Plus className="inline w-3 h-3 mr-1" /> Nota Fiscal</Btn>
             <Btn tone="ghost" onClick={() => setSub('rec')}><Plus className="inline w-3 h-3 mr-1" /> Lançar Receita</Btn>
             <Btn tone="gold" onClick={() => setSub('das')}><DollarSign className="inline w-3 h-3 mr-1" /> Pagar DAS</Btn>
-            <Btn tone="ghost" onClick={() => setSub('desp')}><Plus className="inline w-3 h-3 mr-1" /> Despesa</Btn>
+            <Btn tone="ghost" onClick={() => setSub('dasn')}><FileText className="inline w-3 h-3 mr-1" /> Declaração</Btn>
           </div>
         </Card>
       </div>
+
+      {/* Links úteis */}
+      <Card>
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <Globe className="w-4 h-4 text-[#D4A017]" />
+            <h4 className="text-xs font-bold uppercase tracking-widest text-white">Links Úteis</h4>
+          </div>
+          <button onClick={() => setSub('empresa')} className="text-[10px] uppercase tracking-widest text-zinc-400 hover:text-[#b7ff00] flex items-center gap-1">
+            Ver todos <ArrowRight className="w-3 h-3" />
+          </button>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          {LINKS_GOVERNO.slice(0, 4).map((l, i) => {
+            const Icon = l.icone;
+            return (
+              <a
+                key={i}
+                href={l.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-2 p-2.5 rounded-lg bg-white/[0.04] border border-white/10 hover:border-[#b7ff00]/40 transition"
+              >
+                <Icon className="w-4 h-4 text-[#D4A017] shrink-0" />
+                <span className="text-[11px] font-bold text-white truncate flex-1">{l.descricao}</span>
+                <ExternalLink className="w-3 h-3 text-zinc-500 group-hover:text-[#b7ff00] transition" />
+              </a>
+            );
+          })}
+        </div>
+      </Card>
     </div>
   );
 };
