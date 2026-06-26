@@ -41,7 +41,7 @@ import { safeStorage } from '../utils/storage';
 import { uploadWorkspace, downloadWorkspace, FirebaseSyncError } from '../sync/firebaseSync';
 import { useCustomKeys } from '../hooks/useCustomKeys';
 import { ApiKeyField } from './ApiKeyField';
-import { pickBackupFolder, getBackupFolderName, clearBackupFolder, runBackupNow, getDropboxConfig, setDropboxConfig, testDropbox, getDropboxOAuth, setDropboxOAuthApp, buildDropboxAuthUrl, exchangeDropboxCode, disconnectDropboxOAuth, getGDriveConfig, setGDriveConfig, testGDrive } from '../hooks/useAutoBackup';
+import { pickBackupFolder, getBackupFolderName, clearBackupFolder, runBackupNow, getDropboxConfig, setDropboxConfig, testDropbox, getDropboxOAuth, buildDropboxAuthUrl, exchangeDropboxCode, disconnectDropboxOAuth, getGDriveConfig, setGDriveConfig, testGDrive } from '../hooks/useAutoBackup';
 
 function GDriveBackupControl() {
   const initial = React.useMemo(() => getGDriveConfig(), []);
