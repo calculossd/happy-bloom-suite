@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { assertInternalCaller } from "./_auth";
 
 const GATEWAY_URL = "https://connector-gateway.lovable.dev/google_maps";
 
@@ -56,6 +57,8 @@ export const Route = createFileRoute("/api/places-leads")({
   server: {
     handlers: {
       GET: async ({ request }) => {
+        const blocked = assertInternalCaller(request);
+        if (blocked) return blocked;
         const url = new URL(request.url);
         const query = (url.searchParams.get("q") || "").trim();
         const region = (url.searchParams.get("region") || "").trim();

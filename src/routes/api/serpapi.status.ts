@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { assertInternalCaller } from "./_auth";
 
 function isValidKey(k: string | null | undefined): boolean {
   if (!k) return false;
@@ -48,6 +49,8 @@ export const Route = createFileRoute("/api/serpapi/status")({
     handlers: {
       OPTIONS: async () => new Response(null, { status: 204, headers: CORS }),
       GET: async ({ request }) => {
+        const blocked = assertInternalCaller(request);
+        if (blocked) return blocked;
         const key = pickKey(request);
         if (!key) {
           return Response.json(

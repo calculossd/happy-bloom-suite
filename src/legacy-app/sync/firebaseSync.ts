@@ -1,5 +1,4 @@
 // @ts-nocheck
-import { safeStorage } from '../utils/storage';
 
 export class FirebaseSyncError extends Error {
   constructor(message: string) {
@@ -76,18 +75,10 @@ export function buildSyncPayload(slices: SyncSlices) {
     catalogItems: readLocalCatalog(),
     brandConfig: slices.brandConfig,
     tuyaDevices: slices.tuyaDevices || [],
-    customKeys: {
-      geminiKey: safeStorage.getItem('bambuzau_custom_gemini_key', ''),
-      groqKey: safeStorage.getItem('bambuzau_custom_groq_key', ''),
-      serpKey: safeStorage.getItem('bambuzau_custom_serp_key', ''),
-      tavilyKey: safeStorage.getItem('bambuzau_custom_tavily_key', ''),
-      jinaKey: safeStorage.getItem('bambuzau_custom_jina_key', ''),
-      aiProvider: safeStorage.getItem('bambuzau_ai_provider', 'gemini'),
-      webOrigin: safeStorage.getItem(
-        'bambuzau_web_origin',
-        typeof window !== 'undefined' ? window.location.origin : '',
-      ),
-    },
+    // SECURITY: API keys (Gemini, Groq, SerpApi, Tavily, Jina) are intentionally
+    // NOT synced to Firebase. The previous unauthenticated PUT/GET to the
+    // Realtime Database exposed plaintext credentials to anyone who could guess
+    // the workspace code. Keys now stay local-only.
   };
 }
 
@@ -154,7 +145,9 @@ export async function downloadWorkspace(target: SyncTarget): Promise<{ data: any
   }
 
   persistSyncTarget(url, workspace);
-  restoreCustomKeys(data.customKeys);
+  // SECURITY: Do NOT restore customKeys from Firebase. Legacy payloads may
+  // still contain them; ignore so that compromised remote data cannot inject
+  // attacker-controlled API keys into the local workspace.
   if (data.catalogItems) {
     try {
       localStorage.setItem('bambuzau_local_catalog_production', JSON.stringify(data.catalogItems));
@@ -164,20 +157,4 @@ export async function downloadWorkspace(target: SyncTarget): Promise<{ data: any
   }
 
   return { data, syncedAt: persistSyncTimestamp() };
-}
-
-function restoreCustomKeys(customKeys: any) {
-  if (!customKeys) return;
-  const mapping: Array<[string, string]> = [
-    ['geminiKey', 'bambuzau_custom_gemini_key'],
-    ['groqKey', 'bambuzau_custom_groq_key'],
-    ['serpKey', 'bambuzau_custom_serp_key'],
-    ['tavilyKey', 'bambuzau_custom_tavily_key'],
-    ['jinaKey', 'bambuzau_custom_jina_key'],
-    ['aiProvider', 'bambuzau_ai_provider'],
-    ['webOrigin', 'bambuzau_web_origin'],
-  ];
-  for (const [src, storageKey] of mapping) {
-    if (customKeys[src]) safeStorage.setItem(storageKey, customKeys[src]);
-  }
 }

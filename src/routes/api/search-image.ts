@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { sanitizeQuery } from "./_sanitize";
+import { assertInternalCaller } from "./_auth";
 
 type Body = { query?: string };
 
@@ -99,6 +100,8 @@ export const Route = createFileRoute("/api/search-image")({
   server: {
     handlers: {
       POST: async ({ request }) => {
+        const blocked = assertInternalCaller(request);
+        if (blocked) return blocked;
         let body: Body = {};
         try { body = await request.json(); } catch {}
         const query = sanitizeQuery(body?.query);

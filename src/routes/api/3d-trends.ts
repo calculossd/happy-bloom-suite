@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { sanitizeQuery, isAllowedScrapeUrl } from "./_sanitize";
+import { assertInternalCaller } from "./_auth";
 
 export type TrendItem = {
   id: string;
@@ -169,6 +170,8 @@ export const Route = createFileRoute("/api/3d-trends")({
   server: {
     handlers: {
       GET: async ({ request }) => {
+        const blocked = assertInternalCaller(request);
+        if (blocked) return blocked;
         const url = new URL(request.url);
         const force = url.searchParams.get("refresh") === "1";
         const rawQ = (url.searchParams.get("q") || "").trim();

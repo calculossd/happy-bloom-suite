@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { sanitizeQuery, sanitizeType } from "./_sanitize";
+import { assertInternalCaller } from "./_auth";
 
 function isValidKey(k: string | null | undefined): boolean {
   if (!k) return false;
@@ -143,6 +144,8 @@ export const Route = createFileRoute("/api/quotations")({
   server: {
     handlers: {
       GET: async ({ request }) => {
+        const blocked = assertInternalCaller(request);
+        if (blocked) return blocked;
         const url = new URL(request.url);
         const apiKey = getKey(request, url);
         const fallbackKey = getFallbackKey(request, url);
