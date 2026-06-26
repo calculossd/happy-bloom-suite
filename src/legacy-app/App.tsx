@@ -1746,9 +1746,13 @@ export default function App() {
                 </div>
               )}
               {group.items.map((item, ii) => {
-                const active = item.sub
-                  ? currentTab === item.id && costsSubTab === item.sub
-                  : currentTab === item.id && !item.onClick;
+                const active = item.sub === 'MANUT'
+                  ? currentTab === 16 && printersSubTab === 'MANUT'
+                  : item.id === 16 && !item.sub
+                    ? currentTab === 16 && printersSubTab === 'GERAL'
+                    : item.sub
+                      ? currentTab === item.id && costsSubTab === item.sub
+                      : currentTab === item.id && !item.onClick;
                 const accent = '#b7ff00';
                 return (
                   <button
