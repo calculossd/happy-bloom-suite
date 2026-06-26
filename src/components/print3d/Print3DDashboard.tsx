@@ -1366,22 +1366,23 @@ export function Print3DPanel({
     <div className="space-y-5 text-white">
       {/* Hero + KPI strip — image fades down into dashboard */}
       <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#050908]">
-        {/* Background image stretches behind hero + KPIs */}
-        <img
-          src={dashboardHero.url}
-          alt="Ateliê 3D em produção"
-          className="pointer-events-none absolute inset-x-0 top-0 w-full h-full object-cover"
-          style={{ objectPosition: "center 78%" }}
-          loading="lazy"
-          decoding="async"
-        />
-        {/* Left fade for title legibility */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#050908] via-[#050908]/55 to-transparent" />
-        {/* Bottom fade — image dissolves into dashboard */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-b from-transparent via-[#050908]/85 to-[#050908]" />
+        {/* Hero image — only covers the title band, then fades to solid black */}
+        <div className="relative" style={{ minHeight: "clamp(180px, 22vw, 280px)" }}>
+          <img
+            src={dashboardHero.url}
+            alt="Ateliê 3D em produção"
+            className="pointer-events-none absolute inset-0 w-full h-full object-cover"
+            style={{ objectPosition: "center 78%" }}
+            loading="lazy"
+            decoding="async"
+          />
+          {/* Left fade for title legibility */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#050908] via-[#050908]/55 to-transparent" />
+          {/* Bottom fade — image dissolves into solid black */}
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[70%] bg-gradient-to-b from-transparent via-[#050908]/90 to-[#050908]" />
 
         {/* Hero band */}
-        <div className="relative z-10 flex flex-col justify-between gap-5 p-5 lg:p-7" style={{ minHeight: "clamp(180px, 22vw, 280px)" }}>
+        <div className="relative z-10 flex flex-col justify-between gap-5 p-5 lg:p-7 h-full">
           <div>
             <h1 className="text-[22px] lg:text-[26px] font-bold tracking-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
               Bem-vindo de volta, Inova Mundo! <span className="inline-block">👋</span>
@@ -1406,9 +1407,10 @@ export function Print3DPanel({
             </button>
           </div>
         </div>
+        </div>
 
-        {/* KPI strip — sits over the faded bottom of the image */}
-        <div className="relative z-10 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 p-4 pt-0">
+        {/* KPI strip — fully on solid black, abaixo da imagem */}
+        <div className="relative z-10 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 p-4 bg-[#050908]">
         <PremiumKpi tone="lime"    icon={ShoppingBag} label="Pedidos Hoje"       value={String(ordersToday.length)} sub={`${activePrinters}/${printersTotal} impressoras`} />
         <PremiumKpi tone="emerald" icon={DollarSign}  label="Faturamento Hoje"   value={fmtBRL(revenueToday)}       sub="receita do dia" />
         <PremiumKpi tone="blue"    icon={Package2}    label="Peças Impressas"    value={String(piecesToday)}        sub="hoje" />
