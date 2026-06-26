@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { sanitizeQuery, isAllowedScrapeUrl } from "./_sanitize";
+import { assertInternalCaller } from "./_auth";
 
 export type TrendItem = {
   id: string;
