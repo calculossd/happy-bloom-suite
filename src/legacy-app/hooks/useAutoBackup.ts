@@ -13,6 +13,45 @@ const DBX_APP_SECRET = 'lov_dropbox_app_secret';
 const DBX_REFRESH = 'lov_dropbox_refresh_token';
 const DBX_ACCESS = 'lov_dropbox_access_token';
 const DBX_EXPIRES = 'lov_dropbox_access_expires';
+const GDRIVE_ENABLED_KEY = 'lov_gdrive_enabled';
+const GDRIVE_FOLDER_KEY = 'lov_gdrive_folder';
+
+export function getGDriveConfig() {
+  try {
+    return {
+      enabled: localStorage.getItem(GDRIVE_ENABLED_KEY) === '1',
+      folder: localStorage.getItem(GDRIVE_FOLDER_KEY) || 'Imprimetrics',
+    };
+  } catch { return { enabled: false, folder: 'Imprimetrics' }; }
+}
+export function setGDriveConfig(enabled: boolean, folder: string) {
+  try {
+    localStorage.setItem(GDRIVE_ENABLED_KEY, enabled ? '1' : '0');
+    localStorage.setItem(GDRIVE_FOLDER_KEY, (folder || 'Imprimetrics').trim());
+  } catch {}
+}
+async function uploadToGDrive(fileName: string, content: string): Promise<boolean> {
+  const { enabled, folder } = getGDriveConfig();
+  if (!enabled) return false;
+  try {
+    const { uploadBackupToGDrive } = await import('@/lib/gdrive-backup.functions');
+    await uploadBackupToGDrive({ data: { fileName, content, folderName: folder } });
+    return true;
+  } catch (e) {
+    console.warn('GDrive upload erro:', e);
+    return false;
+  }
+}
+export async function testGDrive(): Promise<{ ok: boolean; message: string }> {
+  try {
+    const { uploadBackupToGDrive } = await import('@/lib/gdrive-backup.functions');
+    const ts = new Date().toISOString().replace(/[:.]/g, '-');
+    const r = await uploadBackupToGDrive({ data: { fileName: `imprimetrics-test-${ts}.json`, content: JSON.stringify({ ok: true, at: ts }), folderName: getGDriveConfig().folder } });
+    return { ok: true, message: `Enviado: ${r.name}` };
+  } catch (e: any) {
+    return { ok: false, message: e?.message || String(e) };
+  }
+}
 
 // --- Dropbox ---
 export function getDropboxConfig(): { token: string; folder: string } {
@@ -303,7 +342,8 @@ export async function runBackupNow() {
   let saved = false;
   if (handle) saved = await writeToFolder(handle, fileName, json);
   const dbxOk = await uploadToDropbox(fileName, json);
-  if (!saved && !dbxOk) downloadJson(data, fileName);
+  const gdOk = await uploadToGDrive(fileName, json);
+  if (!saved && !dbxOk && !gdOk) downloadJson(data, fileName);
   try { localStorage.setItem(LAST_KEY, String(Date.now())); } catch {}
 }
 

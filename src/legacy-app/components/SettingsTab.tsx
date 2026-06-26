@@ -41,7 +41,41 @@ import { safeStorage } from '../utils/storage';
 import { uploadWorkspace, downloadWorkspace, FirebaseSyncError } from '../sync/firebaseSync';
 import { useCustomKeys } from '../hooks/useCustomKeys';
 import { ApiKeyField } from './ApiKeyField';
-import { pickBackupFolder, getBackupFolderName, clearBackupFolder, runBackupNow, getDropboxConfig, setDropboxConfig, testDropbox, getDropboxOAuth, setDropboxOAuthApp, buildDropboxAuthUrl, exchangeDropboxCode, disconnectDropboxOAuth } from '../hooks/useAutoBackup';
+import { pickBackupFolder, getBackupFolderName, clearBackupFolder, runBackupNow, getDropboxConfig, setDropboxConfig, testDropbox, getDropboxOAuth, setDropboxOAuthApp, buildDropboxAuthUrl, exchangeDropboxCode, disconnectDropboxOAuth, getGDriveConfig, setGDriveConfig, testGDrive } from '../hooks/useAutoBackup';
+
+function GDriveBackupControl() {
+  const initial = React.useMemo(() => getGDriveConfig(), []);
+  const [enabled, setEnabled] = React.useState(initial.enabled);
+  const [folder, setFolder] = React.useState(initial.folder);
+  const [status, setStatus] = React.useState('');
+  const [busy, setBusy] = React.useState(false);
+  const save = () => { setGDriveConfig(enabled, folder); setStatus(enabled ? 'Ativado e salvo.' : 'Desativado.'); };
+  const test = async () => {
+    setBusy(true); setStatus('Enviando teste...');
+    setGDriveConfig(true, folder); setEnabled(true);
+    const r = await testGDrive();
+    setStatus(r.message);
+    setBusy(false);
+  };
+  return (
+    <div className="mt-3 p-3 rounded-xl bg-[#0C0E0D] border border-[#7FE2B0]/30 space-y-2">
+      <div className="text-[11px] font-bold text-[#7FE2B0] uppercase tracking-wide">Backup no Google Drive (15 GB grátis)</div>
+      <div className="text-[10px] text-[#8BA58D] leading-relaxed">
+        Conectado via Lovable — sem token nem app secret. Envia a cada 6h (com o app aberto) e mantém os 5 backups mais recentes na pasta.
+      </div>
+      <label className="flex items-center gap-2 text-[11px] text-[#F1F4EE]">
+        <input type="checkbox" checked={enabled} onChange={(e) => setEnabled(e.target.checked)} />
+        Ativar envio automático para Google Drive
+      </label>
+      <input type="text" value={folder} onChange={(e) => setFolder(e.target.value)} placeholder="Imprimetrics" className="w-full px-3 py-1.5 rounded-lg bg-[#111613] border border-[#2F3D35] text-[#F1F4EE] text-[11px]" />
+      <div className="flex gap-2 flex-wrap">
+        <button type="button" onClick={save} className="px-3 py-1.5 rounded-lg bg-[#1C2420] hover:bg-[#232F2A] border border-[#2F3D35] text-[#F1F4EE] text-[11px] font-semibold">Salvar</button>
+        <button type="button" disabled={busy} onClick={test} className="px-3 py-1.5 rounded-lg bg-[#7FE2B0]/15 hover:bg-[#7FE2B0]/25 border border-[#7FE2B0]/40 text-[#7FE2B0] text-[11px] font-semibold disabled:opacity-50">Enviar teste</button>
+      </div>
+      {status && <div className="text-[10px] text-[#8BA58D]">{status}</div>}
+    </div>
+  );
+}
 
 function DropboxOAuthControl() {
   const initial = React.useMemo(() => getDropboxOAuth(), []);
@@ -2148,6 +2182,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
             <AutoBackupFolderControl />
             <DropboxBackupControl />
            <DropboxOAuthControl />
+           <GDriveBackupControl />
 
             {showClipboardBackup && (
               <div className="mt-3 bg-[#0C0E0D] border border-purple-500/10 p-3.5 rounded-xl space-y-3 animate-fade-in">
