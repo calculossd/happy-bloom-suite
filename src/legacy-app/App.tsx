@@ -19,6 +19,7 @@ import { OkLojaAssistant } from './components/OkLojaAssistant';
 import { ShowcaseView } from './components/ShowcaseView';
 import { PrintFlowTab } from './components/PrintFlowTab';
 import { PrinterQueueList } from './components/PrinterQueueList';
+import { ManutencaoTab } from './components/ManutencaoTab';
 import { OrcamentosTab } from './components/OrcamentosTab';
 import {
   PriceResearchTab, PreCheckTab, AgendaTab, ToolsTab, ModelsTab
@@ -360,6 +361,7 @@ export function safeGetLocalStorageItem(key: string, defaultValue: string = ''):
 export default function App() {
   const [currentTab, setCurrentTab] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [printersSubTab, setPrintersSubTab] = useState<'GERAL' | 'MANUT'>('GERAL');
   const [costsSubTab, setCostsSubTab] = useState<string>(() => {
     try {
       const saved = localStorage.getItem('bambuzau_costs_subtab_override');
@@ -1690,7 +1692,8 @@ export default function App() {
             {
               section: 'Operacional',
               items: [
-                { id: 16, label: 'Impressoras', icon: PrinterNavIcon },
+                { id: 16, label: 'Impressoras', icon: PrinterNavIcon, onClick: () => { setCurrentTab(16); setPrintersSubTab('GERAL'); } },
+                { id: 16, label: 'Manutenção', icon: Wrench, sub: 'MANUT', onClick: () => { setCurrentTab(16); setPrintersSubTab('MANUT'); } },
                 { id: 12, label: 'Pré-check', icon: ClipboardCheck },
                 { id: 14, label: 'Sites', icon: Globe },
               ],
@@ -1743,9 +1746,13 @@ export default function App() {
                 </div>
               )}
               {group.items.map((item, ii) => {
-                const active = item.sub
-                  ? currentTab === item.id && costsSubTab === item.sub
-                  : currentTab === item.id && !item.onClick;
+                const active = item.sub === 'MANUT'
+                  ? currentTab === 16 && printersSubTab === 'MANUT'
+                  : item.id === 16 && !item.sub
+                    ? currentTab === 16 && printersSubTab === 'GERAL'
+                    : item.sub
+                      ? currentTab === item.id && costsSubTab === item.sub
+                      : currentTab === item.id && !item.onClick;
                 const accent = '#b7ff00';
                 return (
                   <button
@@ -2241,6 +2248,28 @@ export default function App() {
             )}
             {currentTab === 16 && (
               <div className="space-y-4">
+                {/* Sub-abas Impressoras */}
+                <div className="flex items-center gap-2 border-b border-white/10 pb-2">
+                  {[
+                    { id: 'GERAL', label: 'Visão Geral' },
+                    { id: 'MANUT', label: 'Manutenção' },
+                  ].map(t => (
+                    <button
+                      key={t.id}
+                      onClick={() => setPrintersSubTab(t.id as 'GERAL' | 'MANUT')}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                        printersSubTab === t.id
+                          ? 'bg-[#b7ff00] text-black'
+                          : 'text-white/60 hover:text-white hover:bg-white/5'
+                      }`}
+                    >
+                      {t.label}
+                    </button>
+                  ))}
+                </div>
+                {printersSubTab === 'MANUT' ? (
+                  <ManutencaoTab printers={printers} onUpdatePrinter={handleUpdatePrinter} />
+                ) : (<>
                 <ProductionTab
                   orders={orders}
                   printers={printers}
@@ -2271,6 +2300,7 @@ export default function App() {
                   showAddPrinterForm={showAddPrinterFormTab16}
                   onToggleAddPrinterForm={() => setShowAddPrinterFormTab16(v => !v)}
                 />
+                </>)}
               </div>
             )}
             {currentTab === 17 && <ContabilidadeTab />}
