@@ -4,6 +4,7 @@ import {
   Receipt, FileText, Calendar, DollarSign, Wallet, FileBarChart2,
   Plus, Trash2, CheckCircle2, AlertTriangle, Download, Upload, Search, ArrowRight,
   Building2, Banknote, ExternalLink, Landmark, ScrollText, Globe,
+  BarChart3, TrendingUp, ClipboardCheck,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Kpi, SectionTitle } from './DashboardShell';
@@ -128,13 +129,13 @@ const Modal: React.FC<{ open: boolean; onClose: () => void; title: string; child
 
 /* ---------- main ---------- */
 const SUBS = [
-  { id: 'dash',   label: 'Dashboard',         icon: FileBarChart2 },
-  { id: 'empresa',label: 'Empresa',           icon: Building2 },
-  { id: 'notas',  label: 'Notas Fiscais',     icon: Receipt },
-  { id: 'rec',    label: 'Receitas Mensais',  icon: Calendar },
-  { id: 'das',    label: 'DAS',               icon: DollarSign },
-  { id: 'desp',   label: 'Despesas',          icon: Wallet },
-  { id: 'dasn',   label: 'Declaração Anual',  icon: FileText },
+  { id: 'dash',   label: 'Dashboard',     icon: BarChart3 },
+  { id: 'notas',  label: 'Notas Fiscais', icon: FileText },
+  { id: 'rec',    label: 'Receitas',      icon: TrendingUp },
+  { id: 'das',    label: 'DAS',           icon: Banknote },
+  { id: 'desp',   label: 'Despesas',      icon: Receipt },
+  { id: 'dasn',   label: 'Declaração',    icon: ClipboardCheck },
+  { id: 'empresa',label: 'Empresa',       icon: Building2 },
 ] as const;
 
 export const ContabilidadeTab: React.FC = () => {
