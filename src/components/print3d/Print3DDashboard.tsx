@@ -1367,7 +1367,7 @@ export function Print3DPanel({
       {/* Hero banner 16:5 — title + actions overlaid with gradient shadow */}
       <div
         className="relative w-full overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0a0d0c] shadow-[0_24px_60px_-30px_rgba(163,230,53,0.35)]"
-        style={{ aspectRatio: "16 / 5" }}
+        style={{ aspectRatio: "32 / 5" }}
       >
         <img
           src={dashboardHero.url}
