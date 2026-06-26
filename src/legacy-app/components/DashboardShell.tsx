@@ -26,14 +26,14 @@ export const Kpi: React.FC<{
   return (
     <div className="group relative p-[1px] rounded-xl bg-white/10 transition-all duration-300 hover:scale-[1.03] hover:z-10 h-full flex">
       <div className={`absolute inset-0 rounded-xl ${t.glow} blur-xl pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity`} />
-      <div className="relative bg-white/[0.03] backdrop-blur-xl p-3 rounded-[11px] overflow-hidden h-full w-full border border-white/10 flex flex-col">
+      <div className="relative bg-white/[0.03] backdrop-blur-xl p-3 rounded-[11px] overflow-hidden h-full w-full border border-white/10 grid grid-rows-[auto_1fr_auto] gap-1">
         <div className={`absolute top-0 left-0 w-[3px] h-full ${t.bar}`} />
         <div className="flex items-center justify-between">
           <span className="text-[9px] uppercase tracking-wider text-zinc-400 font-bold">{label}</span>
           <Icon className="h-3.5 w-3.5 text-white/70" />
         </div>
-        <div className="text-lg font-bold text-white mt-auto pt-2 truncate leading-tight">{value}</div>
-        <div className="text-[9px] text-zinc-500 uppercase tracking-wider mt-0.5 min-h-[12px]">{sub || '\u00A0'}</div>
+        <div className="text-lg font-bold text-white truncate leading-none flex items-end h-7">{value}</div>
+        <div className="text-[9px] text-zinc-500 uppercase tracking-wider leading-none h-3">{sub || '\u00A0'}</div>
       </div>
     </div>
   );
