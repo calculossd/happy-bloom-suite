@@ -100,6 +100,8 @@ export const Route = createFileRoute("/api/search-image")({
   server: {
     handlers: {
       POST: async ({ request }) => {
+        const blocked = assertInternalCaller(request);
+        if (blocked) return blocked;
         let body: Body = {};
         try { body = await request.json(); } catch {}
         const query = sanitizeQuery(body?.query);
