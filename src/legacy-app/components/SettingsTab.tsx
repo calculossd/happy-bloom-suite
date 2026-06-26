@@ -42,6 +42,54 @@ import { uploadWorkspace, downloadWorkspace, FirebaseSyncError } from '../sync/f
 import { useCustomKeys } from '../hooks/useCustomKeys';
 import { ApiKeyField } from './ApiKeyField';
 import { pickBackupFolder, getBackupFolderName, clearBackupFolder, runBackupNow, getDropboxConfig, setDropboxConfig, testDropbox, getDropboxOAuth, buildDropboxAuthUrl, exchangeDropboxCode, disconnectDropboxOAuth, getGDriveConfig, setGDriveConfig, testGDrive } from '../hooks/useAutoBackup';
+import { getTelegramChatId, setTelegramChatId, getTelegramAutoSend, setTelegramAutoSend, sendStlToTelegram } from '../lib/telegram';
+
+function TelegramStlControl() {
+  const [chatId, setChatIdState] = React.useState(() => getTelegramChatId());
+  const [auto, setAuto] = React.useState(() => getTelegramAutoSend());
+  const [status, setStatus] = React.useState('');
+  const [busy, setBusy] = React.useState(false);
+  const save = () => {
+    setTelegramChatId(chatId);
+    setTelegramAutoSend(auto);
+    setStatus('Salvo.');
+  };
+  const test = async () => {
+    setBusy(true); setStatus('Enviando mensagem de teste...');
+    setTelegramChatId(chatId);
+    const blob = new Blob([`teste Imprimetrics ${new Date().toISOString()}`], { type: 'text/plain' });
+    const r = await sendStlToTelegram(blob, 'teste-imprimetrics.txt', '🤖 Teste de conexão do Telegram', chatId);
+    setStatus(r.ok ? '✅ Enviado! Verifique seu Telegram.' : `❌ ${r.error}`);
+    setBusy(false);
+  };
+  return (
+    <div className="mt-3 p-3 rounded-xl bg-[#0C0E0D] border border-[#3FA9F5]/30 space-y-2">
+      <div className="text-[11px] font-bold text-[#3FA9F5] uppercase tracking-wide">Telegram — Envio automático de STL</div>
+      <div className="text-[10px] text-[#8BA58D] leading-relaxed">
+        Conectado via Lovable (sem token de bot). Toda vez que você subir um <b>.stl</b> ou <b>.3mf</b> no Vault, o arquivo cai direto no seu Telegram. Limite: 50&nbsp;MB por arquivo.
+      </div>
+      <input type="text" value={chatId} onChange={(e) => setChatIdState(e.target.value)} placeholder="Seu chat_id do Telegram (ex: 123456789)" className="w-full px-3 py-1.5 rounded-lg bg-[#111613] border border-[#2F3D35] text-[#F1F4EE] text-[11px]" />
+      <label className="flex items-center gap-2 text-[11px] text-[#F1F4EE]">
+        <input type="checkbox" checked={auto} onChange={(e) => setAuto(e.target.checked)} />
+        Enviar automaticamente todo STL/3MF que eu subir
+      </label>
+      <div className="flex gap-2 flex-wrap">
+        <button type="button" onClick={save} className="px-3 py-1.5 rounded-lg bg-[#1C2420] hover:bg-[#232F2A] border border-[#2F3D35] text-[#F1F4EE] text-[11px] font-semibold">Salvar</button>
+        <button type="button" disabled={busy || !chatId.trim()} onClick={test} className="px-3 py-1.5 rounded-lg bg-[#3FA9F5]/15 hover:bg-[#3FA9F5]/25 border border-[#3FA9F5]/40 text-[#3FA9F5] text-[11px] font-semibold disabled:opacity-50">Enviar teste</button>
+      </div>
+      <details className="text-[10px] text-[#8BA58D]">
+        <summary className="cursor-pointer text-[#3FA9F5] font-semibold">Como descobrir meu chat_id</summary>
+        <ol className="list-decimal pl-4 mt-1 space-y-0.5">
+          <li>Abra o Telegram e procure pelo bot conectado.</li>
+          <li>Envie <code>/start</code> para ele.</li>
+          <li>No navegador, abra <code>@userinfobot</code> no Telegram e ele te mostra seu chat_id numérico.</li>
+          <li>Cole o número aqui e clique em <b>Enviar teste</b>.</li>
+        </ol>
+      </details>
+      {status && <div className="text-[10px] text-[#8BA58D]">{status}</div>}
+    </div>
+  );
+}
 
 function GDriveBackupControl() {
   const initial = React.useMemo(() => getGDriveConfig(), []);
@@ -2183,6 +2231,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
             <DropboxBackupControl />
            <DropboxOAuthControl />
            <GDriveBackupControl />
+           <TelegramStlControl />
 
             {showClipboardBackup && (
               <div className="mt-3 bg-[#0C0E0D] border border-purple-500/10 p-3.5 rounded-xl space-y-3 animate-fade-in">
