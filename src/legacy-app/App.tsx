@@ -1683,7 +1683,6 @@ export default function App() {
                 { id: 2, label: 'Clientes', icon: Users },
                 { id: 3, label: 'Pedidos', icon: GitPullRequest, badge: pendingOrdersCount, blink: pendingOrdersBlink },
                 { id: 1, label: 'Produção', icon: Activity, badge: awaitingAcceptCount, blink: productionBlink },
-                { id: 19, label: 'Orçamentos', icon: FileEdit },
                 { id: 4, label: 'Estoque', icon: Layers, sub: 'STOCK', onClick: () => openCostsSubtab('STOCK') },
                 { id: 6, label: 'Histórico', icon: ShoppingBag },
               ],
@@ -1711,6 +1710,7 @@ export default function App() {
             {
               section: 'Financeiro',
               items: [
+                { id: 19, label: 'Orçamentos', icon: FileEdit },
                 { id: 4, label: 'Gastos', icon: DollarSign, sub: 'SHOP', onClick: () => openCostsSubtab('SHOP') },
                 { id: 4, label: 'Cotação', icon: TrendingUp, sub: 'QUOTE', onClick: () => openCostsSubtab('QUOTE') },
                 { id: 4, label: 'Calculadora', icon: Calculator, sub: 'CALC', onClick: () => openCostsSubtab('CALC') },
