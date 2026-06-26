@@ -620,6 +620,7 @@ export const CostsTab: React.FC<CostsTabProps> = ({
     setManualProdSupplies(item.suppliesUsed || []);
     setManualStlFileName(item.stlFileName || '');
     setManualStlFileData(item.stlFileData || '');
+    setManualProdExtraCost(Number(item.extraCostPerUnit || 0));
     setShowAddProductManualForm(true);
 
     setTimeout(() => {
@@ -644,6 +645,7 @@ export const CostsTab: React.FC<CostsTabProps> = ({
     setManualProdSupplies([]);
     setManualStlFileName('');
     setManualStlFileData('');
+    setManualProdExtraCost(0);
     setShowAddProductManualForm(false);
   };
 
