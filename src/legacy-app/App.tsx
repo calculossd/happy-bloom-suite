@@ -53,6 +53,7 @@ const MarketTab       = lazyWithReload(() => import('./imported/MarketTab'));
 const AgendaTabNew    = lazyWithReload(() => import('./imported/AgendaTab'));
 const SitesTab        = lazyWithReload(() => import('./imported/SitesTab'));
 const PreCheckTabNew  = lazyWithReload(() => import('./imported/PreCheckTab'));
+const ContabilidadeTab = lazyWithReload(() => import('./components/ContabilidadeTab'));
 
 const TabFallback = () => (
   <div className="flex items-center justify-center py-20 text-[var(--brand-text-muted)] text-sm gap-2">
@@ -94,7 +95,8 @@ import {
   TrendingUp,
   Radar,
   Download,
-  Printer as PrinterNavIcon
+  Printer as PrinterNavIcon,
+  FileBarChart2
 } from 'lucide-react';
 
 // STUNNING 3D CUBE & PRINTER EXTENSION GEOMETRIC LOGO
@@ -1709,6 +1711,7 @@ export default function App() {
                 { id: 4, label: 'Gastos', icon: DollarSign, sub: 'SHOP', onClick: () => openCostsSubtab('SHOP') },
                 { id: 4, label: 'Cotação', icon: TrendingUp, sub: 'QUOTE', onClick: () => openCostsSubtab('QUOTE') },
                 { id: 4, label: 'Calculadora', icon: Calculator, sub: 'CALC', onClick: () => openCostsSubtab('CALC') },
+                { id: 17, label: 'Contabilidade', icon: FileBarChart2 },
               ],
             },
             {
