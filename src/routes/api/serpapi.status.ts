@@ -7,10 +7,10 @@ function isValidKey(k: string | null | undefined): boolean {
   return k.trim().length >= 15;
 }
 
-function pickKey(request: Request, url: URL): string {
-  const q = url.searchParams.get("api_key");
+function pickKey(request: Request): string {
+  // SECURITY: api keys must never be passed via URL query (leak in logs/history).
+  // Accept only via custom header or server env var.
   const h = request.headers.get("x-custom-serpapi-key");
-  if (isValidKey(q)) return q!.trim();
   if (isValidKey(h)) return h!.trim();
   const env = process.env.SERPAPI_KEY;
   if (isValidKey(env)) return env!.trim();
@@ -48,8 +48,7 @@ export const Route = createFileRoute("/api/serpapi/status")({
     handlers: {
       OPTIONS: async () => new Response(null, { status: 204, headers: CORS }),
       GET: async ({ request }) => {
-        const url = new URL(request.url);
-        const key = pickKey(request, url);
+        const key = pickKey(request);
         if (!key) {
           return Response.json(
             { ok: false, authenticated: false, status: 401, reason: "Nenhuma chave SerpApi configurada" },
