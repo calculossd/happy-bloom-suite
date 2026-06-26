@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { sanitizeQuery } from "./_sanitize";
+import { assertInternalCaller } from "./_auth";
 
 type Body = { query?: string };
 
