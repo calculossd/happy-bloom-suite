@@ -6,6 +6,69 @@ const LAST_KEY = 'lov_auto_backup_last';
 const HANDLE_DB = 'lov-backup-handle';
 const HANDLE_STORE = 'handles';
 const HANDLE_KEY = 'backupDir';
+const DROPBOX_TOKEN_KEY = 'lov_dropbox_token';
+const DROPBOX_FOLDER_KEY = 'lov_dropbox_folder';
+
+// --- Dropbox ---
+export function getDropboxConfig(): { token: string; folder: string } {
+  try {
+    return {
+      token: localStorage.getItem(DROPBOX_TOKEN_KEY) || '',
+      folder: localStorage.getItem(DROPBOX_FOLDER_KEY) || '/Imprimetrics',
+    };
+  } catch { return { token: '', folder: '/Imprimetrics' }; }
+}
+export function setDropboxConfig(token: string, folder: string) {
+  try {
+    if (token) localStorage.setItem(DROPBOX_TOKEN_KEY, token.trim());
+    else localStorage.removeItem(DROPBOX_TOKEN_KEY);
+    localStorage.setItem(DROPBOX_FOLDER_KEY, (folder || '/Imprimetrics').trim());
+  } catch {}
+}
+async function uploadToDropbox(fileName: string, content: string): Promise<boolean> {
+  const { token, folder } = getDropboxConfig();
+  if (!token) return false;
+  try {
+    const path = `${folder.startsWith('/') ? folder : '/' + folder}/${fileName}`;
+    const res = await fetch('https://content.dropboxapi.com/2/files/upload', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/octet-stream',
+        'Dropbox-API-Arg': JSON.stringify({
+          path,
+          mode: 'overwrite',
+          autorename: false,
+          mute: true,
+        }),
+      },
+      body: content,
+    });
+    if (!res.ok) {
+      console.warn('Dropbox upload falhou:', res.status, await res.text().catch(() => ''));
+      return false;
+    }
+    return true;
+  } catch (e) {
+    console.warn('Dropbox upload erro:', e);
+    return false;
+  }
+}
+export async function testDropbox(): Promise<{ ok: boolean; message: string }> {
+  const { token } = getDropboxConfig();
+  if (!token) return { ok: false, message: 'Sem token configurado.' };
+  try {
+    const res = await fetch('https://api.dropboxapi.com/2/users/get_current_account', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) return { ok: false, message: `Token inválido (${res.status}).` };
+    const data = await res.json().catch(() => ({} as any));
+    return { ok: true, message: `Conectado como ${data?.name?.display_name || data?.email || 'Dropbox'}.` };
+  } catch (e: any) {
+    return { ok: false, message: 'Erro de rede: ' + (e?.message || e) };
+  }
+}
 
 // --- Persisted directory handle (File System Access API) ---
 function idb(): Promise<IDBDatabase> {
@@ -128,7 +191,8 @@ export async function runBackupNow() {
   const handle = await loadHandle();
   let saved = false;
   if (handle) saved = await writeToFolder(handle, fileName, json);
-  if (!saved) downloadJson(data, fileName);
+  const dbxOk = await uploadToDropbox(fileName, json);
+  if (!saved && !dbxOk) downloadJson(data, fileName);
   try { localStorage.setItem(LAST_KEY, String(Date.now())); } catch {}
 }
 
