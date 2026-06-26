@@ -2147,6 +2147,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
             </button>
             <AutoBackupFolderControl />
             <DropboxBackupControl />
+           <DropboxOAuthControl />
 
             {showClipboardBackup && (
               <div className="mt-3 bg-[#0C0E0D] border border-purple-500/10 p-3.5 rounded-xl space-y-3 animate-fade-in">
