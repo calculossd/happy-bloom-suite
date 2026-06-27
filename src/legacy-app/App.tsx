@@ -444,7 +444,6 @@ export default function App() {
       window.removeEventListener('navigate-costs-subtab', onNavigateCostsSub);
     };
   }, []);
-  const [dismissedPriceAlert, setDismissedPriceAlert] = useState(false);
   const [dismissedStockAlert, setDismissedStockAlert] = useState(false);
 
   // Cloud database sync states (v3.3.0.4)
