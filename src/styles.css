@@ -923,24 +923,26 @@ input, select, textarea {
   background-image: linear-gradient(135deg, #131316 0%, #000000 100%) !important;
 }
 
-/* Notificação de oportunidade: sem o bloco/degradê de fundo */
+/* Notificação de oportunidade: azul sólido, sem transparência */
 .legacy-skin #global-price-opportunity-banner,
 .legacy-skin #global-price-opportunity-banner:hover,
 #global-price-opportunity-banner,
 #global-price-opportunity-banner:hover {
-  background: transparent !important;
-  background-color: transparent !important;
+  background: #0284c7 !important;
+  background-color: #0284c7 !important;
   background-image: none !important;
-  border: 1px solid rgba(56, 189, 248, 0.25) !important;
+  opacity: 1 !important;
+  border: 1px solid #7dd3fc !important;
   border-radius: 1rem !important;
-  box-shadow: 0 20px 50px -20px rgba(56, 189, 248, 0.35) !important;
+  box-shadow: 0 20px 50px -20px #0284c7 !important;
   backdrop-filter: none !important;
   transform: none !important;
 }
 
 .legacy-skin #global-price-opportunity-banner > div,
 #global-price-opportunity-banner > div {
-  background: transparent !important;
+  background: #0284c7 !important;
+  background-color: #0284c7 !important;
   background-image: none !important;
 }
 
