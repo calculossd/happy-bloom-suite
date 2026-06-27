@@ -184,8 +184,8 @@ function PremiumInsightTicker({
   const Icon = current.icon;
   const isProblem = !!current.problem;
   const toneClass = isProblem
-    ? 'from-[#5b0f1a] via-[#b91c1c] to-[#2a0608] text-white shadow-rose-500/30'
-    : 'from-[#063d33] via-[#0f8a6a] to-[#03201b] text-white shadow-emerald-500/30';
+    ? 'from-[#5b0f1a]/20 via-[#b91c1c]/20 to-[#2a0608]/20 text-white shadow-rose-500/20'
+    : 'from-[#063d33]/20 via-[#0f8a6a]/20 to-[#03201b]/20 text-white shadow-emerald-500/20';
 
   return (
     <section
@@ -197,31 +197,31 @@ function PremiumInsightTicker({
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/45 to-transparent" />
       <div className="pointer-events-none absolute -left-20 top-1/2 h-28 w-52 -translate-y-1/2 rounded-full bg-white/10 blur-3xl transition-opacity duration-700 group-hover:opacity-80" />
 
-      <div className="relative grid gap-4 px-4 py-3 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:items-center sm:px-5 sm:py-4">
-        <div className="flex items-center gap-3 min-w-0">
-          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-white/20 bg-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] transition-transform duration-500 group-hover:scale-105">
-            <Icon className="h-4 w-4" />
+      <div className="relative grid gap-3 px-4 py-1.5 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:items-center sm:px-5 sm:py-2">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-white/20 bg-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] transition-transform duration-500 group-hover:scale-105">
+            <Icon className="h-3.5 w-3.5" />
           </div>
           <div className="min-w-0">
-            <div className="text-[9px] font-black uppercase tracking-[0.24em] text-white/65">{current.eyebrow}</div>
-            <div key={current.title} className="mt-0.5 truncate text-[14px] font-black tracking-tight text-white sm:text-[15px] animate-premium-fade">
+            <div className="text-[8px] font-black uppercase tracking-[0.24em] text-white/65">{current.eyebrow}</div>
+            <div key={current.title} className="truncate text-[12px] font-black tracking-tight text-white sm:text-[13px] animate-premium-fade">
               {current.title}
             </div>
           </div>
         </div>
 
-        <p className="min-w-0 text-[12px] font-medium leading-relaxed text-white/68 sm:border-l sm:border-white/12 sm:pl-5">
+        <p className="min-w-0 truncate text-[11px] font-medium leading-snug text-white/70 sm:border-l sm:border-white/12 sm:pl-4">
           {current.detail}
         </p>
 
-        <div className="flex items-center justify-between gap-3 sm:justify-end">
-          <div className="rounded-lg border border-white/12 bg-white/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]">
+        <div className="flex items-center justify-between gap-2 sm:justify-end">
+          <div className="rounded-md border border-white/12 bg-white/10 px-2 py-1 text-[9px] font-black uppercase tracking-[0.14em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]">
             {current.metric}
           </div>
           <button
             type="button"
             onClick={current.action}
-            className="inline-flex h-9 items-center gap-2 rounded-lg bg-white px-3 text-[10px] font-black uppercase tracking-[0.14em] text-zinc-950 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_30px_-12px_rgba(255,255,255,0.75)] active:scale-95"
+            className="inline-flex h-7 items-center gap-1.5 rounded-md bg-white px-2.5 text-[9px] font-black uppercase tracking-[0.14em] text-zinc-950 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_30px_-12px_rgba(255,255,255,0.75)] active:scale-95"
           >
             Abrir
             <ArrowRight className="h-3 w-3" />
