@@ -2085,14 +2085,18 @@ export default function App() {
             return (
               <div
                 id="global-price-opportunity-banner"
-                className="relative mb-2 overflow-visible rounded-2xl border border-sky-300 bg-sky-600 animate-fade-in"
+                className="relative mb-2 overflow-visible rounded-2xl border border-sky-300 bg-sky-600"
                 style={{
+                  background: '#0284c7',
                   backgroundColor: '#0284c7',
+                  backgroundImage: 'none',
                   opacity: 1,
+                  filter: 'none',
+                  backdropFilter: 'none',
                   boxShadow: '0 18px 34px -18px #0284c7, inset 0 1px 0 #7dd3fc',
                 }}
               >
-                <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-1.5 sm:px-5">
+                <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-1.5 sm:px-5" style={{ background: '#0284c7', opacity: 1 }}>
                   <div className="flex min-w-0 items-center gap-3">
                     <div className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-sky-900 ring-1 ring-inset ring-sky-100 text-sky-50">
                       <span className="text-sm leading-none">🔥</span>
