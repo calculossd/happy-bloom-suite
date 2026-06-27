@@ -346,7 +346,7 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
   };
 
   return (
-    <div className="space-y-6" id="dashboard_tab_container">
+    <div className="space-y-2" id="dashboard_tab_container">
 
       <PremiumInsightTicker
         orders={orders}
