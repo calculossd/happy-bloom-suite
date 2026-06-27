@@ -206,10 +206,6 @@ function PremiumInsightTicker({
         </div>
       </div>
 
-      <div className="relative h-[3px] bg-white/10">
-        <div key={active} className="h-full origin-left bg-white/80 dashboard-notification-progress" />
-      </div>
-
       <div className="absolute bottom-3 left-4 flex gap-1 sm:left-5">
         {insights.map((_, index) => (
           <button
