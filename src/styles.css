@@ -923,22 +923,21 @@ input, select, textarea {
   background-image: linear-gradient(135deg, #131316 0%, #000000 100%) !important;
 }
 
-/* Notificação de oportunidade: azul sólido, sem transparência */
+/* Notificação de oportunidade: azul com 30% de transparência no fundo */
 .legacy-skin #global-price-opportunity-banner,
 .legacy-skin #global-price-opportunity-banner:hover,
 #global-price-opportunity-banner,
 #global-price-opportunity-banner:hover {
-  background: linear-gradient(90deg, #0284c7 0%, #0284c7 62%, #0369a1 100%) !important;
-  background-color: #0284c7 !important;
+  background: linear-gradient(90deg, rgba(2, 132, 199, 0.70) 0%, rgba(2, 132, 199, 0.70) 62%, rgba(3, 105, 161, 0.70) 100%) !important;
+  background-color: rgba(2, 132, 199, 0.70) !important;
   background-blend-mode: normal !important;
   opacity: 1 !important;
   filter: none !important;
   mix-blend-mode: normal !important;
-  border: 1px solid #38bdf8 !important;
+  border: 1px solid rgba(56, 189, 248, 0.55) !important;
   border-radius: 0.75rem !important;
-  box-shadow: 0 10px 24px -14px #0284c7 !important;
+  box-shadow: 0 10px 24px -14px rgba(2, 132, 199, 0.8) !important;
   backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
   transform: none !important;
 }
 
@@ -958,7 +957,6 @@ input, select, textarea {
   opacity: 1 !important;
   filter: none !important;
   backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
 }
 
 /* Cor de destaque por categoria de aba */
