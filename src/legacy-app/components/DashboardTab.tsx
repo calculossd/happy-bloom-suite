@@ -206,17 +206,6 @@ function PremiumInsightTicker({
         </div>
       </div>
 
-      <div className="absolute bottom-3 left-4 flex gap-1 sm:left-5">
-        {insights.map((_, index) => (
-          <button
-            key={index}
-            type="button"
-            onClick={() => setActive(index)}
-            aria-label={`Ver notificação ${index + 1}`}
-            className={`h-1.5 rounded-full transition-all duration-300 ${index === active ? 'w-5 bg-white' : 'w-1.5 bg-white/35 hover:bg-white/60'}`}
-          />
-        ))}
-      </div>
     </section>
   );
 }
