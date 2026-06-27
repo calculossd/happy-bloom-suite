@@ -928,17 +928,17 @@ input, select, textarea {
 .legacy-skin #global-price-opportunity-banner:hover,
 #global-price-opportunity-banner,
 #global-price-opportunity-banner:hover {
-  background: #0284c7 !important;
+  background: linear-gradient(90deg, #0284c7 0%, #0284c7 62%, #0369a1 100%) !important;
   background-color: #0284c7 !important;
-  background-image: none !important;
   background-blend-mode: normal !important;
   opacity: 1 !important;
   filter: none !important;
   mix-blend-mode: normal !important;
-  border: 1px solid #7dd3fc !important;
-  border-radius: 1rem !important;
-  box-shadow: 0 20px 50px -20px #0284c7 !important;
+  border: 1px solid #38bdf8 !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 0 10px 24px -14px #0284c7 !important;
   backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
   transform: none !important;
 }
 
@@ -955,12 +955,10 @@ input, select, textarea {
 #global-price-opportunity-banner > div,
 .legacy-skin #global-price-opportunity-banner *:not(button):not(svg):not(path),
 #global-price-opportunity-banner *:not(button):not(svg):not(path) {
-  background: #0284c7 !important;
-  background-color: #0284c7 !important;
-  background-image: none !important;
   opacity: 1 !important;
   filter: none !important;
   backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 /* Cor de destaque por categoria de aba */

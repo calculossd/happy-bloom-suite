@@ -2087,28 +2087,28 @@ export default function App() {
                 id="global-price-opportunity-banner"
                 className="relative mb-2 overflow-hidden rounded-xl"
                 style={{
-                  background: 'linear-gradient(90deg, #0c4a6e 0%, #0369a1 55%, #0284c7 100%)',
-                  backgroundColor: '#0369a1',
+                  background: 'linear-gradient(90deg, #0284c7 0%, #0284c7 62%, #0369a1 100%)',
+                  backgroundColor: '#0284c7',
                   opacity: 1,
                   filter: 'none',
                   backdropFilter: 'none',
-                  border: '1px solid rgba(125,211,252,0.25)',
-                  boxShadow: '0 12px 30px -16px rgba(2,132,199,0.55), inset 0 1px 0 rgba(255,255,255,0.08)',
+                  border: '1px solid #38bdf8',
+                  boxShadow: '0 10px 24px -14px #0284c7',
                 }}
               >
-                <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-2.5 sm:px-5">
+                <div className="relative grid min-h-11 grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-2 sm:px-5">
                   <div className="flex min-w-0 items-center gap-3">
-                    <div className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-white/10 ring-1 ring-inset ring-white/15 text-white">
+                    <div className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-sky-950 text-white shadow-[inset_0_0_0_1px_#38bdf8]">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
                       </svg>
                     </div>
                     <div className="min-w-0 flex items-center gap-3 truncate">
-                      <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-sky-100/80 shrink-0">
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white shrink-0">
                         Oportunidade
                       </span>
-                      <span className="h-3 w-px bg-white/20 shrink-0" />
-                      <span className="truncate text-[13px] font-medium tracking-tight text-white">
+                      <span className="h-3 w-px shrink-0 bg-sky-100" />
+                      <span className="truncate text-[13px] font-extrabold tracking-tight text-white">
                         {alertMsg}
                       </span>
                     </div>
@@ -2120,7 +2120,7 @@ export default function App() {
                         localStorage.setItem("bambuzau_costs_subtab_override", "QUOTE");
                         setCurrentTab(4);
                       }}
-                      className="inline-flex items-center gap-1.5 rounded-lg bg-white text-sky-700 px-3 py-1.5 text-[11px] font-semibold tracking-tight transition-all duration-200 hover:bg-sky-50 active:scale-[0.97]"
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-[11px] font-black tracking-tight text-sky-800 transition-all duration-200 hover:bg-sky-50 active:scale-[0.97]"
                     >
                       Ver cotações
                       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
@@ -2129,7 +2129,7 @@ export default function App() {
                       onClick={() => setDismissedPriceAlert(true)}
                       title="Fechar oportunidade"
                       aria-label="Fechar"
-                      className="grid h-7 w-7 place-items-center rounded-lg bg-white/10 text-white/80 hover:bg-white/20 hover:text-white transition-all duration-200 active:scale-95"
+                      className="grid h-7 w-7 place-items-center rounded-lg bg-sky-950 text-white transition-all duration-200 hover:bg-sky-900 active:scale-95"
                     >
                       <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round">
                         <path d="M2 2l8 8M10 2l-8 8" />
