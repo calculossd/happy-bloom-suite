@@ -64,8 +64,10 @@ export function Print3DPanel({
 
           <div className="relative z-10 flex flex-col justify-between gap-5 p-5 lg:p-7 h-full">
             <div>
-              <h1 className="text-[22px] lg:text-[26px] font-bold tracking-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
-                Bem-vindo de volta, Inova Mundo! <span className="inline-block">👋</span>
+              <h1 className="font-bold tracking-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] flex flex-wrap items-baseline gap-x-2">
+                <span className="text-[22px] lg:text-[26px]">Bem-vindo de volta,</span>
+                <span className="text-[30px] lg:text-[38px] font-extrabold text-sky-400 drop-shadow-[0_2px_12px_rgba(56,189,248,0.45)]">Inova Mundo!</span>
+                <span className="inline-block text-[26px]">👋</span>
               </h1>
               <p className="text-[12.5px] lg:text-[13px] text-white/70">Aqui está o resumo da sua produção hoje.</p>
             </div>
