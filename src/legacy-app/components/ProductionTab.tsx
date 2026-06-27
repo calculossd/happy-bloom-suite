@@ -12,7 +12,6 @@ import {
   Clock, 
   AlertCircle, 
   Printer as PrinterIcon, 
-  Tag, 
   X, 
   ChevronRight,
   ClipboardList,
