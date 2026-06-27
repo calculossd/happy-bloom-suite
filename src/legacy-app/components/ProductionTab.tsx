@@ -32,6 +32,7 @@ import {
 import { OrderDetailModal } from './production/OrderDetailModal';
 import { OrderFormModal } from './production/OrderFormModal';
 import { PrinterAllocationModal } from './production/PrinterAllocationModal';
+import { useOrderTransitions } from './production/useOrderTransitions';
 
 interface ProductionTabProps {
   orders: PrintOrder[];
