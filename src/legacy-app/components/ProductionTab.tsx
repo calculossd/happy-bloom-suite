@@ -32,6 +32,7 @@ import {
 import { OrderDetailModal } from './production/OrderDetailModal';
 import { OrderFormModal } from './production/OrderFormModal';
 import { PrinterAllocationModal } from './production/PrinterAllocationModal';
+import { useOrderTransitions } from './production/useOrderTransitions';
 
 interface ProductionTabProps {
   orders: PrintOrder[];
@@ -359,47 +360,15 @@ export const ProductionTab: React.FC<ProductionTabProps> = ({
     setIsDialogOpen(false);
   };
 
+  const { advanceStatus, assignPrinter } = useOrderTransitions({ printers, onUpdateOrder, onUpdatePrinter });
+
   const handleFastStatusAdvance = (order: PrintOrder, nextStatus: string) => {
-    if (nextStatus === 'PRINTING') {
-      const idlePrinters = printers.filter(p => p.status === 'IDLE');
-      const availablePrinters = printers.filter(p => p.status !== 'MAINTENANCE');
-      if (idlePrinters.length > 0) {
-        const defaultPrinter = idlePrinters[0];
-        onUpdateOrder(order.id, {
-          status: 'PRINTING',
-          assignedPrinterId: defaultPrinter.id,
-          printerName: defaultPrinter.name,
-          printingProgress: 0.05
-        });
-        onUpdatePrinter(defaultPrinter.id, { status: 'PRINTING', printProgress: 5 });
-      } else {
-        // Sem impressora ociosa: a fila de produção manda. Atribui a primeira impressora
-        // existente que NÃO esteja em manutenção e segue para PRINTING — sem modal de alocação.
-        const fallbackPrinter = availablePrinters[0];
-        onUpdateOrder(order.id, {
-          status: 'PRINTING',
-          assignedPrinterId: fallbackPrinter ? fallbackPrinter.id : null,
-          printerName: fallbackPrinter ? fallbackPrinter.name : '',
-          printingProgress: 0.05,
-        });
-      }
-    } else {
-      onUpdateOrder(order.id, {
-        status: nextStatus as any,
-        printingProgress: nextStatus === 'POST_PROCESS' || nextStatus === 'PACKING' || nextStatus === 'READY' || nextStatus === 'DELIVERED' ? 1.0 : 0.0
-      });
-    }
+    advanceStatus(order, nextStatus);
   };
 
   const handleSelectPrinterQuick = (printerId: number) => {
     if (!quickPrintOrder) return;
-    const printerObj = printers.find(p => p.id === printerId);
-    onUpdateOrder(quickPrintOrder.id, {
-      status: 'PRINTING',
-      assignedPrinterId: printerId,
-      printerName: printerObj ? printerObj.name : 'Impressora',
-      printingProgress: 0.05
-    });
+    assignPrinter(quickPrintOrder, printerId);
     setQuickPrintOrder(null);
   };
 
