@@ -1,47 +1,17 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import "leaflet/dist/leaflet.css";
-import {
-  LayoutDashboard, ShoppingCart, FileText, Users, Package, Printer as PrinterIcon,
-  ListOrdered, Radio, Box, Layers, Wrench, Truck, Activity, Wallet, Receipt,
-  BarChart3, TrendingDown, Settings, Search, Bell, MessageSquare, HelpCircle,
-  ChevronDown, Calendar, Filter, Plus, DollarSign, Clock, Package2, ShoppingBag,
-  Droplets, Thermometer, ChevronRight, TrendingUp, Cpu, FlaskConical,
-} from "lucide-react";
-import {
-  ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, BarChart, Bar,
-  PieChart, Pie, Cell, LabelList,
-} from "recharts";
-import { FilamentSpool, materialColor } from "@/legacy-app/components/FilamentSpool";
+import { DollarSign, Clock, Package2, ShoppingBag, Users, TrendingUp } from "lucide-react";
 import dashboardHero from "@/assets/dashboard-hero-printer.jpg.asset.json";
 import { Kpi as PremiumKpi } from "@/legacy-app/components/DashboardShell";
+import { LIME } from "./parts/constants";
+import { fmtBRL } from "./parts/utils";
+import { Sidebar, TopBar } from "./parts/Chrome";
+import { ClientsMap } from "./parts/ClientsMap";
+import {
+  LivePrinters, OrdersList, Hygrometers, StlGallery, StockOverview,
+  FilamentQuotes, AiPricing, TopProductsChart, HourlyChart, FinanceSummary,
+} from "./parts/cards";
+import { usePanelData } from "./parts/usePanelData";
 
-// Color name → hex swatch for filament color chips
-const COLOR_HEX: Record<string, string> = {
-  preto: "#111", black: "#111",
-  branco: "#f5f5f5", white: "#f5f5f5",
-  cinza: "#9ca3af", gray: "#9ca3af",
-  vermelho: "#ef4444", red: "#ef4444",
-  laranja: "#f97316", orange: "#f97316",
-  amarelo: "#facc15", yellow: "#facc15",
-  verde: "#22c55e", green: "#22c55e",
-  azul: "#3b82f6", blue: "#3b82f6",
-  roxo: "#a855f7", purple: "#a855f7",
-  rosa: "#ec4899", pink: "#ec4899",
-  marrom: "#92400e", brown: "#92400e",
-  dourado: "#d4a017", gold: "#d4a017",
-  prata: "#c0c0c0", silver: "#c0c0c0",
-  transparente: "rgba(255,255,255,0.25)", transparent: "rgba(255,255,255,0.25)",
-};
-function colorHex(name?: string) {
-  if (!name) return "#9ca3af";
-  return COLOR_HEX[String(name).toLowerCase().trim()] || "#9ca3af";
-}
-
-const LIME = "#a3e635";
-const LIME_DIM = "#84cc16";
-
-/* ---------- Sidebar ---------- */
-const NAV: Array<{ section?: string; items: Array<{ icon: any; label: string; badge?: string; active?: boolean }> }> = [
+const _legacy_DELETED_NAV_PLACEHOLDER: any = null; /* moved to parts/constants */
   { items: [{ icon: LayoutDashboard, label: "Dashboard", active: true }] },
   { section: "Principal", items: [
     { icon: ShoppingCart, label: "Pedidos", badge: "24" },
