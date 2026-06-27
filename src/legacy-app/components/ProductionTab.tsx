@@ -23,86 +23,14 @@ import {
 } from 'lucide-react';
 import { initialCatalogItems } from '../utils/initialData';
 import { PrinterCameraModal } from './PrinterCameraModal';
-
-// Helper labels translation mapping
-const getStatusLabel = (status: string): string => {
-  switch (status) {
-    case 'WAITING': return "Ag. Arquivo";
-    case 'QUEUE': return "Aguardando Aceite";
-    case 'PRINTING': return "Imprimindo";
-    case 'POST_PROCESS': return "Acabamento";
-    case 'PACKING': return "Pronto para Entrega";
-    case 'READY': return "Pronto";
-    case 'DELIVERED': return "Entregue";
-    default: return status;
-  }
-};
-
-const getNextStatusActionLabel = (status: string): string => {
-  switch (status) {
-    case 'WAITING': return "Estudo/Fila";
-    case 'QUEUE': return "Iniciar Impressão";
-    case 'PRINTING': return "Ir p/ Acabamento";
-    case 'POST_PROCESS': return "Ir p/ Embalando";
-    case 'PACKING': return "Marcar Pronto";
-    case 'READY': return "Marcar Entregue";
-    default: return "";
-  }
-};
-
-const getNextStatusValue = (status: string): string | null => {
-  switch (status) {
-    case 'WAITING': return "QUEUE";
-    case 'QUEUE': return "PRINTING";
-    case 'PRINTING': return "POST_PROCESS";
-    case 'POST_PROCESS': return "PACKING";
-    case 'PACKING': return "READY";
-    case 'READY': return "DELIVERED";
-    default: return null;
-  }
-};
-
-const getStatusColor = (status: string): string => {
-  switch (status) {
-    case 'WAITING': return '#90A4AE';
-    case 'QUEUE': return 'var(--brand-accent)';
-    case 'PRINTING': return 'var(--brand-primary)';
-    case 'POST_PROCESS': return 'var(--brand-accent)';
-    case 'PACKING': return '#a855f7';
-    case 'READY': return '#3b82f6'; // Azul vibrante para pronto / empacotado
-    case 'DELIVERED': return '#10b981'; // Verde para entregue / finalizado
-    default: return 'var(--brand-muted)';
-  }
-};
-
-const getDelayCategory = (createdAt: number, status: string) => {
-  if (status === 'DELIVERED' || status === 'READY') {
-    return { level: 'GREEN', color: '#10b981', bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', label: 'No Prazo' };
-  }
-  const elapsedHrs = (Date.now() - createdAt) / (1000 * 3600);
-  if (elapsedHrs >= 24) {
-    return { level: 'CRITICAL', color: '#ef4444', bg: 'bg-red-500/10', border: 'border-red-500', textClass: 'text-red-400', label: 'CRÍTICO (+24h) 🚨' };
-  }
-  if (elapsedHrs >= 15) {
-    return { level: 'ORANGE', color: '#f97316', bg: 'bg-orange-500/10', border: 'border-orange-500', textClass: 'text-orange-400', label: 'ATENÇÃO (15h) ⚠️' };
-  }
-  if (elapsedHrs >= 8) {
-    return { level: 'YELLOW', color: '#eab308', bg: 'bg-yellow-500/10', border: 'border-yellow-500', textClass: 'text-yellow-400', label: 'ATENÇÃO (8h) ⏳' };
-  }
-  return { level: 'GREEN', color: '#10b981', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20', textClass: 'text-emerald-400', label: 'Verde (Normal)' };
-};
-
-const getProgressPercentage = (status: string, printingProgress: number = 0): number => {
-  switch (status) {
-    case 'WAITING': return 15;
-    case 'QUEUE': return 35;
-    case 'PRINTING': return Math.min(80, Math.max(40, 40 + Math.round(printingProgress * 40)));
-    case 'POST_PROCESS': return 85;
-    case 'PACKING': return 93;
-    case 'READY': return 100;
-    default: return 0;
-  }
-};
+import {
+  getStatusLabel,
+  getNextStatusActionLabel,
+  getNextStatusValue,
+  getStatusColor,
+  getDelayCategory,
+  getProgressPercentage,
+} from './production/statusHelpers';
 
 interface ProductionTabProps {
   orders: PrintOrder[];
