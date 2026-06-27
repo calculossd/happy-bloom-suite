@@ -931,7 +931,10 @@ input, select, textarea {
   background: #0284c7 !important;
   background-color: #0284c7 !important;
   background-image: none !important;
+  background-blend-mode: normal !important;
   opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
   border: 1px solid #7dd3fc !important;
   border-radius: 1rem !important;
   box-shadow: 0 20px 50px -20px #0284c7 !important;
@@ -939,11 +942,25 @@ input, select, textarea {
   transform: none !important;
 }
 
+.legacy-skin #global-price-opportunity-banner::before,
+.legacy-skin #global-price-opportunity-banner::after,
+#global-price-opportunity-banner::before,
+#global-price-opportunity-banner::after {
+  display: none !important;
+  content: none !important;
+  opacity: 0 !important;
+}
+
 .legacy-skin #global-price-opportunity-banner > div,
-#global-price-opportunity-banner > div {
+#global-price-opportunity-banner > div,
+.legacy-skin #global-price-opportunity-banner *:not(button):not(svg):not(path),
+#global-price-opportunity-banner *:not(button):not(svg):not(path) {
   background: #0284c7 !important;
   background-color: #0284c7 !important;
   background-image: none !important;
+  opacity: 1 !important;
+  filter: none !important;
+  backdrop-filter: none !important;
 }
 
 /* Cor de destaque por categoria de aba */
