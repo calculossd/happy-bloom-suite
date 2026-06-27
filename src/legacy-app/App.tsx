@@ -2087,13 +2087,14 @@ export default function App() {
                 id="global-price-opportunity-banner"
                 className="relative mb-2 overflow-hidden rounded-xl"
                 style={{
-                  background: 'linear-gradient(90deg, rgba(2,132,199,0.70) 0%, rgba(2,132,199,0.70) 62%, rgba(3,105,161,0.70) 100%)',
-                  backgroundColor: 'rgba(2,132,199,0.70)',
+                  background: 'linear-gradient(90deg, rgba(2,132,199,0.30) 0%, rgba(2,132,199,0.30) 62%, rgba(3,105,161,0.30) 100%)',
+                  backgroundColor: 'rgba(2,132,199,0.30)',
                   opacity: 1,
                   filter: 'none',
-                  backdropFilter: 'none',
-                  border: '1px solid rgba(56,189,248,0.55)',
-                  boxShadow: '0 10px 24px -14px rgba(2,132,199,0.8)',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                  border: '1px solid rgba(56,189,248,0.35)',
+                  boxShadow: '0 10px 24px -14px rgba(2,132,199,0.4)',
                 }}
               >
                 <div className="relative grid min-h-11 grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-2 sm:px-5">

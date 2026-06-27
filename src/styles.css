@@ -928,16 +928,16 @@ input, select, textarea {
 .legacy-skin #global-price-opportunity-banner:hover,
 #global-price-opportunity-banner,
 #global-price-opportunity-banner:hover {
-  background: linear-gradient(90deg, rgba(2, 132, 199, 0.70) 0%, rgba(2, 132, 199, 0.70) 62%, rgba(3, 105, 161, 0.70) 100%) !important;
-  background-color: rgba(2, 132, 199, 0.70) !important;
+  background: linear-gradient(90deg, rgba(2, 132, 199, 0.30) 0%, rgba(2, 132, 199, 0.30) 62%, rgba(3, 105, 161, 0.30) 100%) !important;
+  background-color: rgba(2, 132, 199, 0.30) !important;
   background-blend-mode: normal !important;
   opacity: 1 !important;
   filter: none !important;
   mix-blend-mode: normal !important;
-  border: 1px solid rgba(56, 189, 248, 0.55) !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
   border-radius: 0.75rem !important;
-  box-shadow: 0 10px 24px -14px rgba(2, 132, 199, 0.8) !important;
-  backdrop-filter: none !important;
+  box-shadow: 0 10px 24px -14px rgba(2, 132, 199, 0.4) !important;
+  backdrop-filter: blur(8px) !important;
   transform: none !important;
 }
 
