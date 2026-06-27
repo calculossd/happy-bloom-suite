@@ -31,6 +31,7 @@ import {
   getDelayCategory,
   getProgressPercentage,
 } from './production/statusHelpers';
+import { OrderDetailModal } from './production/OrderDetailModal';
 
 interface ProductionTabProps {
   orders: PrintOrder[];
