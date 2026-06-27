@@ -99,10 +99,18 @@ function PremiumInsightTicker({
       shoppingItems.filter(i => !i.isChecked).reduce((sum, i) => sum + (i.price || 0), 0);
     const margin = monthRevenue > 0 ? ((monthRevenue - monthExpense) / monthRevenue) * 100 : 0;
     const bestQuote = readLowestFilamentQuote();
+    const lastAuditTs = Number(
+      typeof window !== 'undefined' ? localStorage.getItem('bambuzau_last_audit_ts') || 0 : 0,
+    );
+    const daysSinceAudit = lastAuditTs > 0
+      ? Math.floor((Date.now() - lastAuditTs) / (1000 * 60 * 60 * 24))
+      : 999;
+    const auditOverdue = daysSinceAudit >= 3;
 
     const list = [
       {
-        tone: 'sky',
+        tone: 'ok',
+        problem: false,
         eyebrow: 'Oportunidade de compra',
         title: `${bestQuote.type} encontrado por ${formatBRL(bestQuote.price)}`,
         detail: bestQuote.price < bestQuote.limit
@@ -116,7 +124,8 @@ function PremiumInsightTicker({
         },
       },
       {
-        tone: lowStock.length > 0 ? 'amber' : 'emerald',
+        tone: lowStock.length > 0 ? 'problem' : 'ok',
+        problem: lowStock.length > 0,
         eyebrow: 'Estoque crítico',
         title: lowStock.length > 0 ? `${lowStock.length} bobina${lowStock.length > 1 ? 's' : ''} abaixo do mínimo` : 'Estoque dentro do planejado',
         detail: lowStock[0]?.type ? `${lowStock[0].type} precisa de atenção primeiro.` : 'Sem ruptura prevista neste momento.',
@@ -128,7 +137,8 @@ function PremiumInsightTicker({
         },
       },
       {
-        tone: 'emerald',
+        tone: margin < 25 && monthRevenue > 0 ? 'problem' : 'ok',
+        problem: margin < 25 && monthRevenue > 0,
         eyebrow: 'Saúde financeira',
         title: `Margem do mês em ${margin.toFixed(1)}%`,
         detail: `${formatBRL(monthRevenue)} faturados com ${formatBRL(monthExpense)} em custos e compras abertas.`,
@@ -137,13 +147,28 @@ function PremiumInsightTicker({
         action: () => onSelectTab(6),
       },
       {
-        tone: 'violet',
+        tone: 'ok',
+        problem: false,
         eyebrow: 'Produção ao vivo',
         title: `${activePrints.length}/${printers.length || 0} impressoras trabalhando`,
         detail: waitingOrders.length > 0 ? `${waitingOrders.length} pedidos aguardando aceite ou fila.` : 'Fila sem gargalo de aceite agora.',
         metric: readyOrders.length > 0 ? `${readyOrders.length} prontos` : 'Fluxo limpo',
         icon: Cpu,
         action: () => onSelectTab(1),
+      },
+      {
+        tone: auditOverdue ? 'problem' : 'ok',
+        problem: auditOverdue,
+        eyebrow: 'Auditoria de estoque',
+        title: auditOverdue
+          ? 'Recontagem de estoques pendente'
+          : 'Auditoria física em dia',
+        detail: auditOverdue
+          ? `Última recontagem há ${daysSinceAudit === 999 ? '—' : daysSinceAudit} dias. Confira fisicamente e confirme.`
+          : `Estoque físico auditado há ${daysSinceAudit} dias. Dados reais sincronizados.`,
+        metric: auditOverdue ? 'Confirmar auditoria' : 'Tudo certo',
+        icon: CheckCircle2,
+        action: () => onSelectTab(4),
       },
     ];
 
@@ -157,20 +182,18 @@ function PremiumInsightTicker({
 
   const current = insights[active] || insights[0];
   const Icon = current.icon;
-  const toneClass = {
-    sky: 'from-[#0b3b6f] via-[#0e6ea8] to-[#06243f] text-white border-sky-300/40 shadow-sky-500/30',
-    amber: 'from-[#7a4a0d] via-[#c9851a] to-[#2a1604] text-white border-amber-200/40 shadow-amber-500/30',
-    emerald: 'from-[#063d33] via-[#0f8a6a] to-[#03201b] text-white border-emerald-200/40 shadow-emerald-500/30',
-    violet: 'from-[#3b1668] via-[#7a2bbd] to-[#1a0833] text-white border-violet-200/40 shadow-violet-500/30',
-  }[current.tone] || 'from-[#0b3b6f] via-[#0e6ea8] to-[#06243f] text-white border-sky-300/40 shadow-sky-500/30';
+  const anyProblem = insights.some(i => i.problem);
+  const toneClass = anyProblem
+    ? 'from-[#5b0f1a] via-[#b91c1c] to-[#2a0608] text-white shadow-rose-500/30'
+    : 'from-[#063d33] via-[#0f8a6a] to-[#03201b] text-white shadow-emerald-500/30';
 
   return (
     <section
       id="dashboard-premium-rotating-notification"
-      className={`group relative overflow-hidden rounded-2xl border bg-gradient-to-r ${toneClass} shadow-[0_24px_70px_-34px] backdrop-blur-xl animate-premium-fade`}
+      className={`group relative overflow-hidden rounded-2xl bg-gradient-to-r ${toneClass} shadow-[0_24px_70px_-34px] backdrop-blur-xl animate-premium-fade`}
       aria-live="polite"
     >
-      <div className="pointer-events-none absolute inset-0 bg-sky-500/15 backdrop-blur-md" />
+      <div className={`pointer-events-none absolute inset-0 ${anyProblem ? 'bg-rose-500/10' : 'bg-emerald-500/10'} backdrop-blur-md`} />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/45 to-transparent" />
       <div className="pointer-events-none absolute -left-20 top-1/2 h-28 w-52 -translate-y-1/2 rounded-full bg-white/10 blur-3xl transition-opacity duration-700 group-hover:opacity-80" />
 
