@@ -158,11 +158,11 @@ function PremiumInsightTicker({
   const current = insights[active] || insights[0];
   const Icon = current.icon;
   const toneClass = {
-    sky: 'from-sky-400/30 via-cyan-300/10 to-sky-950/30 text-sky-100 border-sky-300/35 shadow-sky-500/20',
-    amber: 'from-amber-300/30 via-yellow-200/10 to-amber-950/30 text-amber-50 border-amber-200/35 shadow-amber-500/20',
-    emerald: 'from-emerald-300/28 via-teal-200/10 to-emerald-950/30 text-emerald-50 border-emerald-200/35 shadow-emerald-500/20',
-    violet: 'from-violet-300/28 via-fuchsia-200/10 to-violet-950/30 text-violet-50 border-violet-200/35 shadow-violet-500/20',
-  }[current.tone] || 'from-sky-400/30 via-cyan-300/10 to-sky-950/30 text-sky-100 border-sky-300/35 shadow-sky-500/20';
+    sky: 'from-[#0b3b6f] via-[#0e6ea8] to-[#06243f] text-white border-sky-300/40 shadow-sky-500/30',
+    amber: 'from-[#7a4a0d] via-[#c9851a] to-[#2a1604] text-white border-amber-200/40 shadow-amber-500/30',
+    emerald: 'from-[#063d33] via-[#0f8a6a] to-[#03201b] text-white border-emerald-200/40 shadow-emerald-500/30',
+    violet: 'from-[#3b1668] via-[#7a2bbd] to-[#1a0833] text-white border-violet-200/40 shadow-violet-500/30',
+  }[current.tone] || 'from-[#0b3b6f] via-[#0e6ea8] to-[#06243f] text-white border-sky-300/40 shadow-sky-500/30';
 
   return (
     <section
@@ -170,7 +170,7 @@ function PremiumInsightTicker({
       className={`group relative overflow-hidden rounded-2xl border bg-gradient-to-r ${toneClass} shadow-[0_24px_70px_-34px] backdrop-blur-xl animate-premium-fade`}
       aria-live="polite"
     >
-      <div className="pointer-events-none absolute inset-0 bg-black/35" />
+      <div className="pointer-events-none absolute inset-0 bg-black/15" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/45 to-transparent" />
       <div className="pointer-events-none absolute -left-20 top-1/2 h-28 w-52 -translate-y-1/2 rounded-full bg-white/10 blur-3xl transition-opacity duration-700 group-hover:opacity-80" />
 
