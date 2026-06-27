@@ -182,8 +182,8 @@ function PremiumInsightTicker({
 
   const current = insights[active] || insights[0];
   const Icon = current.icon;
-  const anyProblem = insights.some(i => i.problem);
-  const toneClass = anyProblem
+  const isProblem = !!current.problem;
+  const toneClass = isProblem
     ? 'from-[#5b0f1a] via-[#b91c1c] to-[#2a0608] text-white shadow-rose-500/30'
     : 'from-[#063d33] via-[#0f8a6a] to-[#03201b] text-white shadow-emerald-500/30';
 
@@ -193,7 +193,7 @@ function PremiumInsightTicker({
       className={`group relative overflow-hidden rounded-2xl bg-gradient-to-r ${toneClass} shadow-[0_24px_70px_-34px] backdrop-blur-xl animate-premium-fade`}
       aria-live="polite"
     >
-      <div className={`pointer-events-none absolute inset-0 ${anyProblem ? 'bg-rose-500/10' : 'bg-emerald-500/10'} backdrop-blur-md`} />
+      <div className={`pointer-events-none absolute inset-0 ${isProblem ? 'bg-rose-500/10' : 'bg-emerald-500/10'} backdrop-blur-md`} />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/45 to-transparent" />
       <div className="pointer-events-none absolute -left-20 top-1/2 h-28 w-52 -translate-y-1/2 rounded-full bg-white/10 blur-3xl transition-opacity duration-700 group-hover:opacity-80" />
 
