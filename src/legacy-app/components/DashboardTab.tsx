@@ -347,16 +347,6 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
 
   return (
     <div className="space-y-2" id="dashboard_tab_container">
-
-      <PremiumInsightTicker
-        orders={orders}
-        printers={printers}
-        filamentStocks={filamentStocks}
-        expenses={expenses}
-        shoppingItems={shoppingItems}
-        onSelectTab={onSelectTab}
-      />
-
       {/* ===== PRINT3D PANEL (real data) ===== */}
       <Print3DPanel
         orders={orders}
@@ -367,6 +357,16 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
         shoppingItems={shoppingItems}
         tuyaDevices={tuyaDevices}
         onSelectTab={onSelectTab}
+        topNotification={(
+          <PremiumInsightTicker
+            orders={orders}
+            printers={printers}
+            filamentStocks={filamentStocks}
+            expenses={expenses}
+            shoppingItems={shoppingItems}
+            onSelectTab={onSelectTab}
+          />
+        )}
       />
 
     </div>
