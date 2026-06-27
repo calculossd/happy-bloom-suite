@@ -32,6 +32,7 @@ import {
   getProgressPercentage,
 } from './production/statusHelpers';
 import { OrderDetailModal } from './production/OrderDetailModal';
+import { OrderFormModal } from './production/OrderFormModal';
 
 interface ProductionTabProps {
   orders: PrintOrder[];
