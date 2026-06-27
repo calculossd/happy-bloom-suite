@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Client, Printer, PrintOrder, FilamentStock, Expense, ShoppingItem } from '../types';
 import { 
   DollarSign, 
@@ -17,7 +17,9 @@ import {
   CheckCircle2, 
   MessageSquare,
   HelpCircle,
-  Share2
+  Share2,
+  Bell,
+  ArrowRight
 } from 'lucide-react';
 import { PrinterCameraModal } from './PrinterCameraModal';
 import { Print3DPanel } from '@/components/print3d/Print3DDashboard';
@@ -33,6 +35,194 @@ interface DashboardTabProps {
   onSelectTab: (tab: number) => void;
   onUpdatePrinter: (id: number, updated: Partial<Printer>) => void;
   onUpdateOrder?: (id: number, updated: Partial<PrintOrder>) => void;
+}
+
+const formatBRL = (value: number) =>
+  value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 2 });
+
+const readLowestFilamentQuote = () => {
+  const fallback = { type: 'PETG', price: 72.9, limit: 80 };
+  if (typeof window === 'undefined') return fallback;
+
+  const limits: Record<string, number> = {
+    PLA: Number(localStorage.getItem('bambuzau_alert_price_pla') || 85),
+    PETG: Number(localStorage.getItem('bambuzau_alert_price_petg') || 80),
+    TPU: Number(localStorage.getItem('bambuzau_alert_price_tpu') || 115),
+  };
+
+  try {
+    const cached = JSON.parse(localStorage.getItem('bambuzau_cached_quotes') || '[]');
+    const quotes = Array.isArray(cached)
+      ? cached.flatMap((group: any) =>
+          Array.isArray(group?.offers)
+            ? group.offers
+                .map((offer: any) => ({ type: String(group.type || '').toUpperCase(), price: Number(offer.price), limit: limits[String(group.type || '').toUpperCase()] }))
+                .filter((offer: any) => offer.type && Number.isFinite(offer.price) && offer.price > 0)
+            : [],
+        )
+      : [];
+    return quotes.sort((a: any, b: any) => a.price - b.price)[0] || fallback;
+  } catch {
+    return fallback;
+  }
+};
+
+function PremiumInsightTicker({
+  orders,
+  printers,
+  filamentStocks,
+  expenses,
+  shoppingItems,
+  onSelectTab,
+}: {
+  orders: PrintOrder[];
+  printers: Printer[];
+  filamentStocks: FilamentStock[];
+  expenses: Expense[];
+  shoppingItems: ShoppingItem[];
+  onSelectTab: (tab: number) => void;
+}) {
+  const [active, setActive] = useState(0);
+
+  const insights = useMemo(() => {
+    const lowStock = filamentStocks.filter(f => f.stockGrams < f.minStockGrams);
+    const activePrints = printers.filter(p => p.status === 'PRINTING');
+    const waitingOrders = orders.filter(o => o.status === 'WAITING' || o.status === 'QUEUE');
+    const readyOrders = orders.filter(o => o.status === 'READY');
+    const monthStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1).getTime();
+    const monthRevenue = orders
+      .filter(o => (o.createdAt || 0) >= monthStart && o.status !== 'WAITING')
+      .reduce((sum, o) => sum + (o.priceCharged || 0), 0);
+    const monthExpense = expenses
+      .filter(e => (e.date || 0) >= monthStart)
+      .reduce((sum, e) => sum + ((e.amount || 0) * (e.qty || 1)), 0) +
+      shoppingItems.filter(i => !i.isChecked).reduce((sum, i) => sum + (i.price || 0), 0);
+    const margin = monthRevenue > 0 ? ((monthRevenue - monthExpense) / monthRevenue) * 100 : 0;
+    const bestQuote = readLowestFilamentQuote();
+
+    const list = [
+      {
+        tone: 'sky',
+        eyebrow: 'Oportunidade de compra',
+        title: `${bestQuote.type} encontrado por ${formatBRL(bestQuote.price)}`,
+        detail: bestQuote.price < bestQuote.limit
+          ? `Abaixo do limite configurado de ${formatBRL(bestQuote.limit)}.`
+          : 'Preço monitorado para reposição inteligente.',
+        metric: bestQuote.price < bestQuote.limit ? 'Comprar agora' : 'Monitorar',
+        icon: Bell,
+        action: () => {
+          localStorage.setItem('bambuzau_costs_subtab_override', 'QUOTE');
+          onSelectTab(4);
+        },
+      },
+      {
+        tone: lowStock.length > 0 ? 'amber' : 'emerald',
+        eyebrow: 'Estoque crítico',
+        title: lowStock.length > 0 ? `${lowStock.length} bobina${lowStock.length > 1 ? 's' : ''} abaixo do mínimo` : 'Estoque dentro do planejado',
+        detail: lowStock[0]?.type ? `${lowStock[0].type} precisa de atenção primeiro.` : 'Sem ruptura prevista neste momento.',
+        metric: lowStock.length > 0 ? 'Repor estoque' : 'Saudável',
+        icon: AlertTriangle,
+        action: () => {
+          localStorage.setItem('bambuzau_costs_subtab_override', 'STOCK');
+          onSelectTab(4);
+        },
+      },
+      {
+        tone: 'emerald',
+        eyebrow: 'Saúde financeira',
+        title: `Margem do mês em ${margin.toFixed(1)}%`,
+        detail: `${formatBRL(monthRevenue)} faturados com ${formatBRL(monthExpense)} em custos e compras abertas.`,
+        metric: margin >= 25 ? 'Boa margem' : 'Revisar preço',
+        icon: TrendingUp,
+        action: () => onSelectTab(6),
+      },
+      {
+        tone: 'violet',
+        eyebrow: 'Produção ao vivo',
+        title: `${activePrints.length}/${printers.length || 0} impressoras trabalhando`,
+        detail: waitingOrders.length > 0 ? `${waitingOrders.length} pedidos aguardando aceite ou fila.` : 'Fila sem gargalo de aceite agora.',
+        metric: readyOrders.length > 0 ? `${readyOrders.length} prontos` : 'Fluxo limpo',
+        icon: Cpu,
+        action: () => onSelectTab(1),
+      },
+    ];
+
+    return list;
+  }, [orders, printers, filamentStocks, expenses, shoppingItems, onSelectTab]);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setActive(index => (index + 1) % insights.length), 5200);
+    return () => window.clearInterval(timer);
+  }, [insights.length]);
+
+  const current = insights[active] || insights[0];
+  const Icon = current.icon;
+  const toneClass = {
+    sky: 'from-sky-400/30 via-cyan-300/10 to-sky-950/30 text-sky-100 border-sky-300/35 shadow-sky-500/20',
+    amber: 'from-amber-300/30 via-yellow-200/10 to-amber-950/30 text-amber-50 border-amber-200/35 shadow-amber-500/20',
+    emerald: 'from-emerald-300/28 via-teal-200/10 to-emerald-950/30 text-emerald-50 border-emerald-200/35 shadow-emerald-500/20',
+    violet: 'from-violet-300/28 via-fuchsia-200/10 to-violet-950/30 text-violet-50 border-violet-200/35 shadow-violet-500/20',
+  }[current.tone] || 'from-sky-400/30 via-cyan-300/10 to-sky-950/30 text-sky-100 border-sky-300/35 shadow-sky-500/20';
+
+  return (
+    <section
+      id="dashboard-premium-rotating-notification"
+      className={`group relative overflow-hidden rounded-2xl border bg-gradient-to-r ${toneClass} shadow-[0_24px_70px_-34px] backdrop-blur-xl animate-premium-fade`}
+      aria-live="polite"
+    >
+      <div className="pointer-events-none absolute inset-0 bg-black/35" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/45 to-transparent" />
+      <div className="pointer-events-none absolute -left-20 top-1/2 h-28 w-52 -translate-y-1/2 rounded-full bg-white/10 blur-3xl transition-opacity duration-700 group-hover:opacity-80" />
+
+      <div className="relative grid gap-4 px-4 py-3 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:items-center sm:px-5 sm:py-4">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-white/20 bg-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] transition-transform duration-500 group-hover:scale-105">
+            <Icon className="h-4 w-4" />
+          </div>
+          <div className="min-w-0">
+            <div className="text-[9px] font-black uppercase tracking-[0.24em] text-white/65">{current.eyebrow}</div>
+            <div key={current.title} className="mt-0.5 truncate text-[14px] font-black tracking-tight text-white sm:text-[15px] animate-premium-fade">
+              {current.title}
+            </div>
+          </div>
+        </div>
+
+        <p className="min-w-0 text-[12px] font-medium leading-relaxed text-white/68 sm:border-l sm:border-white/12 sm:pl-5">
+          {current.detail}
+        </p>
+
+        <div className="flex items-center justify-between gap-3 sm:justify-end">
+          <div className="rounded-lg border border-white/12 bg-white/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]">
+            {current.metric}
+          </div>
+          <button
+            type="button"
+            onClick={current.action}
+            className="inline-flex h-9 items-center gap-2 rounded-lg bg-white px-3 text-[10px] font-black uppercase tracking-[0.14em] text-zinc-950 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_30px_-12px_rgba(255,255,255,0.75)] active:scale-95"
+          >
+            Abrir
+            <ArrowRight className="h-3 w-3" />
+          </button>
+        </div>
+      </div>
+
+      <div className="relative h-[3px] bg-white/10">
+        <div key={active} className="h-full origin-left bg-white/80 dashboard-notification-progress" />
+      </div>
+
+      <div className="absolute bottom-3 left-4 flex gap-1 sm:left-5">
+        {insights.map((_, index) => (
+          <button
+            key={index}
+            type="button"
+            onClick={() => setActive(index)}
+            aria-label={`Ver notificação ${index + 1}`}
+            className={`h-1.5 rounded-full transition-all duration-300 ${index === active ? 'w-5 bg-white' : 'w-1.5 bg-white/35 hover:bg-white/60'}`}
+          />
+        ))}
+      </div>
+    </section>
+  );
 }
 
 export const DashboardTab: React.FC<DashboardTabProps> = ({
@@ -157,6 +347,15 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
 
   return (
     <div className="space-y-6" id="dashboard_tab_container">
+
+      <PremiumInsightTicker
+        orders={orders}
+        printers={printers}
+        filamentStocks={filamentStocks}
+        expenses={expenses}
+        shoppingItems={shoppingItems}
+        onSelectTab={onSelectTab}
+      />
 
       {/* ===== PRINT3D PANEL (real data) ===== */}
       <Print3DPanel
