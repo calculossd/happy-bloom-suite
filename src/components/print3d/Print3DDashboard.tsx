@@ -1246,6 +1246,7 @@ interface Print3DPanelProps {
   shoppingItems?: any[];
   tuyaDevices?: any[];
   onSelectTab?: (tab: number) => void;
+  topNotification?: any;
 }
 
 export function Print3DPanel({
@@ -1256,6 +1257,7 @@ export function Print3DPanel({
   clients = [],
   tuyaDevices = [],
   onSelectTab,
+  topNotification,
 }: Print3DPanelProps = {}) {
   // === Real KPIs (today) ===
   const today = new Date();
@@ -1391,6 +1393,12 @@ export function Print3DPanel({
           </div>
         </div>
         </div>
+
+        {topNotification && (
+          <div className="relative z-10 bg-black px-0 pb-2">
+            {topNotification}
+          </div>
+        )}
 
         {/* KPI strip — fully on solid black, abaixo da imagem */}
         <div className="relative z-10 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4 px-0 pt-2 pb-1 bg-black items-stretch">
