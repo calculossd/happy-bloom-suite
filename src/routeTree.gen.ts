@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StoriesRouteImport } from './routes/stories'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiWhatsappProxyRouteImport } from './routes/api/whatsapp-proxy'
 import { Route as ApiSearchImageRouteImport } from './routes/api/search-image'
 import { Route as ApiQuotationsRouteImport } from './routes/api/quotations'
 import { Route as ApiPlacesLeadsRouteImport } from './routes/api/places-leads'
@@ -28,6 +29,11 @@ const StoriesRoute = StoriesRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiWhatsappProxyRoute = ApiWhatsappProxyRouteImport.update({
+  id: '/api/whatsapp-proxy',
+  path: '/api/whatsapp-proxy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiSearchImageRoute = ApiSearchImageRouteImport.update({
@@ -80,6 +86,7 @@ export interface FileRoutesByFullPath {
   '/api/places-leads': typeof ApiPlacesLeadsRoute
   '/api/quotations': typeof ApiQuotationsRoute
   '/api/search-image': typeof ApiSearchImageRoute
+  '/api/whatsapp-proxy': typeof ApiWhatsappProxyRoute
   '/api/serpapi/status': typeof ApiSerpapiStatusRoute
   '/api/telegram/send-stl': typeof ApiTelegramSendStlRoute
 }
@@ -92,6 +99,7 @@ export interface FileRoutesByTo {
   '/api/places-leads': typeof ApiPlacesLeadsRoute
   '/api/quotations': typeof ApiQuotationsRoute
   '/api/search-image': typeof ApiSearchImageRoute
+  '/api/whatsapp-proxy': typeof ApiWhatsappProxyRoute
   '/api/serpapi/status': typeof ApiSerpapiStatusRoute
   '/api/telegram/send-stl': typeof ApiTelegramSendStlRoute
 }
@@ -105,6 +113,7 @@ export interface FileRoutesById {
   '/api/places-leads': typeof ApiPlacesLeadsRoute
   '/api/quotations': typeof ApiQuotationsRoute
   '/api/search-image': typeof ApiSearchImageRoute
+  '/api/whatsapp-proxy': typeof ApiWhatsappProxyRoute
   '/api/serpapi/status': typeof ApiSerpapiStatusRoute
   '/api/telegram/send-stl': typeof ApiTelegramSendStlRoute
 }
@@ -119,6 +128,7 @@ export interface FileRouteTypes {
     | '/api/places-leads'
     | '/api/quotations'
     | '/api/search-image'
+    | '/api/whatsapp-proxy'
     | '/api/serpapi/status'
     | '/api/telegram/send-stl'
   fileRoutesByTo: FileRoutesByTo
@@ -131,6 +141,7 @@ export interface FileRouteTypes {
     | '/api/places-leads'
     | '/api/quotations'
     | '/api/search-image'
+    | '/api/whatsapp-proxy'
     | '/api/serpapi/status'
     | '/api/telegram/send-stl'
   id:
@@ -143,6 +154,7 @@ export interface FileRouteTypes {
     | '/api/places-leads'
     | '/api/quotations'
     | '/api/search-image'
+    | '/api/whatsapp-proxy'
     | '/api/serpapi/status'
     | '/api/telegram/send-stl'
   fileRoutesById: FileRoutesById
@@ -156,6 +168,7 @@ export interface RootRouteChildren {
   ApiPlacesLeadsRoute: typeof ApiPlacesLeadsRoute
   ApiQuotationsRoute: typeof ApiQuotationsRoute
   ApiSearchImageRoute: typeof ApiSearchImageRoute
+  ApiWhatsappProxyRoute: typeof ApiWhatsappProxyRoute
   ApiSerpapiStatusRoute: typeof ApiSerpapiStatusRoute
   ApiTelegramSendStlRoute: typeof ApiTelegramSendStlRoute
 }
@@ -174,6 +187,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/whatsapp-proxy': {
+      id: '/api/whatsapp-proxy'
+      path: '/api/whatsapp-proxy'
+      fullPath: '/api/whatsapp-proxy'
+      preLoaderRoute: typeof ApiWhatsappProxyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/search-image': {
@@ -244,6 +264,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPlacesLeadsRoute: ApiPlacesLeadsRoute,
   ApiQuotationsRoute: ApiQuotationsRoute,
   ApiSearchImageRoute: ApiSearchImageRoute,
+  ApiWhatsappProxyRoute: ApiWhatsappProxyRoute,
   ApiSerpapiStatusRoute: ApiSerpapiStatusRoute,
   ApiTelegramSendStlRoute: ApiTelegramSendStlRoute,
 }
