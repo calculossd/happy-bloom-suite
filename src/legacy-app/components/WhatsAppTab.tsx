@@ -400,7 +400,14 @@ function ChatsView({ cfg }: { cfg: WppConfig }) {
                   </div>
                 );
               })}
-              {msgs.length === 0 && <div className="text-xs text-white/40 text-center py-6">Sem mensagens</div>}
+              {loadingMsgs && <div className="text-xs text-white/40 text-center py-6"><Loader2 className="w-4 h-4 animate-spin inline" /></div>}
+              {!loadingMsgs && msgs.length === 0 && (
+                <div className="text-[11px] text-center py-6">
+                  {msgsErr
+                    ? <span className="text-rose-300">{msgsErr}</span>
+                    : <span className="text-white/40">Sem mensagens</span>}
+                </div>
+              )}
             </div>
             <div className="p-3 border-t border-white/10 flex gap-2">
               <Input placeholder="Mensagem..." value={text} onChange={e => setText(e.target.value)}
