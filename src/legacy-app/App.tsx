@@ -21,6 +21,7 @@ import { PrintFlowTab } from './components/PrintFlowTab';
 import { PrinterQueueList } from './components/PrinterQueueList';
 import { ManutencaoTab } from './components/ManutencaoTab';
 import { OrcamentosTab } from './components/OrcamentosTab';
+import { WhatsAppTab } from './components/WhatsAppTab';
 import {
   PriceResearchTab, PreCheckTab, AgendaTab, ToolsTab, ModelsTab
 } from './components/NewTabs';
@@ -99,7 +100,8 @@ import {
   Download,
   Printer as PrinterNavIcon,
   FileBarChart2,
-  FileEdit
+  FileEdit,
+  MessageCircle
 } from 'lucide-react';
 
 // STUNNING 3D CUBE & PRINTER EXTENSION GEOMETRIC LOGO
@@ -1746,6 +1748,7 @@ export default function App() {
               section: 'Configurações',
               items: [
                 { id: 13, label: 'Agenda', icon: Calendar },
+                { id: 20, label: 'WhatsApp', icon: MessageCircle },
                 { id: 5, label: 'Ajustes', icon: Settings },
               ],
             },
@@ -2228,6 +2231,7 @@ export default function App() {
             {currentTab === 19 && (
               <OrcamentosTab clients={clients} orders={orders} setOrders={setOrders} />
             )}
+            {currentTab === 20 && <WhatsAppTab />}
           </Suspense>
         )}
           </div>
