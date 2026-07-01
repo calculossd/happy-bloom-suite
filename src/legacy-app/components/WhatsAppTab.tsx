@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import {
   MessageCircle, Users, Send, Settings as SettingsIcon, LayoutDashboard,
   Search, Wifi, WifiOff, Loader2, CheckCircle2, XCircle, RefreshCw, Phone,
+  QrCode, PlugZap, Copy,
 } from 'lucide-react';
 
 /* ---------- Config storage ---------- */
@@ -56,6 +57,24 @@ async function evoTry(cfg: WppConfig, v2: { path: string; body?: any }, v1: { pa
   }
 }
 
+function getConnectionState(r: any): string {
+  if (Array.isArray(r)) {
+    const item = r[0] || {};
+    return item.instance?.state || item.instance?.connectionStatus || item.connectionStatus || item.state || 'ok';
+  }
+  return r?.instance?.state || r?.instance?.connectionStatus || r?.connectionStatus || r?.state || r?.status || 'ok';
+}
+
+function getQrImage(r: any): string {
+  const raw = r?.base64 || r?.qrcode?.base64 || r?.qr?.base64 || r?.data?.base64 || '';
+  if (!raw) return '';
+  return raw.startsWith('data:image') ? raw : `data:image/png;base64,${raw}`;
+}
+
+function getPairingCode(r: any): string {
+  return r?.pairingCode || r?.code || r?.qrcode?.code || r?.qr?.code || r?.data?.pairingCode || r?.data?.code || '';
+}
+
 // Evolution retorna às vezes array puro, às vezes { records:[] } ou { chats:[] } etc.
 function unwrapList(r: any): any[] {
   if (Array.isArray(r)) return r;
@@ -83,16 +102,44 @@ const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = ({ classNam
 function ConfigScreen({ cfg, setCfg }: { cfg: WppConfig; setCfg: (c: WppConfig) => void }) {
   const [draft, setDraft] = useState(cfg);
   const [status, setStatus] = useState<{ ok: boolean | null; msg: string; loading: boolean }>({ ok: null, msg: '', loading: false });
+  const [qr, setQr] = useState<{ img: string; code: string; raw?: any } | null>(null);
   useEffect(() => setDraft(cfg), [cfg]);
+
+  const persistDraft = () => {
+    saveCfg(draft);
+    setCfg(draft);
+  };
 
   const test = async () => {
     setStatus({ ok: null, msg: 'Testando...', loading: true });
+    setQr(null);
     try {
-      const r = await evo(draft, `/instance/fetchInstances?instanceName=${encodeURIComponent(draft.instance)}`);
-      const st = Array.isArray(r) ? r[0]?.instance?.state || r[0]?.connectionStatus || 'ok' : (r?.instance?.state || 'ok');
-      setStatus({ ok: true, msg: `Conectado (${st})`, loading: false });
+      const state = await evo(draft, `/instance/connectionState/${encodeURIComponent(draft.instance)}`)
+        .then(getConnectionState)
+        .catch(async () => getConnectionState(await evo(draft, `/instance/fetchInstances?instanceName=${encodeURIComponent(draft.instance)}`)));
+      const connected = /open|connected|connect/i.test(state);
+      setStatus({ ok: connected, msg: connected ? `WhatsApp conectado (${state})` : `API ok, WhatsApp ainda não conectado (${state})`, loading: false });
     } catch (e: any) {
       setStatus({ ok: false, msg: e.message || 'Falha', loading: false });
+    }
+  };
+
+  const connect = async () => {
+    persistDraft();
+    setStatus({ ok: null, msg: 'Gerando QR Code...', loading: true });
+    setQr(null);
+    try {
+      const r = await evo(draft, `/instance/connect/${encodeURIComponent(draft.instance)}`);
+      const img = getQrImage(r);
+      const code = getPairingCode(r);
+      setQr({ img, code, raw: r });
+      setStatus({
+        ok: !!(img || code),
+        msg: img || code ? 'Escaneie o QR Code no WhatsApp para conectar' : 'Resposta recebida, mas sem QR Code. Verifique se a instância já existe na Evolution.',
+        loading: false,
+      });
+    } catch (e: any) {
+      setStatus({ ok: false, msg: e.message || 'Falha ao conectar', loading: false });
     }
   };
 
@@ -117,13 +164,35 @@ function ConfigScreen({ cfg, setCfg }: { cfg: WppConfig; setCfg: (c: WppConfig) 
         Usar proxy do servidor (recomendado — evita erros de CORS)
       </label>
       <div className="flex items-center gap-2">
-        <Btn onClick={() => { saveCfg(draft); setCfg(draft); }}>Salvar</Btn>
+        <Btn onClick={persistDraft}>Salvar</Btn>
         <Btn tone="ghost" onClick={test} disabled={status.loading}>
           {status.loading ? <Loader2 className="w-4 h-4 animate-spin inline" /> : 'Testar conexão'}
+        </Btn>
+        <Btn tone="ghost" onClick={connect} disabled={status.loading || !draft.url || !draft.apiKey || !draft.instance}>
+          {status.loading ? <Loader2 className="w-4 h-4 animate-spin inline" /> : <><PlugZap className="w-4 h-4 inline mr-1" />Conectar WhatsApp</>}
         </Btn>
         {status.ok === true && <span className="text-xs text-emerald-400 flex items-center gap-1"><CheckCircle2 className="w-4 h-4" />{status.msg}</span>}
         {status.ok === false && <span className="text-xs text-red-400 flex items-center gap-1"><XCircle className="w-4 h-4" />{status.msg}</span>}
       </div>
+      {qr && (qr.img || qr.code) && (
+        <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/5 p-4 flex flex-col sm:flex-row gap-4 items-start">
+          <div className="w-44 h-44 rounded-xl bg-white p-2 grid place-items-center shrink-0">
+            {qr.img ? <img src={qr.img} alt="QR Code para conectar WhatsApp" className="w-full h-full object-contain" /> : <QrCode className="w-20 h-20 text-black" />}
+          </div>
+          <div className="space-y-2 min-w-0">
+            <div className="text-sm font-bold text-white">Conectar instância {draft.instance}</div>
+            <p className="text-xs text-white/55">No celular: WhatsApp → aparelhos conectados → conectar aparelho → escaneie este QR Code.</p>
+            {qr.code && (
+              <button
+                onClick={() => navigator.clipboard?.writeText(qr.code)}
+                className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-xs font-semibold text-emerald-300 hover:bg-white/5"
+              >
+                <Copy className="w-3.5 h-3.5" /> Código: {qr.code}
+              </button>
+            )}
+          </div>
+        </div>
+      )}
       <div className="text-[11px] text-amber-400/80 bg-amber-500/5 border border-amber-500/20 rounded-lg p-3">
         Se a Evolution API estiver rodando num IP local (ex: 172.x.x.x), só funciona quando você abrir o site na mesma rede. Para uso em qualquer lugar, exponha via HTTPS (Cloudflare Tunnel, ngrok ou domínio próprio).
       </div>
