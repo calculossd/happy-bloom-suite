@@ -2231,6 +2231,7 @@ export default function App() {
             {currentTab === 19 && (
               <OrcamentosTab clients={clients} orders={orders} setOrders={setOrders} />
             )}
+            {currentTab === 20 && <WhatsAppTab />}
           </Suspense>
         )}
           </div>
