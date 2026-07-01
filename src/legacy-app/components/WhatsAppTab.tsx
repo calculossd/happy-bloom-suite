@@ -6,22 +6,39 @@ import {
 } from 'lucide-react';
 
 /* ---------- Config storage ---------- */
-type WppConfig = { url: string; apiKey: string; instance: string };
+type WppConfig = { url: string; apiKey: string; instance: string; useProxy?: boolean };
 const CFG_KEY = 'wpp_evo_cfg_v1';
 const loadCfg = (): WppConfig => {
   try { const v = JSON.parse(localStorage.getItem(CFG_KEY) || ''); if (v?.url) return v; } catch {}
-  return { url: '', apiKey: '', instance: '' };
+  return { url: '', apiKey: '', instance: '', useProxy: true };
 };
 const saveCfg = (c: WppConfig) => localStorage.setItem(CFG_KEY, JSON.stringify(c));
 
 /* ---------- Fetch helper ---------- */
 async function evo(cfg: WppConfig, path: string, opts: RequestInit = {}) {
   if (!cfg.url) throw new Error('Configure a URL da API em Configurações');
-  const url = cfg.url.replace(/\/$/, '') + path;
-  const r = await fetch(url, {
-    ...opts,
-    headers: { 'Content-Type': 'application/json', apikey: cfg.apiKey, ...(opts.headers || {}) },
-  });
+  const method = (opts.method || 'GET').toUpperCase();
+  let r: Response;
+  if (cfg.useProxy !== false) {
+    // Encaminha via server proxy (contorna CORS)
+    r = await fetch('/api/whatsapp-proxy', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        baseUrl: cfg.url,
+        path: path.replace(/^\//, ''),
+        method,
+        apiKey: cfg.apiKey,
+        body: opts.body ? JSON.parse(opts.body as string) : undefined,
+      }),
+    });
+  } else {
+    const url = cfg.url.replace(/\/$/, '') + path;
+    r = await fetch(url, {
+      ...opts,
+      headers: { 'Content-Type': 'application/json', apikey: cfg.apiKey, ...(opts.headers || {}) },
+    });
+  }
   if (!r.ok) throw new Error(`HTTP ${r.status}: ${await r.text().catch(() => r.statusText)}`);
   return r.json();
 }
