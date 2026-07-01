@@ -43,6 +43,19 @@ async function evo(cfg: WppConfig, path: string, opts: RequestInit = {}) {
   return r.json();
 }
 
+// Evolution API v2 usa /chat/findChats (POST); v1 usa /chat/fetchChats (GET).
+// Tenta v2 primeiro; se 404, cai pro v1.
+async function evoTry(cfg: WppConfig, v2: { path: string; body?: any }, v1: { path: string }) {
+  try {
+    return await evo(cfg, v2.path, { method: 'POST', body: JSON.stringify(v2.body || {}) });
+  } catch (e: any) {
+    if (/HTTP 40[04]/.test(String(e?.message))) {
+      return await evo(cfg, v1.path);
+    }
+    throw e;
+  }
+}
+
 /* ---------- UI primitives ---------- */
 const Card: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className = '', ...p }) => (
   <div {...p} className={`rounded-2xl border border-white/[0.08] bg-[#0a0d0c]/95 backdrop-blur-xl ${className}`} />
