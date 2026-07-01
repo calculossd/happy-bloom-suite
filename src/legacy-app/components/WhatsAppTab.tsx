@@ -79,10 +79,14 @@ function getPairingCode(r: any): string {
 function unwrapList(r: any): any[] {
   if (Array.isArray(r)) return r;
   if (!r || typeof r !== 'object') return [];
-  return (
-    r.records || r.chats || r.contacts || r.messages?.records ||
-    r.messages || r.data || r.result || []
-  );
+  const candidates = [
+    r.records, r.chats, r.contacts,
+    r.messages?.records, r.messages,
+    r.data?.records, r.data?.messages?.records, r.data?.messages, r.data,
+    r.result?.records, r.result,
+  ];
+  for (const c of candidates) if (Array.isArray(c)) return c;
+  return [];
 }
 
 /* ---------- UI primitives ---------- */
