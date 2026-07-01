@@ -329,15 +329,27 @@ function ChatsView({ cfg }: { cfg: WppConfig }) {
     setSelected(c); setMsgs([]); setMsgsErr(''); setLoadingMsgs(true);
     try {
       const chatId = c.id || c.remoteJid;
-      let r: any;
-      try {
-        r = await evo(cfg, `/chat/findMessages/${cfg.instance}`, { method: 'POST', body: JSON.stringify({ where: { key: { remoteJid: chatId } } }) });
-      } catch {
-        r = await evo(cfg, `/chat/fetchMessages/${cfg.instance}`, { method: 'POST', body: JSON.stringify({ chatId }) });
+      // Evolution v2 exige paginação; sem `page`/`offset` alguns builds devolvem vazio.
+      const attempts: Array<() => Promise<any>> = [
+        () => evo(cfg, `/chat/findMessages/${cfg.instance}`, { method: 'POST', body: JSON.stringify({ where: { key: { remoteJid: chatId } }, page: 1, offset: 100 }) }),
+        () => evo(cfg, `/chat/findMessages/${cfg.instance}`, { method: 'POST', body: JSON.stringify({ where: { key: { remoteJid: chatId } } }) }),
+        () => evo(cfg, `/chat/findMessages/${cfg.instance}`, { method: 'POST', body: JSON.stringify({ where: { remoteJid: chatId }, page: 1, offset: 100 }) }),
+        () => evo(cfg, `/chat/fetchMessages/${cfg.instance}`, { method: 'POST', body: JSON.stringify({ chatId, count: 100 }) }),
+      ];
+      let list: any[] = [];
+      let lastErr = '';
+      for (const attempt of attempts) {
+        try {
+          const r = await attempt();
+          const l = unwrapList(r);
+          if (l.length) { list = l; break; }
+          // guarda como "resposta vazia" mas continua tentando outros formatos
+        } catch (e: any) {
+          lastErr = e?.message || String(e);
+        }
       }
-      const list = unwrapList(r);
       setMsgs(list);
-      if (list.length === 0) setMsgsErr('Sem mensagens retornadas pela Evolution para este chat.');
+      if (list.length === 0) setMsgsErr(lastErr ? `Falha: ${lastErr}` : 'Sem mensagens retornadas pela Evolution para este chat (nenhum formato conhecido retornou dados).');
     } catch (e: any) {
       setMsgsErr(e?.message || 'Falha ao buscar mensagens');
     } finally {
