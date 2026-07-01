@@ -366,6 +366,7 @@ function ChatsView({ cfg }: { cfg: WppConfig }) {
         </div>
         <div className="flex-1 overflow-y-auto space-y-1">
           {loading && <div className="text-xs text-white/40 py-6 text-center"><Loader2 className="w-4 h-4 animate-spin inline" /></div>}
+          {!loading && chatsErr && <div className="text-[11px] text-rose-300 bg-rose-500/10 border border-rose-500/30 rounded-lg p-2">{chatsErr}</div>}
           {filtered.map((c: any, i: number) => (
             <button key={c.id || c.remoteJid || i} onClick={() => openChat(c)}
               className={`w-full text-left px-3 py-2 rounded-lg transition ${selected?.id === c.id ? 'bg-emerald-500/10 border border-emerald-500/30' : 'hover:bg-white/5'}`}>
