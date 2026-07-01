@@ -310,8 +310,8 @@ export function OkLojaAssistant({
 
     bgRec.onerror = (e: any) => {
       console.warn("Speech recognition bg error:", e.error);
-      if (e.error === 'not-allowed') {
-        console.warn("Background microphone access was denied.");
+      if (e.error === 'not-allowed' || e.error === 'audio-capture' || e.error === 'service-not-allowed') {
+        console.warn("Background mic unavailable:", e.error);
         setIsBackgroundListening(false);
         setBackgroundWakeWordEnabled(false);
         setMicPermissionDenied(true);
