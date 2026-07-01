@@ -84,6 +84,15 @@ function ConfigScreen({ cfg, setCfg }: { cfg: WppConfig; setCfg: (c: WppConfig) 
         <label className="block text-xs text-white/60">API Key<Input type="password" placeholder="sua-api-key" value={draft.apiKey} onChange={e => setDraft({ ...draft, apiKey: e.target.value })} /></label>
         <label className="block text-xs text-white/60">Instância<Input placeholder="zap" value={draft.instance} onChange={e => setDraft({ ...draft, instance: e.target.value })} /></label>
       </div>
+      <label className="flex items-center gap-2 text-xs text-white/70 cursor-pointer">
+        <input
+          type="checkbox"
+          checked={draft.useProxy !== false}
+          onChange={e => setDraft({ ...draft, useProxy: e.target.checked })}
+          className="accent-emerald-500"
+        />
+        Usar proxy do servidor (recomendado — evita erros de CORS)
+      </label>
       <div className="flex items-center gap-2">
         <Btn onClick={() => { saveCfg(draft); setCfg(draft); }}>Salvar</Btn>
         <Btn tone="ghost" onClick={test} disabled={status.loading}>
