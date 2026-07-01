@@ -303,12 +303,21 @@ function ChatsView({ cfg }: { cfg: WppConfig }) {
   const [loading, setLoading] = useState(false);
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
+  const [chatsErr, setChatsErr] = useState<string>('');
+  const [msgsErr, setMsgsErr] = useState<string>('');
+  const [loadingMsgs, setLoadingMsgs] = useState(false);
 
   useEffect(() => {
     if (!cfg.url) return;
-    setLoading(true);
+    setLoading(true); setChatsErr('');
     evoTry(cfg, { path: `/chat/findChats/${cfg.instance}`, body: {} }, { path: `/chat/fetchChats/${cfg.instance}` })
-      .then(r => setChats(unwrapList(r))).catch(() => {}).finally(() => setLoading(false));
+      .then(r => {
+        const list = unwrapList(r);
+        setChats(list);
+        if (list.length === 0) setChatsErr('Resposta vazia da Evolution. Verifique se a instância está conectada e possui conversas.');
+      })
+      .catch((e: any) => setChatsErr(e?.message || 'Falha ao buscar conversas'))
+      .finally(() => setLoading(false));
   }, [cfg.url, cfg.instance]);
 
   const filtered = useMemo(() => {
@@ -317,7 +326,7 @@ function ChatsView({ cfg }: { cfg: WppConfig }) {
   }, [chats, q]);
 
   const openChat = async (c: any) => {
-    setSelected(c); setMsgs([]);
+    setSelected(c); setMsgs([]); setMsgsErr(''); setLoadingMsgs(true);
     try {
       const chatId = c.id || c.remoteJid;
       let r: any;
@@ -326,8 +335,14 @@ function ChatsView({ cfg }: { cfg: WppConfig }) {
       } catch {
         r = await evo(cfg, `/chat/fetchMessages/${cfg.instance}`, { method: 'POST', body: JSON.stringify({ chatId }) });
       }
-      setMsgs(unwrapList(r));
-    } catch (e) { /* ignore */ }
+      const list = unwrapList(r);
+      setMsgs(list);
+      if (list.length === 0) setMsgsErr('Sem mensagens retornadas pela Evolution para este chat.');
+    } catch (e: any) {
+      setMsgsErr(e?.message || 'Falha ao buscar mensagens');
+    } finally {
+      setLoadingMsgs(false);
+    }
   };
 
   const send = async () => {
