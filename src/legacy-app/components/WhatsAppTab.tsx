@@ -43,6 +43,19 @@ async function evo(cfg: WppConfig, path: string, opts: RequestInit = {}) {
   return r.json();
 }
 
+// Evolution API v2 usa /chat/findChats (POST); v1 usa /chat/fetchChats (GET).
+// Tenta v2 primeiro; se 404, cai pro v1.
+async function evoTry(cfg: WppConfig, v2: { path: string; body?: any }, v1: { path: string }) {
+  try {
+    return await evo(cfg, v2.path, { method: 'POST', body: JSON.stringify(v2.body || {}) });
+  } catch (e: any) {
+    if (/HTTP 40[04]/.test(String(e?.message))) {
+      return await evo(cfg, v1.path);
+    }
+    throw e;
+  }
+}
+
 /* ---------- UI primitives ---------- */
 const Card: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className = '', ...p }) => (
   <div {...p} className={`rounded-2xl border border-white/[0.08] bg-[#0a0d0c]/95 backdrop-blur-xl ${className}`} />
@@ -115,8 +128,8 @@ function Dashboard({ cfg }: { cfg: WppConfig }) {
     setData(d => ({ ...d, loading: true, error: undefined }));
     try {
       const [chats, contacts] = await Promise.all([
-        evo(cfg, `/chat/fetchChats/${cfg.instance}`).catch(() => []),
-        evo(cfg, `/contacts/fetchContacts/${cfg.instance}`).catch(() => []),
+        evoTry(cfg, { path: `/chat/findChats/${cfg.instance}`, body: {} }, { path: `/chat/fetchChats/${cfg.instance}` }).catch(() => []),
+        evoTry(cfg, { path: `/chat/findContacts/${cfg.instance}`, body: {} }, { path: `/contacts/fetchContacts/${cfg.instance}` }).catch(() => []),
       ]);
       setData({ chats: Array.isArray(chats) ? chats : [], contacts: Array.isArray(contacts) ? contacts : [], loading: false });
     } catch (e: any) { setData(d => ({ ...d, loading: false, error: e.message })); }
@@ -181,7 +194,8 @@ function ChatsView({ cfg }: { cfg: WppConfig }) {
   useEffect(() => {
     if (!cfg.url) return;
     setLoading(true);
-    evo(cfg, `/chat/fetchChats/${cfg.instance}`).then(r => setChats(Array.isArray(r) ? r : [])).catch(() => {}).finally(() => setLoading(false));
+    evoTry(cfg, { path: `/chat/findChats/${cfg.instance}`, body: {} }, { path: `/chat/fetchChats/${cfg.instance}` })
+      .then(r => setChats(Array.isArray(r) ? r : [])).catch(() => {}).finally(() => setLoading(false));
   }, [cfg.url, cfg.instance]);
 
   const filtered = useMemo(() => {
@@ -193,8 +207,13 @@ function ChatsView({ cfg }: { cfg: WppConfig }) {
     setSelected(c); setMsgs([]);
     try {
       const chatId = c.id || c.remoteJid;
-      const r = await evo(cfg, `/chat/fetchMessages/${cfg.instance}`, { method: 'POST', body: JSON.stringify({ chatId }) });
-      const arr = Array.isArray(r) ? r : (r?.messages?.records || r?.messages || []);
+      let r: any;
+      try {
+        r = await evo(cfg, `/chat/findMessages/${cfg.instance}`, { method: 'POST', body: JSON.stringify({ where: { key: { remoteJid: chatId } } }) });
+      } catch {
+        r = await evo(cfg, `/chat/fetchMessages/${cfg.instance}`, { method: 'POST', body: JSON.stringify({ chatId }) });
+      }
+      const arr = Array.isArray(r) ? r : (r?.messages?.records || r?.messages || r?.records || []);
       setMsgs(arr);
     } catch (e) { /* ignore */ }
   };
@@ -277,7 +296,8 @@ function ContactsView({ cfg }: { cfg: WppConfig }) {
   useEffect(() => {
     if (!cfg.url) return;
     setLoading(true);
-    evo(cfg, `/contacts/fetchContacts/${cfg.instance}`).then(r => setList(Array.isArray(r) ? r : [])).catch(() => {}).finally(() => setLoading(false));
+    evoTry(cfg, { path: `/chat/findContacts/${cfg.instance}`, body: {} }, { path: `/contacts/fetchContacts/${cfg.instance}` })
+      .then(r => setList(Array.isArray(r) ? r : [])).catch(() => {}).finally(() => setLoading(false));
   }, [cfg.url, cfg.instance]);
   const filtered = useMemo(() => {
     const t = q.toLowerCase();
