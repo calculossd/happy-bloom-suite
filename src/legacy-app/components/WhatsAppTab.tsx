@@ -128,8 +128,8 @@ function Dashboard({ cfg }: { cfg: WppConfig }) {
     setData(d => ({ ...d, loading: true, error: undefined }));
     try {
       const [chats, contacts] = await Promise.all([
-        evo(cfg, `/chat/fetchChats/${cfg.instance}`).catch(() => []),
-        evo(cfg, `/contacts/fetchContacts/${cfg.instance}`).catch(() => []),
+        evoTry(cfg, { path: `/chat/findChats/${cfg.instance}`, body: {} }, { path: `/chat/fetchChats/${cfg.instance}` }).catch(() => []),
+        evoTry(cfg, { path: `/chat/findContacts/${cfg.instance}`, body: {} }, { path: `/contacts/fetchContacts/${cfg.instance}` }).catch(() => []),
       ]);
       setData({ chats: Array.isArray(chats) ? chats : [], contacts: Array.isArray(contacts) ? contacts : [], loading: false });
     } catch (e: any) { setData(d => ({ ...d, loading: false, error: e.message })); }
@@ -194,7 +194,8 @@ function ChatsView({ cfg }: { cfg: WppConfig }) {
   useEffect(() => {
     if (!cfg.url) return;
     setLoading(true);
-    evo(cfg, `/chat/fetchChats/${cfg.instance}`).then(r => setChats(Array.isArray(r) ? r : [])).catch(() => {}).finally(() => setLoading(false));
+    evoTry(cfg, { path: `/chat/findChats/${cfg.instance}`, body: {} }, { path: `/chat/fetchChats/${cfg.instance}` })
+      .then(r => setChats(Array.isArray(r) ? r : [])).catch(() => {}).finally(() => setLoading(false));
   }, [cfg.url, cfg.instance]);
 
   const filtered = useMemo(() => {
@@ -206,8 +207,13 @@ function ChatsView({ cfg }: { cfg: WppConfig }) {
     setSelected(c); setMsgs([]);
     try {
       const chatId = c.id || c.remoteJid;
-      const r = await evo(cfg, `/chat/fetchMessages/${cfg.instance}`, { method: 'POST', body: JSON.stringify({ chatId }) });
-      const arr = Array.isArray(r) ? r : (r?.messages?.records || r?.messages || []);
+      let r: any;
+      try {
+        r = await evo(cfg, `/chat/findMessages/${cfg.instance}`, { method: 'POST', body: JSON.stringify({ where: { key: { remoteJid: chatId } } }) });
+      } catch {
+        r = await evo(cfg, `/chat/fetchMessages/${cfg.instance}`, { method: 'POST', body: JSON.stringify({ chatId }) });
+      }
+      const arr = Array.isArray(r) ? r : (r?.messages?.records || r?.messages || r?.records || []);
       setMsgs(arr);
     } catch (e) { /* ignore */ }
   };
