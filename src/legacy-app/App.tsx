@@ -1748,6 +1748,7 @@ export default function App() {
               section: 'Configurações',
               items: [
                 { id: 13, label: 'Agenda', icon: Calendar },
+                { id: 20, label: 'WhatsApp', icon: MessageCircle },
                 { id: 5, label: 'Ajustes', icon: Settings },
               ],
             },
