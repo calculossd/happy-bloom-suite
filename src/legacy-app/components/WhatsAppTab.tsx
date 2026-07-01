@@ -56,6 +56,16 @@ async function evoTry(cfg: WppConfig, v2: { path: string; body?: any }, v1: { pa
   }
 }
 
+// Evolution retorna às vezes array puro, às vezes { records:[] } ou { chats:[] } etc.
+function unwrapList(r: any): any[] {
+  if (Array.isArray(r)) return r;
+  if (!r || typeof r !== 'object') return [];
+  return (
+    r.records || r.chats || r.contacts || r.messages?.records ||
+    r.messages || r.data || r.result || []
+  );
+}
+
 /* ---------- UI primitives ---------- */
 const Card: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className = '', ...p }) => (
   <div {...p} className={`rounded-2xl border border-white/[0.08] bg-[#0a0d0c]/95 backdrop-blur-xl ${className}`} />
