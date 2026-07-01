@@ -129,13 +129,43 @@ function ConfigScreen({ cfg, setCfg }: { cfg: WppConfig; setCfg: (c: WppConfig) 
     setStatus({ ok: null, msg: 'Gerando QR Code...', loading: true });
     setQr(null);
     try {
-      const r = await evo(draft, `/instance/connect/${encodeURIComponent(draft.instance)}`);
-      const img = getQrImage(r);
-      const code = getPairingCode(r);
+      let r = await evo(draft, `/instance/connect/${encodeURIComponent(draft.instance)}`);
+      let img = getQrImage(r);
+      let code = getPairingCode(r);
+
+      // Se veio sem QR, provavelmente a instância ainda não existe: cria e tenta de novo.
+      if (!img && !code) {
+        try {
+          setStatus({ ok: null, msg: 'Instância não encontrada. Criando...', loading: true });
+          const created = await evo(draft, `/instance/create`, {
+            method: 'POST',
+            body: JSON.stringify({
+              instanceName: draft.instance,
+              integration: 'WHATSAPP-BAILEYS',
+              qrcode: true,
+            }),
+          });
+          img = getQrImage(created) || getQrImage(created?.qrcode);
+          code = getPairingCode(created) || getPairingCode(created?.qrcode);
+          if (!img && !code) {
+            // Aguarda a Evolution montar o QR e chama connect novamente.
+            await new Promise(res => setTimeout(res, 1500));
+            r = await evo(draft, `/instance/connect/${encodeURIComponent(draft.instance)}`);
+            img = getQrImage(r);
+            code = getPairingCode(r);
+          }
+        } catch (createErr: any) {
+          // Se já existe (409), só reporta o erro original abaixo.
+          if (!/HTTP 409/.test(String(createErr?.message))) throw createErr;
+        }
+      }
+
       setQr({ img, code, raw: r });
       setStatus({
         ok: !!(img || code),
-        msg: img || code ? 'Escaneie o QR Code no WhatsApp para conectar' : 'Resposta recebida, mas sem QR Code. Verifique se a instância já existe na Evolution.',
+        msg: img || code
+          ? 'Escaneie o QR Code no WhatsApp para conectar'
+          : 'Resposta recebida, mas sem QR Code. A instância pode já estar conectada — teste em "Testar conexão".',
         loading: false,
       });
     } catch (e: any) {
