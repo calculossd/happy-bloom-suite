@@ -296,7 +296,8 @@ function ContactsView({ cfg }: { cfg: WppConfig }) {
   useEffect(() => {
     if (!cfg.url) return;
     setLoading(true);
-    evo(cfg, `/contacts/fetchContacts/${cfg.instance}`).then(r => setList(Array.isArray(r) ? r : [])).catch(() => {}).finally(() => setLoading(false));
+    evoTry(cfg, { path: `/chat/findContacts/${cfg.instance}`, body: {} }, { path: `/contacts/fetchContacts/${cfg.instance}` })
+      .then(r => setList(Array.isArray(r) ? r : [])).catch(() => {}).finally(() => setLoading(false));
   }, [cfg.url, cfg.instance]);
   const filtered = useMemo(() => {
     const t = q.toLowerCase();
