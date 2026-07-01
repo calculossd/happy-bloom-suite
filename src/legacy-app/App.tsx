@@ -21,6 +21,7 @@ import { PrintFlowTab } from './components/PrintFlowTab';
 import { PrinterQueueList } from './components/PrinterQueueList';
 import { ManutencaoTab } from './components/ManutencaoTab';
 import { OrcamentosTab } from './components/OrcamentosTab';
+import { WhatsAppTab } from './components/WhatsAppTab';
 import {
   PriceResearchTab, PreCheckTab, AgendaTab, ToolsTab, ModelsTab
 } from './components/NewTabs';
@@ -99,7 +100,8 @@ import {
   Download,
   Printer as PrinterNavIcon,
   FileBarChart2,
-  FileEdit
+  FileEdit,
+  MessageCircle
 } from 'lucide-react';
 
 // STUNNING 3D CUBE & PRINTER EXTENSION GEOMETRIC LOGO
