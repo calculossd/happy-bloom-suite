@@ -79,10 +79,14 @@ function getPairingCode(r: any): string {
 function unwrapList(r: any): any[] {
   if (Array.isArray(r)) return r;
   if (!r || typeof r !== 'object') return [];
-  return (
-    r.records || r.chats || r.contacts || r.messages?.records ||
-    r.messages || r.data || r.result || []
-  );
+  const candidates = [
+    r.records, r.chats, r.contacts,
+    r.messages?.records, r.messages,
+    r.data?.records, r.data?.messages?.records, r.data?.messages, r.data,
+    r.result?.records, r.result,
+  ];
+  for (const c of candidates) if (Array.isArray(c)) return c;
+  return [];
 }
 
 /* ---------- UI primitives ---------- */
@@ -299,12 +303,21 @@ function ChatsView({ cfg }: { cfg: WppConfig }) {
   const [loading, setLoading] = useState(false);
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
+  const [chatsErr, setChatsErr] = useState<string>('');
+  const [msgsErr, setMsgsErr] = useState<string>('');
+  const [loadingMsgs, setLoadingMsgs] = useState(false);
 
   useEffect(() => {
     if (!cfg.url) return;
-    setLoading(true);
+    setLoading(true); setChatsErr('');
     evoTry(cfg, { path: `/chat/findChats/${cfg.instance}`, body: {} }, { path: `/chat/fetchChats/${cfg.instance}` })
-      .then(r => setChats(unwrapList(r))).catch(() => {}).finally(() => setLoading(false));
+      .then(r => {
+        const list = unwrapList(r);
+        setChats(list);
+        if (list.length === 0) setChatsErr('Resposta vazia da Evolution. Verifique se a instância está conectada e possui conversas.');
+      })
+      .catch((e: any) => setChatsErr(e?.message || 'Falha ao buscar conversas'))
+      .finally(() => setLoading(false));
   }, [cfg.url, cfg.instance]);
 
   const filtered = useMemo(() => {
@@ -313,7 +326,7 @@ function ChatsView({ cfg }: { cfg: WppConfig }) {
   }, [chats, q]);
 
   const openChat = async (c: any) => {
-    setSelected(c); setMsgs([]);
+    setSelected(c); setMsgs([]); setMsgsErr(''); setLoadingMsgs(true);
     try {
       const chatId = c.id || c.remoteJid;
       let r: any;
@@ -322,8 +335,14 @@ function ChatsView({ cfg }: { cfg: WppConfig }) {
       } catch {
         r = await evo(cfg, `/chat/fetchMessages/${cfg.instance}`, { method: 'POST', body: JSON.stringify({ chatId }) });
       }
-      setMsgs(unwrapList(r));
-    } catch (e) { /* ignore */ }
+      const list = unwrapList(r);
+      setMsgs(list);
+      if (list.length === 0) setMsgsErr('Sem mensagens retornadas pela Evolution para este chat.');
+    } catch (e: any) {
+      setMsgsErr(e?.message || 'Falha ao buscar mensagens');
+    } finally {
+      setLoadingMsgs(false);
+    }
   };
 
   const send = async () => {
@@ -347,6 +366,7 @@ function ChatsView({ cfg }: { cfg: WppConfig }) {
         </div>
         <div className="flex-1 overflow-y-auto space-y-1">
           {loading && <div className="text-xs text-white/40 py-6 text-center"><Loader2 className="w-4 h-4 animate-spin inline" /></div>}
+          {!loading && chatsErr && <div className="text-[11px] text-rose-300 bg-rose-500/10 border border-rose-500/30 rounded-lg p-2">{chatsErr}</div>}
           {filtered.map((c: any, i: number) => (
             <button key={c.id || c.remoteJid || i} onClick={() => openChat(c)}
               className={`w-full text-left px-3 py-2 rounded-lg transition ${selected?.id === c.id ? 'bg-emerald-500/10 border border-emerald-500/30' : 'hover:bg-white/5'}`}>
@@ -380,7 +400,14 @@ function ChatsView({ cfg }: { cfg: WppConfig }) {
                   </div>
                 );
               })}
-              {msgs.length === 0 && <div className="text-xs text-white/40 text-center py-6">Sem mensagens</div>}
+              {loadingMsgs && <div className="text-xs text-white/40 text-center py-6"><Loader2 className="w-4 h-4 animate-spin inline" /></div>}
+              {!loadingMsgs && msgs.length === 0 && (
+                <div className="text-[11px] text-center py-6">
+                  {msgsErr
+                    ? <span className="text-rose-300">{msgsErr}</span>
+                    : <span className="text-white/40">Sem mensagens</span>}
+                </div>
+              )}
             </div>
             <div className="p-3 border-t border-white/10 flex gap-2">
               <Input placeholder="Mensagem..." value={text} onChange={e => setText(e.target.value)}
