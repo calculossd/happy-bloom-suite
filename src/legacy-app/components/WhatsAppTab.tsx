@@ -56,6 +56,16 @@ async function evoTry(cfg: WppConfig, v2: { path: string; body?: any }, v1: { pa
   }
 }
 
+// Evolution retorna às vezes array puro, às vezes { records:[] } ou { chats:[] } etc.
+function unwrapList(r: any): any[] {
+  if (Array.isArray(r)) return r;
+  if (!r || typeof r !== 'object') return [];
+  return (
+    r.records || r.chats || r.contacts || r.messages?.records ||
+    r.messages || r.data || r.result || []
+  );
+}
+
 /* ---------- UI primitives ---------- */
 const Card: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className = '', ...p }) => (
   <div {...p} className={`rounded-2xl border border-white/[0.08] bg-[#0a0d0c]/95 backdrop-blur-xl ${className}`} />
@@ -131,7 +141,7 @@ function Dashboard({ cfg }: { cfg: WppConfig }) {
         evoTry(cfg, { path: `/chat/findChats/${cfg.instance}`, body: {} }, { path: `/chat/fetchChats/${cfg.instance}` }).catch(() => []),
         evoTry(cfg, { path: `/chat/findContacts/${cfg.instance}`, body: {} }, { path: `/contacts/fetchContacts/${cfg.instance}` }).catch(() => []),
       ]);
-      setData({ chats: Array.isArray(chats) ? chats : [], contacts: Array.isArray(contacts) ? contacts : [], loading: false });
+      setData({ chats: unwrapList(chats), contacts: unwrapList(contacts), loading: false });
     } catch (e: any) { setData(d => ({ ...d, loading: false, error: e.message })); }
   };
   useEffect(() => { if (cfg.url && cfg.instance) reload(); }, [cfg.url, cfg.instance]);
@@ -195,7 +205,7 @@ function ChatsView({ cfg }: { cfg: WppConfig }) {
     if (!cfg.url) return;
     setLoading(true);
     evoTry(cfg, { path: `/chat/findChats/${cfg.instance}`, body: {} }, { path: `/chat/fetchChats/${cfg.instance}` })
-      .then(r => setChats(Array.isArray(r) ? r : [])).catch(() => {}).finally(() => setLoading(false));
+      .then(r => setChats(unwrapList(r))).catch(() => {}).finally(() => setLoading(false));
   }, [cfg.url, cfg.instance]);
 
   const filtered = useMemo(() => {
@@ -213,8 +223,7 @@ function ChatsView({ cfg }: { cfg: WppConfig }) {
       } catch {
         r = await evo(cfg, `/chat/fetchMessages/${cfg.instance}`, { method: 'POST', body: JSON.stringify({ chatId }) });
       }
-      const arr = Array.isArray(r) ? r : (r?.messages?.records || r?.messages || r?.records || []);
-      setMsgs(arr);
+      setMsgs(unwrapList(r));
     } catch (e) { /* ignore */ }
   };
 
@@ -297,7 +306,7 @@ function ContactsView({ cfg }: { cfg: WppConfig }) {
     if (!cfg.url) return;
     setLoading(true);
     evoTry(cfg, { path: `/chat/findContacts/${cfg.instance}`, body: {} }, { path: `/contacts/fetchContacts/${cfg.instance}` })
-      .then(r => setList(Array.isArray(r) ? r : [])).catch(() => {}).finally(() => setLoading(false));
+      .then(r => setList(unwrapList(r))).catch(() => {}).finally(() => setLoading(false));
   }, [cfg.url, cfg.instance]);
   const filtered = useMemo(() => {
     const t = q.toLowerCase();
